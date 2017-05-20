@@ -36,7 +36,9 @@
 		"symfony/security-csrf": "^3.2",
 		"symfony/monolog-bridge": "^3.2",
 		"symfony/translation": "^3.2",
-		"symfony/asset": "^3.2"
+		"symfony/asset": "^3.2",
+		"symfony/expression-language": "^3.2",
+		"silex/web-profiler": "^2.0"
 	},
 
     "minimum-stability": "stable",
@@ -48,7 +50,9 @@
 			"queue\\": "queue/",
 			"task\\": "task/",
 			"schema_task\\": "schema_task/",
-			"util\\": "util/"
+			"util\\": "util/",
+			"controller\\": "controller/",
+			"provider\\": "provider/"
         }
     }
 }
