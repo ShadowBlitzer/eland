@@ -21,12 +21,24 @@ $secure->host('l.' . $app['overall_domain']);
 
 $secure->get('/', function(Request $request){
 	return 'secured ' . $request->getHost() . ' ' . $request;
-});
+});s
 
 $users = $app['controllers_factory'];
 
-$users->get('/{type}', 'controller\\users::index')->bind('users_index');
-$users->get('/{id}')->
+$users->assert('type', '^(\'active|new|leaving|intertrade|pre-active|post-active|all\')$')
+	->assert('user', '\d+')
+	->convert('user', 'service\\user_cache::get')
+	->before(/* check authorisation */);
+
+$users->match('/add', 'controller\\user::add')->bind('user_add');   // admin
+$users->match('/{user}/edit', 'controller\\user::edit')->bind('user_edit');
+$users->match('/{user}/del', 'controller\\user::del')->bind('user_del');   // admin
+
+$users->get('/{type}/{user}', 'controller\\user::show')->bind('user_show');
+$users->get('/{user}', 'controller\\user::no_type_context')->bind('user_no_type_context');
+$users->get('/', 'controller\\user::index'
+
+
 
 $public = $app['controllers_factory'];
 

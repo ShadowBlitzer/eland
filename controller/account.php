@@ -5,10 +5,17 @@ namespace controller;
 use util\app;
 use Symfony\Component\HttpFoundation\Request;
 
-class users
+class account
 {
 	public function index(Request $request, app $app, string $type)
 	{
+
+
+
+
+
+
+
 		return $app['twig']->render('page/terms.html.twig', []);
 	}
 

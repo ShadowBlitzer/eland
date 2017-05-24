@@ -14,6 +14,7 @@
 		"fabpot/goutte": "^3",
 		"ext-imagick": "*",
 		"ext-exif": "*",
+		"ext-gmp": "*",
         "imagine/imagine": "^0.6",
         "doctrine/dbal": "~2.5",
         "willdurand/geocoder": "^3",
@@ -38,7 +39,8 @@
 		"symfony/translation": "^3.2",
 		"symfony/asset": "^3.2",
 		"symfony/expression-language": "^3.2",
-		"silex/web-profiler": "^2.0"
+		"silex/web-profiler": "^2.0",
+		"minishlink/web-push": "^1.4"
 	},
 
     "minimum-stability": "stable",
@@ -52,6 +54,8 @@
 			"schema_task\\": "schema_task/",
 			"util\\": "util/",
 			"controller\\": "controller/",
+			"controller_provider\\": "controller_provider/",
+			"converter\\": "converter/",
 			"provider\\": "provider/"
         }
     }
