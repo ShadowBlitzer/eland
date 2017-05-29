@@ -32,6 +32,7 @@ class user implements UserInterface
 		'ROLE_INTERLETS'	=> 'interlets',
 		'ROLE_USER'			=> 'user',
 		'ROLE_ADMIN'		=> 'admin',
+		'ROLE_MASTER'		=> 'master',
 	];
 
 	public function __construct(this_group $this_group, Logger $monolog,

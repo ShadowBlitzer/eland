@@ -31,12 +31,20 @@ $users->assert('type', '^(\'active|new|leaving|intertrade|pre-active|post-active
 	->before(/* check authorisation */);
 
 $users->match('/add', 'controller\\user::add')->bind('user_add');   // admin
-$users->match('/{user}/edit', 'controller\\user::edit')->bind('user_edit');
+$users->match('/{user}/edit', 'controller\\user::edit')->bind('user_edit'); // +admin
 $users->match('/{user}/del', 'controller\\user::del')->bind('user_del');   // admin
 
 $users->get('/{type}/{user}', 'controller\\user::show')->bind('user_show');
 $users->get('/{user}', 'controller\\user::no_type_context')->bind('user_no_type_context');
 $users->get('/', 'controller\\user::index'
+
+
+
+$register = $app['controllers_factory'];
+$register->match('/', 'controller\\register::index')->bind('register');
+$register->get('/{token}', 'controller\\register::token')
+	->bind('register_token');
+
 
 
 
