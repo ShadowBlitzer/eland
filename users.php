@@ -567,7 +567,7 @@ if ($s_admin)
 		'naam' 				=> 'name',
 		'volledige_naam'	=> 'fullname',
 		'saldo'				=> 'saldo',
-		'letscode'			=> 'letscode',
+		$app['type_template']->get('code')	=> 'letscode',
 		'postcode'			=> 'postcode',
 		'id'				=> 'id',
 		'status'			=> 'status',
@@ -686,13 +686,14 @@ if ($s_admin && !count($errors) && ($bulk_mail_submit || $bulk_mail_test) && $po
 
 		foreach ($map_template_vars as $key => $trans)
 		{
-			$template_vars[$key] = '{{ ' . $trans . ' }}';
+			$template_vars[$key] = '{{ ' . $key . ' }}';
 		}
 
 		$replace = $app['protocol'] . $app['this_group']->get_host() . '/users.php?';
 
 		$out = str_replace('./users.php?', $replace, $alert_msg);
 		$out .= '<br><br>';
+
 		if (isset($alert_warning))
 		{
 			$out .= str_replace('./users.php?', $replace, $alert_warning);
@@ -1301,24 +1302,20 @@ if ($add || $edit)
 		{
 			if (!$user['letscode'])
 			{
-				$errors[] = 'Vul een letscode in!';
+				$errors[] = 'Vul een ' . $app['type_template']->get('code') . ' in!';
 			}
 			else if ($app['db']->fetchColumn($letscode_sql, $letscode_sql_params))
 			{
-				$errors[] = 'De letscode bestaat al!';
-			}
-			else if ($user['letscode'] == '-')
-			{
-				$errors[] = 'Letscode - is gereserveerd voor de interlets gast gebruikers';
+				$errors[] = 'De ' . $app['type_template']->get('code') . ' bestaat al!';
 			}
 			else if (strlen($user['letscode']) > 20)
 			{
-				$errors[] = 'De letscode mag maximaal 20 tekens lang zijn.';
+				$errors[] = 'De ' . $app['type_template']->get('code') . ' mag maximaal 20 tekens lang zijn.';
 			}
 
 			if (!preg_match("/^[A-Za-z0-9-]+$/", $user['letscode']))
 			{
-				$errors[] = 'De letscode kan enkel uit letters, cijfers en koppeltekens bestaan.';
+				$errors[] = 'De ' . $app['type_template']->get('code') . ' kan enkel uit letters, cijfers en koppeltekens bestaan.';
 			}
 
 			if (filter_var($user['minlimit'], FILTER_VALIDATE_INT) === false)
@@ -1752,7 +1749,9 @@ if ($add || $edit)
 	if ($s_admin)
 	{
 		echo '<div class="form-group">';
-		echo '<label for="letscode" class="col-sm-2 control-label">Letscode</label>';
+		echo '<label for="letscode" class="col-sm-2 control-label">';
+		echo $app['type_template']->get('code');
+		echo '</label>';
 		echo '<div class="col-sm-10">';
 		echo '<input type="text" class="form-control" id="letscode" name="letscode" ';
 		echo 'value="' . $user['letscode'] . '" required maxlength="20">';
@@ -1948,8 +1947,8 @@ if ($add || $edit)
 
 		echo '</p>';
 
-		echo '<p>Dit veld wordt vooraf ingevuld bij aanmaak gebruiker wanneer ';
-		echo aphp('config', ['active_tab' => 'balance'], 'preset individuele minimum limiet') . ' ';
+		echo '<p>Dit veld wordt vooraf ingevuld bij aanmaak gebruiker wanneer "';
+		echo aphp('config', ['active_tab' => 'balance'], 'preset individuele minimum limiet') . '" ';
 		echo 'is ingevuld in de instellingen.';
 
 		if ($app['config']->get('preset_minlimit') !== '')
@@ -1984,8 +1983,8 @@ if ($add || $edit)
 
 		echo '</p>';
 
-		echo '<p>Dit veld wordt vooraf ingevuld bij aanmaak gebruiker wanneer ';
-		echo aphp('config', ['active_tab' => 'balance'], 'preset individuele maximum limiet') . ' ';
+		echo '<p>Dit veld wordt vooraf ingevuld bij aanmaak gebruiker wanneer "';
+		echo aphp('config', ['active_tab' => 'balance'], 'preset individuele maximum limiet') . '" ';
 		echo 'is ingevuld in de instellingen.';
 
 		if ($app['config']->get('preset_maxlimit') !== '')
@@ -2193,6 +2192,25 @@ if ($id)
 		order by u.letscode desc
 		limit 1', $sql_bind);
 
+	$interlets_group_missing = false;
+
+	if ($s_admin && $user['accountrole'] === 'interlets'
+		&& $app['config']->get('interlets_en') && $app['config']->get('template_lets'))
+	{
+		$interlets_group_id = $app['db']->fetchColumn('select id
+			from letsgroups
+			where localletscode = ?', [$user['letscode']]);
+
+		if (!$interlets_group_id)
+		{
+			$interlets_group_missing = true;
+		}
+	}
+	else
+	{
+		$interlets_group_id = false;
+	}
+
 	$app['assets']->add(['leaflet', 'jqplot', 'user.js', 'plot_user_transactions.js']);
 
 	if ($s_admin || $s_owner)
@@ -2270,6 +2288,19 @@ if ($id)
 	{
 		$h1 .= ' <small><span class="text-' . $st_class_ary[$status] . '">';
 		$h1 .= $h_status_ary[$status] . '</span></small>';
+	}
+
+	if ($s_admin)
+	{
+		if ($interlets_group_missing)
+		{
+			$h1 .= ' <span class="label label-warning label-sm"><i class="fa fa-exclamation-triangle"></i> ';
+			$h1 .= 'Gekoppelde Interlets groep ontbreekt</span>';
+		}
+		else if ($interlets_group_id)
+		{
+			$h1 .= ' ' . aphp('interlets', ['id' => $interlets_group_id], 'Gekoppelde groep', 'btn btn-default', 'Gekoppelde groep');
+		}
 	}
 
 	$fa = 'user';
@@ -2417,7 +2448,7 @@ if ($id)
 		}
 
 		echo '<dt>';
-		echo 'Rechten';
+		echo 'Rechten / rol';
 		echo '</dt>';
 		dd_render($user['accountrole']);
 
@@ -3719,7 +3750,8 @@ else if ($v_tiles)
 {
 	echo '<p>';
 	echo '<span class="btn-group sort-by" role="group">';
-	echo '<button class="btn btn-default active" data-sort-by="letscode">letscode ';
+	echo '<button class="btn btn-default active" data-sort-by="letscode">';
+	echo $app['type_template']->get('code') . ' ';
 	echo '<i class="fa fa-sort-asc"></i></button>';
 	echo '<button class="btn btn-default" data-sort-by="name">naam ';
 	echo '<i class="fa fa-sort"></i></button>';

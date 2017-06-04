@@ -3,10 +3,12 @@
 namespace service;
 
 use service\this_group;
+use service\config;
 
 class access_control
 {
 	private $this_group;
+	private $type_template;
 
 	private $acc_ary = [
 		'admin'	=> [
@@ -32,13 +34,32 @@ class access_control
 		2 => 'interlets',
 	];
 
+	private $input_ary = [
+		'admin'	=> 'admin',
+		'users'	=> 'users',
+		'interlets'	=> 'interlets',
+	];
+
+	private $label_ary = [
+		'admin'	=> 'admin',
+		'users'	=> 'users',
+		'interlets' => 'interlets',
+	];
+
 	/**
 	 *
 	 */
 
-	public function __construct(this_group $this_group)
+	public function __construct(this_group $this_group, config $config)
 	{
 		$this->this_group = $this_group;
+		$this->config = $config;
+
+		if (!$this->config->get('template_lets') || !$this->config->get('interlets_en'))
+		{
+			unset($this->input_ary['interlets']);
+			$this->label_ary['interlets'] = 'users';
+		}
 	}
 
 	/*
@@ -114,7 +135,7 @@ class access_control
 			$access = $this->acc_ary_search[$access];
 		}
 
-		$acc = $this->acc_ary[$access];
+		$acc = $this->acc_ary[$this->label_ary[$access]];
 
 		return '<span class="label label-' . $acc['class'] . ' label-' . $size . '">' . $acc['label'] . '</span>';
 	}
@@ -132,7 +153,7 @@ class access_control
 
 		if (isset($this->acc_ary[$_POST[$name]]))
 		{
-			return $this->acc_ary[$_POST[$name]]['level'];
+			return $this->acc_ary[$this->input_ary[$_POST[$name]]]['level'];
 		}
 
 		return false;
@@ -148,6 +169,7 @@ class access_control
 		{
 			return false;
 		}
+
 		return 'Kies een zichtbaarheid.';
 	}
 
@@ -163,13 +185,17 @@ class access_control
 		{
 			$selected = false;
 		}
-		else if (isset($this->acc_ary[$value]))
+		else if (isset($this->acc_ary[$this->input_ary[$value]]))
 		{
 			$selected = $value;
 		}
-		else if (isset($this->acc_ary_search[$value]))
+		else if (isset($this->input_ary[$this->acc_ary_search[$value]]))
 		{
-			$selected = $this->acc_ary_search[$value];
+			$selected = $this->input_ary[$this->acc_ary_search[$value]];
+		}
+		else if ($value === 2 || $value === 'interlets')
+		{
+			$selected = 'users';
 		}
 		else
 		{
@@ -187,6 +213,17 @@ class access_control
 			{
 				unset($acc_ary[$omit]);
 			}
+		}
+
+		$acc_ary = array_intersect_key($acc_ary, $this->input_ary);
+
+		if (count($acc_ary) === 0)
+		{
+			return '';
+		}
+		else if (count($acc_ary) === 1)
+		{
+			return '<input type="hidden" name="' . $name . '" value="' . key($acc_ary) . '">';
 		}
 
 		$out = '<div class="form-group">';

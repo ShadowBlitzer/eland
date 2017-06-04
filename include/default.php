@@ -181,7 +181,8 @@ $app['mailaddr'] = function ($app){
 };
 
 $app['interlets_groups'] = function ($app){
-	return new service\interlets_groups($app['db'], $app['predis'], $app['groups'], $app['protocol']);
+	return new service\interlets_groups($app['db'], $app['predis'], $app['groups'],
+		$app['config'], $app['protocol']);
 };
 
 $app['distance'] = function ($app){
@@ -191,6 +192,10 @@ $app['distance'] = function ($app){
 $app['config'] = function ($app){
 	return new service\config($app['monolog'], $app['db'], $app['xdb'],
 		$app['predis'], $app['this_group']);
+};
+
+$app['type_template'] = function ($app){
+	return new service\type_template($app['config']);
 };
 
 $app['user_cache'] = function ($app){

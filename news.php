@@ -373,6 +373,9 @@ if ($id)
 
 	require_once __DIR__ . '/include/web.php';
 
+	$show_visibility = ($s_user && $app['config']->get('template_lets')
+		&& $app['config']->get('interlets_en')) || $s_admin ? true : false;
+
 	$news = $app['db']->fetchAssoc('SELECT n.*
 		FROM news n
 		WHERE n.id = ?', [$id]);
@@ -442,7 +445,7 @@ if ($id)
 
 	include __DIR__ . '/include/header.php';
 
-	if (!$s_guest)
+	if ($show_visibility)
 	{
 		echo '<p>Zichtbaarheid: ';
 		echo $app['access_control']->get_label($news_access);
@@ -508,6 +511,9 @@ if ($id)
 
 $page_access = 'guest';
 require_once __DIR__ . '/include/web.php';
+
+$show_visibility = ($s_user && $app['config']->get('template_lets')
+	&& $app['config']->get('interlets_en')) || $s_admin ? true : false;
 
 if (!($view || $inline))
 {
@@ -621,8 +627,8 @@ if ($v_list)
 		echo '<tr>';
 		echo '<th>Titel</th>';
 		echo '<th data-hide="phone" data-sort-initial="descending">Agendadatum</th>';
-		echo ($s_admin && !$inline) ? '<th data-hide="phone">Goedgekeurd</th>' : '';
-		echo ($s_guest) ? '' : '<th data-hide="phone, tablet">Zichtbaar</th>';
+		echo $s_admin ? '<th data-hide="phone">Goedgekeurd</th>' : '';
+		echo $show_visibility ? '<th data-hide="phone, tablet">Zichtbaar</th>' : '';
 		echo '</tr>';
 		echo '</thead>';
 	}
@@ -632,7 +638,7 @@ if ($v_list)
 	foreach ($news as $n)
 	{
 		echo '<tr';
-		echo ($n['approved']) ? '' : ' class="warning"';
+		echo $n['approved'] ? '' : ' class="warning"';
 		echo '>';
 
 		echo '<td>';
@@ -644,11 +650,11 @@ if ($v_list)
 		if ($s_admin && !$inline)
 		{
 			echo '<td>';
-			echo ($n['approved']) ? 'Ja' : 'Nee';
+			echo $n['approved'] ? 'Ja' : 'Nee';
 			echo '</td>';
 		}
 
-		if (!$s_guest)
+		if ($show_visibility)
 		{
 			echo '<td>';
 			echo $app['access_control']->get_label($n['access']);
@@ -664,7 +670,7 @@ else if ($v_extended)
 {
 	foreach ($news as $n)
 	{
-		$background = ($n['approved']) ? '' : ' bg-warning';
+		$background = $n['approved'] ? '' : ' bg-warning';
 
 		echo '<div class="panel panel-info printview">';
 		echo '<div class="panel-body' . $background . '">';
@@ -703,7 +709,7 @@ else if ($v_extended)
 			echo '</dd>';
 		}
 
-		if (!$s_guest)
+		if ($show_visibility)
 		{
 			echo '<dt>';
 			echo 'Zichtbaarheid';
