@@ -7,7 +7,22 @@ eland:
     (Maak eerst een %link_b_open%Github%link_b_close% account aan.)
   title: eLAND
 
+input:
+  email: Email
+  message: Bericht
+  code: Code
+  letscode: LETScode
+  group_name: Groepsnaam
+
+btn:
+  send: Verzenden
+  cancel: Annuleren
+  add: Toevoegen
+  edit: Aanpassen
+  delete: Verwijderen
+  
 hosting:
+  title: Aanvraag hosting eLAND
   privacy: >
     *Privacy: uw email adres wordt voor geen enkel ander doel
     gebruikt dan u terug te kunnen contacteren.

@@ -4,7 +4,7 @@
 
 {% block inner_content %}
 
-<h1>Aanvraag hosting eLAND</h1>
+<h1>{{ 'hosting.title'|trans }}</h1>
 
 {{ form_start(form) }}
 
@@ -14,11 +14,12 @@
 
 {{ form_row(form.message, {'attr': {'rows': 6}}) }}
 
+{{ form_row(form.token) }}
+
 {{ form_widget(form.send) }}
 
 <br>
-<p>{{ 'hosting.privacy'|trans }} *Privacy: uw email adres wordt voor geen enkel ander doel gebruikt dan u terug te kunnen 
-contacteren.</p>
+<p>{{ 'hosting.privacy'|trans }}</p>
 
 {% endblock inner_content %}
 

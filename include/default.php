@@ -74,6 +74,10 @@ $app->extend('translator', function($translator, $app) {
     return $translator;
 });
 
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+
+$app->register(new Silex\Provider\FormServiceProvider());
+
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
 
 $app->extend('monolog', function($monolog, $app) {
