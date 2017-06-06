@@ -1,0 +1,17 @@
+language: Nederlands
+
+eland:
+  explain: %link_open%eLAND%link_close% web app voor gemeenschapsmunten
+  github: >
+    Rapporteer bugs in de %link_a_open%Github issue tracker%link_a_close%
+    (Maak eerst een %link_b_open%Github%link_b_close% account aan.)
+  title: eLAND
+
+hosting:
+  privacy: >
+    *Privacy: uw email adres wordt voor geen enkel ander doel
+    gebruikt dan u terug te kunnen contacteren.
+
+
+
+

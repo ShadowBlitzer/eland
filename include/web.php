@@ -747,3 +747,5 @@ function etag_buffer($content)
 
 	return $content;
 }
+
+

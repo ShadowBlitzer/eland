@@ -1,0 +1,31 @@
+{% macro group_start(label, id) %}
+<div class="form-group">
+<label for="{{ id }}" class="col-sm-2 control-label">{{ label|trans }}</label>
+<div class="col-sm-10 controls">
+{% endmacro group_start %}
+
+{% macro group_end() %}
+</div>
+</div>
+{% endmacro group_end %}
+
+
+<div class="form-group">
+<label for="{{ name }}" class="col-sm-2 control-label">{{ label }}</label>
+<div class="col-sm-10" {% if access_cache_id %} data-access-cache-id="{{ schema ~ access_cache_id }}"
+ id="{{ name }}">
+
+foreach ($acc_ary as $key => $ary)
+{
+	<label class="radio-inline">
+	<input type="radio" name="' . $name . '"
+	$out .= ($key === $selected) ? ' checked="checked"' : '
+	 value="' . $key . '" required> 
+	<span class="btn btn-' . $ary['class'] . ' btn-' . $size . '">
+	$out .= $ary['label'];
+	</span>
+	</label>
+}
+
+</div>
+</div>

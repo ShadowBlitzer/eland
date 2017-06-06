@@ -1,0 +1,9 @@
+{% macro css(location, package, media) %}
+<link type="text/css" rel="stylesheet" href="{{ asset(location, package|default('css')) }}" media="{{ media|default('screen') }}">
+{% endmacro %}
+
+{% macro js(location, package) %}
+<script src="{{ asset(location, package|default('js')) }}"></script>
+{% endmacro %}
+
+

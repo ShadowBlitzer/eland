@@ -43,6 +43,37 @@ $app->extend('twig', function($twig, $app) {
 	return $twig;
 });
 
+$app->register(new Silex\Provider\AssetServiceProvider(), [
+    'assets.version' => '15',
+    'assets.version_format' => '%s?v=%s',
+    'assets.named_packages' => [
+        'css' 		=> ['base_path' => '/gfx'],
+        'js'		=> ['base_path'	=> '/js'],
+        'img' 		=> ['base_urls' => ['http://' . getenv('S3_IMG')]],
+        'doc'		=> ['base_urls' => ['http://' . getenv('S3_DOC')]],
+        'maxcdn'	=> ['base_urls' => ['https://maxcdn.bootstrapcdn.com']],
+        'cdnjs'		=> ['base_urls'	=> ['https://cdnjs.cloudflare.com/ajax/libs']],
+        'jquery'	=> ['base_urls'	=> ['https://code.jquery.com']],
+    ],
+]);
+
+$app->register(new Silex\Provider\LocaleServiceProvider());
+
+$app->register(new Silex\Provider\TranslationServiceProvider(), [
+    'locale_fallbacks' => ['nl', 'en'],
+    'locale'			=> 'nl',
+]);
+
+$app->extend('translator', function($translator, $app) {
+
+    $translator->addLoader('yaml', new \Symfony\Component\Translation\Loader\YamlFileLoader());
+	$trans_dir = __DIR__ . '/../translation/';
+    $translator->addResource('yaml', $trans_dir . 'en.yml', 'en');
+    $translator->addResource('yaml', $trans_dir . 'nl.yml', 'nl');
+
+    return $translator;
+});
+
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
 
 $app->extend('monolog', function($monolog, $app) {

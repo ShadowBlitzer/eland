@@ -1,7 +1,12 @@
 <?php
 
+use util\app;
+
 $page_access = 'guest';
 require_once __DIR__ . '/include/web.php';
+
+echo $app->renderView('login/login.html.twig');
+
 
 if (isset($hosting_form))
 {

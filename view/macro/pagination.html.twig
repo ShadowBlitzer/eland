@@ -1,0 +1,87 @@
+{% macro pagination(p) %}
+	{% import _self as pag %}
+
+	{{ pag.pagination_pages(p) }}
+	{{ pag.pagination_limit_select(p) }}
+
+	</div>
+	</div>
+	</div>
+
+{% endmacro pagination %}
+
+
+{% macro pagination_inline(p) %}
+	{% import _self as pag %}
+
+	{{ pag.pagination_pages(p) }}
+
+	</div>
+	</div>
+	</div>
+{% endmacro pagination_inline %}
+
+{% macro pagination_limit_select(p) %}
+
+<div>
+<form action="{{ path(p.path) }}">
+{{ 'pagination.items_per_page'|trans }}:
+ 
+<select name="limit" onchange="this.form.submit();">
+{% for o in p.limit_options %}
+<option value="{{ o }}"{% if o == p.limit %} selected="selected"{% endif %}>{{ o }}</option>
+{% endfor %}
+</select>
+
+{% set action_params = p.params|merge({'start': 0}) %}
+
+{% for name, value in action_params %}
+	<input name="{{ name }}" value="{{ value }}" type="hidden">
+{% endfor %}
+
+</form>
+</div>
+
+{% endmacro pagination_limit_select %}
+
+{% macro pagination_pages(p) %}
+
+<div class="row print-hide"><div class="col-md-12">
+<ul class="pagination">
+
+{% if p.page > 1 %}
+<li><a href="{{ path(p.path, p.params|merge({'start': (p.page - 2) * p.limit}) ) }}">&#9668;</a></li>
+{% endif %}
+
+{% if p.min > 1 %}
+<li><a href="{{ path(p.path, p.params|merge({'start': 0}) ) }}">1</a></li>
+{% endif %}
+
+{% for pa in p.min..p.max %}
+<li{% if pa == p.page %} class="active"{% endif %}>
+<a href="{{ path(p.path, p.params|merge({'start': (pa - 1) * p.limit}) ) }}">{{ pa }}</a>
+</li>
+{% endfor %}
+
+{% if p.max < p.page_num %}
+<li><a href="{{ path(p.path, p.params|merge({'start': (p.page_num - 1) * p.limit}) ) }}">{{ p.page_num }}</a></li>
+{% endif %}
+
+{% if p.page < p.page_num %}
+<li><a href="{{ path(p.path, p.params|merge({'start': p.page * p.limit}) ) }}">&#9658;</a></li>
+{% endif %}
+
+</ul>
+
+<div class="pull-right hidden-xs">
+
+<div>
+{{ 'pagination.count_items_and_pages'|trans({
+	'%total%': p.row_count,
+	'%page%': p.page,
+	'%pages_total%': p.page_num
+}) }}
+</div>
+
+{% endmacro pagination_pages %}
+

@@ -1,0 +1,27 @@
+{% extends 'eland.html.twig' %}
+
+{% import 'macro.html.twig' as mcr %}
+
+{% block inner_content %}
+
+<h1>Aanvraag hosting eLAND</h1>
+
+{{ form_start(form) }}
+
+{{ form_row(form.group_name) }}
+
+{{ form_row(form.email) }}
+
+{{ form_row(form.message, {'attr': {'rows': 6}}) }}
+
+{{ form_widget(form.send) }}
+
+<br>
+<p>{{ 'hosting.privacy'|trans }} *Privacy: uw email adres wordt voor geen enkel ander doel gebruikt dan u terug te kunnen 
+contacteren.</p>
+
+{% endblock inner_content %}
+
+
+
+

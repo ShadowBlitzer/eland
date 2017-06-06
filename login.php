@@ -63,9 +63,6 @@ if ($monitor)
 		exit;
 	}
 
-
-
-
 	exit;
 }
 

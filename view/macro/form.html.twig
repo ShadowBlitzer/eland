@@ -1,0 +1,16 @@
+{% extends 'bootstrap_3_layout.html.twig' %}
+
+{% macro start(method, class) %}
+<form method="{{ method|default('post') }}" class="form-horizontal">
+<div class="panel panel-{{ class|default('info') }}">
+<div class="panel-heading">
+{% endmacro %}
+
+{% macro end(form_token) %}
+<input type="hidden" name="form_token" value="{{ form_token|default('') }}">
+</div>
+</div>
+</form>
+{% endmacro %}
+
+

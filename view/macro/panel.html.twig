@@ -1,0 +1,116 @@
+{% macro csv() %}
+<a href="#" class="csv">
+<i class="fa fa-file"></i>
+&nbsp;{{ 'csv'|trans }}</a>
+{% endmacro csv %}
+
+{% macro filter_toggle_btn() %}
+<div class="pull-right">
+&nbsp;<button class="btn btn-default hidden-xs" title="{{ 'input.filter'|trans }}" data-toggle="collapse" data-target="#filter">
+<i class="fa fa-caret-down"></i>
+<span class="hidden-xs hidden-sm"> {{ 'input.filter'|trans }}</span></button>
+</div>
+{% endmacro filter_toggle_btn %}
+
+{% macro filter_ind() %}
+&nbsp;<small>{{ 'filtered'|trans }}</small>
+{% endmacro filter_ind %}
+
+{% macro start_filter() %}
+<div class="panel panel-warning" id="filter">
+<div class="panel-heading">
+{% endmacro start_filter %}
+
+{% macro start_post() %}
+<div class="panel panel-info">
+<div class="panel-heading">
+{% endmacro start_post %}
+
+{% macro start_edit() %}
+<div class="panel panel-info">
+<div class="panel-heading">
+{% endmacro start_edit %}
+
+{% macro start_add() %}
+<div class="panel panel-info">
+<div class="panel-heading">
+{% endmacro start_add %}
+
+{% macro start_del() %}
+<div class="panel panel-danger">
+<div class="panel-heading">
+{% endmacro start_del %}
+
+{% macro start_mail() %}
+<div class="panel panel-success">
+<div class="panel-heading">
+{% endmacro start_mail %}
+
+{% macro start_help() %}
+<div class="panel panel-warning">
+<div class="panel-heading">
+{% endmacro start_help %}
+
+{% macro end() %}
+</div>
+</div>
+{% endmacro %}
+
+{% macro filter(form_item, param, width) %}
+<div class="col-sm-{{ width|default('6') }}">
+{{ form_errors(form_item) }}
+{{ form_widget(form_item, param) }}
+</div>
+{% endmacro filter %}
+
+{% macro filter_addon_fa(form_item, param, width, fa) %}
+<div class="col-sm-{{ width|default('6') }}">
+<div class="input-group margin-bottom">
+{{ form_errors(form_item) }}
+<span class="input-group-addon" id="{{ form_item.vars.id }}_addon">
+<i class="fa fa-{{ fa }}"></i></span>
+{{ form_widget(form_item, param|merge({'attr': {'aria-describedby': form_item.vars.id ~ '_addon'}})) }}
+</div>
+</div>
+{% endmacro filter_addon_fa %}
+
+{% macro filter_addon_text(form_item, param, width, text) %}
+<div class="col-sm-{{ width|default('6') }}">
+<div class="input-group margin-bottom">
+{{ form_errors(form_item) }}
+<span class="input-group-addon" id="{{ form_item.vars.id }}_addon">
+{{ text|trans }}</span>
+{{ form_widget(form_item, param|merge({'attr': {'aria-describedby': form_item.vars.id ~ '_addon'}})) }}
+</div>
+</div>
+{% endmacro filter_addon_text %}
+
+{% macro filter_btn(form_item, param, width) %}
+<div class="col-sm-{{ width|default('2') }}">
+{{ form_widget(form_item, param|merge({'attr': {'class': 'btn-default btn-block'}})) }}
+</div>
+{% endmacro filter_btn %}
+
+{% macro filter_datepicker(form_item) %}
+<div class="col-sm-5">
+<div class="input-group margin-bottom">
+<span class="input-group-addon" id="{{ form_item.vars.id }}_addon">Vanaf 
+<span class="fa fa-calendar"></span></span>
+{{ form_errors(form_item) }}
+{{ form_widget(form_item, {'attr':{
+		'aria-describedby': form_item.vars.id ~ '_addon',
+		'data-provide': 'datepicker',
+		'data-date-format': datepicker_format(), 
+		'data-date-default-view-date': '-1y',
+		'data-date-end-date': '0d',
+		'data-date-language': global.request.locale, 
+		'data-date-today-highlight': 'true',
+		'data-date-autoclose': 'true',
+		'data-date-immediate-updates': 'true', 
+		'data-date-orientation': 'bottom', 
+		'placeholder': datepicker_placeholder() 
+	}
+}) }}
+</div>
+</div>
+{% endmacro filter_datepicker %}
