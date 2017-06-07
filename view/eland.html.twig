@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% import 'macro/flash.html.twig' as f %}
+
 {% block footable_css %}{% endblock %}
 {% block fileupload_css %}{% endblock %}
 {% block datepicker_css %}{% endblock %}
@@ -29,7 +31,12 @@
 <div class="container-fluid">
 <div class="row">
 <div class="col-md-12">
-{% block inner_content %}{% endblock %}
+
+{{ f.flash() }}
+
+{% block inner_content %}
+{% endblock %}
+
 </div>
 </div>
 </div>

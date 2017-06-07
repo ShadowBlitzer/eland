@@ -4,11 +4,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $app = new util\app();
 
-$app['debug'] = getenv('DEBUG');
-
 $app['route_class'] = 'util\route';
-
-$app['protocol'] = getenv('ELAND_HTTPS') ? 'https://' : 'http://';
 
 $app->register(new Predis\Silex\ClientServiceProvider(), [
 	'predis.parameters' => getenv('REDIS_URL'),
@@ -26,7 +22,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
 $app->register(new Silex\Provider\TwigServiceProvider(), [
 	'twig.path' => __DIR__ . '/view',
 	'twig.options'	=> [
-		'cache'		=> __DIR__ . '/../cache',
+		'cache'		=> __DIR__ . '/cache',
 		'debug'		=> getenv('DEBUG'),
 	],
 	'twig.form.templates'	=> [
@@ -42,6 +38,57 @@ $app->extend('twig', function($twig, $app) {
 
 	return $twig;
 });
+
+$app->register(new Silex\Provider\AssetServiceProvider(), [
+    'assets.version' => '15',
+    'assets.version_format' => '%s?v=%s',
+    'assets.base_path' => '/assets',
+    'assets.named_packages' => [
+        'css' 		=> ['base_path' => '/assets/css'],
+        'js'		=> ['base_path'	=> '/assets/js'],
+        'img' 		=> ['base_urls' => ['http://' . getenv('S3_IMG')]],
+        'doc'		=> ['base_urls' => ['http://' . getenv('S3_DOC')]],
+        'maxcdn'	=> ['base_urls' => ['https://maxcdn.bootstrapcdn.com']],
+        'cdnjs'		=> ['base_urls'	=> ['https://cdnjs.cloudflare.com/ajax/libs']],
+        'jquery'	=> ['base_urls'	=> ['https://code.jquery.com']],
+    ],
+]);
+
+$app->register(new Silex\Provider\LocaleServiceProvider());
+
+$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+    'locale_fallbacks' => ['nl', 'en'],
+    'locale'			=> 'nl',
+));
+
+/*
+ * The locale must be installed in the OS for formatting dates.
+ */
+
+setlocale(LC_TIME, 'nl_NL.UTF-8');
+
+date_default_timezone_set((getenv('TIMEZONE')) ?: 'Europe/Brussels');
+
+use Symfony\Component\Translation\Loader\YamlFileLoader;
+
+$app->extend('translator', function($translator, $app) {
+
+	$translator->addLoader('yaml', new YamlFileLoader());
+
+	$trans_dir = __DIR__ . '/translation/';
+
+	$translator->addResource('yaml', $trans_dir . 'en.yml', 'en');
+	$translator->addResource('yaml', $trans_dir . 'nl.yml', 'nl');
+
+	return $translator;
+});
+
+$app->register(new Silex\Provider\FormServiceProvider());
+
+$app->register(new Silex\Provider\CsrfServiceProvider());
+
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+
 
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
 
@@ -82,6 +129,15 @@ $app->extend('monolog', function($monolog, $app) {
 
 	return $monolog;
 });
+
+$app->register(new Silex\Provider\SessionServiceProvider(), [
+	'session.storage.handler'	=> new service\redis_session($app['predis']),
+	'session.storage.options'	=> [
+		'name'						=> 'eland',
+		'cookie_lifetime'			=> 172800,
+	],
+]);
+
 
 /*
 $app->register(new Silex\Provider\SecurityServiceProvider(), [
@@ -181,7 +237,8 @@ $app['mailaddr'] = function ($app){
 };
 
 $app['interlets_groups'] = function ($app){
-	return new service\interlets_groups($app['db'], $app['predis'], $app['groups'], $app['protocol']);
+	return new service\interlets_groups($app['db'], $app['predis'], $app['groups'],
+		$app['config'], $app['protocol']);
 };
 
 $app['distance'] = function ($app){
@@ -191,6 +248,10 @@ $app['distance'] = function ($app){
 $app['config'] = function ($app){
 	return new service\config($app['monolog'], $app['db'], $app['xdb'],
 		$app['predis'], $app['this_group']);
+};
+
+$app['type_template'] = function ($app){
+	return new service\type_template($app['config']);
 };
 
 $app['user_cache'] = function ($app){
@@ -291,126 +352,9 @@ $app['queue.geocode'] = function ($app){
 	return new queue\geocode($app['db'], $app['cache'], $app['queue'], $app['monolog'], $app['user_cache']);
 };
 
-$app->register(new Silex\Provider\FormServiceProvider());
-
-$app->register(new Silex\Provider\CsrfServiceProvider());
-
-$app->register(new Silex\Provider\ValidatorServiceProvider());
-
-$app->register(new Silex\Provider\MonologServiceProvider(), []);
-
-$app->extend('monolog', function($monolog, $app) {
-
-	$monolog->setTimezone(new DateTimeZone('UTC'));
-
-	$handler = new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Logger::DEBUG);
-	$handler->setFormatter(new \Bramus\Monolog\Formatter\ColoredLineFormatter());
-	$monolog->pushHandler($handler);
-
-	return $monolog;
-});
 
 
 
-
-$app->register(new Silex\Provider\SessionServiceProvider(), [
-	'session.storage.handler'	=> new service\redis_session($app['predis']),
-	'session.storage.options'	=> [
-		'name'						=> 'omv',
-		'cookie_lifetime'			=> 172800,
-	],
-]);
-
-$app['xdb'] = function($app){
-	return new service\xdb($app['db'], $app['predis'], $app['monolog']);
-};
-
-$app['s3'] = function($app){
-	return new service\s3($app['monolog']);
-};
-
-$app['token'] = function($app){
-	return new service\token();
-};
-
-$app['uuid'] = function($app){
-	return new service\uuid();
-};
-
-$app['mail'] = function($app){
-	return new service\mail($app['predis']);
-};
-
-$app['redis_session'] = function($app){
-	return new service\redis_session($app['predis']);
-};
-
-$app->register(new Silex\Provider\HttpFragmentServiceProvider());
-$app->register(new Silex\Provider\ServiceControllerServiceProvider());
-
-$app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
-    'profiler.cache_dir' => __DIR__.'/cache/profiler',
-    'profiler.mount_prefix' => '/_profiler',
-));
-
-$app->register(new Knp\Provider\ConsoleServiceProvider(), [
-    'console.name'              => 'eland',
-    'console.version'           => '01',
-    'console.project_directory' => __DIR__,
-]);
-
-$app->register(new Silex\Provider\FormServiceProvider());
-
-$app->register(new Silex\Provider\CsrfServiceProvider());
-
-$app->register(new Silex\Provider\ValidatorServiceProvider());
-
-$app['uuid'] = function($app){
-	return new service\uuid();
-};
-
-$app->register(new Silex\Provider\AssetServiceProvider(), [
-	'assets.version' => '1',
-	'assets.version_format' => '%s?v=%s',
-	'assets.base_path'	=> '/assets',
-]);
-
-$app->register(new Silex\Provider\LocaleServiceProvider());
-$app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale_fallbacks' => ['nl', 'en'],
-    'locale'			=> 'nl',
-));
-
-use Symfony\Component\Translation\Loader\YamlFileLoader;
-
-$app->extend('translator', function($translator, $app) {
-
-	$translator->addLoader('yaml', new YamlFileLoader());
-
-	$translator->addResource('yaml', __DIR__.'/translations/en.yml', 'en');
-	$translator->addResource('yaml', __DIR__.'/translations/nl.yml', 'nl');
-
-	return $translator;
-});
-
-$app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $request, $code) use ($app) {
-    if ($app['debug'])
-    {
-        return;
-    }
-
-    // ... logic to handle the error and return a Response
-
-	switch ($code) {
-		case 404:
-			$message = '404. The requested page could not be found.';
-			break;
-		default:
-			$message =  $code . '. We are sorry, but something went wrong.';
-	}
-
-    return new Response($message);
-});
 
 /**
  * functions
@@ -450,5 +394,51 @@ function link_user($user, string $sch = '', $link = true, $show_id = false, $fie
 	return $out;
 }
 
+
+/**
+ *
+ *
+ */
+
+
+
+$app->register(new Silex\Provider\HttpFragmentServiceProvider());
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+
+$app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
+    'profiler.cache_dir' => __DIR__.'/cache/profiler',
+    'profiler.mount_prefix' => '/_profiler',
+));
+
+$app->register(new Knp\Provider\ConsoleServiceProvider(), [
+    'console.name'              => 'eland',
+    'console.version'           => '01',
+    'console.project_directory' => __DIR__,
+]);
+
+$app['uuid'] = function($app){
+	return new service\uuid();
+};
+
+/*
+$app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $request, $code) use ($app) {
+    if ($app['debug'])
+    {
+        return;
+    }
+
+    // ... logic to handle the error and return a Response
+
+	switch ($code) {
+		case 404:
+			$message = '404. The requested page could not be found.';
+			break;
+		default:
+			$message =  $code . '. We are sorry, but something went wrong.';
+	}
+
+    return new Response($message);
+});
+*/
 
 return $app;

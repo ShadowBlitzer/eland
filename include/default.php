@@ -66,12 +66,14 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), [
 
 $app->extend('translator', function($translator, $app) {
 
-    $translator->addLoader('yaml', new \Symfony\Component\Translation\Loader\YamlFileLoader());
-	$trans_dir = __DIR__ . '/../translation/';
-    $translator->addResource('yaml', $trans_dir . 'en.yml', 'en');
-    $translator->addResource('yaml', $trans_dir . 'nl.yml', 'nl');
+	$translator->addLoader('yaml', new \Symfony\Component\Translation\Loader\YamlFileLoader());
 
-    return $translator;
+	$trans_dir = __DIR__ . '/../translation/';
+
+	$translator->addResource('yaml', $trans_dir . 'en.yml', 'en');
+	$translator->addResource('yaml', $trans_dir . 'nl.yml', 'nl');
+
+	return $translator;
 });
 
 $app->register(new Silex\Provider\ValidatorServiceProvider());

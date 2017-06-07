@@ -1,104 +1,11 @@
 <?php
 
-use util\app;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Validator\Constraints as Assert;
-
 $page_access = 'guest';
 require_once __DIR__ . '/include/web.php';
 
-if ($_GET['form_ok'])
+
+if (isset($hosting_form))
 {
-	echo $app->renderView('hosting/ok.html.twig');
-	exit;
-}
-
-if (true || isset($hosting_form))
-{
-	$request = $app['request_stack']->getCurrentRequest();
-
-
-	$form = $app['form.factory']->createBuilder(FormType::class)
-		->add('group_name')
-		->add('email', EmailType::class)
-		->add('message', TextareaType::class)
-		->add('token', HiddenType::class, [
-
-		])
-		->add('zend', SubmitType::class)
-		->getForm();
-
-	$form->handleRequest($request);
-
-	if ($form->isValid())
-	{
-		$data = $form->getData();
-
-		if (!$app['predis']->get('hosting_form_' . $token))
-		{
-			$errors[] = 'Het formulier is verlopen.';
-		}
-
-		$to = getenv('MAIL_HOSTER_ADDRESS');
-		$from = getenv('MAIL_FROM_ADDRESS');
-
-		if (!$to || !$from)
-		{
-			$errors[] = 'Interne fout.';
-		}
-
-		if (!count($errors))
-		{
-
-			$subject = 'Aanvraag hosting: ' . $data['group_name'];
-			$text = $data['message'] . "\r\n\r\n\r\n" . 'browser: ' . $browser . "\n" . 'token: ' . $token;
-
-			$enc = getenv('SMTP_ENC') ?: 'tls';
-			$transport = Swift_SmtpTransport::newInstance(getenv('SMTP_HOST'), getenv('SMTP_PORT'), $enc)
-				->setUsername(getenv('SMTP_USERNAME'))
-				->setPassword(getenv('SMTP_PASSWORD'));
-
-			$mailer = Swift_Mailer::newInstance($transport);
-
-			$mailer->registerPlugin(new Swift_Plugins_AntiFloodPlugin(100, 30));
-
-			$msg = Swift_Message::newInstance()
-				->setSubject($subject)
-				->setBody($text)
-				->setTo($to)
-				->setFrom($from)
-				->setReplyTo($data['email']);
-
-			$mailer->send($msg);
-
-			header('Location: ' . $rootpath . '?form_ok=1');
-			exit;
-		}
-
-
-	}
-
-	echo $app->renderView('hosting/request.html.twig', [
-		'form' 	=> $form->createView(),
-	]);
-
-	exit;
-}
-
-
-
-/*
-
-
-
 	if (isset($_POST['zend']))
 	{
 		$mail = $_POST['mail'];
@@ -281,10 +188,11 @@ if (true || isset($hosting_form))
 	echo '</html>';
 	exit;
 }
-*/
+
 /**
  *
  **/
+
 
 include __DIR__ . '/include/header.php';
 include __DIR__ . '/include/footer.php';

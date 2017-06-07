@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% import 'macro/flash.html.twig' as f %}
+
 {% block title %}{{ group.name }}{% endblock title %}
 
 {% block url_index %}{% endblock url_index %}
@@ -20,28 +22,7 @@
 <div id="wrap">
 <div id="main" class="container-fluid clear-top{% block div_main_class %}{% endblock %}">
 
-{% block flash %}
-
-{% if global.request.hasPreviousSession %}
-	{% if global.session.flashbag.peekAll()|length > 0 %}
-		<div id="flash">
-		{% for type, msg in global.session.flashbag.all() %}
-			{% for idx, flashMessage in flashMessages %}
-				{% if type == 'error' %}{% set type = 'danger' %}{% endif %}
-				<div class="row">
-				<div class="col-xs-12">
-				<div class="alert alert-{{ type }} alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true"><span class="fa fa-times"></span></span></button>
-				{{ msg|trans|trim }}
-				</div></div></div>
-			{% endfor %}
-		{% endfor %}
-		</div>
-	{% endif %}
-{% endif %}
-
-{% endblock flash %}
+{% block flash %}{{ f.flash() }}{% endblock flash %}
 
 {% block top_buttons_container %}
 

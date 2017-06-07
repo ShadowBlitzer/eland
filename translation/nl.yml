@@ -7,26 +7,40 @@ eland:
     (Maak eerst een %link_b_open%Github%link_b_close% account aan.)
   title: eLAND
 
-input:
-  email: Email
-  message: Bericht
-  code: Code
-  letscode: LETScode
-  group_name: Groepsnaam
 
-btn:
-  send: Verzenden
-  cancel: Annuleren
-  add: Toevoegen
-  edit: Aanpassen
-  delete: Verwijderen
+email: Email
+message: Bericht
+code: Code
+letscode: LETScode
+group_name: Groepsnaam
+
+from: Van
+to: Naar
+
+from_date: Vanaf
+
+send: Verzenden
+cancel: Annuleren
+add: Toevoegen
+edit: Aanpassen
+delete: Verwijderen
+filter: Filter
+filtered: Gefilterd
+csv: csv
+
+error: Er deed zich een fout voor
   
 hosting:
   title: Aanvraag hosting eLAND
   privacy: >
-    *Privacy: uw email adres wordt voor geen enkel ander doel
+    Privacy: uw email adres wordt voor geen enkel ander doel
     gebruikt dan u terug te kunnen contacteren.
+  success: >
+    <h3>Uw aanvraag voor eLAND hosting is verstuurd.</h3>
+    <p>We nemen zo spoedig mogelijk contact met u op.</p>
 
+index:
+  title: eLAND
 
 
 

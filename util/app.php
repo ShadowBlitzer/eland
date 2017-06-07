@@ -13,4 +13,5 @@ class app extends Application
     use Application\SwiftmailerTrait;
     use Application\MonologTrait;
     use Application\TranslationTrait;
+    use eland_trait;
 }
