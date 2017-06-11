@@ -15,13 +15,13 @@ class password_reset
 	public function token(Request $request, Application $app, $token)
 	{
 		$data = [
-			'name' => 'Your name',
-			'email' => 'Your email',
+			'name' 		=> '',
+			'email' 	=> '',
 		];
 
-		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+		$form = $app->form($data)
 			->add('password', TextType::class)
-			->add('zend', SubmitType::class)
+			->add('send', SubmitType::class)
 			->getForm();
 
 		$form->handleRequest($request);

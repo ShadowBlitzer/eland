@@ -44,8 +44,8 @@ $app->register(new Silex\Provider\AssetServiceProvider(), [
     'assets.version_format' => '%s?v=%s',
     'assets.base_path' => '/assets',
     'assets.named_packages' => [
-        'css' 		=> ['base_path' => '/assets/css'],
-        'js'		=> ['base_path'	=> '/assets/js'],
+        'css' 		=> ['base_path' => '/assets/css', 'version' => '15', 'version_format' => '%s?v=%s'],
+        'js'		=> ['base_path'	=> '/assets/js', 'version' => '15', 'version_format' => '%s?v=%s'],
         'img' 		=> ['base_urls' => ['http://' . getenv('S3_IMG')]],
         'doc'		=> ['base_urls' => ['http://' . getenv('S3_DOC')]],
         'maxcdn'	=> ['base_urls' => ['https://maxcdn.bootstrapcdn.com']],
@@ -89,6 +89,7 @@ $app->register(new Silex\Provider\CsrfServiceProvider());
 
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
+$app->register(new Silex\Provider\VarDumperServiceProvider());
 
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
 
@@ -206,6 +207,10 @@ $app['log_db'] = function($app){
 
 $app['groups'] = function ($app){
 	return new service\groups($app['db']);
+};
+
+$app['schemas'] = function ($app){
+	return new service\schemas($app['db']);
 };
 
 $app['template_vars'] = function ($app){

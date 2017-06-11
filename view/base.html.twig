@@ -9,7 +9,10 @@
 <title>{% block title %}eLAND{% endblock title %}</title>
 
 {{ a.css('bootstrap/3.3.7/css/bootstrap.min.css', 'maxcdn') }}
+
+{% block fontawesome_css %}
 {{ a.css('font-awesome/4.7.0/css/font-awesome.min.css', 'maxcdn') }}
+{% endblock fontawesome_css %}
 
 {% block footable_css %}
 {{ a.css('jquery-footable/2.0.3/css/footable.core.min.css', 'cdnjs') }}
@@ -35,7 +38,7 @@
 {% endblock leaflet_css %}
 
 {% block swiper_css %}
-{{ a.css('3.4.1/css/swiper.min.css', 'cdnjs') }}
+{{ a.css('Swiper/3.4.1/css/swiper.min.css', 'cdnjs') }}
 {% endblock swiper_css %}
 
 {% block css %}{% endblock css %}
@@ -93,9 +96,17 @@
 
 </div>
 
+{% block jquery_js %}
 {{ a.js('jquery-3.2.1.min.js', 'jquery') }}
+{% endblock jquery_js %}
+
+{% block bootstrap_js %}
 {{ a.js('bootstrap/3.3.7/js/bootstrap.min.js', 'maxcdn') }}
+{% endblock bootstrap_js %}
+
+{% block base_js %}
 {{ a.js('base.js') }}
+{% endblock base_js %}
 
 {% block typeahead_js %}
 {{ a.js('typeahead.js/0.11.1/typeahead.bundle.min.js', 'cdnjs') }}

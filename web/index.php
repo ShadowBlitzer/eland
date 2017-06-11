@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Response;
 use util\app;
 
 // development server
+
 $filename = __DIR__ . preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
 
 if (php_sapi_name() === 'cli-server' && is_file($filename))
@@ -14,16 +15,49 @@ if (php_sapi_name() === 'cli-server' && is_file($filename))
 
 $app = require_once __DIR__ . '/../app.php';
 
+$app['controllers']->assert('id', '\d+')
+	->assert('schema', '[a-z][a-z0-9]+')
+	->assert('token', '[a-z0-9][a-z0-9-]+[a-z0-9]');
 
-/*
+$cc = $app['controllers_factory'];
 
-$app['overall_domain'] = getenv('OVERALL_DOMAIN');
+$cc->match('/login', 'controller\\auth::login')
+	->bind('login');
+$cc->match('/password-reset', 'controller\\auth::password_reset')
+	->bind('password_reset');
+$cc->match('/password-reset/{token}', 'controller\\auth::password_reset_confirm')
+	->bind('password_reset');
+$cc->get('/logout', 'controller\\auth::logout')
+	->bind('logout');
+$cc->match('/register', 'controller\\auth::register')
+	->bind('register');
+$cc->match('/register/{token}', 'controller\\auth::register_confirm')
+	->bind('register_confirm');
 
-$secure = $app['controllers_factory'];
+$cc->match('/contact', 'controller\\contact::contact')->bind('contact');
 
-$secure->get('/', function(Request $request){
-	return 'secured ' . $request->getHost() . ' ' . $request;
+$cc->get('/contact/{token}', 'controller\\contact::contact_confirm')->bind('contact_confirm');
+
+$cc->get('/', function (Request $request, app $app, $schema){
+
+	return ' ok test ' . $schema;
 });
+
+$cc->before(function(Request $request) use ($app){
+
+	$schema = $request->attributes->get('_route_params')['schema'];
+
+	if (!$app['schemas']->is_set($schema))
+	{
+		$app->abort(404, 'error.404_page_not_found');
+	}
+
+	$app['db']->exec('set search_path to ' . $schema);
+});
+
+
+
+$app->mount('/{schema}', $cc);
 
 $users = $app['controllers_factory'];
 
@@ -35,8 +69,8 @@ $users->match('/add', 'controller\\user::add')->bind('user_add');   // admin
 $users->match('/{user}/edit', 'controller\\user::edit')->bind('user_edit'); // +admin
 $users->match('/{user}/del', 'controller\\user::del')->bind('user_del');   // admin
 
-$users->get('/{user_type}/{user}', 'controller\\user::show')->bind('user_show');
-$users->get('/{user}', 'controller\\user::show_without_type_context')->bind('user_show_without_type_context');
+$users->get('/{user_type}/{user}', 'controller\\user::show_with_type')->bind('user_show_with_type');
+$users->get('/{user}', 'controller\\user::show')->bind('user_show');
 $users->get('/', 'controller\\user::index');
 
 
@@ -51,23 +85,16 @@ $register->get('/{token}', 'controller\\register::token')
 
 $public = $app['controllers_factory'];
 
-$public->host('x.' . $app['overall_domain']);
-
 $public->get('/', function(){
 	return 'public';
 });
 
-
-
-
-
-
-
-$app->mount('/', $secure);
 $app->mount('/', $public);
-*/
+
+
 
 $app->match('/hosting-request', 'controller\\main::hosting_request')->bind('hosting_request');
+$app->get('/monitor', 'controller\\main::monitor')->bind('monitor');
 $app->get('/', 'controller\\main::index')->bind('main_index');
 
 

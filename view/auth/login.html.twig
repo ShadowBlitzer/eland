@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+<div class="row">
+<div class="col-md-12">
+<p></p>
+
+<h1>{{ 'login.heading'|trans }}</h1>
+
+{{ form_start(form) }}
+
+<p>
+
+<div class="input-group input-group-lg">
+      <span class="input-group-btn">
+        <button class="btn btn-info" type="button"><i class="fa fa-envelope-o"></i></button>
+      </span>
+     {{ form_widget(form.email, {'attr': {'placeholder': 'login.email'}}) }}
+</div>
+{{ form_errors(form.email) }}
+
+</p>
+
+<p>
+
+<div class="input-group input-group-lg">
+  <span class="input-group-btn">
+	<button class="btn btn-info" type="button"><i class="fa fa-key"></i></button>
+  </span>
+{{ form_widget(form.password, {'attr': {'placeholder': 'login.password' }}) }}
+</div>
+{{ form_errors(form.password) }}
+</p>
+
+<p>
+	{{ form_widget(form.submit, {'label': 'login.submit_btn', 'attr': {'class': 'btn btn-default btn-lg'}}) }}
+</p>
+
+{{ form_end(form) }}
+
+<a href="{{ path('password_reset_request') }}" class="btn btn-default btn-lg btn-block">{{ 'login.link_password_reset'|trans }}</a>
+
+</div>
+</div>
+
+{% endblock content %}
+

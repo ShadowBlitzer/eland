@@ -40,7 +40,8 @@
 		"symfony/asset": "^3.3",
 		"symfony/expression-language": "^3.2",
 		"silex/web-profiler": "^2.0",
-		"minishlink/web-push": "^1.4"
+		"minishlink/web-push": "^1.4",
+		"symfony/var-dumper": "^3.3"
 	},
 
     "minimum-stability": "stable",

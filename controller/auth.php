@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class auth
+class cc_auth
 {
 
 	/**
@@ -28,15 +28,14 @@ class auth
 		];
 
 		$form = $app->form($data)
-			->add('email', EmailType::class, [
-				'constraints' => new Assert\Email(),
-			])
 
+			->add('login')
 			->add('password', PasswordType::class, [
-				'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
+				'constraints' => [new Assert\Length(['min' => 6])],
 			])
 
 			->add('submit', SubmitType::class)
+
 			->getForm();
 
 		$form->handleRequest($request);
@@ -48,7 +47,7 @@ class auth
 			return $app->redirect('edit');
 		}
 
-		return $app['twig']->render('auth/login.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('cc_auth/login.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**

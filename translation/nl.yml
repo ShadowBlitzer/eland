@@ -28,9 +28,12 @@ filter: Filter
 filtered: Gefilterd
 csv: csv
 
-error: Er deed zich een fout voor
-  
-hosting:
+error: 
+  internal_configuration: Interne configuratie fout van de web app
+  form_token_expired: De maximale duurtijd van het formulier is overschreden.
+  404_page_not_found: Pagina niet gevonden.
+
+hosting_request:
   title: Aanvraag hosting eLAND
   privacy: >
     Privacy: uw email adres wordt voor geen enkel ander doel
@@ -38,6 +41,8 @@ hosting:
   success: >
     <h3>Uw aanvraag voor eLAND hosting is verstuurd.</h3>
     <p>We nemen zo spoedig mogelijk contact met u op.</p>
+  mail:
+    subject: 'Aanvraag hosting: %group_name%'
 
 index:
   title: eLAND
