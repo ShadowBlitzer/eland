@@ -98,7 +98,6 @@ $app->get('/monitor', 'controller\\main::monitor')->bind('monitor');
 $app->get('/', 'controller\\main::index')->bind('main_index');
 
 
-
 /*
 $app->match('/contact', 'controller\\contact::contact')->bind('contact');
 $app->get('/contact-confirm/{token}', 'controller\\contact::contact_confirm')->bind('contact_confirm');
