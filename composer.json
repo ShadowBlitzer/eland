@@ -57,7 +57,8 @@
 			"controller\\": "controller/",
 			"controller_provider\\": "controller_provider/",
 			"converter\\": "converter/",
-			"provider\\": "provider/"
+			"provider\\": "provider/",
+			"security\\": "security/"
         }
     }
 }

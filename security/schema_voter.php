@@ -3,6 +3,7 @@
 namespace security;
 
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -10,7 +11,15 @@ use service\schemas;
 
 class schema_voter implements VoterInterface
 {
-    const ROLE_ALLOWED_ON_DOMAIN = 'ALLOWED_ON_DOMAIN';
+    private $attribute_ary = [
+		'AC_GUEST_INTERLETS'	=> true,
+		'AC_GUEST_ELAS'			=> true,
+		'AC_GUEST_ELAND'		=> true,
+		'AC_INTERLETS'			=> true,
+		'AC_USER'				=> true,
+		'AC_ADMIN'				=> true,
+		'AC_MASTER'				=> true,
+    ];
 
     private $schemas;
 
@@ -31,16 +40,39 @@ class schema_voter implements VoterInterface
 
 	public function vote(TokenInterface $token, Request $request, array $attributes)
 	{
-		$result = self::ACCESS_ABSTAIN;
-
+/*
+		if (!($object instanceof Request))
+		{
+			return self::ACCESS_ABSTAIN;
+		}
+*/
 		$user = $token->getUser();
 
 		if (!($user instanceof UserInterface))
 		{
-			return $result;
+			return self::ACCESS_ABSTAIN;
 		}
 
-        /* @var $object Request */
+		$route_params = $request->attributes->get('_route_params');
+
+		if (!isset($schema = $route_params['schema']))
+		{
+			return self::ACCESS_ABSTAIN;
+		}
+
+		if (!isset($role = $route_params['role']))
+		{
+			return self::ACCESS_ABSTAIN;
+		}
+
+
+
+
+		if (!isset($guest_type = $route_params['guest_type']))
+		{
+			return self::ACCESS_ABSTAIN;
+		}
+
 
 		foreach ($attributes as $attribute)
 		{
@@ -61,6 +93,6 @@ class schema_voter implements VoterInterface
 			}
 		}
 
-        return $result;
+        return self::ACCESS_ABSTAIN;
     }
 }
