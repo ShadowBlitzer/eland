@@ -1,9 +1,10 @@
 <?php
 
-namespace util;
+namespace security;
 
-use service\service\xdb;
-use util\user;
+use Doctrine\DBAL\Connection as db;
+use service\xdb;
+use service\user;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -11,21 +12,26 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 class user_provider implements UserProviderInterface
 {
+	private $db;
 	private $xdb;
 
-	public function __construct(xdb $xdb)
+	public function __construct(db $db, xdb $xdb)
 	{
+		$this->db = $db;
 		$this->xdb = $xdb;
 	}
 
 	/**
-	 * @param string username is actually email (Symfony hack)
+	 * @param string username is actually email (user), username or code
 	 * @return user
 	 */
 
-    public function loadUserByUsername(string $username)
+    public function loadUserByUsername($username)
     {
-        $data = $this->xdb->get('user_auth_' . $username)
+
+
+
+        $data = $this->xdb->get('user', $username);
 
         if ($data === '{}')
         {
@@ -38,6 +44,7 @@ class user_provider implements UserProviderInterface
 
 		return new user($username, $data['password'], $data['salt'], $data['roles']);
     }
+
 
     public function refreshUser(UserInterface $user)
     {

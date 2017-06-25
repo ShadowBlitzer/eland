@@ -6,12 +6,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 use service\schemas;
 
-class schema_voter implements VoterInterface
+class role_voter implements VoterInterface
 {
+	// ACCESS_GRANTED, ACCESS_ABSTAIN, ACCESS_DENIED
+
     private $attribute_ary = [
 		'view'		=> true,
 		'edit'		=> true,
@@ -20,7 +21,7 @@ class schema_voter implements VoterInterface
 		'undelete'	=> true,
     ];
 
-    private $attributes = [
+    private $access_bitmap = [
 		'view'		=> 1,
 		'edit'		=> 2,
 		'create'	=> 4,
@@ -28,24 +29,32 @@ class schema_voter implements VoterInterface
 		'undelete'	=> 16,
 	];
 
-
+	private $roles = [
+		'anonymous'		=> 1,
+		'guest_temp'	=> 2,
+		'guest_elas'	=> 4,
+		'guest_eland'	=> 8,
+		'interlets'		=> 16,
+		'user'			=> 32,
+		'operator'		=> 64,
+		'admin'			=> 128,
+		'owner'			=> 256,
+	];
 
     private $schemas;
 
-    public function __construct(schemas $schemas, RequestStack $requestStack)
+    public function __construct(schemas $schemas)
     {
         $this->schemas = $schemas;
-        $this->request = $requestStack->getCurrentRequest();
     }
 
 	public function vote(TokenInterface $token, $object, array $attributes)
 	{
-/*
 		if (!($object instanceof Request))
 		{
 			return self::ACCESS_ABSTAIN;
 		}
-*/
+
 		$user = $token->getUser();
 
 		if (!($user instanceof UserInterface))
@@ -55,20 +64,17 @@ class schema_voter implements VoterInterface
 
 		$route_params = $request->attributes->get('_route_params');
 
-		if (!isset($route_params['schema']))
+		if (!isset($schema = $route_params['schema']))
 		{
 			return self::ACCESS_ABSTAIN;
 		}
 
-		if (!isset($route_params['role']))
+		if (!isset($role = $route_params['role']))
 		{
 			return self::ACCESS_ABSTAIN;
 		}
 
-
-
-
-		if (!isset($route_params['guest_type']))
+		if (!isset($guest_type = $route_params['guest_type']))
 		{
 			return self::ACCESS_ABSTAIN;
 		}

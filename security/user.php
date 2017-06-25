@@ -46,19 +46,26 @@ class user implements UserInterface, EquatableInterface
 
     public function isEqualTo(UserInterface $user)
     {
-        if (!$user instanceof WebserviceUser) {
+
+/*
+        if (!$user instanceof WebserviceUser)
+        {
+            return false;
+        }
+*/
+
+        if ($this->password !== $user->getPassword())
+        {
             return false;
         }
 
-        if ($this->password !== $user->getPassword()) {
+        if ($this->salt !== $user->getSalt())
+        {
             return false;
         }
 
-        if ($this->salt !== $user->getSalt()) {
-            return false;
-        }
-
-        if ($this->username !== $user->getUsername()) {
+        if ($this->username !== $user->getUsername())
+        {
             return false;
         }
 

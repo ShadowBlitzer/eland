@@ -22,15 +22,15 @@
 {{ a.css('print.css', 'css', 'print') }}
 
 {% block summernote_css %}
-{{ a.css('summernote/0.8.2/summernote.css', 'cdnjs') }}
+{{ a.css('summernote/0.8.4/summernote.css', 'cdnjs') }}
 {% endblock summernote_css %}
 
 {% block fileupload_css %}
-{{ a.css('jQuery-File-Upload-9.17.0/css/jquery.fileupload.css', 'cdnjs') }}
+{{ a.css('blueimp-file-upload/9.18.0/css/jquery.fileupload.min.css', 'cdnjs') }}
 {% endblock fileupload_css %}
 
 {% block datepicker_css %}
-{{ a.css('bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.standalone.min.css', 'cdnjs') }}
+{{ a.css('bootstrap-datepicker/1.7.0/css/bootstrap-datepicker.standalone.min.css', 'cdnjs') }}
 {% endblock datepicker_css %}
 
 {% block leaflet_css %}
@@ -38,7 +38,7 @@
 {% endblock leaflet_css %}
 
 {% block swiper_css %}
-{{ a.css('Swiper/3.4.1/css/swiper.min.css', 'cdnjs') }}
+{{ a.css('Swiper/3.4.2/css/swiper.min.css', 'cdnjs') }}
 {% endblock swiper_css %}
 
 {% block css %}{% endblock css %}
@@ -58,7 +58,7 @@
 <body{% block body_attr %}{% endblock %}>
 
 {% block loading_img %}
-<img src="/gfx/loading.gif?v=1" class="ajax-loader">
+<img src="{{ asset('loading.gif', 'loc_img') }}" class="ajax-loader">
 {% endblock loading_img%}
 
 <div class="navbar navbar-default navbar-fixed-top">
@@ -113,19 +113,19 @@
 {% endblock typeahead_js %}
 
 {% block summernote_js %}
-{{ a.js('summernote/0.8.2/summernote.min.js', 'cdnjs') }}
-{{ a.js('summernote/0.8.2/lang/summernote-nl-NL.min.js', 'cdnjs') }}
+{{ a.js('summernote/0.8.4/summernote.min.js', 'cdnjs') }}
+{{ a.js('summernote/0.8.4/lang/summernote-nl-NL.min.js', 'cdnjs') }}
 {% endblock summernote_js %}
 
 {% block fileupload_js %}
-{{ a.js('blueimp-file-upload/9.17.0/js/vendor/jquery.ui.widget.min.js', 'cdnjs') }}
-{{ a.js('blueimp-file-upload/9.17.0/js/jquery.iframe-transport.min.js', 'cdnjs') }}
+{{ a.js('blueimp-file-upload/9.18.0/js/vendor/jquery.ui.widget.min.js', 'cdnjs') }}
+{{ a.js('blueimp-file-upload/9.18.0/js/jquery.iframe-transport.min.js', 'cdnjs') }}
 {{ a.js('blueimp-load-image/2.12.2/load-image.all.min.js', 'cdnjs') }}
-{{ a.js('javascript-canvas-to-blob/3.7.0/js/canvas-to-blob.min.js', 'cdnjs') }}
-{{ a.js('blueimp-file-upload/9.17.0/js/jquery.fileupload.min.js', 'cdnjs') }}
-{{ a.js('blueimp-file-upload/9.17.0/js/jquery.fileupload-process.min.js', 'cdnjs') }}
-{{ a.js('blueimp-file-upload/9.17.0/js/jquery.fileupload-image.min.js', 'cdnjs') }}
-{{ a.js('blueimp-file-upload/9.17.0/js/jquery.fileupload-validate.min.js', 'cdnjs') }}
+{{ a.js('javascript-canvas-to-blob/3.8.0/js/canvas-to-blob.min.js', 'cdnjs') }}
+{{ a.js('blueimp-file-upload/9.18.0/js/jquery.fileupload.min.js', 'cdnjs') }}
+{{ a.js('blueimp-file-upload/9.18.0/js/jquery.fileupload-process.min.js', 'cdnjs') }}
+{{ a.js('blueimp-file-upload/9.18.0/js/jquery.fileupload-image.min.js', 'cdnjs') }}
+{{ a.js('blueimp-file-upload/9.18.0/js/jquery.fileupload-validate.min.js', 'cdnjs') }}
 {% endblock fileupload_js %}
 
 {% block footable_js %}
@@ -135,7 +135,7 @@
 {% endblock footable_js %}
 
 {% block jssor_js %}
-{{ a.js('jssor-slider/22.1.8/jssor.slider.min.js', 'cdnjs') }}
+{{ a.js('jssor-slider/24.1.5/jssor.slider.min.js', 'cdnjs') }}
 {% endblock jssor_js %}
 
 {% block jqplot_js %}
@@ -144,13 +144,13 @@
 {{ a.js('jqPlot/1.0.9/plugins/jqplot.cursor.min.js', 'cdnjs') }}
 {{ a.js('jqPlot/1.0.9/plugins/jqplot.dateAxisRenderer.min.js', 'cdnjs') }}
 {{ a.js('jqPlot/1.0.9/plugins/jqplot.canvasTextRenderer.min.js', 'cdnjs') }}
-{{ a.js('jqPlot/1.0.8/plugins/jqplot.canvasAxisTickRenderer.min.js', 'cdnjs') }}
+{{ a.js('jqPlot/1.0.9/plugins/jqplot.canvasAxisTickRenderer.min.js', 'cdnjs') }}
 {{ a.js('jqPlot/1.0.9/plugins/jqplot.highlighter.min.js', 'cdnjs') }}
 {% endblock jqplot_js %}
 
 {% block datepicker_js %}
-{{ a.js('bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js', 'cdnjs') }}
-{{ a.js('bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.nl.min.js', 'cdnjs') }}
+{{ a.js('bootstrap-datepicker/1.7.0/js/bootstrap-datepicker.min.js', 'cdnjs') }}
+{{ a.js('bootstrap-datepicker/1.7.0/locales/bootstrap-datepicker.nl.min.js', 'cdnjs') }}
 {% endblock datepicker_js %}
 
 {% block isotope_js %}
@@ -163,7 +163,7 @@
 {% endblock leaflet_js %}
 
 {% block swiper_js %}
-{{ a.js('Swiper/3.4.1/js/swiper.jquery.min.js', 'cdnjs') }}
+{{ a.js('Swiper/3.4.2/js/swiper.jquery.min.js', 'cdnjs') }}
 {% endblock swiper_js %}
 
 {% block js %}{% endblock js %}

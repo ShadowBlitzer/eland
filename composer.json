@@ -38,10 +38,12 @@
 		"symfony/monolog-bridge": "^3.2",
 		"symfony/translation": "^3.2",
 		"symfony/asset": "^3.3",
-		"symfony/expression-language": "^3.2",
+		"symfony/expression-language": "^3.3",
 		"silex/web-profiler": "^2.0",
 		"minishlink/web-push": "^1.4",
-		"symfony/var-dumper": "^3.3"
+		"symfony/var-dumper": "^3.3",
+		"gigablah/silex-oauth": "~2.0@dev",
+		"twig/extensions": "^1.5"
 	},
 
     "minimum-stability": "stable",
@@ -58,7 +60,8 @@
 			"controller_provider\\": "controller_provider/",
 			"converter\\": "converter/",
 			"provider\\": "provider/",
-			"security\\": "security/"
+			"security\\": "security/",
+			"twig\\": "twig/"
         }
     }
 }

@@ -33,7 +33,9 @@ class contact
 			])
 
 			->add('message', TextareaType::class, [
-				'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 20, 'max' => 2000])],
+				'constraints' => [
+					new Assert\NotBlank(),
+					new Assert\Length(['min' => 20, 'max' => 2000])],
 			])
 
 			->add('submit', SubmitType::class)
@@ -67,7 +69,9 @@ class contact
 			return $app->redirect($app->path('index'));
 		}
 
-		return $app['twig']->render('contact/contact.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('contact/contact.html.twig', [
+			'form' => $form->createView(),
+		]);
 	}
 
 	/**

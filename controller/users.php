@@ -47,7 +47,7 @@ class users
 			->add('postcode')
 			->add('gsm', TextType::class, ['required'	=> false])
 			->add('tel', TextType::class, ['required'	=> false])
-			->add('zend', SubmitType::class)
+			->add('send', SubmitType::class)
 			->getForm();
 
 		$form->handleRequest($request);

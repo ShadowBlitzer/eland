@@ -33,10 +33,10 @@ $cc->match('/register', 'controller\\auth::register')
 	->bind('register');
 $cc->match('/register/{token}', 'controller\\auth::register_confirm')
 	->bind('register_confirm');
-
-$cc->match('/contact', 'controller\\contact::contact')->bind('contact');
-
-$cc->get('/contact/{token}', 'controller\\contact::contact_confirm')->bind('contact_confirm');
+$cc->match('/contact', 'controller\\contact::contact')
+	->bind('contact');
+$cc->get('/contact/{token}', 'controller\\contact::contact_confirm')
+	->bind('contact_confirm');
 
 $cc->get('/', function (Request $request, app $app, $schema){
 
@@ -47,7 +47,7 @@ $cc->before(function(Request $request) use ($app){
 
 	$schema = $request->attributes->get('_route_params')['schema'];
 
-	if (!$app['schemas']->is_set($schema))
+	if (!isset($schema) || !$app['schemas']->is_set($schema))
 	{
 		$app->abort(404, 'error.404_page_not_found');
 	}

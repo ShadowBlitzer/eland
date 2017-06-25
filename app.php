@@ -6,6 +6,8 @@ $app = new util\app();
 
 $app['route_class'] = 'util\route';
 
+$app['debug'] = getenv('DEBUG');
+
 $app->register(new Predis\Silex\ClientServiceProvider(), [
 	'predis.parameters' => getenv('REDIS_URL'),
 	'predis.options'    => [
@@ -32,7 +34,18 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 
 $app->extend('twig', function($twig, $app) {
 
-	$twig->addExtension(new service\twig_extension($app));
+	$twig->addExtension(new twig\extension());
+	$twig->addRuntimeLoader(new Twig_FactoryRuntimeLoader([
+		twig\config::class => function() use ($app){
+			return new twig\config($app['config']);
+		},
+		twig\distance::class => function() use ($app){
+			return new twig\distance($app['db'], $app['cache']);
+		},
+		twig\date_format::class => function() use ($app){
+			return new twig\date_format($app['config']);
+		},
+	]));
 	$twig->addGlobal('s3_img', getenv('S3_IMG'));
 	$twig->addGlobal('s3_doc', getenv('S3_DOC'));
 
@@ -46,6 +59,7 @@ $app->register(new Silex\Provider\AssetServiceProvider(), [
     'assets.named_packages' => [
         'css' 		=> ['base_path' => '/assets/css', 'version' => '15', 'version_format' => '%s?v=%s'],
         'js'		=> ['base_path'	=> '/assets/js', 'version' => '15', 'version_format' => '%s?v=%s'],
+        'loc_img'	=> ['base_path'	=> '/assets/img', 'version' => '15', 'version_format' => '%s?v=%s'],
         'img' 		=> ['base_urls' => ['http://' . getenv('S3_IMG')]],
         'doc'		=> ['base_urls' => ['http://' . getenv('S3_DOC')]],
         'maxcdn'	=> ['base_urls' => ['https://maxcdn.bootstrapcdn.com']],
@@ -93,6 +107,7 @@ $app->register(new Silex\Provider\VarDumperServiceProvider());
 
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
 
+/*
 $app->extend('monolog', function($monolog, $app) {
 
 	$monolog->setTimezone(new DateTimeZone('UTC'));
@@ -130,6 +145,7 @@ $app->extend('monolog', function($monolog, $app) {
 
 	return $monolog;
 });
+*/
 
 $app->register(new Silex\Provider\SessionServiceProvider(), [
 	'session.storage.handler'	=> new service\redis_session($app['predis']),
@@ -139,8 +155,14 @@ $app->register(new Silex\Provider\SessionServiceProvider(), [
 	],
 ]);
 
+$app['schemas'] = function ($app){
+	return new service\schemas($app['db']);
+};
 
-/*
+$app['schema_voter'] = function ($app){
+	return new security\schema_voter($app['schemas'], $app['request_stack']);
+};
+
 $app->register(new Silex\Provider\SecurityServiceProvider(), [
 
 	'security.firewalls' => [
@@ -150,21 +172,38 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
 		],
 
 		'secured'	=> [
-			'host'		=> '^l.',
+			'pattern'	=>  '^/*/[giuam]/',
+
+			'form' => [
+				'login_path' => 'login',
+				'check_path' => 'login_check',
+			],
+
+			'logout' => [
+				'logout_path' 			=> 'logout',
+				'invalidate_session' 	=> true,
+			],
+
 			'users'		=> function () use ($app) {
-				return new util\user_provider($app['xdb']);
+				return new security\user_provider($app['db'], $app['xdb']);
 			},
 
 		],
 	],
 
+/*
 	'security.role_hierarchy' => [
 		'ROLE_ADMIN' => ['ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'],
 	],
-
-]);
 */
+]);
 
+
+$app['security.voters'] = $app->extend('security.voters', function($voters) use ($app) {
+    $voters[] = $app['schema_voter'];
+
+    return $voters;
+});
 
 if(!isset($rootpath))
 {
@@ -209,10 +248,6 @@ $app['groups'] = function ($app){
 	return new service\groups($app['db']);
 };
 
-$app['schemas'] = function ($app){
-	return new service\schemas($app['db']);
-};
-
 $app['template_vars'] = function ($app){
 	return new service\template_vars($app['config']);
 };
@@ -255,6 +290,11 @@ $app['config'] = function ($app){
 		$app['predis'], $app['this_group']);
 };
 
+$app['config_en'] = function ($app){
+	return new service\config($app['monolog'], $app['db'], $app['xdb'],
+		$app['predis']);
+};
+
 $app['type_template'] = function ($app){
 	return new service\type_template($app['config']);
 };
@@ -266,6 +306,8 @@ $app['user_cache'] = function ($app){
 $app['token'] = function ($app){
 	return new service\token();
 };
+
+
 
 
 // queue

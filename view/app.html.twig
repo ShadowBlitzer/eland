@@ -2,7 +2,7 @@
 
 {% import 'macro/flash.html.twig' as f %}
 
-{% block title %}{{ group.name }}{% endblock title %}
+{% block title %}{{ config('systemname') }}{# {{ config_en('systemname') }} #}{% endblock title %}
 
 {% block url_index %}{% endblock url_index %}
 

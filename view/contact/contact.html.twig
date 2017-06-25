@@ -1,0 +1,52 @@
+{% extends 'anon.html.twig' %}
+
+{% import 'macro/asset.html.twig' as a %}
+
+{% block content %}
+
+<div class="row">
+<div class="col-md-12">
+<p></p>
+
+<h1>{{ 'contact.title'|trans }}</h1>
+
+{{ config('contact_form_top_text') }}
+
+{{ form_start(form) }}
+
+<p>
+
+<div class="input-group input-group-lg">
+<span class="input-group-btn">
+<button class="btn btn-info" type="button"><i class="fa fa-envelope-o"></i></button>
+</span>
+{{ form_widget(form.email, {'attr': {'placeholder': 'contact.email'}}) }}
+</div>
+{{ form_errors(form.email) }}
+<p>{{ 'contact.email_explain'|trans }}</p>
+
+</p>
+
+<p>
+
+{{ form_widget(form.message, {'attr': {'class': 'rich-edit'}}) }}
+{{ form_errors(form.message) }}
+
+</p>
+
+<p>
+{{ form_widget(form.submit, {'label': 'send', 'attr': {'class': 'btn btn-default btn-lg'}}) }}
+</p>
+
+{{ form_end(form) }}
+
+{{ config('contact_form_bottom_text') }}
+
+</div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+{{ a.js('rich_edit.js') }}
+{% endblock %}

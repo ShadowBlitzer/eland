@@ -28,7 +28,7 @@ filter: Filter
 filtered: Gefilterd
 csv: csv
 
-error: 
+error:
   internal_configuration: Interne configuratie fout van de web app
   form_token_expired: De maximale duurtijd van het formulier is overschreden.
   404_page_not_found: Pagina niet gevonden.
@@ -43,6 +43,12 @@ hosting_request:
     <p>We nemen zo spoedig mogelijk contact met u op.</p>
   mail:
     subject: 'Aanvraag hosting: %group_name%'
+
+contact:
+  title: Contact
+  email: Je emailadres
+  email_explain: Er wordt een validatielink naar je gestuurd die je moet aanklikken.
+  message: Je bericht
 
 index:
   title: eLAND
