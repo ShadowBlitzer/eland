@@ -39,7 +39,7 @@ if ($token)
 					'url_login'	=> $app['base_url'] . '/login.php?login=' . $user['letscode'],
 				];
 
-				$app['queue.mail']->queue([
+				$app['mail']->queue([
 					'to' 		=> $user_id,
 					'template'	=> 'password_reset',
 					'vars'		=> $vars,
@@ -144,11 +144,12 @@ if (isset($_POST['zend']))
 					'url_login'	=> $app['base_url'] . '/login.php?login=' . $user['letscode'],
 				];
 
-				$app['queue.mail']->queue([
+				$app['mail']->queue([
 					'to' 		=> $email,
 					'template'	=> 'password_reset_confirm',
 					'vars'		=> $vars,
-				], 1000);
+					'priority'	=> 10000,
+				]);
 
 				$app['alert']->success('Een link om je paswoord te resetten werd naar je mailbox verzonden. Opgelet, deze link blijft slechts één uur geldig.');
 

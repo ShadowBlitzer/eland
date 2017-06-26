@@ -580,21 +580,23 @@ if ($mail && $post && $id)
 		'login_url'		=> $app['base_url'].'/login.php',
 	];
 
-	$app['queue.mail']->queue([
+	$app['mail']->queue([
 		'to'		=> $user['id'],
 		'reply_to'	=> $s_schema . '.' . $s_id,
 		'template'	=> 'message',
 		'vars'		=> $vars,
-	], 600);
+		'priority'	=> 9000,
+	]);
 
 
 	if ($cc)
 	{
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'to'		=> $s_schema . '.' . $s_id,
 			'template'	=> 'message_copy',
 			'vars'		=> $vars,
-		], 600);
+			'priority'	=> 9000,
+		]);
 	}
 
 	$app['alert']->success('Mail verzonden.');

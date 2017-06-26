@@ -35,7 +35,7 @@ class queue
 	 *
 	 */
 
-	public function set(string $topic, array $data, int $priority = 0, int $interval = 0)
+	public function set(string $topic, array $data)
 	{
 		if (!strlen($topic))
 		{
@@ -47,15 +47,23 @@ class queue
 		if (!$data)
 		{
 			$error = 'Queue topic: ' . $topic . ' -> No data set';
-			$this->monolog->error('queue: ', $error);
+			$this->monolog->error('queue: ' .  $error);
 			return $error;
 		}
 
-		if (!ctype_digit((string) $priority))
+		if (!isset($data['priority']))
 		{
-			$error = 'Queue topic: ' . $topic . ' -> error Priority is no number: ' . $priority;
-			$this->monolog->error('queue error: ', $error);
+			$priority = 1000;
+		}
+		else if (!ctype_digit((string) $data['priority']))
+		{
+			$error = 'Queue topic: ' . $topic . ' -> error Priority is no number: ' . $data['priority'];
+			$this->monolog->error('queue error: ' . $error);
 			return $error;
+		}
+		else
+		{
+			$priority = $data['priority'];
 		}
 
 		$insert = [
@@ -82,14 +90,14 @@ class queue
 	 *
 	 */
 
-	public function get(array $omit_topics = [])
+	public function get(array $topic_ary = [])
 	{
 		$sql_where = $sql_params = $sql_types = [];
 
-		if (count($omit_topics))
+		if (count($topic_ary))
 		{
-			$sql_where[] = 'topic not in (?)';
-			$sql_params[] = $omit_topics;
+			$sql_where[] = 'topic in (?)';
+			$sql_params[] = $topic_ary;
 			$sql_types[] = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
 		}
 

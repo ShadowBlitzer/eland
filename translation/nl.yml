@@ -9,6 +9,7 @@ eland:
 
 
 email: Email
+password: Paswoord
 message: Bericht
 code: Code
 letscode: LETScode
@@ -27,6 +28,7 @@ delete: Verwijderen
 filter: Filter
 filtered: Gefilterd
 csv: csv
+generate: Genereer
 
 error:
   internal_configuration: Interne configuratie fout van de web app
@@ -44,11 +46,34 @@ hosting_request:
   mail:
     subject: 'Aanvraag hosting: %group_name%'
 
+title:
+  login: Login
+  contact: Contact
+  register: Inschrijven
+  password_reset: Paswoord vergeten
+
 contact:
-  title: Contact
   email: Je emailadres
   email_explain: Er wordt een validatielink naar je gestuurd die je moet aanklikken.
   message: Je bericht
+
+login:
+  login: Email, code of gebruikersnaam
+  login_lets: Email, LETScode of gebruikersnaam
+  submit_btn: Login
+  password_reset_link: Ik ben mijn paswoord vergeten
+
+password_reset:
+  explain: Stuur een link naar je mailbox waarmee je je paswoord opnieuw kan instellen.
+  submit_btn: Reset paswoord
+  mail:
+    subject: Reset paswoord
+    top: >
+      Gebruik deze link om een nieuw paswoord in te stellen voor je account.
+    bottom: >
+      Deze link blijft 4 uur geldig. Gelieve deze mail te negeren indien je niet zelf
+      een paswoord reset hebt aangevraagd.
+
 
 index:
   title: eLAND

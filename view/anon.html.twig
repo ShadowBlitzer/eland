@@ -2,10 +2,14 @@
 
 {% import 'macro/menu.html.twig' as menu %}
 
-{% set anon_pages = {
-	'login': {'fa': 'sign-in'},
-	'contact': {'fa': 'comment-o'},
-	'register': {'fa': 'check-square-o'}
+{% set anon_routes = {
+	'login': {'fa': 'sign-in', 'menu': true},
+	'password_reset': {'fa': 'key'},
+	'password_reset_confirm': {'fa': 'key'},
+	'contact': {'fa': 'comment-o', 'menu': true},
+	'contact_confirm': {'fa': 'comment-o'},
+	'register': {'fa': 'check-square-o', 'menu': true},
+	'register_confirm': {'fa': 'check-square-o'}
 }
 %}
 
@@ -16,6 +20,8 @@
 {% block datepicker_css %}{% endblock %}
 {% block leaflet_css %}{% endblock %}
 {% block leaflet_label_css %}{% endblock %}
+
+{% block loading_img %}{% endblock loading_img%}
 
 {% block typeahead_js %}{% endblock %}
 {% block fileupload_js %}{% endblock %}
@@ -29,13 +35,13 @@
 
 {% block side_menu_items %}
 
-	{% for page, prop in anon_pages %}
-	{{ menu.li(page, prop, active_page) }}
+	{% for route, prop in anon_routes %}
+	{{ menu.li(route, prop, active_route, schema) }}
 	{% endfor %}
 
 {% endblock side_menu_items %}
 
-{% block fa %}{{ anon_pages[active_page].fa }}{% endblock fa %}
+{% block fa %}{{ anon_routes[active_route].fa }}{% endblock fa %}
 
 
 

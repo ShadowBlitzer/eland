@@ -100,7 +100,7 @@ function mail_mailtype_interlets_transaction($transaction)
 		],
 	];
 
-	$app['queue.mail']->queue([
+	$app['mail']->queue([
 		'to' 		=> $transaction['id_to'],
 		'reply_to' 	=> 'admin',
 		'template'	=> 'mailtype_interlets_transaction',
@@ -109,7 +109,7 @@ function mail_mailtype_interlets_transaction($transaction)
 
 	$vars['copy'] = true;
 
-	$app['queue.mail']->queue([
+	$app['mail']->queue([
 		'to' 		=> $transaction['id_from'],
 		'cc' 		=> 'admin',
 		'template'	=> 'mailtype_interlets_transaction',
@@ -161,7 +161,7 @@ function mail_transaction($transaction, $remote_schema = null)
 
 	if ($userfrom['accountrole'] != 'interlets' && ($userfrom['status'] == 1 || $userfrom['status'] == 2))
 	{
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'to' 		=> $userfrom['id'],
 			'template'	=> 'transaction',
 			'vars'		=> array_merge($vars, [
@@ -173,7 +173,7 @@ function mail_transaction($transaction, $remote_schema = null)
 
 	if ($userto['accountrole'] != 'interlets' && ($userto['status'] == 1 || $userto == 2))
 	{
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'to' 		=> $t_schema . $userto['id'],
 			'schema'	=> $sch,
 			'template'	=> 'transaction',

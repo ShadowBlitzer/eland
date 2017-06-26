@@ -864,7 +864,7 @@ function mail_mass_transaction($mail_ary)
 			'url_login'			=> $app['base_url'] . '/login.php?login=' . $user['letscode'],
 		]);
 
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'to'		=> $user_id,
 			'template'	=> 'transaction',
 			'vars'		=> $vars,
@@ -907,7 +907,7 @@ function mail_mass_transaction($mail_ary)
 		'total'		=> $total,
 	]);
 
-	$app['queue.mail']->queue([
+	$app['mail']->queue([
 		'to' 		=> ['admin', $s_id, $one_user_id],
 		'subject' 	=> $subject,
 		'text' 		=> $text,

@@ -10,19 +10,13 @@ if (php_sapi_name() !== 'cli')
 	exit;
 }
 
-require_once __DIR__ . '/include/default.php';
+$app = require_once __DIR__ . '/app.php';
 
-$boot = $app['cache']->get('boot');
+$app->boot();
 
-if (!count($boot))
-{
-	$boot = ['count' => 0];
-}
+$boot = $app['boot_count']->get('worker');
 
-$boot['count']++;
-$app['cache']->set('boot', $boot);
-
-echo 'worker started .. ' . $boot['count'] . "\n";
+echo 'worker started .. ' . $boot . "\n";
 
 $queue = new queue_container($app, 'queue');
 $task = new task_container($app, 'task');
@@ -30,15 +24,11 @@ $schema_task = new task_container($app, 'schema_task');
 
 $loop_count = 1;
 
-$app['predis']->set('block_task', '1');
-$app['predis']->expire('block_task', 3);
-
 while (true)
 {
-
 	$app['log_db']->update();
 
-	sleep(1);
+	sleep(5);
 
 	if ($queue->should_run())
 	{

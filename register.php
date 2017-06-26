@@ -155,7 +155,7 @@ if ($token)
 			'user_url'	=> $app['base_url'] . '/users.php?id=' . $user_id,
 		];
 
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'to' 			=> 'admin',
 			'vars'			=> $vars,
 			'template'		=> 'admin_registration',
@@ -172,12 +172,13 @@ if ($token)
 			$vars[$k] = $data[$v];
 		}
 
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'to' 					=> $data['email'],
 			'reply_to'				=> 'admin',
 			'template_from_config'	=> 'registration_success_mail',
 			'vars'		=> $vars,
-		], 1000);
+			'priority'	=> 10000,
+		]);
 
 		$app['alert']->success('Inschrijving voltooid.');
 
@@ -279,11 +280,12 @@ if ($submit)
 			'confirm_url'	=> $app['base_url'] . '/register.php?token=' . $token,
 		];
 
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'to' 		=> $reg['email'],
 			'vars'		=> $vars,
 			'template'	=> 'registration_confirm',
-		], 1000);
+			'priority'	=> 10000,
+		]);
 
 		$app['alert']->warning('Open je mailbox en klik op de bevestigingslink in de email die we naar je gestuurd hebben om je inschrijving te voltooien.');
 		header('Location: ' . $rootpath . 'login.php');

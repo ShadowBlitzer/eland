@@ -1,4 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends 'anon.html.twig' %}
+
+{% block summernote_css %}{% endblock %}
 
 {% form_theme form _self %}
 
@@ -28,13 +30,7 @@
 {% endblock checkbox_radio_label %}
 
 
-{% block content %}
-
-<div class="row">
-<div class="col-md-12">
-<p></p>
-
-<h1>{{ 'register.heading'|trans }}</h1>
+{% block inner %}
 
 {{ form_start(form) }}
 
@@ -83,12 +79,13 @@
 
 <p>
 
+{#
 {{ form_errors(form.accept) }}
 
 {% set accept_label = 'register.accept'|trans({'%url%': path('terms')}) %}
 
 {{ form_widget(form.accept, {'label': accept_label}) }}
-
+#}
 </p>
 
 <p>
@@ -97,10 +94,9 @@
 
 {{ form_end(form) }}
 
-</div>
-</div>
+{% endblock inner %}
 
-{% endblock content %}
+{% block summernote_js %}{% endblock %}
 
 {% block js %}
 <script src="{{ asset('generate_password.js') }}"></script>

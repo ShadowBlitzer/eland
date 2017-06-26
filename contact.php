@@ -53,13 +53,13 @@ if ($token)
 			],
 		];
 
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'template'	=> 'contact_copy',
 			'vars'		=> $vars,
 			'to'		=> $data['mail'],
 		]);
 
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'template'	=> 'contact',
 			'vars'		=> $vars,
 			'to'		=> 'support',
@@ -152,7 +152,7 @@ if($post && isset($_POST['zend']))
 			'confirm_url'	=> $app['base_url'] . '/contact.php?token=' . $token,
 		];
 
-		$return_message =  $app['queue.mail']->queue([
+		$return_message =  $app['mail']->queue([
 			'to' 		=> $mail,
 			'template'	=> 'contact_confirm',
 			'vars'		=> $vars,

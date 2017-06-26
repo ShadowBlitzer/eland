@@ -25,13 +25,13 @@ $cc->match('/login', 'controller\\auth::login')
 	->bind('login');
 $cc->match('/password-reset', 'controller\\auth::password_reset')
 	->bind('password_reset');
-$cc->match('/password-reset/{token}', 'controller\\auth::password_reset_confirm')
-	->bind('password_reset');
+$cc->get('/password-reset/{token}', 'controller\\auth::password_reset_confirm')
+	->bind('password_reset_confirm');
 $cc->get('/logout', 'controller\\auth::logout')
 	->bind('logout');
 $cc->match('/register', 'controller\\auth::register')
 	->bind('register');
-$cc->match('/register/{token}', 'controller\\auth::register_confirm')
+$cc->get('/register/{token}', 'controller\\auth::register_confirm')
 	->bind('register_confirm');
 $cc->match('/contact', 'controller\\contact::contact')
 	->bind('contact');
@@ -53,9 +53,9 @@ $cc->before(function(Request $request) use ($app){
 	}
 
 	$app['db']->exec('set search_path to ' . $schema);
+
+	$app['schema'] = $schema;
 });
-
-
 
 $app->mount('/{schema}', $cc);
 

@@ -1,37 +1,32 @@
 <?php
 
-namespace queue;
+namespace service;
 
-use model\queue as queue_model;
-use model\queue_interface;
 use League\HTMLToMarkdown\HtmlConverter;
 use service\queue;
 use Monolog\Logger;
-use service\this_group;
 use service\mailaddr;
 use Twig_Environment as Twig;
 use service\config;
 use service\token;
 use service\email_validate;
 
-class mail extends queue_model implements queue_interface
+class mail
 {
 	private $converter;
 	private $mailer;
 	private $queue;
 	private $monolog;
-	private $this_group;
 	private $mailaddr;
 	private $twig;
 	private $email_validate;
 
 	public function __construct(queue $queue, Logger $monolog,
-		this_group $this_group, mailaddr $mailaddr, Twig $twig, config $config,
+		mailaddr $mailaddr, Twig $twig, config $config,
 		email_validate $email_validate)
 	{
 		$this->queue = $queue;
 		$this->monolog = $monolog;
-		$this->this_group = $this_group;
 		$this->mailaddr = $mailaddr;
 		$this->twig = $twig;
 		$this->config = $config;
@@ -52,8 +47,6 @@ class mail extends queue_model implements queue_interface
 		$converter_config = $this->converter->getConfig();
 		$converter_config->setOption('strip_tags', true);
 		$converter_config->setOption('remove_nodes', 'img');
-
-		parent::__construct();
 	}
 
 	/**
@@ -186,12 +179,14 @@ class mail extends queue_model implements queue_interface
 		$this->mailer->getTransport()->stop();
 	}
 
-	public function queue(array $data, int $priority = 100)
+	public function queue(array $data)
 	{
-		// only the interlets transactions receiving side has a different schema
-		// always set schema in cron
-
-		$data['schema'] = $data['schema'] ?? $this->this_group->get_schema();
+		if (!$data['schema'])
+		{
+			$m = 'Mail: no schema set, data: ' . json_encode($data) . "\n";
+			$this->monolog->info('mail: ' . $m);
+			return $m;
+		}
 
 		$data['vars']['validate_param'] = '';
 
@@ -260,7 +255,7 @@ class mail extends queue_model implements queue_interface
 
 		if (isset($data['reply_to']))
 		{
-			$data['reply_to'] = $this->mailaddr->get($data['reply_to']);
+			$data['reply_to'] = $this->mailaddr->get($data['reply_to'], $data['schema']);
 
 			if (!count($data['reply_to']))
 			{
@@ -304,7 +299,7 @@ class mail extends queue_model implements queue_interface
 
 			unset($data['to'][$email_to]);
 
-			$error = $this->queue->set('mail', $val_data, $priority);
+			$error = $this->queue->set('mail', $val_data);
 
 			if (!$error)
 			{
@@ -313,7 +308,7 @@ class mail extends queue_model implements queue_interface
 					', subject: ' .
 					($data['subject'] ?? '(template)') . ', from : ' .
 					json_encode($data['from']) . ' to : ' . json_encode($data['to']) . ' ' .
-					$reply . ' priority: ' . $priority, ['schema' => $data['schema']]);
+					$reply . ' priority: ' . $data['priority'], ['schema' => $data['schema']]);
 			}
 		}
 
@@ -322,19 +317,14 @@ class mail extends queue_model implements queue_interface
 			return;
 		}
 
-		$error = $this->queue->set('mail', $data, $priority);
+		$error = $this->queue->set('mail', $data);
 
 		if (!$error)
 		{
 			$this->monolog->info('mail: Mail in queue, subject: ' .
 				($data['subject'] ?? '(template)') . ', from : ' .
 				json_encode($data['from']) . ' to : ' . json_encode($data['to']) . ' ' .
-				$reply . ' priority: ' . $priority, ['schema' => $data['schema']]);
+				$reply . ' priority: ' . $data['priority'], ['schema' => $data['schema']]);
 		}
-	}
-
-	public function get_interval()
-	{
-		return 5;
 	}
 }

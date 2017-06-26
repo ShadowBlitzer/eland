@@ -8,7 +8,7 @@ use Predis\Client as Redis;
 use service\xdb;
 use service\cache;
 use Monolog\Logger;
-use queue\mail;
+use service\mail;
 use service\date_format;
 use service\distance;
 

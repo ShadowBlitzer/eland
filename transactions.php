@@ -467,7 +467,7 @@ if ($add)
 				$text = 'WARNING: LOCAL COMMIT OF TRANSACTION ' . $transaction['transid'] . ' FAILED!!!  This means the transaction is not balanced now!';
 				$text .= ' group:' . $group['groupname'];
 
-				$app['queue.mail']->queue([
+				$app['mail']->queue([
 					'to' => 'admin',
 					'subject' => $subject,
 					'text' => $text,

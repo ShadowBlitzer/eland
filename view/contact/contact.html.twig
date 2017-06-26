@@ -2,13 +2,7 @@
 
 {% import 'macro/asset.html.twig' as a %}
 
-{% block content %}
-
-<div class="row">
-<div class="col-md-12">
-<p></p>
-
-<h1>{{ 'contact.title'|trans }}</h1>
+{% block inner %}
 
 {{ config('contact_form_top_text') }}
 
@@ -17,8 +11,7 @@
 <p>
 
 <div class="input-group input-group-lg">
-<span class="input-group-btn">
-<button class="btn btn-info" type="button"><i class="fa fa-envelope-o"></i></button>
+<span class="input-group-addon addon-info"><i class="fa fa-envelope-o"></i>
 </span>
 {{ form_widget(form.email, {'attr': {'placeholder': 'contact.email'}}) }}
 </div>
@@ -42,10 +35,7 @@
 
 {{ config('contact_form_bottom_text') }}
 
-</div>
-</div>
-
-{% endblock content %}
+{% endblock inner %}
 
 {% block js %}
 {{ a.js('rich_edit.js') }}

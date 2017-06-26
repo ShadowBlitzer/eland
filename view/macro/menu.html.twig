@@ -3,13 +3,15 @@
 <li class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 <span class="fa fa-{{ fa|default('question') }}"></span> {{ label|default('--label--') }}
-<span class="caret"></span></a> 
+<span class="caret"></span></a>
 <ul class="dropdown-menu" role="menu">
 {% endmacro %}
 
-{% macro li(page, prop, active_page) %}
-<li{% if active_page and page == active_page %} class="active"{% endif %}>
-<a href="{{ path(page) }}">
-<i class="fa fa-{{ prop['fa']|default('question') }}"></i> {{ page|trans }}
+{% macro li(route, prop, active_route, schema) %}
+{% if prop['menu'] is defined %}
+<li{% if active_route == route %} class="active"{% endif %}>
+<a href="{{ path(route, {'schema': schema }) }}">
+<i class="fa fa-{{ prop['fa']|default('question') }}"></i> {{ ('title.'~route)|trans }}
 </a></li>
+{% endif %}
 {% endmacro %}

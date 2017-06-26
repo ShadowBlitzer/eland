@@ -13,17 +13,13 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class cc_auth
+class auth
 {
-
-	/**
-	 *
-	 */
 
 	public function login(Request $request, app $app)
 	{
 		$data = [
-			'email'		=> '',
+			'login'		=> '',
 			'password'	=> '',
 		];
 
@@ -31,7 +27,7 @@ class cc_auth
 
 			->add('login')
 			->add('password', PasswordType::class, [
-				'constraints' => [new Assert\Length(['min' => 6])],
+				'constraints' => [new Assert\Length(['min' => 4])],
 			])
 
 			->add('submit', SubmitType::class)
@@ -47,7 +43,7 @@ class cc_auth
 			return $app->redirect('edit');
 		}
 
-		return $app['twig']->render('cc_auth/login.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('auth/login.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**
@@ -77,7 +73,7 @@ class cc_auth
 			])
 
 			->add('password', PasswordType::class, [
-				'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
+				'constraints' => new Assert\Length(['min' => 6]),
 			])
 
 			->add('accept', CheckboxType::class, [
@@ -225,7 +221,7 @@ class cc_auth
 	 *
 	 */
 
-	public function password_reset_request(Request $request, app $app)
+	public function password_reset(Request $request, app $app, $schema)
 	{
 		$data = [
 			'email'	=> '',
@@ -245,30 +241,44 @@ class cc_auth
 		{
 			$data = $form->getData();
 
-			$data['email'] = strtolower($data['email']);
+			$email = strtolower($data['email']);
 
-			$user_email = $app['xdb']->get('user_email_' . $data['email']);
+			$user = $app['db']->fetchAll('select u.*
+				from contact c, type_contact tc, users u
+				where c. value = ?
+					and tc.id = c.id_type_contact
+					and tc.abbrev = \'mail\'
+					and c.id_user = u.id
+					and u.status in (1, 2)', [$email]);
 
-			if ($user_email !== '{}')
+			if (count($user) < 2)
 			{
-				$data['subject'] = 'mail_password_reset.subject';
-				$data['top'] = 'mail_password_reset.top';
-				$data['bottom'] = 'mail_password_reset.bottom';
-				$data['template'] = 'link';
-				$data['to'] = $data['email'];
+				$user = $user[0];
 
-				$token = $app['token']->set_length(20)->gen();
+				if ($user['id'])
+				{
+					$token = $app['token']->gen();
+					$key = $schema . '_token_' . $token;
 
-				$data['url'] = $app->url('password_reset', ['token' => $token]);
-				$data['token'] = $token;
+					$app['predis']->set($key, json_encode(['uid' => $user['id'], 'email' => $email]));
+					$app['predis']->expire($key, 3600);
 
-				$redis_key = 'password_reset_' . $token;
-				$app['predis']->set($redis_key, json_encode($data));
-				$app['predis']->expire($redis_key, 14400);
+					$data['subject'] = 'password_reset.mail.subject';
+					$data['top'] = 'password_reset.mail.top';
+					$data['bottom'] = 'password_reset.mail.bottom';
+					$data['template'] = 'link';
+					$data['to'] = $data['email'];
+					$data['url'] = $app->url('password_reset_confirm', [
+						'token' 	=> $token,
+						'schema' 	=> $schema,
+					]);
 
-				$app['mail']->queue_priority($data);
+					$data['priority'] = 1000;
 
-				return $app->redirect($app->path('password_reset_sent'));
+					$app['mail']->queue($data);
+
+					return $app->redirect($app->path('password_reset_sent'));
+				}
 			}
 
 			$app['session']->getFlashBag()->add('error', $app->trans('password_reset.unknown_email_address'));
@@ -293,7 +303,7 @@ class cc_auth
 	 *
 	 */
 
-	public function password_reset(Request $request, app $app, $token)
+	public function _password_reset(Request $request, app $app, $token)
 	{
 		$redis_key = 'password_reset_' . $token;
 		$data = $app['predis']->get($redis_key);

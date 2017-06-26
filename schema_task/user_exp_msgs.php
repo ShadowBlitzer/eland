@@ -4,7 +4,7 @@ namespace schema_task;
 
 use model\schema_task;
 use Doctrine\DBAL\Connection as db;
-use queue\mail;
+use service\mail;
 
 use service\schedule;
 use service\groups;

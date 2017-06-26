@@ -13,17 +13,22 @@ class queue_container extends job_container
 	{
 		$now = time();
 
-		$omit_ary = [];
+		$topic_ary = [];
 
 		foreach ($this->jobs as $queue)
 		{
-			if ($queue->get_next() > $now)
+			if ($queue->get_next() < $now)
 			{
-				$omit_ary[] = $queue->get_class_name();
+				$topic_ary[] = $queue->get_class_name();
 			}
 		}
 
-		$record = $this->app['queue']->get($omit_ary);
+		if (!count($topic_ary))
+		{
+			return false;
+		}
+
+		$record = $this->app['queue']->get($topic_ary);
 
 		if (!$record)
 		{

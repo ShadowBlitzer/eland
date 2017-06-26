@@ -74,7 +74,7 @@ if (isset($_POST['zend']))
 
 		if ($mailaddr)
 		{
-			$app['queue.mail']->queue([
+			$app['mail']->queue([
 				'template'	=> 'support_copy',
 				'vars'		=> $vars,
 				'to'		=> $s_id,
@@ -83,7 +83,7 @@ if (isset($_POST['zend']))
 			$mail_ary['reply_to'] = $s_id;
 		}
 
-		$return_message =  $app['queue.mail']->queue($mail_ary);
+		$return_message =  $app['mail']->queue($mail_ary);
 
 		if (!$return_message)
 		{

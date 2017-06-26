@@ -165,20 +165,22 @@ if ($user_mail_submit && $id && $post)
 		'login_url'		=> $app['base_url'].'/login.php',
 	];
 
-	$app['queue.mail']->queue([
+	$app['mail']->queue([
 		'to'		=> $id,
 		'reply_to'	=> $s_schema . '.' . $s_id,
 		'template'	=> 'user',
 		'vars'		=> $vars,
-	], 600);
+		'priority'	=> 9000,
+	]);
 
 	if ($user_mail_cc)
 	{
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'to' 		=> $s_schema . '.' . $s_id,
 			'template' 	=> 'user_copy',
 			'vars'		=> $vars,
-		], 600);
+			'priority'	=> 9000,
+		]);
 	}
 
 	$app['alert']->success('Mail verzonden.');
@@ -637,7 +639,7 @@ if ($s_admin && !count($errors) && ($bulk_mail_submit || $bulk_mail_test) && $po
 			break;
 		}
 
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'to' 		=> $sel_user['id'],
 			'subject' 	=> $bulk_mail_subject,
 			'html' 		=> $html,
@@ -705,7 +707,7 @@ if ($s_admin && !count($errors) && ($bulk_mail_submit || $bulk_mail_test) && $po
 		$template = $app['twig']->createTemplate($out . $bulk_mail_content);
 		$html = $template->render($template_vars);
 
-		$app['queue.mail']->queue([
+		$app['mail']->queue([
 			'to' 		=> $s_id,
 			'subject' 	=> 'kopie: ' . $bulk_mail_subject,
 			'html' 		=> $html,
@@ -786,7 +788,7 @@ if ($pw)
 							'url_login'		=> $app['base_url'] . '/login.php?login=' . $user['letscode'],
 						];
 
-						$app['queue.mail']->queue([
+						$app['mail']->queue([
 							'to' 		=> $pw,
 							'reply_to'	=> 'support',
 							'template'	=> 'password_reset',
@@ -3878,7 +3880,7 @@ function send_activation_mail($password, $user)
 		'user_mail'		=> $user['mail'],
 	];
 
-	$app['queue.mail']->queue([
+	$app['mail']->queue([
 		'to' 		=> 'admin',
 		'vars'		=> $vars,
 		'template'	=> 'admin_user_activation',
@@ -3896,7 +3898,7 @@ function send_activation_mail($password, $user)
 		'url_login'	=> $app['base_url'] . '/login.php?login=' . $user['letscode'],
 	];
 
-	$app['queue.mail']->queue([
+	$app['mail']->queue([
 		'to' 		=> $user['id'],
 		'reply_to' 	=> 'support',
 		'template'	=> 'user_activation',

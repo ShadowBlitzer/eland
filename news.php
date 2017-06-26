@@ -121,7 +121,7 @@ if ($add && $submit && !count($errors))
 				'news_url'	=> $app['base_url'] . '/news.php?id=' . $id,
 			];
 
-			$app['queue.mail']->queue([
+			$app['mail']->queue([
 				'to' 		=> 'newsadmin',
 				'template'	=> 'admin_news_approve',
 				'vars'		=> $vars,

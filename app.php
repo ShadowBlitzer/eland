@@ -35,7 +35,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 $app->extend('twig', function($twig, $app) {
 
 	$twig->addExtension(new twig\extension());
-	$twig->addRuntimeLoader(new Twig_FactoryRuntimeLoader([
+	$twig->addRuntimeLoader(new \Twig_FactoryRuntimeLoader([
 		twig\config::class => function() use ($app){
 			return new twig\config($app['config']);
 		},
@@ -210,6 +210,8 @@ if(!isset($rootpath))
 	$rootpath = './';
 }
 
+$app['protocol'] = 'http://';
+
 $app['rootpath'] = $rootpath;
 
 $app['s3_img'] = getenv('S3_IMG') ?: die('Environment variable S3_IMG S3 bucket for images not defined.');
@@ -223,6 +225,7 @@ $app['s3_doc_url'] = $app['s3_protocol'] . $app['s3_doc'] . '/';
 $app['s3'] = function($app){
 	return new service\s3($app['s3_img'], $app['s3_doc']);
 };
+
 
 /*
  * The locale must be installed in the OS for formatting dates.
@@ -262,6 +265,10 @@ $app['xdb'] = function ($app){
 
 $app['cache'] = function ($app){
 	return new service\cache($app['db'], $app['predis'], $app['monolog']);
+};
+
+$app['boot_count'] = function ($app){
+	return new service\boot_count($app['cache']);
 };
 
 $app['queue'] = function ($app){
@@ -307,14 +314,14 @@ $app['token'] = function ($app){
 	return new service\token();
 };
 
+$app['email_validate'] = function ($app){
+	return new service\email_validate($app['cache'], $app['xdb'], $app['token'], $app['monolog']);
+};
 
-
-
-// queue
-
-$app['queue.mail'] = function ($app){
-	return new queue\mail($app['queue'], $app['monolog'],
-		$app['this_group'], $app['mailaddr'], $app['twig'], $app['config']);
+$app['mail'] = function ($app){
+	return new service\mail($app['queue'], $app['monolog'],
+		$app['mailaddr'], $app['twig'], $app['config'],
+		$app['email_validate']);
 };
 
 // tasks
@@ -344,6 +351,11 @@ $app['task.fetch_elas_interlets'] = function ($app){
 
 // schema tasks (tasks applied to every group seperate)
 
+$app['schema_task.sync_user_cache'] = function ($app){
+	return new schema_task\sync_user_cache($app['db'], $app['user_cache'],
+		$app['schedule'], $app['groups'], $app['this_group']);
+};
+
 $app['schema_task.cleanup_messages'] = function ($app){
 	return new schema_task\cleanup_messages($app['db'], $app['monolog'],
 		$app['schedule'], $app['groups'], $app['this_group'], $app['config']);
@@ -366,7 +378,7 @@ $app['schema_task.saldo_update'] = function ($app){
 };
 
 $app['schema_task.user_exp_msgs'] = function ($app){
-	return new schema_task\user_exp_msgs($app['db'], $app['queue.mail'],
+	return new schema_task\user_exp_msgs($app['db'], $app['mail'],
 		$app['protocol'],
 		$app['schedule'], $app['groups'], $app['this_group'],
 		$app['config'], $app['template_vars'], $app['user_cache']);
@@ -374,7 +386,7 @@ $app['schema_task.user_exp_msgs'] = function ($app){
 
 $app['schema_task.saldo'] = function ($app){
 	return new schema_task\saldo($app['db'], $app['xdb'], $app['predis'], $app['cache'],
-		$app['monolog'], $app['queue.mail'],
+		$app['monolog'], $app['mail'],
 		$app['s3_img_url'], $app['s3_doc_url'], $app['protocol'],
 		$app['date_format'], $app['distance'],
 		$app['schedule'], $app['groups'], $app['this_group'],
@@ -441,13 +453,9 @@ function link_user($user, string $sch = '', $link = true, $show_id = false, $fie
 	return $out;
 }
 
-
 /**
  *
- *
  */
-
-
 
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
@@ -456,12 +464,6 @@ $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
     'profiler.cache_dir' => __DIR__.'/cache/profiler',
     'profiler.mount_prefix' => '/_profiler',
 ));
-
-$app->register(new Knp\Provider\ConsoleServiceProvider(), [
-    'console.name'              => 'eland',
-    'console.version'           => '01',
-    'console.project_directory' => __DIR__,
-]);
 
 $app['uuid'] = function($app){
 	return new service\uuid();

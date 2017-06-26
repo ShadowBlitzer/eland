@@ -2,7 +2,11 @@
 
 {% import 'macro/flash.html.twig' as f %}
 
-{% block title %}{{ config('systemname') }}{# {{ config_en('systemname') }} #}{% endblock title %}
+{% set active_route = global.request.attributes.get('_route') %}
+{% set schema = global.request.attributes.get('schema') %}
+{% set lets_suffix = config('template_lets') ? '_lets' : '' %}
+
+{% block title %}{{ config('systemname') }}{% endblock title %}
 
 {% block url_index %}{% endblock url_index %}
 
@@ -50,7 +54,7 @@
 <h1>
 {% block heading_pre %}{% endblock %}
 {% block heading_fa_container %}<span class="fa fa-{% block fa %}{% endblock %}"></span> {% endblock heading_fa_container %}
-{% block heading %}{{ active_page|trans }}{% endblock heading %}
+{% block heading %}{{ ('title.' ~ active_route)|trans }}{% endblock heading %}
 {% block heading_post %}{% endblock %}
 </h1>
 {% endblock heading_container %}

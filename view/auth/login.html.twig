@@ -1,34 +1,28 @@
-{% extends 'base.html.twig' %}
+{% extends 'anon.html.twig' %}
 
-{% block content %}
+{% block summernote_css %}{% endblock %}
 
-<div class="row">
-<div class="col-md-12">
-<p></p>
-
-<h1>{{ 'login.heading'|trans }}</h1>
+{% block inner %}
 
 {{ form_start(form) }}
 
 <p>
 
 <div class="input-group input-group-lg">
-      <span class="input-group-btn">
-        <button class="btn btn-info" type="button"><i class="fa fa-envelope-o"></i></button>
+      <span class="input-group-addon addon-info"><i class="fa fa-user"></i>
       </span>
-     {{ form_widget(form.email, {'attr': {'placeholder': 'login.email'}}) }}
+     {{ form_widget(form.login, {'attr': {'placeholder': 'login.login'~lets_suffix}}) }}
 </div>
-{{ form_errors(form.email) }}
+{{ form_errors(form.login) }}
 
 </p>
 
 <p>
 
 <div class="input-group input-group-lg">
-  <span class="input-group-btn">
-	<button class="btn btn-info" type="button"><i class="fa fa-key"></i></button>
+  <span class="input-group-addon addon-info"><i class="fa fa-key"></i>
   </span>
-{{ form_widget(form.password, {'attr': {'placeholder': 'login.password' }}) }}
+{{ form_widget(form.password, {'attr': {'placeholder': 'password' }}) }}
 </div>
 {{ form_errors(form.password) }}
 </p>
@@ -39,10 +33,9 @@
 
 {{ form_end(form) }}
 
-<a href="{{ path('password_reset_request') }}" class="btn btn-default btn-lg btn-block">{{ 'login.link_password_reset'|trans }}</a>
+<a href="{{ path('password_reset', {'schema': schema}) }}">{{ 'login.password_reset_link'|trans }}</a>
 
-</div>
-</div>
+{% endblock inner %}
 
-{% endblock content %}
+{% block summernote_js %}{% endblock %}
 
