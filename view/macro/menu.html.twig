@@ -7,10 +7,10 @@
 <ul class="dropdown-menu" role="menu">
 {% endmacro %}
 
-{% macro li(route, prop, active_route, schema) %}
+{% macro li(route, prop, active_route, schema, param) %}
 {% if prop['menu'] is defined %}
 <li{% if active_route == route %} class="active"{% endif %}>
-<a href="{{ path(route, {'schema': schema }) }}">
+<a href="{{ path(route, {'schema': schema }|merge(param|default({}))) }}">
 <i class="fa fa-{{ prop['fa']|default('question') }}"></i> {{ ('title.'~route)|trans }}
 </a></li>
 {% endif %}

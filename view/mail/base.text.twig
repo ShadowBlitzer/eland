@@ -1,5 +1,5 @@
 {% block pretext %}
-** Dit is een automatische mail. Niet beantwoorden a.u.b. **
+** {{ 'mail.no_reply'|trans }} **
 {% endblock pretext %}
 
 {% block body %}
@@ -29,12 +29,11 @@ Login: {{ url_login }}
 {% block support %}
 {% autoescape false %}
 
-Support
--------
+{{ 'mail.support.title'|trans|underline }}
 
 Als je een vraag of probleem hebt, kan je mailen naar
 
-{% for mail in group.support %}
+{% for mail in config('support', schema)|split(',') %}
 {{ mail }}
 {% endfor %}
 

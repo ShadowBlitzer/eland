@@ -11,7 +11,9 @@
 <div class="input-group input-group-lg">
       <span class="input-group-addon addon-info"><i class="fa fa-user"></i>
       </span>
-     {{ form_widget(form.login, {'attr': {'placeholder': 'login.login'~lets_suffix}}) }}
+{% set login_placeholder = config('template_lets', schema) ? 'login.login_lets' : 'login.login' %}
+
+     {{ form_widget(form.login, {'attr': {'placeholder': login_placeholder}}) }}
 </div>
 {{ form_errors(form.login) }}
 

@@ -821,7 +821,7 @@ function mail_mass_transaction($mail_ary)
 		'group'		=> [
 			'name'			=> $app['config']->get('systemname'),
 			'tag'			=> $app['config']->get('systemtag'),
-			'support'		=> $app['config']->get('support'),
+			'support'		=> explode(',', $app['config']->get('support')),
 			'currency'		=> $app['config']->get('currency'),
 		],
 		'description'			=> $mail_ary['description'],

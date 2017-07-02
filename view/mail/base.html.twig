@@ -6,7 +6,7 @@
 </head>
 <body bgcolor="#FFFFFF" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 {% block pretext %}
-<p><i>Dit is een automatische mail. Niet beantwoorden a.u.b.</i></p>
+<p><i>{{ 'mail.no_reply'|trans }}</i></p>
 {% endblock pretext %}
 
 {% block body %}
@@ -19,24 +19,25 @@
 <ul>
 <li>Je code: <strong>{{ user.letscode }}</strong></li>
 <li>Je gebruikersnaam: <strong>{{ user.name }}</strong></li>
-<li>Je saldo bedraagt momenteel <strong>{{ user.saldo }}</strong> {{ group.currency }}</li>
+<li>Je saldo bedraagt momenteel <strong>{{ user.saldo }}</strong> {{ config('currency', schema) }}</li>
 {% if user.minlimit != '' and user.minlimit != -999999999 %}
-<li>Minimum limiet: <strong>{{ user.minlimit }}</strong> {{ group.currency }}</li>
+<li>Minimum limiet: <strong>{{ user.minlimit }}</strong> {{ config('currency', schema) }}</li>
 {% endif %}
 {% if user.maxlimit != '' and user.maxlimit != 999999999 %}
-<li>Maximum limiet: <strong>{{ user.maxlimit }}</strong> {{ group.currency }}</li>
+<li>Maximum limiet: <strong>{{ user.maxlimit }}</strong> {{ config('currency', schema) }}</li>
 {% endif %}
 <li>Status: <strong>{% if user.status == 1 %}Actief{% elseif user.status == 2 %}Uitstapper{% endif %}</strong></li>
 <li><a href="{{ url_login }}">Login</a></li>
 
 </ul>
 {% endblock accountinfo %}
+
 {% block support %}
 
-<h4>Support</h4>
+<h4>{{ 'mail.support.title'|trans }}</h4>
 <p>Als je een vraag of probleem hebt, kan je mailen naar
 <ul></ul>
-{% for mail in group.support %}
+{% for mail in config('support', schema)|split(',') %}
 <li><a href="mailto:{{ mail }}?subject=Support">{{ mail }}</a></li>
 {% endfor %}
 </p>

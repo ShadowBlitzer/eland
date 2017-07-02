@@ -4,7 +4,7 @@
 
 {% block inner %}
 
-{{ config('contact_form_top_text') }}
+{{ config('contact_form_top_text', schema) }}
 
 {{ form_start(form) }}
 
@@ -33,7 +33,7 @@
 
 {{ form_end(form) }}
 
-{{ config('contact_form_bottom_text') }}
+{{ config('contact_form_bottom_text', schema) }}
 
 {% endblock inner %}
 

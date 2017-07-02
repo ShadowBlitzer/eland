@@ -4,9 +4,8 @@
 
 {% set active_route = global.request.attributes.get('_route') %}
 {% set schema = global.request.attributes.get('schema') %}
-{% set lets_suffix = config('template_lets') ? '_lets' : '' %}
 
-{% block title %}{{ config('systemname') }}{% endblock title %}
+{% block title %}{{ config('systemname', schema) }}{% endblock title %}
 
 {% block url_index %}{% endblock url_index %}
 

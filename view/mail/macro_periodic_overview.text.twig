@@ -1,18 +1,19 @@
 {% macro messages(messages, group, new_message_url, messages_url, s3_img, validate_param) %}
 
-Recent LETS vraag en aanbod
----------------------------
+{{ 'mail.overview.offers_and_wants'|trans|underline }}
 
 {% if messages %}
-Deze lijst bevat vraag en aanbod dat de afgelopen {{ group.saldofreqdays }} dagen online is geplaatst.
+{% set saldofreqdays = config('saldofreqdays', schema) %}
+{{ 'mail.overview.offer_and_wants_explain'|trans }}
+
 {% for msg in messages %}
 
-{% if msg.offer %}Aanbod{% else %}Vraag{% endif %}: {{ msg.content }} ({% if msg.images|length %}{{ msg.images|length }}{% else %}geen{% endif %} {% if msg.images|length == 1 %}afbeelding{% else %} afbeeldingen {% endif %})
+{% if msg.offer %}{{ 'offer'|trans }}{% else %}{{ 'want'|trans }}{% endif %}: {{ msg.content }} ({% if msg.images|length %}{{ msg.images|length }}{% else %}geen{% endif %} {% if msg.images|length == 1 %}afbeelding{% else %} afbeeldingen {% endif %})
 {{ msg.url }}{{ validate_param }}
-	Ingegeven door: {{ msg.user}}{{ validate_param }}
+	Ingegeven door: {{ msg.user}}
 {% endfor %}
 {% else %}
-Er werd geen nieuw vraag of aanbod online geplaatst afgelopen {{ group.saldofreqdays }} dagen.
+{{ 'mail.overview.offers_and_wants_none'|trans }}
 {% endif %}
 
 Geef zelf je eigen vraag of aanbod in: {{ new_message_url }}{{ validate_param }}
@@ -23,8 +24,7 @@ Geef zelf je eigen vraag of aanbod in: {{ new_message_url }}{{ validate_param }}
 
 {% if interlets %}
 
-Recent vraag en aanbod in interLETS groepen
--------------------------------------------
+{{ 'mail.overview.interlets_offers_and_wants'|trans|underline }}
 
 Log in ({{ url_login }}{{ validate_param }}) en ga via 'Groep' in de navigatiebalk naar de betreffende interLETS groep voor meer informatie.
 
@@ -97,13 +97,12 @@ Momenteel zijn er geen nieuwsberichten.
 
 {% if show_docs != 'none' %}
 
-Nieuwe Documenten
------------------
+{{ 'mail.overview.docs'|trans|underline }}
 
 {% for d in docs %}
 * {{ d.name }} {{ d.url }}
 {% else %}
-Er zijn geen nieuwe documenten.
+{{ 'mail.overview.docs_none'|trans }}
 {% endfor %}
 
 {% endif %}
@@ -114,8 +113,7 @@ Er zijn geen nieuwe documenten.
 
 {% if show_new_users != 'none' %}
 
-Nieuwe leden
-------------
+{{ 'mail.overview.new_users'|trans|underline }}
 
 {% for u in new_users %}
 * {{ u.text }}{% if u.postcode %} | postcode: {{ u.postcode }}{% endif %}
@@ -123,9 +121,9 @@ Nieuwe leden
 {% else %}
 
 {% if show_new_users == 'recent' %}
-Er zijn geen nieuwe leden bijgekomen.
+{{ 'mail.overview.new_users_no_recent'|trans }}
 {% else %}
-Momenteel zijn er geen nieuwe leden.
+{{ 'mail.overview.new_users_none'|trans }}
 {% endif %}
 
 {% endfor %}
@@ -138,8 +136,7 @@ Momenteel zijn er geen nieuwe leden.
 
 {% if show_leaving_users != 'none' %}
 
-Uitstappende leden
-------------------
+{{ 'mail.overview.leaving_users'|trans|underline }}
 
 {% for u in leaving_users %}
 * {{ u.text }}{% if u.postcode %} | postcode: {{ u.postcode }}{% endif %}
@@ -147,9 +144,9 @@ Uitstappende leden
 {% else %}
 
 {% if show_leaving_users == 'recent' %}
-Er zijn geen extra uitstappende leden.
+{{ 'mail.overview.leaving_users_no_recent'|trans }}
 {% else %}
-Momenteel zijn er geen uitstappende leden.
+{{ 'mail.overview.leaving_users_none'|trans }}
 {% endif %}
 
 {% endfor %}
@@ -162,11 +159,11 @@ Momenteel zijn er geen uitstappende leden.
 
 {% if show_transactions != 'none' %}
 
-Recente transacties
--------------------
+{{ 'mail.overview.transactions'|trans|underline }}
 
 {% if transactions %}
-Deze lijst toont de transacties van de laatste {{ group.saldofreqdays }} dagen.
+{% set saldofreqdays = config('saldofreqdays', schema) %}
+{{ 'mail.overview.transactions_explain'|trans }}
 {% endif %}
 
 {% for tr in transactions %}
@@ -176,7 +173,7 @@ Deze lijst toont de transacties van de laatste {{ group.saldofreqdays }} dagen.
 	{{ tr.description }}
 
 {% else %}
-Er werden geen nieuwe transacties gedaan afgelopen {{ group.saldofreqdays }} dagen.
+{{ 'mail.overview.transactions_none'|trans }}
 {% endfor %}
 
 Nieuwe transactie ingeven: {{ new_transaction_url }}{{ validate_param }}
@@ -187,7 +184,7 @@ Nieuwe transactie ingeven: {{ new_transaction_url }}{{ validate_param }}
 
 {% macro unsubscribe(account_edit_url, validate_param) %}
 
-Je ontvangt deze mail omdat de optie 'Periodieke mail met recent vraag en aanbod' aangevinkt staat in je instellingen:
+Je ontvangt deze mail omdat de optie 'Periodieke mail met recent vraag en aanbod' aangevinkt staat in je instellingen.
 
 {{ account_edit_url }}{{ validate_param }}
 

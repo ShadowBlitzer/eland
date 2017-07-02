@@ -1,5 +1,7 @@
 {% extends 'anon.html.twig' %}
 
+{% import 'macro/asset.html.twig' as a %}
+
 {% block summernote_css %}{% endblock %}
 
 {% form_theme form _self %}
@@ -32,72 +34,29 @@
 
 {% block inner %}
 
+{{ config('registration_top_text', schema) }}
+
 {{ form_start(form) }}
 
-<p>
-
-<div class="input-group input-group-lg">
-<span class="input-group-btn">
-<button class="btn btn-info" type="button"><i class="fa fa-user"></i></button>
-</span>
-{{ form_widget(form.username, {'attr': {'placeholder': 'register.username'}}) }}
-</div>
-{{ form_errors(form.username) }}
-<p>{{ 'register.username_explain'|trans }}</p>
-
-</p>
-
-<p>
-
-<div class="input-group input-group-lg">
-<span class="input-group-btn">
-<button class="btn btn-info" type="button"><i class="fa fa-envelope-o"></i></button>
-</span>
-{{ form_widget(form.email, {'attr': {'placeholder': 'register.email'}}) }}
-</div>
-{{ form_errors(form.email) }}
-<p>{{ 'register.email_explain'|trans }}</p>
-
-</p>
-
-<p>
-
-{{ form_errors(form.password) }}
-<div class="input-group input-group-lg">
-<span class="input-group-btn">
-<button class="btn btn-info" type="button"><i class="fa fa-key"></i></button>
-</span>
-{{ form_widget(form.password, {'attr': {'placeholder': 'register.password' }}) }}
-  <span class="input-group-btn">
-	<button class="btn btn-info" type="button" id="generate">{{ 'register.generate_btn'|trans }}</button>
-  </span>
-</div>
-
-<p>{{ 'register.password_explain'|trans }}</p>
-
-</p>
-
-<p>
-
+{{ form_row(form.first_name, {'label': 'first_name', 'attr': {'class': 'input-lg'}}) }}
+{{ form_row(form.last_name, {'label': 'last_name', 'attr': {'class': 'input-lg'}}) }}
+{{ form_row(form.email, {'label': 'email', 'attr': {'class': 'input-lg'}}) }}
+{{ form_row(form.postcode, {'label': 'postcode', 'attr': {'class': 'input-lg'}}) }}
+{{ form_row(form.mobile, {'label': 'mobile', 'attr': {'class': 'input-lg'}}) }}
+{{ form_row(form.telephone, {'label': 'telephone', 'attr': {'class': 'input-lg'}}) }}
 {#
-{{ form_errors(form.accept) }}
-
 {% set accept_label = 'register.accept'|trans({'%url%': path('terms')}) %}
-
 {{ form_widget(form.accept, {'label': accept_label}) }}
 #}
-</p>
+{{ form_row(form.accept) }}
 
-<p>
-{{ form_widget(form.submit, {'label': 'register.submit_btn', 'attr': {'class': 'btn btn-default btn-lg'}}) }}
-</p>
+{{ form_row(form.submit, {'label': 'register.submit_btn', 'attr': {'class': 'btn btn-default btn-lg'}}) }}
 
 {{ form_end(form) }}
+
+{{ config('registration_bottom_text', schema) }}
 
 {% endblock inner %}
 
 {% block summernote_js %}{% endblock %}
 
-{% block js %}
-<script src="{{ asset('generate_password.js') }}"></script>
-{% endblock js %}

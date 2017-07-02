@@ -2,26 +2,31 @@
 
 namespace controller;
 
-use Silex\Application;
+use util\app;
+use util\user;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class password_reset
 {
-	public function token(Request $request, Application $app, $token)
+	public function form(Request $request, app $app, string $schema)
 	{
 		$data = [
-			'name' 		=> '',
-			'email' 	=> '',
+			'email'	=> '',
 		];
 
 		$form = $app->form($data)
-			->add('password', TextType::class)
-			->add('send', SubmitType::class)
+			->add('email', EmailType::class, [
+				'constraints' => new Assert\Email(),
+			])
+
+			->add('submit', SubmitType::class)
 			->getForm();
 
 		$form->handleRequest($request);
@@ -30,59 +35,97 @@ class password_reset
 		{
 			$data = $form->getData();
 
-			// do something with the data
+			$email = strtolower($data['email']);
 
-			// redirect somewhere
-			return $app->redirect('...');
-		}
+			$user = $app['db']->fetchAll('select u.*
+				from ' . $schema . '.contact c,
+					' . $schema . '.type_contact tc,
+					' . $schema . '.users u
+				where c. value = ?
+					and tc.id = c.id_type_contact
+					and tc.abbrev = \'mail\'
+					and c.id_user = u.id
+					and u.status in (1, 2)', [$email]);
 
-		return $app['twig']->render('anon/password_reset_token.html.twig', [
-			'form' => $form->createView(),
-		]);
-
-/*
-		if($apikey = $app['redis']->get($app['eland.this_group']->get_schema() . '_token_' . $token))
-		{
-			$logins = $app['session']->get('logins');
-			$logins[$app['eland.this_group']->get_schema()] = 'elas';
-			$app['session']->set('logins', $logins);
-
-			$param = 'welcome=1&r=guest&u=elas';
-
-			$referrer = $_SERVER['HTTP_REFERER'] ?? 'unknown';
-
-			if ($referrer != 'unknown')
+			if (count($user) < 2)
 			{
-				// record logins to link the apikeys to domains and groups
-				$domain_referrer = strtolower(parse_url($referrer, PHP_URL_HOST));
-				$app['eland.xdb']->set('apikey_login', $apikey, ['domain' => $domain_referrer]);
+				$user = $user[0];
+
+				if ($user['id'])
+				{
+					$token = $app['token']->gen();
+					$key = $schema . '_token_' . $token;
+
+					$app['predis']->set($key, json_encode(['uid' => $user['id'], 'email' => $email]));
+					$app['predis']->expire($key, 3600);
+
+					$data['subject'] = 'password_reset.mail.subject';
+					$data['vars'] = [
+						'top'		=> 'password_reset.mail.top',
+						'bottom'	=> 'password_reset.mail.bottom',
+						'url'		=> $app->url('password_reset_new_password', [
+							'token' 	=> $token,
+							'schema' 	=> $schema,
+						]),
+					];
+					$data['template'] = 'link';
+					$data['schema'] = $schema;
+					$data['to'] = $data['email'];
+					$data['url'] =
+
+					$data['priority'] = 10000;
+
+					$app['mail']->queue($data);
+
+					return $app->redirect($app->path('login', ['schema' => $schema]));
+				}
 			}
 
-			$app['monolog']->info('eLAS guest login using token ' . $token . ' succeeded. referrer: ' . $referrer);
-
-			$glue = (strpos($location, '?') === false) ? '?' : '&';
-			header('Location: ' . $location . $glue . $param);
-			exit;
+			$app->err($app->trans('password_reset.unknown_email_address'));
 		}
 
-		$app['eland.alert']->error('interlets_login');
-
-		return $app->redirect('password_reset');
-*/
+		return $app['twig']->render('auth/password_reset.html.twig', ['form' => $form->createView()]);
 	}
 
+	/**
+	 *
+	 */
 
-
-	public function match(Request $request, Application $app)
+	public function new_password(Request $request, app $app, string $schema, string $token)
 	{
+		$redis_key = 'password_reset_' . $token;
+		$data = $app['predis']->get($redis_key);
+
+		if (!$data)
+		{
+			return $app['twig']->render('page/panel_danger.html.twig', [
+				'subject'	=> 'new_password.not_found.subject',
+				'text'		=> 'new_password.not_found.text',
+			]);
+		}
+
+		$data = json_decode($data, true);
+
+		$email = strtolower($data['email']);
+
+		$user = $app['xdb']->get('user_auth_' . $email);
+
+		if ($user === '{}')
+		{
+			return $app['twig']->render('page/panel_danger.html.twig', [
+				'subject'	=> 'register_confirm.not_found.subject',
+				'text'		=> 'register_confirm.not_found.text',
+			]);
+
+		}
+
 		$data = [
-			'name' => 'Your name',
-			'email' => 'Your email',
+			'password'	=> '',
 		];
 
-		$form = $app['form.factory']->createBuilder(FormType::class, $data)
-			->add('email', EmailType::class)
-			->add('zend', SubmitType::class)
+		$form = $app->form($data)
+			->add('password', PasswordType::class)
+			->add('submit', SubmitType::class)
 			->getForm();
 
 		$form->handleRequest($request);
@@ -91,22 +134,10 @@ class password_reset
 		{
 			$data = $form->getData();
 
-			// do something with the data
-
-			// redirect somewhere
-			return $app->redirect('...');
+			return $app->redirect('/edit');
 		}
 
-		return $app['twig']->render('anon/password_reset.html.twig', [
-			'form' => $form->createView(),
-		]);
+		return $app['twig']->render('auth/new_password.html.twig', ['form' => $form->createView()]);
 	}
-
-	public function post(Request $request, Application $app)
-	{
-
-		return $app['twig']->render('anon/password_reset.html.twig', []);
-	}
-
-
 }
+

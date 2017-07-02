@@ -1,0 +1,16 @@
+{% extends 'mail/base.text.twig' %}
+
+{% block pretext %}{% endblock %}
+
+{% block content %}
+
+{{ top|trans }}
+
+{{ url }}
+
+{{ bottom|trans }}
+
+{% endblock content %}
+
+{% block accountinfo %}{% endblock %}
+{% block support %}{% endblock %}

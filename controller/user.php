@@ -7,22 +7,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class user
 {
-	public function index(Request $request, app $app, string $type)
+	public function index(Request $request, app $app)
 	{
 
 
-
-
-
-
-
-		return $app['twig']->render('page/terms.html.twig', []);
+		return $app['twig']->render('user/index.html.twig', []);
 	}
 
-	public function admin_index(Request $request, app $app, string $type)
-	{
 
-	}
 
 
 

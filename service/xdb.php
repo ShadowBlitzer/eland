@@ -8,7 +8,7 @@ use Monolog\Logger;
 use service\this_group;
 
 /*
-                            Table "xdb.events"
+                                Table "xdb.events"
    Column    |            Type             |              Modifiers
 -------------+-----------------------------+--------------------------------------
  ts          | timestamp without time zone | default timezone('utc'::text, now())
@@ -23,10 +23,15 @@ use service\this_group;
  event       | character varying(128)      |
  agg_schema  | character varying(60)       |
  eland_id    | character varying(40)       |
+ uid         | character varying(8)        |
+ eid         | character varying(30)       |
 Indexes:
     "events_pkey" PRIMARY KEY, btree (agg_id, agg_version)
+    "events_agg_id_idx" btree (agg_id)
+    "events_eid_agg_version_idx" btree (eid, agg_version)
 
-                             Table "xdb.aggs"
+
+                                 Table "xdb.aggs"
    Column    |            Type             |              Modifiers
 -------------+-----------------------------+--------------------------------------
  agg_id      | character varying(255)      | not null
@@ -35,17 +40,21 @@ Indexes:
  user_id     | integer                     | default 0
  user_schema | character varying(60)       | default ''::character varying
  ts          | timestamp without time zone | default timezone('utc'::text, now())
- event_time  | timestamp without time zone | default timezone('utc'::text, now())
  agg_type    | character varying(60)       | not null
  agg_schema  | character varying(60)       | not null
  ip          | character varying(60)       |
  event       | character varying(128)      |
  eland_id    | character varying(40)       |
+ event_time  | timestamp without time zone | default timezone('utc'::text, now())
+ eid         | character varying(30)       |
+ uid         | character varying(8)        |
 Indexes:
     "aggs_pkey" PRIMARY KEY, btree (agg_id)
     "aggs_agg_schema_idx" btree (agg_schema)
     "aggs_agg_type_agg_schema_idx" btree (agg_type, agg_schema)
     "aggs_agg_type_idx" btree (agg_type)
+    "aggs_eid_agg_schema_idx" btree (eid, agg_schema)
+    "aggs_eid_idx" btree (eid)
 */
 
 class xdb
@@ -54,14 +63,14 @@ class xdb
 	private $user_schema = '';
 	private $user_id = 0;
 	private $db;
-	private $redis;
+	private $predis;
 	private $monolog;
 	private $this_group;
 
-	public function __construct(db $db, Redis $redis, Logger $monolog, this_group $this_group)
+	public function __construct(db $db, Redis $predis, Logger $monolog, this_group $this_group)
 	{
 		$this->db = $db;
-		$this->redis = $redis;
+		$this->predis = $predis;
 		$this->monolog = $monolog;
 		$this->this_group = $this_group;
 
@@ -69,6 +78,12 @@ class xdb
 		{
 			$this->ip = '';
 		}
+		else
+		{
+			$this->ip = $_SERVER['REMOTE_ADDR'];
+		}
+
+/*
 		else if (isset($_SERVER['HTTP_CLIENT_IP']))
 		{
 			$this->ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -81,6 +96,7 @@ class xdb
 		{
 			$this->ip = $_SERVER['REMOTE_ADDR'];
 		}
+*/
 	}
 
 	/*
@@ -180,8 +196,6 @@ class xdb
 			}
 
 			$this->db->commit();
-
-//			$this->redis->hmset('xdb_' . $agg_id, $data);
 		}
 		catch(Exception $e)
 		{
@@ -239,8 +253,6 @@ class xdb
 			'data'			=> '{}',
 			'ip'			=> $this->ip,
 		];
-
-//		$this->redis->del('xdb_' . $agg_id);
 
 		try
 		{
@@ -409,6 +421,31 @@ class xdb
 		$where = count($sql_where) ? ' where ' . implode(' and ', $sql_where) : '';
 
 		return $this->db->fetchColumn('select count(*) from xdb.aggs' . $where, $sq_params);
+	}
+
+	/**
+	 *
+	 */
+
+	public function free_eid_check(string $eid)
+	{
+		return $this->db->fetchColumn('select eid from xdb.aggs where eid = ?', [$eid]) ? false : true;
+	}
+
+	/*
+	 *
+	 */
+	public function set_by_eid(string $eid, array $data)
+	{
+
+	}
+
+	/**
+	 *
+	 */
+	public function get_by_eid(string $eid)
+	{
+
 	}
 }
 

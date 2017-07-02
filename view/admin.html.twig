@@ -1,15 +1,17 @@
-{% extends 'app.html.twig' %}
+{% extends 'authenticated.html.twig' %}
 
 {% import 'macro/menu.html.twig' as menu %}
 
-{% set auth_pages = {
-	'offers_and_wants': {'fa': 'newspaper-o'},
-	'users': {'fa': 'users'},
-	'members': {'fa': 'users'},
-	'transactions': {'fa': 'exchange'},
-	'news': {'fa': 'calendar-o'},
-	'docs': {'fa': 'files-o'},
-	'forum': {'fa': 'comments-o'},
+{% set access = 'a' %}
+
+{% set auth_routes = {
+	'message_index': {'fa': 'newspaper-o', 'menu': true},
+	'account_index': {'fa': '', 'menu': true},
+	'user_index': {'fa': 'users', 'menu': true},
+	'transaction_index': {'fa': 'exchange', 'menu': true},
+	'news_index': {'fa': 'calendar-o', 'menu': true},
+	'doc_index': {'fa': 'files-o', 'menu': true},
+	'forum_index': {'fa': 'comments-o', 'menu': true},
 	'support': {'fa': 'ambulance'},
 	'my_data': {'fa': 'user'},
 	'my_offers_and_wants': {'fa': 'newspaper-o'},
@@ -18,7 +20,17 @@
 }
 %}
 
-{% block body_attr %} data-elas-group-login="{{ app.url.elas_group_login|default('') }}"{% endblock %}
+{% set anon_routes = {
+	'login': {'fa': 'sign-in', 'menu': true},
+	'password_reset': {'fa': 'key'},
+	'password_reset_confirm': {'fa': 'key'},
+	'contact': {'fa': 'comment-o', 'menu': true},
+	'contact_confirm': {'fa': 'comment-o'},
+	'register': {'fa': 'check-square-o', 'menu': true},
+	'register_confirm': {'fa': 'check-square-o'}
+}
+%}
+
 
 {% block loading_img %}<img src="{{ asset('loading.gif', 'img') }}" class="ajax-loader"></img>{% endblock loading_img %}
 
@@ -70,26 +82,12 @@
 
 {% endblock navbar_menu %}
 
-{#
-	
-{% block side_menu_items %}
 
-	{{ menu.li('messages', 'Vraag en aanbod', 'newspaper-o') }}
-	{{ menu.li('users', 'Leden', 'users') }}
-	{{ menu.li('transactions', 'Transacties', 'exchange') }}
-	{{ menu.li('news', 'Nieuws', 'calendar-o') }}
-	{{ menu.li('forum', 'Forum', 'comments-o') }}
-	{{ menu.li('support', 'Probleem melden', 'ambulance') }}
-	{% block side_menu_items_extra %}{% endblock %}
-
-{% endblock side_menu_items %}
-
-#}
 
 {% block side_menu_items %}
 
-	{% for page, prop in auth_pages %}
-	{{ menu.li(page, prop, active_page) }}
+	{% for route, prop in auth_routes %}
+	{{ menu.li('a_'~route, prop, active_route, schema) }}
 	{% endfor %}
 
 {% endblock side_menu_items %}

@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class transactions
+class transaction
 {
 	public function index(Request $request, Application $app)
 	{
@@ -29,9 +29,9 @@ class transactions
 			->add('andor', ChoiceType::class, [
 				'required' 	=> true,
 				'choices'	=> [
-					'input.and'	=> 'and',
-					'input.or'	=> 'or',
-					'input.nor'	=> 'nor',
+					'and'	=> 'and',
+					'or'	=> 'or',
+					'nor'	=> 'nor',
 				],
 			])
 			->add('fdate', TextType::class, ['required' => false])
@@ -238,10 +238,10 @@ class transactions
 	}
 
 
-	public function show(Request $request, Application $app, int $id)
+	public function show(Request $request, Application $app, array $transaction)
 	{
 		$news = $app['db']->fetchAssoc('SELECT n.*
-			FROM news n  
+			FROM news n
 			WHERE n.id = ?', [$id]);
 
 		if (!$s_admin && !$news['approved'])

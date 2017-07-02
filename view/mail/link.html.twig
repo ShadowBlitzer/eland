@@ -1,0 +1,17 @@
+{% extends 'mail/base.html.twig' %}
+
+{% block pretext %}{% endblock %}
+
+{% block content %}
+
+<p>{{ top|trans }}</p>
+
+<p><a href="{{ url }}">{{ url }}</a></p>
+
+<p>{{ bottom|trans }}</p>
+
+{% endblock %}
+
+{% block accountinfo %}{% endblock %}
+{% block support %}{% endblock %}
+

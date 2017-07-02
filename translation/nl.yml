@@ -7,18 +7,31 @@ eland:
     (Maak eerst een %link_b_open%Github%link_b_close% account aan.)
   title: eLAND
 
-
 email: Email
 password: Paswoord
 message: Bericht
 code: Code
 letscode: LETScode
 group_name: Groepsnaam
+offer: Aanbod
+want: Vraag
+service: Dienst
+good: Goed
+
+first_name: Voornaam
+last_name: Achternaam
+postcode: Postcode
+mobile: GSM
+telephone: Telefoon
+accept: Akkoord
 
 from: Van
 to: Naar
-
 from_date: Vanaf
+
+and: en
+or: of
+nor: noch
 
 send: Verzenden
 cancel: Annuleren
@@ -52,10 +65,36 @@ title:
   register: Inschrijven
   password_reset: Paswoord vergeten
 
+menu:
+  login: Login
+  contact: Contact
+  register: Inschrijven
+  offers_and_wants: Vraag en aanbod
+  accounts: Rekeningen
+  users: Gebruikers
+  transactions: Transacties
+  news: Nieuws
+  forum: Forum
+  docs: Documenten
+  support: Support
+  
+
 contact:
   email: Je emailadres
-  email_explain: Er wordt een validatielink naar je gestuurd die je moet aanklikken.
+  email_explain: >
+    Er wordt een bevestigingslink naar je gestuurd die je moet aanklikken.
   message: Je bericht
+  confirm_email:
+    info: >
+      Gelieve de link ter bevestiging aan te klikken in de email die we naar u verzonden hebben.
+      Deze link blijft vier uur geldig.
+    subject: >
+      Bevestig uw bericht in het contactformulier
+    top: >
+      Klik deze link aan om uw bericht in het contactformulier te bevestigen.
+    bottom: >
+      Deze link blijft vier uur geldig. Gelieve deze mail te negeren indien u niet
+      zelf een bericht hebt ingegeven in het contactformulier van %systemname%
 
 login:
   login: Email, code of gebruikersnaam
@@ -64,7 +103,8 @@ login:
   password_reset_link: Ik ben mijn paswoord vergeten
 
 password_reset:
-  explain: Stuur een link naar je mailbox waarmee je je paswoord opnieuw kan instellen.
+  explain: >
+    Stuur een link naar je mailbox waarmee je je paswoord opnieuw kan instellen.
   submit_btn: Reset paswoord
   mail:
     subject: Reset paswoord
@@ -74,9 +114,60 @@ password_reset:
       Deze link blijft 4 uur geldig. Gelieve deze mail te negeren indien je niet zelf
       een paswoord reset hebt aangevraagd.
 
+register:
+  first_name: Voornaam
+  last_name: Achternaam
+  postcode: Postcode
+  email: Email
+  email_explain: >
+    Er wordt een bevestigingslink naar je gestuurd die je moet aanklikken
+  mobile: GSM
+  telephone: telefoon
+  accept: Ik heb de privacy en aanvaard deze.
+  submit_btn: Inschrijven
+
+
+mail:
+  no_reply: >
+    Dit is een automatische mail. Niet beantwoorden a.u.b.
+  support: Support
+  overview:
+    offers_and_wants: >
+      Vraag en aanbod
+    offers_and_wants_explain: >
+      Deze lijst bevat vraag en aanbod dat de afgelopen %saldofreqdays%
+      dagen online is geplaatst.
+    offers_and_wants_none: >
+      Er werd geen nieuw vraag of aanbod online geplaatst.
+    interlets_offers_and_wants: >
+      Recent interLETS vraag en aanbod
+    docs: >
+      Nieuwe documenten
+    docs_none: >
+      Er zijn geen nieuwe documenten.
+    new_users: Nieuwe leden
+    new_users_none: >
+      Momenteel zijn er geen nieuwe leden.
+    new_users_no_recent: >
+      Er zijn geen nieuwe leden bijgekomen.
+    leaving_users: Uitstappers
+    leaving_users_none: >
+      Momenteel zijn er geen uitstappende leden.
+    leaving_users_no_recent: >
+      Er zijn geen extra uitstappende leden.
+    transactions: Recente transacties
+    transactions_explain: >
+      Deze lijst toont de transacties van de laatste %saldofreqdays% dagen.
+    transactions_none: >
+      Er zijn geen recente transacties.
+
+
+
 
 index:
   title: eLAND
+
+
 
 
 

@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class auth
 {
 
-	public function login(Request $request, app $app)
+	public function login(Request $request, app $app, string $schema)
 	{
 		$data = [
 			'login'		=> '',
@@ -50,36 +50,36 @@ class auth
 	 *
 	 */
 
-	public function register(Request $request, app $app)
+	public function register(Request $request, app $app, string $schema)
 	{
 		$data = [
-			'username'	=> '',
-			'email'		=> '',
-			'password'	=> '',
-			'accept'	=> false,
+			'first_name'	=> '',
+			'last_name'		=> '',
+			'email'			=> '',
+			'postcode'		=> '',
+			'mobile'		=> '',
+			'telephone'		=> '',
+			'accept'		=> false,
 		];
 
 		$form = $app->form($data)
 
-			->add('username', TextType::class, [
-				'constraints'	=> [
-					new Assert\Length(['min' => 2, 'max' => 6]),
-					new Assert\Regex('/^[a-z0-9][a-z0-9-]*[a-z0-9]$/'),
-				],
- 			])
-
+			->add('first_name')
+			->add('last_name')
 			->add('email', EmailType::class, [
 				'constraints' => new Assert\Email(),
 			])
 
-			->add('password', PasswordType::class, [
-				'constraints' => new Assert\Length(['min' => 6]),
+			->add('postcode')
+			->add('mobile', TextType::class, [
+				'required'	=> false,
 			])
-
+			->add('telephone', TextType::class, [
+				'required'	=> false,
+			])
 			->add('accept', CheckboxType::class, [
 				'constraints' => new Assert\IsTrue(),
 			])
-
 			->add('submit', SubmitType::class)
 			->getForm();
 
@@ -89,21 +89,21 @@ class auth
 		{
 			$data = $form->getData();
 
+
 			$user_email = $app['xdb']->get('user_email_' . $data['email']);
-			$user_username = $app['xdb']->get('username_' . $data['username']);
 
 			if ($user_username !== '{}')
 			{
-				$app['session']->getFlashBag()->add('error', $app->trans('register.username_already_registered'));
+				$app->err($app->trans('register.username_already_registered'));
 			}
 			else if ($user_email !== '{}')
 			{
-				$app['session']->getFlashBag()->add('error', $app->trans('register.email_already_registered'));
+				$app->err($app->trans('register.email_already_registered'));
 			}
 			else
 			{
-				$data['subject'] = 'mail_register_confirm.subject';
-				$data['top'] = 'mail_register_confirm.top';
+				$data['subject'] = 'register_confirm.subject';
+				$data['top'] = 'register_confirm.top';
 				$data['bottom'] = 'mail_register_confirm.bottom';
 				$data['template'] = 'link';
 				$data['to'] = $data['email'] = strtolower($data['email']);
@@ -142,7 +142,7 @@ class auth
 	 *
 	 */
 
-	public function register_confirm(Request $request, app $app, $token)
+	public function register_confirm(Request $request, app $app, string $schema, string $token)
 	{
 		$redis_key = 'register_confirm_' . $token;
 		$data = $app['predis']->get($redis_key);
@@ -188,7 +188,6 @@ class auth
 		}
 		while ($exists);
 
-
 		$password = $data['password'];
 
 		$user = new user('', '', '', []);
@@ -221,7 +220,7 @@ class auth
 	 *
 	 */
 
-	public function password_reset(Request $request, app $app, $schema)
+	public function password_reset(Request $request, app $app, string $schema)
 	{
 		$data = [
 			'email'	=> '',
@@ -244,7 +243,9 @@ class auth
 			$email = strtolower($data['email']);
 
 			$user = $app['db']->fetchAll('select u.*
-				from contact c, type_contact tc, users u
+				from ' . $schema . '.contact c,
+					' . $schema . '.type_contact tc,
+					' . $schema . '.users u
 				where c. value = ?
 					and tc.id = c.id_type_contact
 					and tc.abbrev = \'mail\'
@@ -277,7 +278,7 @@ class auth
 
 					$app['mail']->queue($data);
 
-					return $app->redirect($app->path('password_reset_sent'));
+					return $app->redirect($app->path('login', ['schema' => $schema]));
 				}
 			}
 

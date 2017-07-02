@@ -2,8 +2,9 @@
 
 namespace controller;
 
-use Silex\Application;
+use util\app;
 use Symfony\Component\HttpFoundation\Request;
+
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -13,15 +14,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class news
 {
-	public function extended(Request $request, Application $app)
+	public function index(Request $request, app $app, string $schema, string $access)
 	{
+
+/*
 		$query = 'select * from news  where approved = \'t\' order by itemdate desc';
 
 		$news = $app['db']->fetchAll($query);
 
 		$news_access_ary = [];
 
-		$rows = $app['eland.xdb']->get_many(['agg_schema' => $app['eland.this_group']->get_schema(), 'agg_type' => 'news_access']);
+		$rows = $app['xdb']->get_many(['agg_schema' => $app['eland.this_group']->get_schema(), 'agg_type' => 'news_access']);
 
 		foreach ($rows as $row)
 		{
@@ -47,32 +50,31 @@ class news
 				unset($news[$k]);
 			}
 		}
+*/
 
-
-		return $app['twig']->render('news/extended.html.twig', [
+		return $app['twig']->render('news/index.html.twig', [
 			'news'	=> $news,
 		]);
 	}
 
-
-	public function show(Request $request, Application $app, int $id)
+	public function show(Request $request, app $app, string $schema, string $access, string $eid)
 	{
 		$news = $app['db']->fetchAssoc('SELECT n.*
-			FROM news n  
+			FROM ' . $schema . '.news n
 			WHERE n.id = ?', [$id]);
 
 		if (!$s_admin && !$news['approved'])
 		{
-			$app['eland.alert']->error('Je hebt geen toegang tot dit nieuwsbericht.');
+			$app['alert']->error('Je hebt geen toegang tot dit nieuwsbericht.');
 //			$app->redirect('news');
 			cancel();
 		}
 
-		$news_access = $app['eland.xdb']->get('news_access', $id)['data']['access'];
+		$news_access = $app['xdb']->get('news_access', $id)['data']['access'];
 
-		if (!$app['eland.access_control']->is_visible($news_access))
+		if (!$app['access_control']->is_visible($news_access))
 		{
-			$app['eland.alert']->error('Je hebt geen toegang tot dit nieuwsbericht.');
+			$app['alert']->error('Je hebt geen toegang tot dit nieuwsbericht.');
 			cancel();
 		}
 
@@ -98,8 +100,7 @@ class news
 		]);
 	}
 
-
-	public function match(Request $request, Application $app)
+	public function add(Request $request, app $app, string $schema, string $access)
 	{
 
 		$data = [
@@ -129,9 +130,46 @@ class news
 			return $app->redirect('...');
 		}
 
-		return $app['twig']->render('anon/register.html.twig', [
+		return $app['twig']->render('news/add.html.twig', [
 			'form' => $form->createView(),
 		]);
 	}
+
+	public function edit(Request $request, app $app, string $schema, string $access)
+	{
+
+		$data = [
+			'name' => 'Your name',
+			'email' => 'Your email',
+		];
+
+		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+			->add('first_name')
+			->add('last_name')
+			->add('email', EmailType::class)
+			->add('postcode')
+			->add('gsm', TextType::class, ['required'	=> false])
+			->add('tel', TextType::class, ['required'	=> false])
+			->add('zend', SubmitType::class)
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			$data = $form->getData();
+
+			// do something with the data
+
+			// redirect somewhere
+			return $app->redirect('...');
+		}
+
+		return $app['twig']->render('news/edit.html.twig', [
+			'form' => $form->createView(),
+		]);
+	}
+
+
 
 }

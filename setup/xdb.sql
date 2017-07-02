@@ -30,10 +30,13 @@ event_time timestamp without time zone default timezone('utc'::text, now()),
 ip varchar(60),
 event varchar(128),
 agg_schema varchar(60),
-eland_id varchar(40)
+eland_id varchar(40),
+uid varchar(8),
+eid varchar(30)
 );
 
 alter table xdb.events add primary key (agg_id, agg_version);
+create index on xdb.events(eid, agg_version);
 
 create table if not exists xdb.aggs (
 ts timestamp without time zone default timezone('utc'::text, now()),
@@ -47,12 +50,16 @@ ip varchar(60),
 event varchar(128),
 agg_schema varchar(60),
 eland_id varchar(40),
-event_time timestamp without time zone default timezone('utc'::text, now())
+event_time timestamp without time zone default timezone('utc'::text, now()),
+uid varchar(8),
+eid varchar(30)
 );
 
 create index on xdb.aggs(agg_type, agg_schema);
 create index on xdb.aggs(agg_schema);
-create index on xdb.logs(agg_type);
+create index on xdb.aggs(agg_type);
+create index on xdb.aggs(eid);
+create index on xdb.aggs(eid, agg_schema);
 
 create table if not exists xdb.queue (
 ts timestamp without time zone default timezone('utc'::text, now()),

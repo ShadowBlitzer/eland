@@ -780,7 +780,7 @@ if ($pw)
 							'group'		=> [
 								'name'		=> $app['config']->get('systemname'),
 								'tag'		=> $app['config']->get('systemtag'),
-								'support'	=> $app['config']->get('support'),
+								'support'	=> explode(',', $app['config']->get('support')),
 								'currency'	=> $app['config']->get('currency'),
 							],
 							'user'			=> $user,
@@ -3890,7 +3890,7 @@ function send_activation_mail($password, $user)
 		'group'		=> [
 			'name'		=> $app['config']->get('systemname'),
 			'tag'		=> $app['config']->get('systemtag'),
-			'support'	=> $app['config']->get('support'),
+			'support'	=> explode(',', $app['config']->get('support')),
 			'currency'	=> $app['config']->get('currency'),
 		],
 		'user'		=> $user,
