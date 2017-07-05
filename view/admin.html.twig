@@ -1,4 +1,4 @@
-{% extends 'authenticated.html.twig' %}
+{% extends 'own_group.html.twig' %}
 
 {% import 'macro/menu.html.twig' as menu %}
 
@@ -6,7 +6,7 @@
 
 {% set auth_routes = {
 	'message_index': {'fa': 'newspaper-o', 'menu': true},
-	'account_index': {'fa': '', 'menu': true},
+	'account_index': {'fa': 'circle-o', 'menu': true},
 	'user_index': {'fa': 'users', 'menu': true},
 	'transaction_index': {'fa': 'exchange', 'menu': true},
 	'news_index': {'fa': 'calendar-o', 'menu': true},
@@ -20,19 +20,18 @@
 }
 %}
 
-{% set anon_routes = {
-	'login': {'fa': 'sign-in', 'menu': true},
-	'password_reset': {'fa': 'key'},
-	'password_reset_confirm': {'fa': 'key'},
-	'contact': {'fa': 'comment-o', 'menu': true},
-	'contact_confirm': {'fa': 'comment-o'},
-	'register': {'fa': 'check-square-o', 'menu': true},
-	'register_confirm': {'fa': 'check-square-o'}
-}
+{% set menu_left = [
+	'message',
+	'account',
+	'user',
+	'transaction',
+	'news',
+	'doc',
+	'forum'
+]
 %}
 
-
-{% block loading_img %}<img src="{{ asset('loading.gif', 'img') }}" class="ajax-loader"></img>{% endblock loading_img %}
+{% block navbar_container_class %} bg-info{% endblock %}
 
 {% block navbar_toggle_menu %}
 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
@@ -87,7 +86,7 @@
 {% block side_menu_items %}
 
 	{% for route, prop in auth_routes %}
-	{{ menu.li('a_'~route, prop, active_route, schema) }}
+	{{ menu.acc_li(route, prop, active_route, schema, access) }}
 	{% endfor %}
 
 {% endblock side_menu_items %}

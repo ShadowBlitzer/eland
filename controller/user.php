@@ -7,18 +7,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class user
 {
-	public function index(Request $request, app $app)
+	public function index(Request $request, app $app, string $schema, string $access)
 	{
-
-
-		return $app['twig']->render('user/index.html.twig', []);
+		return $app['twig']->render('user/' . $access . '_index.html.twig', []);
 	}
 
-
-
-
-
-
-
+	public function show(Request $request, app $app, string $schema, string $access, array $user)
+	{
+		return $app['twig']->render('user/' . $access . '_show.html.twig', []);
+	}
 }
 

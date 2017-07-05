@@ -87,7 +87,7 @@ class register
 			}
 		}
 
-		return $app['twig']->render('auth/register.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('register/form.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**

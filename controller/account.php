@@ -7,44 +7,24 @@ use Symfony\Component\HttpFoundation\Request;
 
 class account
 {
-	public function g_index(Request $request, app $app, string $schema, string $account_type)
+	public function index(Request $request, app $app, string $schema, string $access, string $account_type)
 	{
-		return $app['twig']->render('account/g_index.html.twig', []);
+		return $app['twig']->render('account/' . $access . '_index.html.twig', []);
 	}
 
-	public function i_index(Request $request, app $app, string $schema, string $account_type)
+	public function map(Request $request, app $app, string $schema, string $access, string $account_type)
 	{
-		return $app['twig']->render('account/i_index.html.twig', []);
+		return $app['twig']->render('account/' . $access . '_map.html.twig', []);
 	}
 
-	public function u_index(Request $request, app $app, string $schema, string $account_type)
+	public function tile(Request $request, app $app, string $schema, string $access, string $account_type)
 	{
-		return $app['twig']->render('account/u_index.html.twig', []);
+		return $app['twig']->render('account/' . $access . '_tile.html.twig', []);
 	}
 
-	public function a_index(Request $request, app $app, string $schema, string $account_type)
+	public function show(Request $request, app $app, string $schema, string $access, string $account_type)
 	{
-		return $app['twig']->render('account/a_index.html.twig', []);
-	}
-
-	public function g_show(Request $request, app $app, string $schema, string $account_type)
-	{
-		return $app['twig']->render('account/g_show.html.twig', []);
-	}
-
-	public function i_show(Request $request, app $app, string $schema, string $account_type)
-	{
-		return $app['twig']->render('account/i_show.html.twig', []);
-	}
-
-	public function u_show(Request $request, app $app, string $schema, string $account_type)
-	{
-		return $app['twig']->render('account/u_show.html.twig', []);
-	}
-
-	public function a_show(Request $request, app $app, string $schema, string $account_type)
-	{
-		return $app['twig']->render('account/a_show.html.twig', []);
+		return $app['twig']->render('account/' . $access . '_show.html.twig', []);
 	}
 
 

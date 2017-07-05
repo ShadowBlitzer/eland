@@ -43,7 +43,7 @@ class login
 			return $app->redirect('edit');
 		}
 
-		return $app['twig']->render('auth/login.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('login/form.html.twig', ['form' => $form->createView()]);
 	}
 }
 

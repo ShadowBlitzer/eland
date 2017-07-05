@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class transaction
 {
-	public function index(Request $request, Application $app)
+	public function index(Request $request, Application $app, string $schema, string $access)
 	{
 		$data = [
 			'andor'	=> 'and',
@@ -230,15 +230,15 @@ class transaction
 		$row_count = $app['db']->fetchColumn('select count(t.*)
 			from transactions t ' . $where_sql, $params_sql);
 
-		return $app['twig']->render('transactions/index.html.twig', [
+		return $app['twig']->render('transaction/' . $access . '_index.html.twig', [
 			'transactions'	=> $transactions,
-			'pagination'	=> $app['util.pagination']->get('transactions', $row_count, $params),
+//			'pagination'	=> $app['util.pagination']->get('transactions', $row_count, $params),
 			'filter'		=> $filter->createView(),
 		]);
 	}
 
 
-	public function show(Request $request, Application $app, array $transaction)
+	public function show(Request $request, Application $app, string $schema, string $access, array $transaction)
 	{
 		$news = $app['db']->fetchAssoc('SELECT n.*
 			FROM news n
@@ -275,13 +275,13 @@ class transaction
 		$next = (count($rows)) ? reset($rows)['eland_id'] : false;
 
 
-		return $app['twig']->render('transactions/index.html.twig', [
+		return $app['twig']->render('transaction/' . $access . '_show.html.twig', [
 			'news'	=> $news,
 		]);
 	}
 
 
-	public function add(Request $request, Application $app)
+	public function add(Request $request, Application $app, string $schema, string $access)
 	{
 
 		$data = [
@@ -311,7 +311,42 @@ class transaction
 			return $app->redirect('...');
 		}
 
-		return $app['twig']->render('anon/register.html.twig', [
+		return $app['twig']->render('transaction/' . $access . '_add.html.twig', [
+			'form' => $form->createView(),
+		]);
+	}
+
+	public function edit(Request $request, Application $app, string $schema, string $access)
+	{
+
+		$data = [
+			'name' => 'Your name',
+			'email' => 'Your email',
+		];
+
+		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+			->add('first_name')
+			->add('last_name')
+			->add('email', EmailType::class)
+			->add('postcode')
+			->add('gsm', TextType::class, ['required'	=> false])
+			->add('tel', TextType::class, ['required'	=> false])
+			->add('zend', SubmitType::class)
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			$data = $form->getData();
+
+			// do something with the data
+
+			// redirect somewhere
+			return $app->redirect('...');
+		}
+
+		return $app['twig']->render('transaction/' . $access . '_register.html.twig', [
 			'form' => $form->createView(),
 		]);
 	}

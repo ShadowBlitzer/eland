@@ -45,505 +45,350 @@ $cc->get('/', function (Request $request, app $app, $schema){
 
 $acc = $app['controllers_factory'];
 
-$g_acc = $app['controllers_factory'];
-$i_acc = $app['controllers_factory'];
-$u_acc = $app['controllers_factory'];
-$a_acc = $app['controllers_factory'];
-
 /**
  * messages
  */
-// g
 
-$g_message = $app['controllers_factory'];
+$message = $app['controllers_factory'];
 
-$g_message->get('/', 'controller\\message::g_index')
-	->bind('g_message_index');
-$g_message->get('/{message}', 'controller\\message::show')
+$message->get('/', 'controller\\message::index')
+	->bind('message_index');
+$message->get('/{message}', 'controller\\message::show')
 	->convert('message', 'service\\xdb::get')
-	->bind('g_message_show');
-
-$g_message->assert('message', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
-
-$g_acc->mount('/offers-and-wants', $g_message);
-
-// i
-
-$i_message = $app['controllers_factory'];
-
-$i_message->get('/', 'controller\\message::i_index')
-	->bind('i_message_index');
-$i_message->get('/{message}', 'controller\\message::show')
+	->bind('message_show');
+$message->match('/add', 'controller\\message::add')
+	->bind('message_add');
+$message->match('/{message}/edit', 'controller\\message::edit')
 	->convert('message', 'service\\xdb::get')
-	->bind('i_message_show');
-$i_message->match('/add', 'controller\\message::add')
-	->bind('i_message_add');
-$i_message->match('/{message}/edit', 'controller\\message::i_edit')
-	->convert('message', 'service\\xdb::get')
-	->bind('i_message_edit');
+	->bind('message_edit');
 
-$i_message->assert('message', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
+$message->assert('message', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
 
-$i_acc->mount('/offers-and-wants', $i_message);
-
-// u
-
-$u_message = $app['controllers_factory'];
-
-$u_message->get('/', 'controller\\message::u_index')
-	->bind('u_message_index');
-$u_message->get('/{message}', 'controller\\message::show')
-	->convert('message', 'service\\xdb::get')
-	->bind('u_message_show');
-$u_message->match('/add', 'controller\\message::add')
-	->bind('u_message_add');
-$u_message->match('/{message}/edit', 'controller\\message::u_edit')
-	->convert('message', 'service\\xdb::get')
-	->bind('u_message_edit');
-
-$u_message->assert('message', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
-
-$u_acc->mount('/offers-and-wants', $u_message);
-
-// a
-
-$a_message = $app['controllers_factory'];
-
-$a_message->get('/', 'controller\\message::a_index')
-	->bind('a_message_index');
-$a_message->get('/{message}', 'controller\\message::show')
-	->convert('message', 'service\\xdb::get')
-	->bind('a_message_show');
-$a_message->match('/add', 'controller\\message::add')
-	->bind('a_message_add');
-$a_message->match('/{message}/edit', 'controller\\message::a_edit')
-	->convert('message', 'service\\xdb::get')
-	->bind('a_message_edit');
-
-$a_message->assert('message', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
-
-$a_acc->mount('/offers-and-wants', $a_message);
+$acc->mount('/ads', $message);
 
 /*
  * accounts
  */
-// g
 
-$g_account = $app['controllers_factory'];
+$account = $app['controllers_factory'];
 
-$g_account->get('/{account_type}', 'controller\\account::g_index')
+$account->get('/{account_type}', 'controller\\account::index')
 	->value('account_type', 'active')
-	->bind('g_account_index');
-$g_account->get('/{account_type}/{account}', 'controller\\account::g_show')
+	->bind('account_index');
+$account->get('/{account_type}/{account}', 'controller\\account::show')
 	->convert('account', 'service\\xdb::get')
-	->bind('g_account_show');
+	->bind('account_show');
 
-$g_account->assert('account_type', '^(\'active|new|leaving\')$')
-	->assert('account', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
-
-$g_acc->mount('/accounts', $g_account);
-
-// i
-
-$i_account = $app['controllers_factory'];
-
-$i_account->get('/{account_type}', 'controller\\account::i_index')
+$account->get('/{account_type}/map', 'controller\\account::map')
 	->value('account_type', 'active')
-	->bind('i_account_index');
-$i_account->get('/{account_type}/{account}', 'controller\\account::i_show')
-	->convert('account', 'service\\xdb::get')
-	->bind('i_account_show');
-$i_account->match('/{account}/edit', 'controller\\account::i_edit')
-	->convert('account', 'service\\xdb::get')
-	->bind('i_account_edit');
+	->bind('account_map');
 
-$i_account->assert('account_type', '^(\'active|new|leaving\')$')
-	->assert('account', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
-
-$i_acc->mount('/accounts', $i_account);
-
-// u
-
-$u_account = $app['controllers_factory'];
-
-$u_account->get('/{account_type}', 'controller\\account::u_index')
+$account->get('/{account_type}/tile', 'controller\\account::tile')
 	->value('account_type', 'active')
-	->bind('u_account_index');
-$u_account->get('/{account_type}/{account}', 'controller\\account::u_show')
+	->bind('account_tile');
+$account->match('/add', 'controller\\acccount::add')
+	->bind('account_add');
+$account->match('/{account}/edit', 'controller\\account::edit')
 	->convert('account', 'service\\xdb::get')
-	->bind('u_account_show');
-$u_account->match('/{account}/edit', 'controller\\account::u_edit')
+	->bind('account_edit');
+$account->get('/typeahead/{account_type}', 'controller\\account::typeahead')
+	->bind('account_typeahead_self');
+$account->get('/typeahead/{account}/{account_type}', 'controller\\account::typeahead')
+	->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
 	->convert('account', 'service\\xdb::get')
-	->bind('u_account_edit');
-
-$u_account->assert('account_type', '^(\'active|new|leaving|interlets\')$')
-	->assert('account', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
-
-$u_acc->mount('/accounts', $u_account);
-
-// a
-
-$a_account = $app['controllers_factory'];
-
-$a_account->get('/{account_type}', 'controller\\account::a_index')
-	->value('account_type', 'active')
-	->bind('a_account_index');
-$a_account->get('/{account_type}/{account}', 'controller\\account::a_show')
+	->bind('account_typeahead');
+$account->get('/weighted-balance/{account}/{days}', 'controller\\account::weighted_balance')
+	->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->assert('days', '/d+')
 	->convert('account', 'service\\xdb::get')
-	->bind('a_account_show');
-$a_account->match('/add', 'controller\\acccount::a_add')
-	->bind('a_account_add');
-$a_account->match('/{account}/edit', 'controller\\account::a_edit')
-	->convert('account', 'service\\xdb::get')
-	->bind('a_account_edit');
+	->bind('account_typeahead');
 
-$a_account->assert('account_type', '^(\'active|new|leaving|interlets|pre-active|post-active|all\')$')
-	->assert('account', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
+$account->assert('account_type', 'active|new|leaving|interlets|pre-active|post-active|all')
+	->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
 
-$a_acc->mount('/accounts', $a_account);
+$acc->mount('/accounts', $account);
 
 /**
  * images
  */
 
-// u
+$img = $app['controllers_factory'];
 
-$u_img = $app['controllers_factory'];
-
-$u_img->post('/', 'controller\\img::u_create')
-	->bind('u_img_create');
-$u_img->delete('/{img}', 'controller\\img::u_del')
+$img->post('/', 'controller\\img::create')
+	->bind('img_create');
+$img->delete('/{img}', 'controller\\img::del')
 	->convert('img', 'service\\xdb::get')
-	->bind('u_img_del');
-$u_img->match('/{message}/del', 'controller\\img::u_del_form')
-	->assert('message', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$')
+	->bind('img_del');
+$img->match('/{message}/del', 'controller\\acccount::del_form')
+	->assert('message', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
 	->convert('message', 'service\\xdb::get')
-	->bind('u_img_del_form');
+	->bind('img_del_form');
 
-$u_img->assert('img', '^[a-z0-9][a-z0-9-]{10}[a-z0-9]$');
+$img->assert('img', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
-$u_acc->mount('/imgs', $u_img);
-
-// a
-
-$a_img = $app['controllers_factory'];
-
-$a_img->post('/', 'controller\\img::a_create')
-	->bind('a_img_create');
-$a_img->delete('/{img}', 'controller\\img::a_del')
-	->convert('img', 'service\\xdb::get')
-	->bind('a_img_del');
-$a_img->match('/{message}/del', 'controller\\acccount::a_del_form')
-	->assert('message', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$')
-	->convert('message', 'service\\xdb::get')
-	->bind('a_img_del_form');
-
-$a_img->assert('img', '^[a-z0-9][a-z0-9-]{10}[a-z0-9]$');
-
-$a_acc->mount('/imgs', $a_img);
+$acc->mount('/imgs', $img);
 
 /*
  *  users
  */
-// a
 
-$a_user = $app['controllers_factory'];
+$user = $app['controllers_factory'];
 
-$a_user->get('/', 'controller\\user::a_index')
-	->bind('a_user_index');
-$a_user->get('/{user}', 'controller\\user::a_show')
+$user->get('/', 'controller\\user::index')
+	->bind('user_index');
+$user->get('/{user}', 'controller\\user::show')
 	->convert('user', 'service\\xdb::get')
-	->bind('a_user_show');
-$a_user->match('/add', 'controller\\user::a_add')
-	->bind('a_user_add');
-$a_user->match('/{user}/edit', 'controller\\user::a_edit')
+	->bind('user_show');
+$user->match('/add', 'controller\\user::add')
+	->bind('user_add');
+$user->match('/{user}/edit', 'controller\\user::edit')
 	->convert('user', 'service\\xdb::get')
-	->bind('a_user_edit');
+	->bind('user_edit');
 
-$a_user->assert('user', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
+$user->assert('user', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
 
-$a_acc->mount('/users', $a_user);
-
+$acc->mount('/users', $user);
 
 /*
  *  transactions
  */
 
-//g
+$transaction = $app['controllers_factory'];
 
-$g_transaction = $app['controllers_factory'];
-
-$g_transaction->get('/', 'controller\\g_transaction::g_index')
-	->bind('g_transaction_index');
-$g_transaction->get('/{transaction}', 'controller\\transacion::g_show')
+$transaction->get('/', 'controller\\transaction::index')
+	->bind('transaction_index');
+$transaction->get('/{transaction}', 'controller\\transacion::show')
 	->convert('transaction', 'service\\xdb::get')
-	->bind('g_transaction_show');
+	->bind('transaction_show');
+$transaction->match('/add', 'controller\\transaction::add')
+	->bind('transaction_add');
+$transaction->match('/{transaction}/edit', 'controller\\transaction::edit')
+	->bind('transaction_edit');
+$transaction->get('/plot-account/{account}/{days}', 'controller\\transaction::plot_account')
+	->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->assert('days', '\d+')
+	->value('days', 365)
+	->bind('transaction_plot_account');
+$transaction->get('/sum-in/{days}', 'controller\\transaction::sum_in')
+	->assert('days', '\d+')
+	->value('days', 365)
+	->bind('transaction_sum_in');
+$transaction->get('/sum-out/{days}', 'controller\\transaction::sum_out')
+	->assert('days', '\d+')
+	->value('days', 365)
+	->bind('transaction_sum_out');
 
-$g_transaction->assert('transaction', '^[a-z0-9][a-z0-9-]{8}[a-z0-9]$');
+$transaction->assert('transaction', '^[a-z0-9][a-z0-9-]{8}[a-z0-9]$');
 
-$g_acc->mount('/transactions', $g_transaction);
-
-//i
-
-$i_transaction = $app['controllers_factory'];
-
-$i_transaction->get('/', 'controller\\transaction::i_index')
-	->bind('i_transaction_index');
-$i_transaction->get('/{transaction}', 'controller\\transacion::i_show')
-	->convert('transaction', 'service\\xdb::get')
-	->bind('i_transaction_show');
-$i_transaction->match('/add', 'controller\\transaction::i_add')
-	->bind('i_transaction_add');
-
-$i_transaction->assert('transaction', '^[a-z0-9][a-z0-9-]{8}[a-z0-9]$');
-
-$i_acc->mount('/transactions', $i_transaction);
-
-//u
-
-$u_transaction = $app['controllers_factory'];
-
-$u_transaction->get('/', 'controller\\transaction::u_index')
-	->bind('u_transaction_index');
-$u_transaction->get('/{transaction}', 'controller\\transacion::u_show')
-	->convert('transaction', 'service\\xdb::get')
-	->bind('u_transaction_show');
-$u_transaction->match('/add', 'controller\\transaction::u_add')
-	->bind('u_transaction_add');
-
-$u_transaction->assert('transaction', '^[a-z0-9][a-z0-9-]{8}[a-z0-9]$');
-
-$u_acc->mount('/transactions', $u_transaction);
-
-//a
-
-$a_transaction = $app['controllers_factory'];
-
-$a_transaction->get('/', 'controller\\transaction::a_index')
-	->bind('a_transaction_index');
-$a_transaction->get('/{transaction}', 'controller\\transacion::a_show')
-	->convert('transaction', 'service\\xdb::get')
-	->bind('a_transaction_show');
-$a_transaction->match('/add', 'controller\\transaction::a_add')
-	->bind('a_transaction_add');
-$a_transaction->match('/{transaction}/edit', 'controller\\transaction::a_edit')
-	->bind('a_transaction_edit');
-
-$a_transaction->assert('transaction', '^[a-z0-9][a-z0-9-]{8}[a-z0-9]$');
-
-$a_acc->mount('/transactions', $a_transaction);
+$acc->mount('/transactions', $transaction);
 
 /*
  * news
  */
 
-// g
-$g_news = $app['controllers_factory'];
+$news = $app['controllers_factory'];
 
-$g_news->get('/', 'controller\\news::g_index')
-	->bind('g_news_index');
-$g_news->get('/{news}', 'controller\\news::g_show')
+$news->get('/', 'controller\\news::index')
+	->bind('news_index');
+$news->get('/{news}', 'controller\\news::show')
 	->convert('news', 'service\\xdb::get')
-	->bind('g_news_show');
-
-$g_news->assert('news', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
-
-$g_acc->mount('/news', $g_news);
-
-// i
-$i_news = $app['controllers_factory'];
-
-$i_news->get('/', 'controller\\news::i_index')
-	->bind('i_news_index');
-$i_news->get('/{news}', 'controller\\news::i_show')
+	->bind('news_show');
+$news->match('/add', 'controller\\news::add')
+	->bind('news_add');
+$news->match('/{news}/edit', 'controller\\news::edit')
 	->convert('news', 'service\\xdb::get')
-	->bind('i_news_show');
-
-$i_news->assert('news', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
-
-$i_acc->mount('/news', $i_news);
-
-// u
-$u_news = $app['controllers_factory'];
-
-$u_news->get('/', 'controller\\news::u_index')
-	->bind('u_news_index');
-$u_news->get('/{news}', 'controller\\news::u_show')
+	->bind('news_edit');
+$news->post('/{news}/approve', 'controller\\news::approve')
 	->convert('news', 'service\\xdb::get')
-	->bind('u_news_show');
-$u_news->match('/add', 'controller\\news::u_add')
-	->bind('u_news_add');
-$u_news->match('/{news}/edit', 'controller\\news::u_edit')
-	->convert('news', 'service\\xdb::get')
-	->bind('u_news_edit');
+	->bind('news_approve');
 
-$u_news->assert('news', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
+$news->assert('news', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
 
-$u_acc->mount('/news', $u_news);
-
-// a
-$a_news = $app['controllers_factory'];
-
-$a_news->get('/', 'controller\\news::a_index')
-	->bind('a_news_index');
-$a_news->get('/{news}', 'controller\\news::a_show')
-	->convert('news', 'service\\xdb::get')
-	->bind('a_news_show');
-$a_news->match('/add', 'controller\\news::a_add')
-	->bind('a_news_add');
-$a_news->match('/{news}/edit', 'controller\\news::a_edit')
-	->convert('news', 'service\\xdb::get')
-	->bind('a_news_edit');
-$a_news->post('/{news}/approve', 'controller\\news::a_approve')
-	->convert('news', 'service\\xdb::get')
-	->bind('a_news_approve');
-
-$a_news->assert('news', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
-
-$a_acc->mount('/news', $a_news);
+$acc->mount('/news', $news);
 
 /*
  *  docs
  */
-// g
 
-$g_doc = $app['controllers_factory'];
+$doc = $app['controllers_factory'];
 
-$g_doc->get('/', 'controller\\doc::g_index')
-	->bind('g_doc_index');
-$g_doc->get('/{doc}', 'controller\\doc::g_show')
+$doc->get('/', 'controller\\doc::index')
+	->bind('doc_index');
+$doc->get('/{doc}', 'controller\\doc::show')
 	->convert('doc', 'service\\xdb::get')
-	->bind('g_doc_show');
-
-$g_doc->assert('doc', '^[a-z0-9][a-z0-9-]{10}[a-z0-9]$');
-
-$g_acc->mount('/docs', $g_doc);
-
-// i
-
-$i_doc = $app['controllers_factory'];
-
-$i_doc->get('/', 'controller\\doc::i_index')
-	->bind('i_doc_index');
-$i_doc->get('/{doc}', 'controller\\doc::i_show')
+	->bind('doc_show');
+$doc->match('/add', 'controller\\doc::add')
+	->bind('doc_add');
+$doc->match('/{doc}/edit', 'controller\\doc::edit')
 	->convert('doc', 'service\\xdb::get')
-	->bind('i_doc_show');
+	->bind('doc_edit');
+$doc->get('/typeahead', 'controller\\doc::typeahead')
+	->bind('doc_typeahead');
 
-$i_doc->assert('doc', '^[a-z0-9][a-z0-9-]{10}[a-z0-9]$');
+$doc->assert('doc', '^[a-z0-9][a-z0-9-]{10}[a-z0-9]$');
 
-$i_acc->mount('/docs', $i_doc);
-
-// u
-
-$u_doc = $app['controllers_factory'];
-
-$u_doc->get('/', 'controller\\doc::u_index')
-	->bind('u_doc_index');
-$u_doc->get('/{doc}', 'controller\\doc::u_show')
-	->convert('doc', 'service\\xdb::get')
-	->bind('u_doc_show');
-$u_doc->match('/add', 'controller\\doc::u_add')
-	->bind('u_doc_add');
-$u_doc->match('/{doc}/edit', 'controller\\doc::u_edit')
-	->convert('doc', 'service\\xdb::get')
-	->bind('u_doc_edit');
-
-$u_doc->assert('doc', '^[a-z0-9][a-z0-9-]{10}[a-z0-9]$');
-
-$u_acc->mount('/docs', $u_doc);
-
-// a
-
-$a_doc = $app['controllers_factory'];
-
-$a_doc->get('/', 'controller\\doc::a_index')
-	->bind('a_doc_index');
-$a_doc->get('/{doc}', 'controller\\doc::a_show')
-	->convert('doc', 'service\\xdb::get')
-	->bind('a_doc_show');
-$a_doc->match('/add', 'controller\\doc::a_add')
-	->bind('a_doc_add');
-$a_doc->match('/{doc}/edit', 'controller\\doc::a_edit')
-	->convert('doc', 'service\\xdb::get')
-	->bind('a_doc_edit');
-
-$a_doc->assert('doc', '^[a-z0-9][a-z0-9-]{10}[a-z0-9]$');
-
-$a_acc->mount('/docs', $a_doc);
+$acc->mount('/docs', $doc);
 
 /*
  *  forum
  */
-//g
 
-$g_forum = $app['controllers_factory'];
+$forum = $app['controllers_factory'];
 
-$g_forum->get('/', 'controller\\forum::g_index')
-	->bind('g_forum_index');
-$g_forum->get('/{forum}', 'controller\\forum::g_show')
+$forum->get('/', 'controller\\forum::index')
+	->bind('forum_index');
+$forum->get('/{forum}', 'controller\\forum::show')
 	->convert('forum', 'service\\xdb::get')
-	->bind('g_forum_show');
-
-$g_forum->assert('forum', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
-
-$g_acc->mount('/forum', $g_forum);
-
-//i
-
-$i_forum = $app['controllers_factory'];
-
-$i_forum->get('/', 'controller\\forum::i_index')
-	->bind('i_forum_index');
-$i_forum->get('/{forum}', 'controller\\forum::i_show')
+	->bind('forum_show');
+$forum->match('/add', 'controller\\forum::add')
+	->bind('forum_add');
+$forum->match('/{forum}/edit', 'controller\\forum::edit')
 	->convert('forum', 'service\\xdb::get')
-	->bind('i_forum_show');
+	->bind('forum_edit');
 
-$i_forum->assert('forum', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
+$forum->assert('forum', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
 
-$i_acc->mount('/forum', $i_forum);
+$acc->mount('/forum', $forum);
 
-//u
+$acc->assert('access', '[giua]');
+$cc->mount('/{access}', $acc);
 
-$u_forum = $app['controllers_factory'];
+/*
+ * elas
+ */
 
-$u_forum->get('/', 'controller\\forum::u_index')
-	->bind('u_forum_index');
-$u_forum->get('/{forum}', 'controller\\forum::u_show')
-	->convert('forum', 'service\\xdb::get')
-	->bind('u_forum_show');
-$u_forum->match('/add', 'controller\\forum::u_add')
-	->bind('u_forum_add');
-$u_forum->match('/{forum}/edit', 'controller\\forum::u_edit')
-	->convert('forum', 'service\\xdb::get')
-	->bind('u_forum_edit');
+$ua = $app['controllers_factory'];
 
-$u_forum->assert('forum', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
+$elas = $app['controllers_factory'];
 
-$u_acc->mount('/forum', $u_forum);
+$elas->get('/soap-status/{account}', 'controller\\elas::soap_status')
+	->convert('account', 'service\\xdb::get')
+	->bind('elas_soap_status');
+$elas->get('/group-login/{account}', 'controller\\elas::soap_status')
+//	->convert('account', 'service\\xdb::get')
+	->bind('elas_group_login');
 
-//a
+$elas->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
 
-$a_forum = $app['controllers_factory'];
+$ua->mount('/elas', $elas);
 
-$a_forum->get('/', 'controller\\forum::a_index')
-	->bind('a_forum_index');
-$a_forum->get('/{forum}', 'controller\\forum::a_show')
-	->convert('forum', 'service\\xdb::get')
-	->bind('a_forum_show');
-$a_forum->match('/add', 'controller\\forum::a_add')
-	->bind('a_forum_add');
-$a_forum->match('/{forum}/edit', 'controller\\forum::a_edit')
-	->convert('forum', 'service\\xdb::get')
-	->bind('a_forum_edit');
+//
 
-$a_forum->assert('forum', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
+$ua->assert('access', '[ua]');
 
-$a_acc->mount('/forum', $a_forum);
+$cc->mount('/{access}', $ua);
 
-$cc->mount('/g', $g_acc);
-$cc->mount('/i', $i_acc);
-$cc->mount('/u', $u_acc);
-$cc->mount('/a', $a_acc);
+/**
+ * a (admin)
+ */
+
+$a = $app['controllers_factory'];
+
+$a->get('/status', 'controller\\status::get')
+	->bind('status');
+
+/**
+ * permissions
+ */
+
+$pms = $app['controllers_factory'];
+
+$pms->get('/', 'controller\\permission::index')
+	->bind('permission_index');
+
+$a->mount('/permissions', $pms);
+
+/**
+ * categories
+ */
+
+$cat = $app['controllers_factory'];
+
+$cat->get('/', 'controller\\category::index')
+	->bind('elas_soap_status');
+$cat->match('/add', 'controller\\category::add')
+	->bind('category_add');
+$cat->match('/{category}/edit', 'controller\\category::edit')
+	->convert('category', 'service\\xdb::get')
+	->bind('category_edit');
+
+$a->mount('/categories', $cat);
+
+/**
+ * Contact types
+ */
+
+$contact_type = $app['controllers_factory'];
+
+$contact_type->get('/', 'controller\\contact_type::index')
+	->bind('contact_type_index');
+$contact_type->match('/add', 'controller\\contact_type::add')
+	->bind('contact_type_add');
+$contact_type->match('/{contact_type}/edit', 'controller\\contact_type::add')
+	->assert('contact_type', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->convert('contact_type', 'service\\xdb::get')
+	->bind('contact_type_add');
+
+$a->mount('/contact_types', $contact_type);
+
+/**
+ * Contacts
+ */
+
+
+/**
+ * Config (includes autominlimit)
+ */
+
+$config = $app['controllers_factory'];
+
+$config->match('/', 'controller\\config::index')
+	->bind('config_index');
+
+$a->mount('/config', $config);
+
+//
+
+$a->get('/groups/typeahead', 'controller\\group::typeahead')
+	->bind('group_typeahead');
+
+/**
+ * export
+ */
+
+$export = $app['controllers_factory'];
+
+$export->get('/', 'controller\\export::index')
+	->bind('export_index');
+
+$a->mount('/export', $export);
+
+/**
+ * auto min limit
+ */
+
+$a->match('/autominlimit', 'controller\\autominlimit::form')
+	->bind('autominlimit');
+
+/*
+ * mass_transaction
+ */
+
+$a->match('/mass-transaction', 'controller\\mass_transaction::form')
+	->bind('mass_transaction');
+
+/*
+ * logs
+ */
+
+$a->get('/logs', 'controller\\log::index')
+	->bind('log');
+$a->get('/logs/typeahead', 'controller\\log::typeahead')
+	->bind('log_typeahead');
+
+$cc->mount('/a', $a);
+
+//
 
 $cc->before(function(Request $request) use ($app){
 
@@ -573,8 +418,6 @@ $public->get('/', function(){
 });
 
 $app->mount('/', $public);
-
-
 
 $app->match('/hosting-request', 'controller\\main::hosting_request')->bind('hosting_request');
 $app->get('/monitor', 'controller\\main::monitor')->bind('monitor');

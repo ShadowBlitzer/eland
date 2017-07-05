@@ -84,7 +84,7 @@ class password_reset
 			$app->err($app->trans('password_reset.unknown_email_address'));
 		}
 
-		return $app['twig']->render('auth/password_reset.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('password_reset/form.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**
@@ -137,7 +137,7 @@ class password_reset
 			return $app->redirect('/edit');
 		}
 
-		return $app['twig']->render('auth/new_password.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('password_reset/new_password.html.twig', ['form' => $form->createView()]);
 	}
 }
 
