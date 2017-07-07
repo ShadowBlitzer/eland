@@ -69,7 +69,7 @@ menu:
   login: Login
   contact: Contact
   register: Inschrijven
-  offers_and_wants: Vraag en aanbod
+  ads: Vraag en aanbod
   accounts: Rekeningen
   users: Gebruikers
   transactions: Transacties
@@ -77,6 +77,53 @@ menu:
   forum: Forum
   docs: Documenten
   support: Support
+
+ad_index:
+  title: Vraag en Aanbod
+
+ad_show:
+  title: '%offer_or_want%: %title%'
+  
+ad_edit:
+  title: Vraag of aanbod aanpassen
+
+ad_add:
+  title: Aanmaken vraag of aanbod
+
+account_index:
+  title: Accounts
+
+user_index:
+  title: Gebruikers
+
+transaction_index:
+  title: Transacties
+
+transaction_show:
+  title: Transactie
+
+transaction_edit:
+  title: Transactie aanpassen
+  explain: >
+    Enkel admins kunnen de omschrijving van een transactie aanpassen.
+    Dit kan nuttig zijn wanneer transacties zichtbaar zijn onder leden en 
+    de omschrijving ongepast is.
+
+transaction_add:
+  title: Transactie ingeven
+    
+forum_index:
+  title: Forum
+
+doc_index:
+  title: Documenten
+
+news_index:
+  title: Nieuws
+
+support:
+  title: Support
+
   
 
 contact:

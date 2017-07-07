@@ -46,28 +46,28 @@ $cc->get('/', function (Request $request, app $app, $schema){
 $acc = $app['controllers_factory'];
 
 /**
- * messages
+ * ads (elas:messages)
  */
 
-$message = $app['controllers_factory'];
+$ad = $app['controllers_factory'];
 
-$message->get('/', 'controller\\message::index')
-	->bind('message_index');
-$message->get('/{message}', 'controller\\message::show')
-	->convert('message', 'service\\xdb::get')
-	->bind('message_show');
-$message->match('/add', 'controller\\message::add')
-	->bind('message_add');
-$message->match('/{message}/edit', 'controller\\message::edit')
-	->convert('message', 'service\\xdb::get')
-	->bind('message_edit');
+$ad->get('/', 'controller\\ad::index')
+	->bind('ad_index');
+$ad->get('/{ad}', 'controller\\ad::show')
+	->convert('ad', 'service\\xdb::get')
+	->bind('ad_show');
+$ad->match('/add', 'controller\\ad::add')
+	->bind('ad_add');
+$ad->match('/{ad}/edit', 'controller\\ad::edit')
+	->convert('ad', 'service\\xdb::get')
+	->bind('ad_edit');
 
-$message->assert('message', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
+$ad->assert('ad', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
 
-$acc->mount('/ads', $message);
+$acc->mount('/ads', $ad);
 
 /*
- * accounts
+ * accounts (elas:users)
  */
 
 $account = $app['controllers_factory'];
@@ -119,9 +119,9 @@ $img->post('/', 'controller\\img::create')
 $img->delete('/{img}', 'controller\\img::del')
 	->convert('img', 'service\\xdb::get')
 	->bind('img_del');
-$img->match('/{message}/del', 'controller\\acccount::del_form')
-	->assert('message', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
-	->convert('message', 'service\\xdb::get')
+$img->match('/{ad}/del', 'controller\\acccount::del_form')
+	->assert('ad', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->convert('ad', 'service\\xdb::get')
 	->bind('img_del_form');
 
 $img->assert('img', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
@@ -129,7 +129,7 @@ $img->assert('img', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 $acc->mount('/imgs', $img);
 
 /*
- *  users
+ *  users  (elas:login part of users)
  */
 
 $user = $app['controllers_factory'];
@@ -271,6 +271,15 @@ $elas->get('/group-login/{account}', 'controller\\elas::soap_status')
 $elas->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
 
 $ua->mount('/elas', $elas);
+
+/**
+ * support
+ */
+
+$ua->match('/support', 'controller\\support::form')
+	->bind('support');
+
+
 
 //
 

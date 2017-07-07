@@ -1,11 +1,11 @@
 {% extends 'own_group.html.twig' %}
 
-{% import 'macro/menu.html.twig' as menu %}
+{% import 'macro/menu.html.twig' as m %}
 
 {% set access = 'a' %}
 
 {% set auth_routes = {
-	'message_index': {'fa': 'newspaper-o', 'menu': true},
+	'ad_index': {'fa': 'newspaper-o', 'menu': true},
 	'account_index': {'fa': 'circle-o', 'menu': true},
 	'user_index': {'fa': 'users', 'menu': true},
 	'transaction_index': {'fa': 'exchange', 'menu': true},
@@ -50,7 +50,7 @@
 
 {% block navbar_user %}
 
-	{{ menu.nav_dropdown('who is this', 'user') }}
+	{{ m.nav_dropdown('who is this', 'user') }}
 
 	{% block navbar_user_menu %}
 
@@ -83,13 +83,15 @@
 
 
 
-{% block side_menu_items %}
+{% block menu_left %}
 
-	{% for route, prop in auth_routes %}
-	{{ menu.acc_li(route, prop, active_route, schema, access) }}
-	{% endfor %}
-
-{% endblock side_menu_items %}
+  {% for key in menu_left %}
+    {% if menu[key] is defined %}
+		{{ m.li(key, menu[key], active_menu, schema, access) }}
+    {% endif %}
+  {% endfor %}
+  
+{% endblock menu_left %}
 
 
 {% block top_buttons %}{% endblock top_buttons %}
