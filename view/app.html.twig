@@ -1,38 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% import 'macro/flash.html.twig' as f %}
+{% import 'macro/menu.html.twig' as m %}
 
 {% set active_route = global.request.attributes.get('_route') %}
 {% set active_menu = active_route|split('_')[0] %}
 {% set schema = global.request.attributes.get('schema') %}
 
-{% set menu = {
-  'ad': {'title': 'ad_index.title', 'fa': 'newspaper-o', 'route': 'ad_index'},
-  'account': {'title': 'account_index.title', 'fa': 'circle-o', 'route': 'account_index'},
-  'user': {'title': 'user_index.title', 'fa': 'user', 'route': 'user_index'},
-  'transaction': {'title': 'transaction_index.title', 'fa': 'exchange', 'route': 'transaction_index'},
-  'news': {'title': 'news_index.title', 'fa': 'calendar-o', 'route': 'news_index'},
-  'doc': {'title': 'doc_index.title', 'fa': 'files-o', 'route': 'doc_index'},
-  'forum': {'title': 'forum_index.title', 'fa': 'comments-o', 'route': 'forum_index'},
-  'support': {'title': 'support.title', 'fa': 'ambulance', 'route': 'support'}
-}
-
-%}
-
-{% set menu_left = [
-  'ad', 'account', 'user', 'transaction', 
-  'news', 'doc', 'forum', 'support'
-] 
-
-%}
-
 {% block title %}{{ config('systemname', schema) }}{% endblock title %}
 
 {% block url_index %}{% endblock url_index %}
-
-{% block navbar_toggle_menu %}{% endblock navbar_toggle_menu %}
-
-{% block navbar_menu %}{% endblock navbar_menu %}
 
 {% block content %}
 
@@ -78,9 +55,9 @@
 <h1>
 {% block heading_pre %}{% endblock %}
 {% block heading_fa_container %}
-<i class="fa fa-{% block fa %}{{ menu[active_menu]['fa'] }}{% endblock %}"></i> 
+<i class="fa fa-{% block fa %}{{ menu_ary[active_menu]['fa'] }}{% endblock %}"></i> 
 {% endblock heading_fa_container %}
-{% block heading %}{{ menu[active_menu]['title']|trans }}{% endblock heading %}
+{% block heading %}{{ menu_ary[active_menu]['title']|trans }}{% endblock heading %}
 {% block heading_post %}{% endblock %}
 </h1>
 {% endblock heading_container %}

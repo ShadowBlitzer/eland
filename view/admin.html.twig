@@ -4,97 +4,58 @@
 
 {% set access = 'a' %}
 
-{% set auth_routes = {
-	'ad_index': {'fa': 'newspaper-o', 'menu': true},
-	'account_index': {'fa': 'circle-o', 'menu': true},
-	'user_index': {'fa': 'users', 'menu': true},
-	'transaction_index': {'fa': 'exchange', 'menu': true},
-	'news_index': {'fa': 'calendar-o', 'menu': true},
-	'doc_index': {'fa': 'files-o', 'menu': true},
-	'forum_index': {'fa': 'comments-o', 'menu': true},
-	'support': {'fa': 'ambulance'},
-	'my_data': {'fa': 'user'},
-	'my_offers_and_wants': {'fa': 'newspaper-o'},
-	'my_transactions': {'fa': 'exchange'},
-	'logout' : {'fa': 'sign-out'}
+{% set admin_menu_ary = {
+  'status': {'title': 'status.title', 'fa': 'exclamation-triangle', 'route': 'status'},
+  'permission': {'title': 'permission.title', 'fa': 'hand-paper-o', 'route': 'permission'},
+  'category': {'title': 'category_index.title', 'fa': 'clone', 'route': 'category_index'},
+  'custom_field': {'title': 'custom_field_index.title', 'fa': 'circle-o-notch', 'route': 'custom_field_index'},
+  'contact_detail': {'title': 'contact_detail_index.title', 'fa': 'map-marker', 'route': 'contact_detail_index'},
+  'config': {'title': 'config_index.title', 'fa': 'gears', 'route': 'config_index'},
+  'export': {'title': 'export.title', 'fa': 'download', 'route': 'export'},
+  'autominlimit': {'title': 'autominlimit.title', 'fa': 'arrows-v', 'route': 'autominlimit'},
+  'mass_transaction': {'title': 'mass_transaction.title', 'fa': 'exchange', 'route': 'mass_transaction'},
+  'periodic_charge': {'title': 'periodic_charge.title', 'fa': 'refresh', 'route': 'periodic_charge'}, 
+  'log': {'title': 'log.title', 'fa': 'history', 'route': 'log'}
 }
+
 %}
 
-{% set menu_left = [
-	'message',
-	'account',
-	'user',
-	'transaction',
-	'news',
-	'doc',
-	'forum'
-]
+{% set menu_admin_en = [
+  'status', 'permission', 'category', 'custom_field', 'contact_detail', 
+  'config', 'export', 'autominlimit', 'mass_transaction',
+  'periodic_charge', 'log'
+] 
+
 %}
 
 {% block navbar_container_class %} bg-info{% endblock %}
 
-{% block navbar_toggle_menu %}
-<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
-<span class="sr-only">Toggle navigation</span>
-<span class="icon-bar"></span>
-<span class="icon-bar"></span>
-<span class="icon-bar"></span>
-</button>
-{% endblock navbar_toggle_menu %}
-
-{% block navbar_menu %}
-<div class="collapse navbar-collapse" id="navbar-collapse-1">
-<ul class="nav navbar-nav navbar-right">
-
 {% block navbar_groups %}{% endblock %}
-
-{% block navbar_user %}
-
-	{{ m.nav_dropdown('who is this', 'user') }}
-
-	{% block navbar_user_menu %}
-
-{#
-		{{ menu.li(user_self_url|default('#'), 'Mijn gegevens', 'user') }} 
-		{{ menu.li(messages_self_url|default('#'), 'Mijn vraag en aanbod', 'newspaper-o') }} 
-		{{ menu.li(transactions_self_url|default('#'), 'Mijn transacties', 'exchange') }}
-
-#}
-		<li class="divider"></li>
-	{% endblock navbar_user_menu %}
-{#
-	{{ menu.li(logout_url|default('#'), 'Uitloggen', 'sign-out') }}
-#}
-	</ul>
-	</li>
-
-{% endblock navbar_user %}
 
 {% block navbar_admin_disabled %}
 {% endblock navbar_admin_disabled %}
 
-{% block navbar_admin %}
-{% endblock navbar_admin %}
+{% block navbar_admin -%}
 
-</ul>
-</div>
+  {{ m.nav_dropdown('admin_modus', 'cog') }}
 
-{% endblock navbar_menu %}
-
-
-
-{% block menu_left %}
-
-  {% for key in menu_left %}
-    {% if menu[key] is defined %}
-		{{ m.li(key, menu[key], active_menu, schema, access) }}
+  {% for key in menu_admin_en %}
+    {% if admin_menu_ary[key] is defined %}
+    {{ m.li(key, admin_menu_ary[key], schema, access) }}
     {% endif %}
   {% endfor %}
-  
-{% endblock menu_left %}
 
+  {{ m.divider() }}
+  {{ m.li_302_no_param({'route': 'logout', 'fa': 'sign-out', 'title': 'logout.title'}) }}
+  {{ m.nav_dropdown_end() }}
+
+{%- endblock navbar_admin %}
 
 {% block top_buttons %}{% endblock top_buttons %}
+
+{% block heading_pre %}
+<small><span class="label label-info">{{ 'admin'|trans }}</span></small>&nbsp; 
+{% endblock heading_pre %}
 
 {#
 

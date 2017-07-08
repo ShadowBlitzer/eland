@@ -303,7 +303,7 @@ $a->get('/status', 'controller\\status::get')
 $pms = $app['controllers_factory'];
 
 $pms->get('/', 'controller\\permission::index')
-	->bind('permission_index');
+	->bind('permission');
 
 $a->mount('/permissions', $pms);
 
@@ -314,7 +314,7 @@ $a->mount('/permissions', $pms);
 $cat = $app['controllers_factory'];
 
 $cat->get('/', 'controller\\category::index')
-	->bind('elas_soap_status');
+	->bind('category_index');
 $cat->match('/add', 'controller\\category::add')
 	->bind('category_add');
 $cat->match('/{category}/edit', 'controller\\category::edit')
@@ -322,6 +322,22 @@ $cat->match('/{category}/edit', 'controller\\category::edit')
 	->bind('category_edit');
 
 $a->mount('/categories', $cat);
+
+/**
+ * custom fields
+ */
+
+$cat = $app['controllers_factory'];
+
+$cat->get('/', 'controller\\custom_field::index')
+	->bind('custom_field_index');
+$cat->match('/add', 'controller\\custom_field::add')
+	->bind('custom_field_add');
+$cat->match('/{custom_field}/edit', 'controller\\custom_field::edit')
+	->convert('custom_field', 'service\\xdb::get')
+	->bind('custom_field_edit');
+
+$a->mount('/custom-fields', $cat);
 
 /**
  * Contact types
@@ -333,7 +349,7 @@ $contact_type->get('/', 'controller\\contact_type::index')
 	->bind('contact_type_index');
 $contact_type->match('/add', 'controller\\contact_type::add')
 	->bind('contact_type_add');
-$contact_type->match('/{contact_type}/edit', 'controller\\contact_type::add')
+$contact_type->match('/{contact_type}/edit', 'controller\\contact_type::edit')
 	->assert('contact_type', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
 	->convert('contact_type', 'service\\xdb::get')
 	->bind('contact_type_add');
@@ -341,8 +357,21 @@ $contact_type->match('/{contact_type}/edit', 'controller\\contact_type::add')
 $a->mount('/contact_types', $contact_type);
 
 /**
- * Contacts
+ * Contacts (temp)
  */
+
+$contact_detail = $app['controllers_factory'];
+
+$contact_detail->get('/', 'controller\\contact_detail::index')
+	->bind('contact_detail_index');
+$contact_detail->match('/add', 'controller\\contact_detail::add')
+	->bind('contact_detail_add');
+$contact_detail->match('/{contact_detail}/edit', 'controller\\contact_detail::edit')
+	->assert('contact_detail', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->convert('contact_detail', 'service\\xdb::get')
+	->bind('contact_type_add');
+
+$a->mount('/contact-detail', $contact_detail);
 
 
 /**
@@ -368,7 +397,7 @@ $a->get('/groups/typeahead', 'controller\\group::typeahead')
 $export = $app['controllers_factory'];
 
 $export->get('/', 'controller\\export::index')
-	->bind('export_index');
+	->bind('export');
 
 $a->mount('/export', $export);
 
@@ -386,6 +415,12 @@ $a->match('/autominlimit', 'controller\\autominlimit::form')
 $a->match('/mass-transaction', 'controller\\mass_transaction::form')
 	->bind('mass_transaction');
 
+/*
+ * periodic charge
+ */
+
+$a->match('/periodic-charge', 'controller\\periodic_charge::form')
+	->bind('periodic_charge');
 /*
  * logs
  */

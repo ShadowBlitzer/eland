@@ -1,2 +1,11 @@
 {% extends 'authenticated.html.twig' %}
 
+{% import 'macro/menu.html.twig' as m %}
+
+{% block navbar_user_items -%}
+
+<li>Item here</li>
+
+{{ m.divider() }}
+
+{%- endblock navbar_user_items %}

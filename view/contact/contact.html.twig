@@ -1,6 +1,8 @@
 {% extends 'anon.html.twig' %}
 
-{% import 'macro/asset.html.twig' as a %}
+{% block css %}
+{% include 'asset/summernote_css.html.twig' %}
+{% endblock css %}
 
 {% block inner %}
 
@@ -38,5 +40,5 @@
 {% endblock inner %}
 
 {% block js %}
-{{ a.js('rich_edit.js') }}
+{% include 'asset/summernote_js.html.twig' %}
 {% endblock %}

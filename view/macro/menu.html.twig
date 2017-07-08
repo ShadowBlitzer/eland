@@ -1,24 +1,62 @@
 
-{% macro nav_dropdown(label, fa) %}
+{% macro nav_dropdown(label, fa) -%}
 <li class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-<span class="fa fa-{{ fa|default('question') }}"></span> {{ label|default('--label--') }}
+<span class="fa fa-{{ fa|default('question') }}"></span> {{ label|default('--label--')|trans }}
 <span class="caret"></span></a>
 <ul class="dropdown-menu" role="menu">
-{% endmacro %}
+{%- endmacro %}
 
-{% macro li(key, item, active_menu, schema, access) %}
+{% macro nav_dropdown_end() -%}
+</ul></li>
+{%- endmacro nav_dropdown_end %}
+
+{% macro li_param(key, item, active_menu, schema, access, param) -%}
+<li{% if active_menu == key %} class="active"{% endif %}>
+<a href="{{ path(item['route'], {'schema': schema, 'access': access }|merge(param|default({}))) }}">
+<i class="fa fa-{{ item['fa']|default('question') }}"></i> {{ item['title']|trans }}
+</a></li>
+{%- endmacro %}
+
+{% macro li(key, item, active_menu, schema, access) -%}
 <li{% if active_menu == key %} class="active"{% endif %}>
 <a href="{{ path(item['route'], {'schema': schema, 'access': access }) }}">
 <i class="fa fa-{{ item['fa']|default('question') }}"></i> {{ item['title']|trans }}
 </a></li>
-{% endmacro %}
+{%- endmacro %}
 
-{% macro acc_li(route, prop, active_route, schema, access) %}
+{% macro li_302(item, schema, access) -%}
+<li>
+<a href="{{ path(item['route'], {'schema': schema, 'access': access }) }}">
+<i class="fa fa-{{ item['fa']|default('question') }}"></i> {{ item['title']|trans }}
+</a></li>
+{%- endmacro %}
+
+{% macro li_302_no_param(item) -%}
+<li>
+<a href="{{ path(item['route']) }}">
+<i class="fa fa-{{ item['fa']|default('question') }}"></i> {{ item['title']|trans }}
+</a></li>
+{%- endmacro %}
+
+{% macro li_anon(key, item, active_menu, schema) -%}
+<li{% if active_menu == key %} class="active"{% endif %}>
+<a href="{{ path(item['route'], {'schema': schema }) }}">
+<i class="fa fa-{{ item['fa']|default('question') }}"></i> {{ item['title']|trans }}
+</a></li>
+{%- endmacro %}
+
+{% macro divider() -%}
+<li class="divider"></li>
+{%- endmacro divider %}
+
+{#
+{% macro acc_li(route, prop, active_route, schema, access) -%}
 {% if prop['menu'] is defined %}
 <li{% if active_route == route %} class="active"{% endif %}>
 <a href="{{ path(route, {'schema': schema, 'access': access}) }}">
 <i class="fa fa-{{ prop['fa']|default('question') }}"></i> {{ ('title.'~route)|trans }}
 </a></li>
 {% endif %}
-{% endmacro %}
+{%- endmacro %}
+#}

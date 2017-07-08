@@ -7,6 +7,14 @@ eland:
     (Maak eerst een %link_b_open%Github%link_b_close% account aan.)
   title: eLAND
 
+toggle_navigation: Navigatie
+admin_modus: Admin modus
+
+admin: Admin
+members: Leden
+interlets: InterLETS
+public: Publiek
+
 email: Email
 password: Paswoord
 message: Bericht
@@ -59,25 +67,6 @@ hosting_request:
   mail:
     subject: 'Aanvraag hosting: %group_name%'
 
-title:
-  login: Login
-  contact: Contact
-  register: Inschrijven
-  password_reset: Paswoord vergeten
-
-menu:
-  login: Login
-  contact: Contact
-  register: Inschrijven
-  ads: Vraag en aanbod
-  accounts: Rekeningen
-  users: Gebruikers
-  transactions: Transacties
-  news: Nieuws
-  forum: Forum
-  docs: Documenten
-  support: Support
-
 ad_index:
   title: Vraag en Aanbod
 
@@ -124,9 +113,8 @@ news_index:
 support:
   title: Support
 
-  
-
 contact:
+  title: Contact
   email: Je emailadres
   email_explain: >
     Er wordt een bevestigingslink naar je gestuurd die je moet aanklikken.
@@ -144,10 +132,14 @@ contact:
       zelf een bericht hebt ingegeven in het contactformulier van %systemname%
 
 login:
+  title: Login
   login: Email, code of gebruikersnaam
   login_lets: Email, LETScode of gebruikersnaam
   submit_btn: Login
   password_reset_link: Ik ben mijn paswoord vergeten
+
+logout:
+  title: Uitloggen
 
 password_reset:
   explain: >
@@ -162,6 +154,7 @@ password_reset:
       een paswoord reset hebt aangevraagd.
 
 register:
+  title: Inschrijven
   first_name: Voornaam
   last_name: Achternaam
   postcode: Postcode

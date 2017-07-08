@@ -1,47 +1,33 @@
 {% extends 'app.html.twig' %}
 
-{% import 'macro/menu.html.twig' as menu %}
+{% import 'macro/menu.html.twig' as m %}
 
-{% set anon_routes = {
-	'login': {'fa': 'sign-in', 'menu': true},
-	'password_reset': {'fa': 'key'},
-	'password_reset_confirm': {'fa': 'key'},
-	'contact': {'fa': 'comment-o', 'menu': true},
-	'contact_confirm': {'fa': 'comment-o'},
-	'register': {'fa': 'check-square-o', 'menu': true},
-	'register_confirm': {'fa': 'check-square-o'}
+{% set menu_ary = {
+  'login': {'title': 'login.title', 'fa': 'sign-in', 'route': 'login'},
+  'contact': {'title': 'contact.title', 'fa': 'comment-o', 'route': 'contact'},
+  'register': {'title': 'register.title', 'fa': 'check-square-o', 'route': 'register'}
 }
+
 %}
 
-{# load summernote #}
+{% set menu_left_en = [
+  'login', 'contact', 'register'
+] 
 
-{% block footable_css %}{% endblock %}
-{% block fileupload_css %}{% endblock %}
-{% block datepicker_css %}{% endblock %}
-{% block leaflet_css %}{% endblock %}
-{% block leaflet_label_css %}{% endblock %}
+%}
 
-{% block loading_img %}{% endblock loading_img%}
+{% block menu_left %}
 
-{% block typeahead_js %}{% endblock %}
-{% block fileupload_js %}{% endblock %}
-{% block footable_js %}{% endblock %}
-{% block jssor_js %}{% endblock %}
-{% block jqplot_js %}{% endblock %}
-{% block datepicker_js %}{% endblock %}
-{% block isotope_js %}{% endblock %}
-{% block leaflet_js %}{% endblock %}
-{% block leaflet_label_js %}{% endblock %}
+  {% for key in menu_left_en %}
+    {% if menu_ary[key] is defined %}
+		{{ m.li_anon(key, menu_ary[key], active_menu, schema) }}
+    {% endif %}
+  {% endfor %}
+  
+{% endblock menu_left %}
 
-{% block side_menu_items %}
-
-	{% for route, prop in anon_routes %}
-	{{ menu.li(route, prop, active_route, schema) }}
-	{% endfor %}
-
-{% endblock side_menu_items %}
-
+{#
 {% block fa %}{{ anon_routes[active_route].fa }}{% endblock fa %}
-
+#}
 
 
