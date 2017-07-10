@@ -1,0 +1,30 @@
+{% extends 'own_group.html.twig' %}
+
+{% block css %}
+{% include 'asset/summernote_css.html.twig' %}
+{% endblock css %}
+
+{% block inner %}
+
+{# {{ config('contact_form_top_text', schema) }} #}
+
+{{ form_start(form) }}
+
+<p>
+{{ form_widget(form.message, {'attr': {'class': 'rich-edit'}}) }}
+{{ form_errors(form.message) }}
+</p>
+
+<p>
+{{ form_widget(form.submit, {'label': 'send', 'attr': {'class': 'btn btn-default btn-lg'}}) }}
+</p>
+
+{{ form_end(form) }}
+
+{# {{ config('contact_form_bottom_text', schema) }} #}
+
+{% endblock inner %}
+
+{% block js %}
+{% include 'asset/summernote_js.html.twig' %}
+{% endblock %}

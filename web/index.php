@@ -15,10 +15,6 @@ if (php_sapi_name() === 'cli-server' && is_file($filename))
 
 $app = require_once __DIR__ . '/../app.php';
 
-$app['controllers']->assert('id', '\d+')
-	->assert('schema', '[a-z][a-z0-9]+')
-	->assert('token', '[a-z0-9][a-z0-9-]{14,14}[a-z0-9]');
-
 $cc = $app['controllers_factory'];
 
 $cc->match('/login', 'controller\\login::form')
@@ -62,7 +58,7 @@ $ad->match('/{ad}/edit', 'controller\\ad::edit')
 	->convert('ad', 'service\\xdb::get')
 	->bind('ad_edit');
 
-$ad->assert('ad', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
+$ad->assert('ad', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
 $acc->mount('/ads', $ad);
 
@@ -94,17 +90,17 @@ $account->match('/{account}/edit', 'controller\\account::edit')
 $account->get('/typeahead/{account_type}', 'controller\\account::typeahead')
 	->bind('account_typeahead_self');
 $account->get('/typeahead/{account}/{account_type}', 'controller\\account::typeahead')
-	->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->assert('account', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
 	->convert('account', 'service\\xdb::get')
 	->bind('account_typeahead');
 $account->get('/weighted-balance/{account}/{days}', 'controller\\account::weighted_balance')
-	->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->assert('account', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
 	->assert('days', '/d+')
 	->convert('account', 'service\\xdb::get')
 	->bind('account_typeahead');
 
 $account->assert('account_type', 'active|new|leaving|interlets|pre-active|post-active|all')
-	->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
+	->assert('account', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
 $acc->mount('/accounts', $account);
 
@@ -120,7 +116,7 @@ $img->delete('/{img}', 'controller\\img::del')
 	->convert('img', 'service\\xdb::get')
 	->bind('img_del');
 $img->match('/{ad}/del', 'controller\\acccount::del_form')
-	->assert('ad', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->assert('ad', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
 	->convert('ad', 'service\\xdb::get')
 	->bind('img_del_form');
 
@@ -145,7 +141,7 @@ $user->match('/{user}/edit', 'controller\\user::edit')
 	->convert('user', 'service\\xdb::get')
 	->bind('user_edit');
 
-$user->assert('user', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
+$user->assert('user', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
 $acc->mount('/users', $user);
 
@@ -165,7 +161,7 @@ $transaction->match('/add', 'controller\\transaction::add')
 $transaction->match('/{transaction}/edit', 'controller\\transaction::edit')
 	->bind('transaction_edit');
 $transaction->get('/plot-account/{account}/{days}', 'controller\\transaction::plot_account')
-	->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->assert('account', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
 	->assert('days', '\d+')
 	->value('days', 365)
 	->bind('transaction_plot_account');
@@ -202,7 +198,7 @@ $news->post('/{news}/approve', 'controller\\news::approve')
 	->convert('news', 'service\\xdb::get')
 	->bind('news_approve');
 
-$news->assert('news', '^[a-z0-9][a-z0-9-]{6}[a-z0-9]$');
+$news->assert('news', '^[a-z0-9][a-z0-9-]{10}[a-z0-9]$');
 
 $acc->mount('/news', $news);
 
@@ -246,7 +242,7 @@ $forum->match('/{forum}/edit', 'controller\\forum::edit')
 	->convert('forum', 'service\\xdb::get')
 	->bind('forum_edit');
 
-$forum->assert('forum', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
+$forum->assert('forum', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
 $acc->mount('/forum', $forum);
 
@@ -268,7 +264,7 @@ $elas->get('/group-login/{account}', 'controller\\elas::soap_status')
 //	->convert('account', 'service\\xdb::get')
 	->bind('elas_group_login');
 
-$elas->assert('account', '[a-z0-9][a-z0-9-]{6}[a-z0-9]');
+$elas->assert('account', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
 $ua->mount('/elas', $elas);
 
@@ -350,7 +346,7 @@ $contact_type->get('/', 'controller\\contact_type::index')
 $contact_type->match('/add', 'controller\\contact_type::add')
 	->bind('contact_type_add');
 $contact_type->match('/{contact_type}/edit', 'controller\\contact_type::edit')
-	->assert('contact_type', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->assert('contact_type', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
 	->convert('contact_type', 'service\\xdb::get')
 	->bind('contact_type_add');
 
@@ -367,7 +363,7 @@ $contact_detail->get('/', 'controller\\contact_detail::index')
 $contact_detail->match('/add', 'controller\\contact_detail::add')
 	->bind('contact_detail_add');
 $contact_detail->match('/{contact_detail}/edit', 'controller\\contact_detail::edit')
-	->assert('contact_detail', '[a-z0-9][a-z0-9-]{6}[a-z0-9]')
+	->assert('contact_detail', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
 	->convert('contact_detail', 'service\\xdb::get')
 	->bind('contact_type_add');
 
@@ -405,8 +401,8 @@ $a->mount('/export', $export);
  * auto min limit
  */
 
-$a->match('/autominlimit', 'controller\\autominlimit::form')
-	->bind('autominlimit');
+$a->match('/auto-min-limit', 'controller\\auto_min_limit::form')
+	->bind('auto_min_limit');
 
 /*
  * mass_transaction
@@ -447,6 +443,8 @@ $cc->before(function(Request $request) use ($app){
 
 	$app['schema'] = $schema;
 });
+
+$cc->assert('schema', '[a-z][a-z0-9]*');
 
 $app->mount('/{schema}', $cc);
 

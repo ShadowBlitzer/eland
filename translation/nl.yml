@@ -166,6 +166,42 @@ register:
   accept: Ik heb de privacy en aanvaard deze.
   submit_btn: Inschrijven
 
+status:
+  title: Status
+
+permission:
+  title: Rechten
+
+category_index:
+  title: Categorieën
+
+custom_field_index:
+  title: Custom velden
+
+contact_detail_index:
+  title: Contacten
+
+config_index:
+  title: Instellingen
+
+export:
+  title: Export
+
+auto_min_limit:
+  title: Auto min limiet
+
+mass_transaction:
+  title: Massa transactie
+
+periodic_charge:
+  title: Periodieke inning
+
+log:
+  title: Logs
+
+
+
+
 
 mail:
   no_reply: >
