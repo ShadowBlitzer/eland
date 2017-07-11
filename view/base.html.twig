@@ -1,7 +1,7 @@
 {% import 'macro/asset.html.twig' as a %}
 
 {% spaceless %}
-
+{% block all %}
 <!DOCTYPE html{% block html %}{% endblock %}>
 <html lang="{{ global.request.locale }}">
 <head>
@@ -104,5 +104,5 @@
 
 </body>
 </html>
-
+{% endblock all %}
 {% endspaceless %}

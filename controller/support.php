@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class support
 {
-	public function form(Request $request, app $app, string $schema)
+	public function form(Request $request, app $app, string $schema, string $access)
 	{
 		$data = [
 			'message'	=> '',

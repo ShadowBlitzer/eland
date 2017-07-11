@@ -314,6 +314,10 @@ $app['token'] = function ($app){
 	return new service\token();
 };
 
+$app['unique_eid'] = function ($app){
+	return new service\unique_eid($app['xdb'], $app['token']);
+};
+
 $app['email_validate'] = function ($app){
 	return new service\email_validate($app['cache'], $app['xdb'], $app['token'], $app['monolog']);
 };

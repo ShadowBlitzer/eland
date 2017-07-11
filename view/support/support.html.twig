@@ -1,4 +1,7 @@
-{% extends 'own_group.html.twig' %}
+{% set acc = global.request.attributes.get('access') %}
+{% set ext = acc == 'a' ? 'admin' : (acc == 'u' ? 'user' : 'unknown') %}
+
+{% extends ext~'.html.twig' %}
 
 {% block css %}
 {% include 'asset/summernote_css.html.twig' %}
