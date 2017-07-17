@@ -6,7 +6,10 @@ $app = new util\app();
 
 $app['route_class'] = 'util\route';
 
-$app['debug'] = getenv('DEBUG');
+$app['debug'] = getenv('DEBUG') ? true : false;
+
+\Symfony\Component\Debug\ErrorHandler::register();
+\Symfony\Component\Debug\ExceptionHandler::register($app['debug']);
 
 $app->register(new Predis\Silex\ClientServiceProvider(), [
 	'predis.parameters' => getenv('REDIS_URL'),
@@ -226,7 +229,6 @@ $app['s3'] = function($app){
 	return new service\s3($app['s3_img'], $app['s3_doc']);
 };
 
-
 /*
  * The locale must be installed in the OS for formatting dates.
  */
@@ -261,6 +263,10 @@ $app['this_group'] = function($app){
 
 $app['xdb'] = function ($app){
 	return new service\xdb($app['db'], $app['predis'], $app['monolog'], $app['this_group']);
+};
+
+$app['ev'] = function ($app){
+	return new service\ev($app['db'], $app['predis']);
 };
 
 $app['cache'] = function ($app){
@@ -415,10 +421,6 @@ $app['queue.geocode'] = function ($app){
 	return new queue\geocode($app['db'], $app['cache'], $app['queue'], $app['monolog'], $app['user_cache']);
 };
 
-
-
-
-
 /**
  * functions
  */
@@ -473,7 +475,6 @@ $app['uuid'] = function($app){
 	return new service\uuid();
 };
 
-/*
 $app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $request, $code) use ($app) {
     if ($app['debug'])
     {
@@ -482,7 +483,8 @@ $app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $r
 
     // ... logic to handle the error and return a Response
 
-	switch ($code) {
+	switch ($code)
+	{
 		case 404:
 			$message = '404. The requested page could not be found.';
 			break;
@@ -492,6 +494,5 @@ $app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $r
 
     return new Response($message);
 });
-*/
 
 return $app;
