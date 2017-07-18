@@ -8,8 +8,11 @@ $app['route_class'] = 'util\route';
 
 $app['debug'] = getenv('DEBUG') ? true : false;
 
-\Symfony\Component\Debug\ErrorHandler::register();
-\Symfony\Component\Debug\ExceptionHandler::register($app['debug']);
+if (php_sapi_name() !== 'cli')
+{
+	\Symfony\Component\Debug\ErrorHandler::register();
+	\Symfony\Component\Debug\ExceptionHandler::register($app['debug']);
+}
 
 $app->register(new Predis\Silex\ClientServiceProvider(), [
 	'predis.parameters' => getenv('REDIS_URL'),

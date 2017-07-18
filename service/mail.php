@@ -33,11 +33,11 @@ class mail
 		$this->email_validate = $email_validate;
 
 		$enc = getenv('SMTP_ENC') ?: 'tls';
-		$transport = \Swift_SmtpTransport::newInstance(getenv('SMTP_HOST'), getenv('SMTP_PORT'), $enc)
-			->setUsername(getenv('SMTP_USERNAME'))
+		$transport = new \Swift_SmtpTransport(getenv('SMTP_HOST'), getenv('SMTP_PORT'), $enc);
+		$transport->setUsername(getenv('SMTP_USERNAME'))
 			->setPassword(getenv('SMTP_PASSWORD'));
 
-		$this->mailer = \Swift_Mailer::newInstance($transport);
+		$this->mailer = new \Swift_Mailer($transport);
 
 		$this->mailer->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(100, 30));
 
@@ -181,6 +181,11 @@ class mail
 
 	public function queue(array $data)
 	{
+		if (!isset($data['priority']))
+		{
+			$data['priority'] = 1000;
+		}
+
 		if (!$data['schema'])
 		{
 			$m = 'Mail: no schema set, data: ' . json_encode($data) . "\n";

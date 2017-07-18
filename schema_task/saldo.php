@@ -58,9 +58,6 @@ class saldo extends schema_task
 
 	function process()
 	{
-
-		// vars
-
 		$host = $this->groups->get_host($this->schema);
 
 		if (!$host)
