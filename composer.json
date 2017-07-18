@@ -44,6 +44,10 @@
 		"symfony/debug": "^3.3"
 	},
 
+	"require-dev": {
+		"heroku/heroku-buildpack-php": "*"
+	},
+
     "minimum-stability": "stable",
 
 	"autoload": {
