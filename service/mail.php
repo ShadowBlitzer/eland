@@ -143,8 +143,8 @@ class mail
 			return;
 		}
 
-		$message = \Swift_Message::newInstance()
-			->setSubject($data['subject'])
+		$message = new \Swift_Message();
+		$message->setSubject($data['subject'])
 			->setBody($data['text'])
 			->setTo($data['to'])
 			->setFrom($data['from']);
