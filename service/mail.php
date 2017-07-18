@@ -60,6 +60,8 @@ class mail
 			return;
 		}
 
+		$data['vars']['schema'] = $data['schema'];
+
 		$sch = $data['schema'];
 		unset($data['schema']);
 
