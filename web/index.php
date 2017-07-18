@@ -35,7 +35,6 @@ $cc->get('/contact/{token}', 'controller\\contact::confirm')
 	->bind('contact_confirm');
 
 $cc->get('/', function (Request $request, app $app, $schema){
-
 	return ' ok test ' . $schema;
 });
 

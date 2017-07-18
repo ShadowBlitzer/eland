@@ -1,3 +1,3 @@
-web: vendor/bin/heroku-php-apache2
+web: vendor/bin/heroku-php-apache2 -C apache.conf web/
 worker: php worker.php
 mail: php mail.php
