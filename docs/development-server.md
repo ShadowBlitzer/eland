@@ -6,11 +6,11 @@ There are some issues with heroku-buildpack-php for [local execution for Debian 
 development server for local testing. 
 Put the environment variables in an .env file at the root of the project in the form of 
 KEY=VALUE on every new line. 
-Then, at the root of the project, you can start the development server with ./serve 
-If everything goes alright the local site is served at localhost:8888
-Optionally, you can give another location as argument for ./serve, like i.e.
+Then, at the root of the project, you can start the development server with `./serve` 
+If everything goes fine the local site is served at localhost:8888
+Optionally, you can give another location as argument for `./serve`, like i.e.
 localhost:40000 
-You can also create a .local file with on the first line the location. 
+You can also create a `.local` file with on the first line the location. 
 
 ####Background processes
 
@@ -22,11 +22,11 @@ The processes are:
 with a eLAS database.
 
 One process can be run: 
-´´´shell
+```shell
 heroku local worker
-´´´
+```
 
 Or, all of them together:
-´´´shell
+```shell
 heroku local worker,mail,sync
-´´´
+```
