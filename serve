@@ -1,6 +1,10 @@
 #!/bin/bash
 if [ -z "$1" ]; then
-  LOCAL="$(head -n 1 .local )"
+    if [ -f .local ] && [ -e .local ]; then
+        LOCAL="$(head -n 1 .local )"
+    else
+        LOCAL=localhost:8888
+    fi
 else
   LOCAL=$1
 fi
