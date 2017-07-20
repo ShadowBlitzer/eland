@@ -142,7 +142,7 @@ class ev
 
 			$this->db->commit();
 
-			$this->redis->set($redis_id, json_encode($full))
+			$this->redis->set($redis_id, json_encode($full));
 		}
 		catch(Exception $e)
 		{

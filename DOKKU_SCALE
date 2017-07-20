@@ -1,3 +1,4 @@
 web=1
 worker=1
 mail=1
+sync=1

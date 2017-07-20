@@ -25,7 +25,7 @@ class unique_eid
 		{
 			$eid = $this->token->set_length(12)->gen();
 
-			if ($this->xdb->free_eid_check($eid)
+			if ($this->xdb->free_eid_check($eid))
 			{
 				return $eid;
 			}

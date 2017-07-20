@@ -27,8 +27,8 @@ class currency
 		'max_limit'			=> '',
 		'landing_page'		=> 'ad_index',
 		'custom'		=> [
-			'dddddzzfjeid' => ['account', 'datetime', 'info moment']
-			'sjkdksjlksqj' => ['datetime', 'lidgeld']
+			'dddddzzfjeid' => ['account', 'datetime', 'info moment'],
+			'sjkdksjlksqj' => ['datetime', 'lidgeld'],
 			'klds-doeoopd' => ['int', ''],
 		],
 	];
