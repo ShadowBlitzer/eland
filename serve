@@ -1,0 +1,7 @@
+#!/bin/bash
+if [ -z "$1" ]; then
+  LOCAL="$(head -n 1 .local )"
+else
+  LOCAL=$1
+fi
+eval "$( cat .env | tr  '\n' ' ' )" php -d variables_order=EGPCS -S $LOCAL -t web/
