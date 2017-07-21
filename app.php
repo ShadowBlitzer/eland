@@ -272,6 +272,10 @@ $app['ev'] = function ($app){
 	return new service\ev($app['db'], $app['predis']);
 };
 
+$app['migrate_from_elas'] =function ($app){
+	return new service\migrate_from_elas($app['db'], $app['xdb'], $app['cache'], $app['ev']);
+};
+
 $app['cache'] = function ($app){
 	return new service\cache($app['db'], $app['predis'], $app['monolog']);
 };
@@ -323,8 +327,8 @@ $app['token'] = function ($app){
 	return new service\token();
 };
 
-$app['unique_eid'] = function ($app){
-	return new service\unique_eid($app['xdb'], $app['token']);
+$app['unique_id'] = function ($app){
+	return new service\unique_id($app['ev'], $app['token']);
 };
 
 $app['email_validate'] = function ($app){

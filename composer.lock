@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b526066cf107f231c59246f42005c7da",
+    "content-hash": "667313eaa84c937b992b7b828aaf91ba",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.31.6",
+            "version": "3.31.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4e066559063683aa4574aee3ed54fcb90b2b10b2"
+                "reference": "9829a8183016df800110148b467179d67c434f90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4e066559063683aa4574aee3ed54fcb90b2b10b2",
-                "reference": "4e066559063683aa4574aee3ed54fcb90b2b10b2",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9829a8183016df800110148b467179d67c434f90",
+                "reference": "9829a8183016df800110148b467179d67c434f90",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-07-17T21:18:04+00:00"
+            "time": "2017-07-20T22:22:05+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -694,6 +694,48 @@
             "time": "2014-09-09T13:34:57+00:00"
         },
         {
+            "name": "econea/nusoap",
+            "version": "v0.9.5.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/econea/nusoap.git",
+                "reference": "682c8e7d0cca019e692fd9b9427607f5ce467571"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/econea/nusoap/zipball/682c8e7d0cca019e692fd9b9427607f5ce467571",
+                "reference": "682c8e7d0cca019e692fd9b9427607f5ce467571",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPLv2"
+            ],
+            "authors": [
+                {
+                    "name": "Milan Felix Sulc"
+                },
+                {
+                    "name": "Martin Macejkou Mates"
+                }
+            ],
+            "description": "NuSOAP fixed for PHP 5.5 - 7.0",
+            "keywords": [
+                "nusoap",
+                "soap"
+            ],
+            "time": "2017-05-16T08:03:25+00:00"
+        },
+        {
             "name": "egeloen/http-adapter",
             "version": "0.8.0",
             "source": {
@@ -924,43 +966,6 @@
                 "scraper"
             ],
             "time": "2017-01-03T13:21:43+00:00"
-        },
-        {
-            "name": "fergusean/nusoap",
-            "version": "0.9.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fergusean/nusoap.git",
-                "reference": "463c772ae805aed7f396d89e6dce1dc0ce4c038b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fergusean/nusoap/zipball/463c772ae805aed7f396d89e6dce1dc0ce4c038b",
-                "reference": "463c772ae805aed7f396d89e6dce1dc0ce4c038b",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "lib/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPLv2"
-            ],
-            "authors": [
-                {
-                    "name": "Dietrich Ayala",
-                    "homepage": "http://sourceforge.net/u/dietricha/profile/"
-                },
-                {
-                    "name": "Scott Nichol",
-                    "homepage": "http://sourceforge.net/u/snichol/profile/"
-                }
-            ],
-            "description": "NuSOAP re-packaged for Packagist/Composer",
-            "time": "2014-05-19T03:44:33+00:00"
         },
         {
             "name": "fgrosse/phpasn1",

@@ -38,6 +38,10 @@ $cc->get('/', function (Request $request, app $app, $schema){
 	return ' ok test ' . $schema;
 });
 
+$cc->get('/pop.php', function(Request $request, app $app, $schema){
+	return $app->render('pop pop ' . $schema);
+});
+
 $acc = $app['controllers_factory'];
 
 /**

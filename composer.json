@@ -10,7 +10,6 @@
 		"swiftmailer/swiftmailer": "~6",
 		"monolog/monolog": "^1",
 		"bramus/monolog-colored-line-formatter": "2.0.*",
-		"fergusean/nusoap": "~0.9",
 		"fabpot/goutte": "^3",
 		"ext-imagick": "*",
 		"ext-exif": "*",
@@ -41,7 +40,8 @@
 		"symfony/var-dumper": "^3.3",
 		"gigablah/silex-oauth": "~2.0@dev",
 		"twig/extensions": "^1.5",
-		"symfony/debug": "^3.3"
+		"symfony/debug": "^3.3",
+		"econea/nusoap": "v0.9.5.3"
 	},
 
 	"require-dev": {
