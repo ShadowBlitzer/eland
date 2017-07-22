@@ -20,33 +20,18 @@ while (true)
 {
 	sleep(1);
 
-// 1.sync eLAND db to eLAS db
-
-	if (false /* test for new events */)
+	if ($app['sync_to_elas']->should_run())
 	{
-
-// 2.migrate eLAS db to eLAND db
-
+		$app['sync_to_elas']->run();
 	}
-	else
+	else if ($app['migrate_from_elas']->should_run())
 	{
-		$sync = $app['cache']->get('migrate_from_elas');
-
-		if (count($sync))
-		{
-
-
-		}
-		else
-		{
-
-		}
+		$app['migrate_from_elas']->run();
 	}
 
-//
 	if ($loop_count % 1000 === 0)
 	{
-		error_log('..sync.. ' . $boot['count'] . ' .. ' . $loop_count);
+		error_log('..sync.. ' . $boot . ' .. ' . $loop_count);
 	}
 
 	$loop_count++;

@@ -276,6 +276,10 @@ $app['migrate_from_elas'] =function ($app){
 	return new service\migrate_from_elas($app['db'], $app['xdb'], $app['cache'], $app['ev']);
 };
 
+$app['sync_to_elas'] =function ($app){
+	return new service\sync_to_elas($app['db'], $app['xdb'], $app['cache'], $app['ev']);
+};
+
 $app['cache'] = function ($app){
 	return new service\cache($app['db'], $app['predis'], $app['monolog']);
 };
@@ -469,6 +473,8 @@ function link_user($user, string $sch = '', $link = true, $show_id = false, $fie
 /**
  *
  */
+
+$app->register(new Knp\Provider\ConsoleServiceProvider());
 
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());

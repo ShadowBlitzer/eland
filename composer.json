@@ -41,7 +41,8 @@
 		"gigablah/silex-oauth": "~2.0@dev",
 		"twig/extensions": "^1.5",
 		"symfony/debug": "^3.3",
-		"econea/nusoap": "v0.9.5.3"
+		"econea/nusoap": "v0.9.5.3",
+		"knplabs/console-service-provider": "^2.1"
 	},
 
 	"require-dev": {
@@ -59,11 +60,14 @@
 			"schema_task\\": "schema_task/",
 			"util\\": "util/",
 			"controller\\": "controller/",
-			"controller_provider\\": "controller_provider/",
 			"converter\\": "converter/",
 			"provider\\": "provider/",
 			"security\\": "security/",
-			"twig\\": "twig/"
+			"twig\\": "twig/",
+			"entity\\": "entity/",
+			"command\\": "command/",
+			"migrate_from_elas\\": "migrate_from_elas",
+			"sync_to_elas\\": "sync_to_elas"
         }
     }
 }

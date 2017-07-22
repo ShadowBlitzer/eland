@@ -3,7 +3,7 @@
 namespace service;
 
 use Doctrine\DBAL\Connection as db;
-use redis\Client as Redis;
+use Predis\Client as Redis;
 
 /*
 Table "xdb.ev"
