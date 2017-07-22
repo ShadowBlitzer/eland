@@ -365,4 +365,49 @@ class ev
 	{
 		return $this->db->fetchColumn('select id from xdb.ag where id = ?', [$id]) ? true : false;
 	}
+
+	public function count_by_data(array $data): int
+	{
+		$sql_where = $sql_params = [];
+
+		foreach($data as $key => $val)
+		{
+			$sql_where[] = 'data->>\'' . $key . '\' = ?';
+			$sql_params[] = $val;
+		}
+
+		$where = ' where ' . implode(' and ', $sql_where);
+
+		$count = $this->db->fetchColumn('select count(*)
+			from xdb.ag' . $where, $sql_params);
+
+		return (int) $count;
+	}
+
+	public function get_by_data(array $data)
+	{
+		$sql_where = $sql_params = [];
+
+		foreach($data as $key => $val)
+		{
+			$sql_where[] = 'data->>\'' . $key . '\' = ?';
+			$sql_params[] = $val;
+		}
+
+		$where = ' where ' . implode(' and ', $sql_where);
+
+		$row = $this->db->fetchAssoc('select *
+			from xdb.ag' . $where, $sql_params);
+
+		if (!$row)
+		{
+			// not found exception
+			return false;
+		}
+
+		$row['data'] = json_decode($row['data'], true);
+		$row['meta'] = json_decode($row['meta'], true);
+
+		return $row;
+	}
 }
