@@ -84,7 +84,7 @@ class ev
 			$ev = 'created';
 			$type = $data['type'] ?? '';
 			$segment = $data['segment'] ?? '';
-			$this->redis->del('ag_count_' . $type . '_' . $segment);
+			$this->redis->del('ag_count_by_type_and_segment_' . $type . '_' . $segment);
 		}
 
 		if (!count($data))
@@ -328,9 +328,9 @@ class ev
 	 *
 	 */
 
-	public function count(string $type, string $segment = ''): int
+	public function count_by_type_and_segment(string $type, string $segment = ''): int
 	{
-		$redis_id = 'ag_count_' . $type . '_' . $segment;
+		$redis_id = 'ag_count_by_type_and_segment_' . $type . '_' . $segment;
 
 		$count = $this->redis->get($redis_id);
 

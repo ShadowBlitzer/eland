@@ -12,7 +12,7 @@ $app->boot();
 
 $boot = $app['boot_count']->get('sync');
 
-echo 'sync started .. ' . $boot . "\n";
+echo 'sync elas started .. ' . $boot . "\n";
 
 $loop_count = 1;
 
@@ -20,18 +20,14 @@ while (true)
 {
 	sleep(1);
 
-	if ($app['sync_to_elas']->should_run())
+	if ($app['sync_elas']->should_run())
 	{
-		$app['sync_to_elas']->run();
-	}
-	else if ($app['migrate_from_elas']->should_run())
-	{
-		$app['migrate_from_elas']->run();
+		$app['sync_elas']->run();
 	}
 
 	if ($loop_count % 1000 === 0)
 	{
-		error_log('..sync.. ' . $boot . ' .. ' . $loop_count);
+		error_log('..sync elas .. ' . $boot . ' .. ' . $loop_count);
 	}
 
 	$loop_count++;

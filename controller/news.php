@@ -16,6 +16,8 @@ class news
 {
 	public function index(Request $request, app $app, string $schema, string $access)
 	{
+		$news = [];
+
 		return $app['twig']->render('news/' . $access . '_index.html.twig', [
 			'news'	=> $news,
 		]);

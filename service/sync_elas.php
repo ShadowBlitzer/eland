@@ -7,7 +7,7 @@ use service\xdb;
 use service\cache;
 use service\ev;
 
-class sync_to_elas
+class sync_elas
 {
 	private $db;
 	private $xdb;

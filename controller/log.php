@@ -12,8 +12,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class log
 {
-	public function index(Request $request, Application $app)
+	public function index(Request $request, Application $app, string $schema)
 	{
+		return $app['twig']->render('log/a_index.html.twig', []);
+
 		$filter = $app['form.factory']->createNamedBuilder('', FormType::class, [], [
 				'csrf_protection'	=> false,
 			])
@@ -55,7 +57,7 @@ class log
 		$limit = $_GET['limit'] ?? 25;
 		$start = $_GET['start'] ?? 0;
 
-		$app['eland.log_db']->update();
+		$app['log_db']->update();
 
 		$params = [
 			'orderby'	=> $orderby,
@@ -66,7 +68,7 @@ class log
 
 		$params_sql = $where_sql = [];
 
-		$params_sql[] = $app['eland.this_group']->get_schema();
+		$params_sql[] = $app['this_group']->get_schema();
 
 		if ($letscode)
 		{
@@ -115,12 +117,12 @@ class log
 		}
 
 		$query = 'select *
-			from eland_extra.logs
+			from xdb.logs
 				where schema = ?' . $where_sql . '
 			order by ' . $orderby . ' ';
 
 		$row_count = $app['db']->fetchColumn('select count(*)
-			from eland_extra.logs
+			from xdb.logs
 			where schema = ?' . $where_sql, $params_sql);
 
 		$query .= ($asc) ? 'asc ' : 'desc ';
@@ -130,7 +132,7 @@ class log
 
 		return $app['twig']->render('logs/index.html.twig', [
 			'logs'			=> $logs,
-			'pagination'	=> $app['util.pagination']->get('logs', $row_count, $params),
+			'pagination'	=> $app['pagination']->get('logs', $row_count, $params),
 			'filter'		=> $filter->createView(),
 		]);
 	}

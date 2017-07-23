@@ -8,39 +8,37 @@
   'status': {'title': 'status.title', 'fa': 'exclamation-triangle', 'route': 'status'},
   'permission': {'title': 'permission.title', 'fa': 'hand-paper-o', 'route': 'permission'},
   'category': {'title': 'category_index.title', 'fa': 'clone', 'route': 'category_index'},
-  'custom_field': {'title': 'custom_field_index.title', 'fa': 'circle-o-notch', 'route': 'custom_field_index'},
-  'contact_detail': {'title': 'contact_detail_index.title', 'fa': 'map-marker', 'route': 'contact_detail_index'},
+  'custom': {'title': 'custom_field_index.title', 'fa': 'circle-o-notch', 'route': 'custom_field_index'},
+  'contact': {'title': 'contact_detail_index.title', 'fa': 'map-marker', 'route': 'contact_detail_index'},
   'config': {'title': 'config_index.title', 'fa': 'gears', 'route': 'config_index'},
   'export': {'title': 'export.title', 'fa': 'download', 'route': 'export'},
-  'auto_min_limit': {'title': 'auto_min_limit.title', 'fa': 'arrows-v', 'route': 'auto_min_limit'},
-  'mass_transaction': {'title': 'mass_transaction.title', 'fa': 'exchange', 'route': 'mass_transaction'},
-  'periodic_charge': {'title': 'periodic_charge.title', 'fa': 'refresh', 'route': 'periodic_charge'}, 
+  'auto': {'title': 'auto_min_limit.title', 'fa': 'arrows-v', 'route': 'auto_min_limit'},
+  'mass': {'title': 'mass_transaction.title', 'fa': 'exchange', 'route': 'mass_transaction'},
+  'periodic': {'title': 'periodic_charge.title', 'fa': 'refresh', 'route': 'periodic_charge'},
   'log': {'title': 'log.title', 'fa': 'history', 'route': 'log'}
 }
 
 %}
 
-{% set menu_admin_en = [
-  'status', 'permission', 'category', 'custom_field', 'contact_detail', 
-  'config', 'export', 'autominlimit', 'mass_transaction',
-  'periodic_charge', 'log'
-] 
+{% set admin_menu_en = [
+  'status', 'permission', 'category', 'custom_field', 'contact',
+  'config', 'export', 'auto', 'mass',
+  'periodic', 'log'
+]
 
 %}
 
 {% block navbar_container_class %} bg-info{% endblock %}
-
 {% block navbar_groups %}{% endblock %}
-
 {% block navbar_admin_disabled %}{% endblock %}
 
 {% block navbar_admin -%}
 
   {{ m.nav_dropdown('admin_modus', 'cog') }}
 
-  {% for key in menu_admin_en %}
+  {% for key in admin_menu_en %}
     {% if admin_menu_ary[key] is defined %}
-    {{ m.li(key, admin_menu_ary[key], schema, access) }}
+    {{ m.li_admin(key, admin_menu_ary[key], active_menu, schema) }}
     {% endif %}
   {% endfor %}
 
@@ -53,7 +51,7 @@
 {% block top_buttons %}{% endblock top_buttons %}
 
 {% block heading_pre %}
-<small><span class="label label-info">{{ 'admin'|trans }}</span></small>&nbsp; 
+<small><span class="label label-info">{{ 'admin'|trans }}</span></small>&nbsp;
 {% endblock heading_pre %}
 
 {#
@@ -64,9 +62,9 @@ if (!$s_anonymous && ($count_interlets_groups + count($logins)) > 1)
 {
 	<li class="dropdown">
 	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-	<span class="fa fa-share-alt"></span> 
+	<span class="fa fa-share-alt"></span>
 	Groep
-	<span class="caret"></span></a> 
+	<span class="caret"></span></a>
 	<ul class="dropdown-menu" role="menu">
 
 	foreach ($logins as $login_schema => $login_id)
@@ -77,7 +75,7 @@ if (!$s_anonymous && ($count_interlets_groups + count($logins)) > 1)
 		<li
 		 $class;
 		>
-		
+
 		<a href="
 		 $app['eland.protocol'] . $app['eland.groups']->get_host($login_schema) . '/' . $app['eland.script_name'] . '.php?r=
 		 ($login_id == 'elas') ? 'guest' : $app['session']->get('role.' . $login_schema);
@@ -130,7 +128,7 @@ if (!$s_anonymous && ($count_interlets_groups + count($logins)) > 1)
 
 	<li class="dropdown">
 	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-	<span class="fa fa-user"></span> 
+	<span class="fa fa-user"></span>
 #}
 {#
 	{% if app.s_master %}
@@ -143,7 +141,7 @@ if (!$s_anonymous && ($count_interlets_groups + count($logins)) > 1)
 	{% endif %}
 #}
 {#
-	<span class="caret"></span></a> 
+	<span class="caret"></span></a>
 	<ul class="dropdown-menu" role="menu">
 	if ($s_schema && !$s_master && !$s_guest)
 	{
@@ -185,11 +183,11 @@ if (!$s_anonymous && ($count_interlets_groups + count($logins)) > 1)
 		];
 
 		<li class="dropdown">
-		<a href="#" class="dropdown-toggle" data-toggle="dropdown" 
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown"
 		role="button" aria-expanded="false">
-		<span class="fa fa-cog"></span> 
+		<span class="fa fa-cog"></span>
 		Admin modus
-		<span class="caret"></span></a> 
+		<span class="caret"></span></a>
 		<ul class="dropdown-menu" role="menu">
 		foreach ($menu as $link => $item)
 		{
@@ -216,11 +214,11 @@ if (!$s_anonymous && ($count_interlets_groups + count($logins)) > 1)
 		$get_params = $_GET;
 		$get_params['r'] = 'admin
 
-		<a href="' . $admin_url . '?' . http_build_query($get_params) . '" 
+		<a href="' . $admin_url . '?' . http_build_query($get_params) . '"
 		title="Admin modus inschakelen">
-		<span class="fa fa-times text-danger"></span> 
+		<span class="fa fa-times text-danger"></span>
 		Admin modus
-		</a> 
+		</a>
 	}
 
 }
@@ -228,4 +226,3 @@ if (!$s_anonymous && ($count_interlets_groups + count($logins)) > 1)
 </ul>
 </div>
 #}
-

@@ -66,8 +66,9 @@
 			"twig\\": "twig/",
 			"entity\\": "entity/",
 			"command\\": "command/",
-			"migrate_from_elas\\": "migrate_from_elas",
-			"sync_to_elas\\": "sync_to_elas"
+			"migrate_from_elas\\": "migrate_from_elas/",
+			"sync_elas\\": "sync_elas/",
+			"elas\\": "elas/"
         }
     }
 }

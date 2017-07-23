@@ -7,6 +7,8 @@
 {% set active_menu = active_route|split('_')[0] %}
 {% set schema = global.request.attributes.get('schema') %}
 
+{% set menu_el = menu_ary[active_menu] ?? admin_menu_ary[active_menu] %}
+
 {% block title %}{{ config('systemname', schema) }}{% endblock title %}
 
 {% block url_index %}{% endblock url_index %}
@@ -55,9 +57,9 @@
 <h1>
 {% block heading_pre %}{% endblock %}
 {% block heading_fa_container %}
-<i class="fa fa-{% block fa %}{{ menu_ary[active_menu]['fa'] }}{% endblock %}"></i> 
+<i class="fa fa-{% block fa %}{{ menu_el['fa'] }}{% endblock %}"></i>
 {% endblock heading_fa_container %}
-{% block heading %}{{ menu_ary[active_menu]['title']|trans }}{% endblock heading %}
+{% block heading %}{{ menu_el['title']|trans }}{% endblock heading %}
 {% block heading_post %}{% endblock %}
 </h1>
 {% endblock heading_container %}
@@ -75,4 +77,3 @@
 	'%link_b_close%': '</a>'
 })|raw }}</p>
 {% endblock footer_extra %}
-

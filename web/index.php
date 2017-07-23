@@ -278,8 +278,6 @@ $ua->mount('/elas', $elas);
 $ua->match('/support', 'controller\\support::form')
 	->bind('support');
 
-
-
 //
 
 $ua->assert('access', '[ua]');
@@ -292,7 +290,7 @@ $cc->mount('/{access}', $ua);
 
 $a = $app['controllers_factory'];
 
-$a->get('/status', 'controller\\status::get')
+$a->get('/status', 'controller\\status::index')
 	->bind('status');
 
 /**
@@ -370,7 +368,7 @@ $contact_detail->match('/{contact_detail}/edit', 'controller\\contact_detail::ed
 	->convert('contact_detail', 'service\\xdb::get')
 	->bind('contact_type_add');
 
-$a->mount('/contact-detail', $contact_detail);
+$a->mount('/contact-details', $contact_detail);
 
 
 /**

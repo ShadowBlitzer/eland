@@ -74,6 +74,13 @@ $app->register(new Silex\Provider\AssetServiceProvider(), [
     ],
 ]);
 
+/*
+ * The locale must be installed in the OS for formatting dates.
+ */
+
+setlocale(LC_TIME, 'nl_NL.UTF-8');
+date_default_timezone_set((getenv('TIMEZONE')) ?: 'Europe/Brussels');
+
 $app->register(new Silex\Provider\LocaleServiceProvider());
 
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
@@ -81,36 +88,19 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale'			=> 'nl',
 ));
 
-/*
- * The locale must be installed in the OS for formatting dates.
- */
-
-setlocale(LC_TIME, 'nl_NL.UTF-8');
-
-date_default_timezone_set((getenv('TIMEZONE')) ?: 'Europe/Brussels');
-
-use Symfony\Component\Translation\Loader\YamlFileLoader;
-
 $app->extend('translator', function($translator, $app) {
-
-	$translator->addLoader('yaml', new YamlFileLoader());
-
+	$loader = new Symfony\Component\Translation\Loader\YamlFileLoader();
+	$translator->addLoader('yaml', $loader);
 	$trans_dir = __DIR__ . '/translation/';
-
 	$translator->addResource('yaml', $trans_dir . 'en.yml', 'en');
 	$translator->addResource('yaml', $trans_dir . 'nl.yml', 'nl');
-
 	return $translator;
 });
 
 $app->register(new Silex\Provider\FormServiceProvider());
-
 $app->register(new Silex\Provider\CsrfServiceProvider());
-
 $app->register(new Silex\Provider\ValidatorServiceProvider());
-
 $app->register(new Silex\Provider\VarDumperServiceProvider());
-
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
 
 /*
@@ -204,21 +194,11 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
 */
 ]);
 
-
 $app['security.voters'] = $app->extend('security.voters', function($voters) use ($app) {
     $voters[] = $app['schema_voter'];
 
     return $voters;
 });
-
-if(!isset($rootpath))
-{
-	$rootpath = './';
-}
-
-$app['protocol'] = 'http://';
-
-$app['rootpath'] = $rootpath;
 
 $app['s3_img'] = getenv('S3_IMG') ?: die('Environment variable S3_IMG S3 bucket for images not defined.');
 $app['s3_doc'] = getenv('S3_DOC') ?: die('Environment variable S3_DOC S3 bucket for documents not defined.');
@@ -237,20 +217,19 @@ $app['s3'] = function($app){
  */
 
 setlocale(LC_TIME, 'nl_NL.UTF-8');
-
 date_default_timezone_set((getenv('TIMEZONE')) ?: 'Europe/Brussels');
 
 $app['typeahead'] = function($app){
 	return new service\typeahead($app['predis'], $app['monolog']);
 };
 
+$app['pagination'] = function (){
+	return new service\pagination();
+};
+
 $app['log_db'] = function($app){
 	return new service\log_db($app['db'], $app['predis']);
 };
-
-/**
- * Get all eland schemas and domains
- */
 
 $app['groups'] = function ($app){
 	return new service\groups($app['db']);
@@ -276,8 +255,8 @@ $app['migrate_from_elas'] =function ($app){
 	return new service\migrate_from_elas($app['db'], $app['xdb'], $app['cache'], $app['ev']);
 };
 
-$app['sync_to_elas'] =function ($app){
-	return new service\sync_to_elas($app['db'], $app['xdb'], $app['cache'], $app['ev']);
+$app['sync_elas'] =function ($app){
+	return new service\sync_elas($app['db'], $app['xdb'], $app['cache'], $app['ev']);
 };
 
 $app['cache'] = function ($app){
@@ -343,6 +322,12 @@ $app['mail'] = function ($app){
 	return new service\mail($app['queue'], $app['monolog'],
 		$app['mailaddr'], $app['twig'], $app['config'],
 		$app['email_validate']);
+};
+
+// elas
+
+$app['elas_ev'] = function($app){
+	return new elas\elas_ev($app['ev']);
 };
 
 // tasks
@@ -469,10 +454,6 @@ function link_user($user, string $sch = '', $link = true, $show_id = false, $fie
 
 	return $out;
 }
-
-/**
- *
- */
 
 $app->register(new Knp\Provider\ConsoleServiceProvider());
 
