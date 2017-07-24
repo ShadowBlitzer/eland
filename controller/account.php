@@ -27,6 +27,9 @@ class account
 		return $app['twig']->render('account/' . $access . '_show.html.twig', []);
 	}
 
-
+	public function show_self(Request $request, app $app, string $schema, string $access)
+	{
+		return $app['twig']->render('account/' . $access . '_show_self.html.twig', []);
+	}
 }
 

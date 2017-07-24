@@ -7,7 +7,12 @@
 {% set active_menu = active_route|split('_')[0] %}
 {% set schema = global.request.attributes.get('schema') %}
 
-{% set menu_el = menu_ary[active_menu] ?? admin_menu_ary[active_menu] %}
+{% set menu_el = 
+	menu_ary[active_menu] ?? 
+	personal_menu_ary[active_menu~'_self'] ?? 
+	admin_menu_ary[active_menu] ??
+	'undefined'
+%}
 
 {% block title %}{{ config('systemname', schema) }}{% endblock title %}
 

@@ -70,6 +70,9 @@ hosting_request:
 ad_index:
   title: Vraag en Aanbod
 
+ad_self: 
+  title: Mijn vraag en aanbod
+
 ad_show:
   title: '%offer_or_want%: %title%'
   
@@ -82,11 +85,20 @@ ad_add:
 account_index:
   title: Accounts
 
+account_self:
+  title: Mijn accounts
+
 user_index:
   title: Gebruikers
 
+user_self:
+  title: Mijn gegevens
+
 transaction_index:
   title: Transacties
+
+transaction_self:
+  title: Mijn transacties
 
 transaction_show:
   title: Transactie
@@ -130,6 +142,12 @@ contact:
     bottom: >
       Deze link blijft vier uur geldig. Gelieve deze mail te negeren indien u niet
       zelf een bericht hebt ingegeven in het contactformulier van %systemname%
+
+notification_index:
+  title: Notificaties
+
+notification_self:
+  title: Mijn notificaties
 
 login:
   title: Login

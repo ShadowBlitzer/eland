@@ -74,7 +74,7 @@ class contact
 			return $app->redirect($app->path('login', ['schema' => $schema]));
 		}
 
-		return $app['twig']->render('contact/contact.html.twig', [
+		return $app['twig']->render('contact/form.html.twig', [
 			'form' => $form->createView(),
 		]);
 	}

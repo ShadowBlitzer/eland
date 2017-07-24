@@ -9,15 +9,18 @@ class ad
 {
 	public function index(Request $request, app $app, string $schema, string $access)
 	{
-
-
-		return $app['twig']->render('message/' . $access . '_index.html.twig', []);
+		return $app['twig']->render('ad/' . $access . '_index.html.twig', []);
 	}
 
-	public function show(Request $request, app $app, string $schema, string $access, array $message)
+	public function show_self(Request $request, app $app, string $schema, string $access)
 	{
-		return $app['twig']->render('message/' . $access . '_show.html.twig', [
-			'message'	=> $message,
+		return $app['twig']->render('ad/' . $access . '_show_self.html.twig', []);
+	}
+
+	public function show(Request $request, app $app, string $schema, string $access, array $ad)
+	{
+		return $app['twig']->render('ad/' . $access . '_show.html.twig', [
+			'ad'	=> $ad,
 		]);
 	}
 

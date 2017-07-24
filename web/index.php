@@ -52,6 +52,8 @@ $ad = $app['controllers_factory'];
 
 $ad->get('/', 'controller\\ad::index')
 	->bind('ad_index');
+$ad->get('/self', 'controller\\ad::show_self')
+	->bind('ad_self');
 $ad->get('/{ad}', 'controller\\ad::show')
 	->convert('ad', 'service\\xdb::get')
 	->bind('ad_show');
@@ -74,6 +76,8 @@ $account = $app['controllers_factory'];
 $account->get('/{account_type}', 'controller\\account::index')
 	->value('account_type', 'active')
 	->bind('account_index');
+$account->get('/self', 'controller\\account::show_self')
+	->bind('account_self');
 $account->get('/{account_type}/{account}', 'controller\\account::show')
 	->convert('account', 'service\\xdb::get')
 	->bind('account_show');
@@ -135,6 +139,8 @@ $user = $app['controllers_factory'];
 
 $user->get('/', 'controller\\user::index')
 	->bind('user_index');
+$user->get('/self', 'controller\\user::show_self')
+	->bind('user_self');
 $user->get('/{user}', 'controller\\user::show')
 	->convert('user', 'service\\xdb::get')
 	->bind('user_show');
@@ -156,6 +162,8 @@ $transaction = $app['controllers_factory'];
 
 $transaction->get('/', 'controller\\transaction::index')
 	->bind('transaction_index');
+$transaction->get('/self', 'controller\\transaction::show_self')
+	->bind('transaction_self');
 $transaction->get('/{transaction}', 'controller\\transacion::show')
 	->convert('transaction', 'service\\xdb::get')
 	->bind('transaction_show');
@@ -248,6 +256,31 @@ $forum->match('/{forum}/edit', 'controller\\forum::edit')
 $forum->assert('forum', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
 $acc->mount('/forum', $forum);
+
+/*
+* notifications
+*/
+
+
+$notification = $app['controllers_factory'];
+
+$notification->get('/', 'controller\\notification::index')
+	->bind('notification_index');
+$notification->get('/self', 'controller\\notification::show_self')
+	->bind('notification_self');
+$notification->get('/{notification}', 'controller\\notification::show')
+	->convert('notification', 'service\\xdb::get')
+	->bind('notification_show');
+$notification->match('/add', 'controller\\notification::add')
+	->bind('notification_add');
+$notification->match('/{notification}/edit', 'controller\\notification::edit')
+	->convert('notification', 'service\\xdb::get')
+	->bind('notification_edit');
+
+$notification->assert('notification', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
+
+$acc->mount('/notifications', $notification);
+
 
 $acc->assert('access', '[giua]');
 $cc->mount('/{access}', $acc);

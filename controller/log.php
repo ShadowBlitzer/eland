@@ -2,7 +2,7 @@
 
 namespace controller;
 
-use Silex\Application;
+use util\app;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class log
 {
-	public function index(Request $request, Application $app, string $schema)
+	public function index(Request $request, app $app, string $schema)
 	{
 		return $app['twig']->render('log/a_index.html.twig', []);
 

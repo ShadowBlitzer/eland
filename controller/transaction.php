@@ -2,7 +2,7 @@
 
 namespace controller;
 
-use Silex\Application;
+use util\app;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -13,8 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class transaction
 {
-	public function index(Request $request, Application $app, string $schema, string $access)
+	public function index(Request $request, app $app, string $schema, string $access)
 	{
+		return $app['twig']->render('transaction/' . $access . '_index.html.twig', []);
+
 		$data = [
 			'andor'	=> 'and',
 		];
@@ -238,7 +240,7 @@ class transaction
 	}
 
 
-	public function show(Request $request, Application $app, string $schema, string $access, array $transaction)
+	public function show(Request $request, app $app, string $schema, string $access, array $transaction)
 	{
 		$news = $app['db']->fetchAssoc('SELECT n.*
 			FROM news n
@@ -280,8 +282,12 @@ class transaction
 		]);
 	}
 
+	public function show_self(Request $request, app $app, string $schema, string $access)
+	{
+		return $app['twig']->render('transaction/' . $access . '_show_self.html.twig', []);
+	}
 
-	public function add(Request $request, Application $app, string $schema, string $access)
+	public function add(Request $request, app $app, string $schema, string $access)
 	{
 
 		$data = [
@@ -316,7 +322,7 @@ class transaction
 		]);
 	}
 
-	public function edit(Request $request, Application $app, string $schema, string $access)
+	public function edit(Request $request, app $app, string $schema, string $access)
 	{
 
 		$data = [
