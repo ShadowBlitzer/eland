@@ -10,13 +10,14 @@ class currency
 	private $ev;
 
 	private $data = [
-		'uid'				=> '',
-		'eid'				=> '',
-		'steward'			=> '',
+		'id'				=> '',
+	//	'steward'			=> '',
 		'name'				=> '',
 		'site_name'			=> '',
+		'description'		=> '',
 		'mail_tag'			=> '',
 		'path_id'			=> '',
+		'ratio'				=> '',
 		'elas_schema'		=> '',
 		'elas_subdomain'	=> '',
 		'redirect'			=> '',
@@ -32,14 +33,14 @@ class currency
 
 	public function __construct(ev $ev)
 	{
-		$this->db = $db;
 		$this->ev = $ev;
-		$this->cache = $cache;
 	}
 
 	public function set(string $id, array $data)
 	{
-
+		$data['segment'] = $id;
+		$data['type'] = 'currency';
+	
 		$config = $this->db->fetchAssoc('select * from ' . $this->schema . '.config');
 
 		foreach ($config as )
