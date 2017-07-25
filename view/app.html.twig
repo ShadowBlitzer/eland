@@ -4,12 +4,13 @@
 {% import 'macro/menu.html.twig' as m %}
 
 {% set active_route = global.request.attributes.get('_route') %}
-{% set active_menu = active_route|split('_')[0] %}
+{% set active_route_ary = active_route|split('_') %}
+{% set active_menu = active_route_ary[1] is defined and active_route_ary[1] == 'self' ? active_route : active_route_ary[0] %}
 {% set schema = global.request.attributes.get('schema') %}
 
-{% set menu_el = 
-	menu_ary[active_menu] ?? 
-	personal_menu_ary[active_menu~'_self'] ?? 
+{% set menu_el =
+	menu_ary[active_menu] ??
+	personal_menu_ary[active_menu] ??
 	admin_menu_ary[active_menu] ??
 	'undefined'
 %}
