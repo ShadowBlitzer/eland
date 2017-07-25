@@ -1,6 +1,6 @@
 <?php
 
-namespace entity;
+namespace schema_task;
 
 use Doctrine\DBAL\Connection as db;
 use Monolog\Logger;
@@ -10,7 +10,7 @@ use service\groups;
 use service\this_group;
 use service\config;
 
-class account
+class transaction
 {
 	private $db;
 	private $monolog;

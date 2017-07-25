@@ -1,16 +1,14 @@
 <?php
 
-namespace migrate_from_elas;
+namespace migrate_elas;
 
-use service\xdb;
-use service\cache;
+use service\ev;
 use Doctrine\DBAL\Connection as db;
 
 class currency
 {
 	private $db;
-	private $xdb;
-	private $cache;
+	private $ev;
 
 	private $data = [
 		'uid'				=> '',
@@ -33,15 +31,24 @@ class currency
 		],
 	];
 
-	public function __construct(db $db, xdb $xdb, cache $cache)
+	public function __construct(db $db, ev $ev)
 	{
 		$this->db = $db;
-		$this->xdb = $xdb;
+		$this->ev = $ev;
 		$this->cache = $cache;
 	}
 
-	public function run()
+	public function process(string $id)
 	{
+		$data = [
+			''
+		];
+
+		$meta = [
+			'event_time'	=> 
+			'event'			=> 'create_currency',
+		]
+
 		$config = $this->db->fetchAssoc('select * from ' . $this->schema . '.config');
 
 		foreach ($config as )
@@ -51,7 +58,7 @@ class currency
 $map = [
 	'config' => [
 		'entity' => 'currency'
-		
+
 	]
 ]
 */

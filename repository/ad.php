@@ -1,7 +1,8 @@
 <?php
 
-namespace entity;
+namespace schema_task;
 
+use model\schema_task;
 use Doctrine\DBAL\Connection as db;
 use Monolog\Logger;
 
@@ -10,7 +11,7 @@ use service\groups;
 use service\this_group;
 use service\config;
 
-class account
+class cleanup_messages extends schema_task
 {
 	private $db;
 	private $monolog;
