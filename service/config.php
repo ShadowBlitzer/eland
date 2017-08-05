@@ -65,10 +65,7 @@ class config
 
 		$value = substr($value, 0, 60);
 
-		if ($this->db->fetchColumn('select setting from config where setting = ?', [$name]))
-		{
-			$this->db->update('config', ['value' => $value, '"default"' => 'f'], ['setting' => $name]);
-		}
+		$this->db->update('config', ['value' => $value, '"default"' => 'f'], ['setting' => $name]);
 	}
 
 	public function get(string $key, string $sch = '')

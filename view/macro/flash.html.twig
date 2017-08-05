@@ -1,4 +1,4 @@
-{% macro flash() %}
+{% macro flash() -%}
 	{% if global.request.hasPreviousSession %}
 		{% if global.session.flashbag.peekAll()|length > 0 %}
 			<div id="flash">
@@ -10,6 +10,16 @@
 					<div class="alert alert-{{ type }} alert-dismissible" role="alert">
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true"><span class="fa fa-times"></span></span></button>
+					{% if msg is iterable %}
+					{% for m in msg %}
+						{{ m|raw }}
+						{% if not loop.last %}
+						</br>
+						{% endif %}
+					{% endfor %}
+					{% else %}
+					{{ msg|raw }}
+					{% endif %}
 					{{ msg|raw }}
 					</div></div></div>
 				{% endfor %}
@@ -17,4 +27,4 @@
 			</div>
 		{% endif %}
 	{% endif %}
-{% endmacro %}
+{%- endmacro %}

@@ -251,8 +251,16 @@ $app['ev'] = function ($app){
 	return new service\ev($app['db'], $app['predis']);
 };
 
-$app['migrate_from_elas'] =function ($app){
-	return new service\migrate_from_elas($app['db'], $app['xdb'], $app['cache'], $app['ev']);
+$app['c_ev'] = function ($app){
+	return new service\c_ev($app['ev']);
+};
+
+$app['u_ev'] = function ($app){
+	return new service\u_ev($app['u_ev']);
+};
+
+$app['migrate_elas'] =function ($app){
+	return new service\migrate_elas($app['db'], $app['xdb'], $app['cache'], $app['ev']);
 };
 
 $app['sync_elas'] =function ($app){

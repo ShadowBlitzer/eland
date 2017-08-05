@@ -6,6 +6,8 @@ use Knp\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 class migrate_elas extends Command
 {
@@ -21,15 +23,37 @@ class migrate_elas extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getSilexApplication();
+        $io = new SymfonyStyle($input, $output);
+        $magenta = new OutputFormatterStyle('magenta'); 
+        $output->getFormatter()->setStyle('magenta', $magenta);
+        $cyan = new OutputFormatterStyle('cyan'); 
+        $output->getFormatter()->setStyle('cyan', $cyan);
         $schema = $input->getArgument('schema');
+        $io->title('Migration from eLAS of schema ' . $schema);
+        $cid = $app['unique_id']->get(); 
+        $io->text('<info>New id of currency: </>' . $cid);
 
+        $io->text('<cyan>Get users</>');
 
+       // $users = $app['db']->fetchAll('select * from ' . $schema . '.users');
 
-        $output->writeln('Migration of ' . $schema);
+        $type_contact = $app['db']->fetchColumn('select id 
+            from ' . $schema . '.type_contact 
+            where abbrev = \'mail\'');
 
-        $cid = $app['unique_id']->get();
+        $mail = $app['db']->fetchAll('select value, id, id_user 
+            from ' . $schema . '.contact 
+            where id_type_contact = ?', [$type_contact]);
 
-        $output->writeln('New id: ' . $cid);
+        $io->table([], $mail);
+
+$io->listing(array(
+    'Element #1 Lorem ipsum dolor sit amet',
+    'Element #2 Lorem ipsum dolor sit amet',
+    'Element #3 Lorem ipsum dolor sit amet',
+));
         
+
+
     }
 }
