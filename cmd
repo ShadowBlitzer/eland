@@ -1,6 +1,10 @@
 #!/usr/bin/env php
 <?php
 
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleEvent;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+
 set_time_limit(0);
 
 if (!getenv('DATABASE_URL'))
@@ -15,9 +19,11 @@ if (!getenv('DATABASE_URL'))
 
 $app = require_once __DIR__ . '/app.php';
 
-$app['request_context']->setHost(getenv('ROUTER_HOST'));
-$app['request_context']->setScheme(getenv('ROUTER_SCHEME') ?: 'https');
-$app['request_context']->setBaseUrl(null);
+$app->on(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) use ($app) {
+    $app['request_context']->setHost(getenv('ROUTER_HOST'));
+    $app['request_context']->setScheme(getenv('ROUTER_SCHEME') ?: 'https');
+    $app['request_context']->setBaseUrl(null);
+});
 
 ob_start();
 $app->run();
