@@ -1,4 +1,4 @@
 web: vendor/bin/heroku-php-apache2 web/
-worker: php worker.php
-mail: php mail.php
-sync: php sync.php
+worker: php cmd process:worker
+mail: php cmd process:mail
+sync: php cmd process:sync

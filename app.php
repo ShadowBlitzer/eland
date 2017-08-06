@@ -1,10 +1,15 @@
 <?php
 
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\ConsoleEvents;
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 $app = new util\app();
 
 $app['route_class'] = 'util\route';
+
+$app['protocol'] = 'https://';
 
 $app['debug'] = getenv('DEBUG') ? true : false;
 
@@ -372,7 +377,8 @@ $app['schema_task.sync_user_cache'] = function ($app){
 
 $app['schema_task.cleanup_messages'] = function ($app){
 	return new schema_task\cleanup_messages($app['db'], $app['monolog'],
-		$app['schedule'], $app['groups'], $app['this_group'], $app['config']);
+		$app['schedule'], $app['groups'], $app['this_group'], $app['config'],
+		$app['url_generator']);
 };
 
 $app['schema_task.cleanup_news'] = function ($app){
@@ -496,5 +502,7 @@ $app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $r
 
     return new Response($message);
 });
+
+require __DIR__ . '/routing.php';
 
 return $app;

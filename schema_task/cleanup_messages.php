@@ -10,20 +10,26 @@ use service\schedule;
 use service\groups;
 use service\this_group;
 use service\config;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class cleanup_messages extends schema_task
 {
 	private $db;
 	private $monolog;
 	private $config;
+	private $url_generator;
 
 	public function __construct(db $db, Logger $monolog, schedule $schedule,
-		groups $groups, this_group $this_group, config $config)
+		groups $groups, this_group $this_group, config $config, 
+		UrlGenerator $url_generator)
 	{
 		parent::__construct($schedule, $groups, $this_group);
 		$this->db = $db;
 		$this->monolog = $monolog;
 		$this->config = $config;
+		$this->url_generator = $url_generator;
+		error_log($url_generator->generate('main_index', [], UrlGeneratorInterface::ABSOLUTE_URL));
 	}
 
 	function process()
