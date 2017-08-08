@@ -89,8 +89,9 @@ class ev
 
 		if (!count($data))
 		{
+			return;
 			// exception?
-			return 'xdb: no (new) data';
+			// return 'xdb: no (new) data';
 		}
 
 		$redis_id = 'ag_' . $id;

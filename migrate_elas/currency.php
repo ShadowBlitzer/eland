@@ -2,75 +2,57 @@
 
 namespace migrate_elas;
 
-use service\ev;
 use Doctrine\DBAL\Connection as db;
+use service\xdb;
+use migrate_elas\base;
+use migrate_elas\base_interface;
 
-class currency
+class currency extends base implements base_interface
 {
-	private $db;
-	private $ev;
-
-	private $data = [
-		'uid'				=> '',
-		'eid'				=> '',
-		'steward'			=> '',
-		'name'				=> '',
-		'site_name'			=> '',
-		'mail_tag'			=> '',
-		'path_id'			=> '',
-		'elas_schema'		=> '',
-		'elas_subdomain'	=> '',
-		'redirect'			=> '',
-		'min_limit'			=> '',
-		'max_limit'			=> '',
-		'landing_page'		=> 'ad_index',
-		'custom'		=> [
-			'dddddzzfjeid' => ['account', 'datetime', 'info moment'],
-			'sjkdksjlksqj' => ['datetime', 'lidgeld'],
-			'klds-doeoopd' => ['int', ''],
-		],
+	$map = [
+		'preset_minlimit'					=> '',
+		'preset_maxlimit'					=> '',
+		'users_can_edit_username'			=> '0',
+		'users_can_edit_fullname'			=> '0',
+		'registration_en'					=> '0',
+		'registration_top_text'				=> '',
+		'registration_bottom_text'			=> '',
+		'registration_success_text'			=> '',
+		'registration_success_url'			=> '',
+		'forum_en'							=> '0',
+		'css'								=> '',
+		'msgs_days_default'					=> '365',
+		'balance_equilibrium'				=> '0',
+		'date_format'						=> '%e %b %Y, %H:%M:%S',
+		'weekly_mail_show_interlets'		=> 'recent',
+		'weekly_mail_show_news'				=> 'recent',
+		'weekly_mail_show_docs'				=> 'recent',
+		'weekly_mail_show_forum'			=> 'recent',
+		'weekly_mail_show_transactions'		=> 'recent',
+		'weekly_mail_show_leaving_users'	=> 'recent',
+		'weekly_mail_show_new_users'		=> 'recent',
+		'weekly_mail_template'				=> 'messages_top',
+		'default_landing_page'				=> 'messages',
+		'homepage_url'						=> '',
+		'template_lets'						=> '1',
+		'interlets_en'						=> '1',
 	];
 
-	public function __construct(db $db, ev $ev)
+	public function execute()
 	{
-		$this->db = $db;
-		$this->ev = $ev;
-		$this->cache = $cache;
-	}
-
-	public function process(string $id)
-	{
-		$data = [
-			''
-		];
-
-		$meta = [
-			'event_time'	=> 
-			'event'			=> 'create_currency',
-		]
-
-		$config = $this->db->fetchAssoc('select * from ' . $this->schema . '.config');
-
-		foreach ($config as )
-	}
-
-/*
-$map = [
-	'config' => [
-		'entity' => 'currency'
-
-	]
-]
-*/
+		parent::execute();
 
 
-	public function get_next(): string
-	{
+
+
+
+
+
 
 	}
 
-	public function get_priority(): int
+	public function get_step()
 	{
-		return 1000;
+		return 100;
 	}
 }

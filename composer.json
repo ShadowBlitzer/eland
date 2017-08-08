@@ -69,6 +69,7 @@
 			"migrate_elas\\": "migrate_elas/",
 			"sync_elas\\": "sync_elas/",
 			"elas\\": "elas/",
+			"eland\\": "eland/",
 			"repository\\": "repository/"
         }
     }

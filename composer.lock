@@ -1082,7 +1082,7 @@
                 "oauth",
                 "silex"
             ],
-            "time": "2016-02-24 16:23:07"
+            "time": "2016-02-24T16:23:07+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",

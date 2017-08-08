@@ -27,7 +27,7 @@ class config
 		'registration_success_text'			=> '',
 		'registration_success_url'			=> '',
 		'forum_en'							=> '0',
-		'css'								=> '0',
+		'css'								=> '',
 		'msgs_days_default'					=> '365',
 		'balance_equilibrium'				=> '0',
 		'date_format'						=> '%e %b %Y, %H:%M:%S',
