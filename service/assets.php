@@ -4,7 +4,7 @@ namespace service;
 
 class assets
 {
-	private $version = '14';
+	private $version = '15';
 
 	private $asset_ary = [
 		'bootstrap' => [
@@ -83,6 +83,9 @@ class assets
 		'swiper' => [
 			'js'	=> '//cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/js/swiper.jquery.min.js',
 			'css'	=> '//cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/css/swiper.min.css',
+		],
+		'sortable' => [
+			'js'	=> '//cdnjs.cloudflare.com/ajax/libs/Sortable/1.6.0/Sortable.min.js',
 		],
 	];
 

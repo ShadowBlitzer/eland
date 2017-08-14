@@ -73,6 +73,14 @@ class mail
 			return ;
 		}
 
+		if ($data['template'] === 'periodic_overview_messages_top'
+			|| $data['template'] === 'periodic_overview_news_top')
+		{
+			$this->monolog->error('mail error: template not found ' . $data['template'],
+				['schema' => $sch]);
+			return;
+		}
+
 		if (isset($data['template']) && isset($data['vars']))
 		{
 			$template_subject = $this->twig->loadTemplate('mail/' . $data['template'] . '.subject.twig');
@@ -164,18 +172,23 @@ class mail
 			$message->setCc($data['cc']);
 		}
 
-		if ($this->mailer->send($message, $failed_recipients))
+		try
 		{
-			$this->monolog->info('mail: message send to ' . implode(', ', $data['to']) . ' subject: ' . $data['subject'], ['schema' => $sch]);
+			if ($this->mailer->send($message, $failed_recipients))
+			{
+				$this->monolog->info('mail: message send to ' . implode(', ', $data['to']) . ' subject: ' . $data['subject'], ['schema' => $sch]);
+			}
+			else
+			{
+				$this->monolog->error('mail error: failed sending message to ' . implode(', ', $data['to']) . ' subject: ' . $data['subject'], ['schema' => $sch]);
+				$this->monolog->error('Failed recipients: ' . implode(', ', $failed_recipients), ['schema' => $sch]);
+			}
 		}
-		else
+		catch (Exception $e)
 		{
-			$this->monolog->error('mail error: failed sending message to ' . implode(', ', $data['to']) . ' subject: ' . $data['subject'], ['schema' => $sch]);
-		}
-
-		if ($failed_recipients)
-		{
-			$this->monolog->error('mail: failed recipients: ' . $failed_recipients, ['schema' => $sch]);
+			$err = $e->getMessage();
+			error_log('mail queue: ' . $err);
+			$this->monolog->error('mail queue error: ' . $err . ' | subject: ' . $data['subject'] . ' ' . implode(', ', $data['to']), ['schema' => $sch]);		
 		}
 
 		$this->mailer->getTransport()->stop();

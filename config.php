@@ -50,6 +50,46 @@ $landing_page_options = [
 
 unset($periodic_mail_item_show_options_not_all['all']);
 
+$periodic_mail_block_ary = [
+	'messages'		=> [
+		'recent'	=> 'Recent vraag en aanbod',
+	],
+	'interlets'		=> [
+		'recent'	=> 'Recent interLETS vraag en aanbod',
+	],
+	'forum'			=> [
+		'recent'	=> 'Recente forumberichten',
+	],
+	'news'			=> [
+		'all'		=> 'Alle nieuwsberichten',
+		'recent'	=> 'Recente nieuwsberichten',
+	],
+	'docs'			=> [
+		'recent'	=> 'Recente documenten',
+	],
+	'new_users'		=> [
+		'all'		=> 'Alle nieuwe leden',
+		'recent'	=> 'Recente nieuwe leden',
+	],
+	'leaving_users'	=> [
+		'all'		=> 'Alle uitstappende leden',
+		'recent'	=> 'Recent uitstappende leden',
+	],
+	'transactions' => [
+		'recent'	=> 'Recente transacties',
+	],
+];
+
+if (!$app['config']->get('forum_en'))
+{
+	unset($periodic_mail_block_ary['forum']);
+}
+
+if (!$app['config']->get('interlets_en') || !$app['config']->get('template_lets'))
+{
+	unset($periodic_mail_block_ary['interlets']);
+}
+
 $currency = $app['config']->get('currency');
 
 $tab_panes = [
@@ -189,7 +229,7 @@ $tab_panes = [
 
 	'saldomail'		=> [
 		'lbl'	=> 'Overzichtsmail',
-		'lbl_pane'	=> 'Overzichtsmail met recent vraag en aanbod',
+		'lbl_pane'	=> 'Periodieke overzichtsmail',
 		'inputs' => [
 			'li_1'	=> [
 				'inline' => 'Verstuur de overzichtsmail met recent vraag en aanbod om de %1$s dagen',
@@ -203,56 +243,17 @@ $tab_panes = [
 				'explain' => 'Noot: Leden kunnen steeds ontvangst van de overzichtsmail aan- of afzetten in hun profielinstellingen.',
 			],
 
-			'weekly_mail_show_interlets'	=> [
-				'lbl'		=> 'Toon interlets vraag en aanbod',
-				'type'		=> 'select',
-				'options'	=> $periodic_mail_item_show_options_not_all,
-				'explain'	=> 'Deze instelling is enkel van toepassing wanneer eLAS/eLAND interlets groepen ingesteld zijn.',
+			'periodic_mail_block_ary' => [
+				'lbl'				=> 'Mail opmaak (versleep blokken)',
+				'type'				=> 'sortable',
+				'explain_top'		=> 'Verslepen gaat met 
+					muis of touchpad, maar misschien niet met touch-screen. 
+					"Recent" betekent "sinds
+					de laatste periodieke overzichtsmail".',
+				'lbl_active' 		=> 'Inhoud',
+				'lbl_inactive'		=> 'Niet gebruikte blokken',
+				'ary'				=> $periodic_mail_block_ary,
 			],
-
-			'weekly_mail_show_news'	=> [
-				'lbl'		=> 'Toon nieuwsberichten',
-				'type'		=> 'select',
-				'options'	=> $periodic_mail_item_show_options,
-			],
-
-			'weekly_mail_show_docs'	=> [
-				'lbl'		=> 'Toon documenten',
-				'type'		=> 'select',
-				'options'	=> $periodic_mail_item_show_options_not_all,
-			],
-
-			'weekly_mail_show_forum'	=> [
-				'lbl'		=> 'Toon forumberichten',
-				'type'		=> 'select',
-				'explain'	=> 'Deze instelling heeft enkel invloed wanneer de forumpagina geactiveerd is.',
-				'options'	=> $periodic_mail_item_show_options_not_all,
-			],
-
-			'weekly_mail_show_transactions'	=> [
-				'lbl'		=> 'Toon transacties',
-				'type'		=> 'select',
-				'options'	=> $periodic_mail_item_show_options_not_all,
-			],
-
-			'weekly_mail_show_new_users'	=> [
-				'lbl'		=> 'Toon Instappers',
-				'type'		=> 'select',
-				'options'	=> $periodic_mail_item_show_options,
-			],
-
-			'weekly_mail_show_leaving_users'	=> [
-				'lbl'		=> 'Toon Uitstappers',
-				'type'		=> 'select',
-				'options'	=> $periodic_mail_item_show_options,
-			],
-
-			'weekly_mail_template'	=> [
-				'lbl'		=> 'Template',
-				'type'		=> 'select',
-				'options'	=> $periodic_mail_template,
-			],
-
 		],
 	],
 
@@ -530,7 +531,7 @@ if ($post)
 
 		$value = (strip_tags($value) !== '') ? $value : '';
 
-		if ($validator['type'] == 'checkbox')
+		if ($validator['type'] === 'checkbox')
 		{
 			$value = ($value) ? '1' : '0';
 		}
@@ -553,7 +554,7 @@ if ($post)
 			continue;
 		}
 
-		if ($validator['type'] == 'text')
+		if ($validator['type'] === 'text')
 		{
 			$posted_configs[$name] = $value;
 
@@ -570,7 +571,7 @@ if ($post)
 			continue;
 		}
 
-		if ($validator['type'] == 'number')
+		if ($validator['type'] === 'number')
 		{
 			if ($value === '' && !$validator['required'])
 			{
@@ -595,14 +596,14 @@ if ($post)
 			continue;
 		}
 
-		if ($validator['type'] == 'checkbox')
+		if ($validator['type'] === 'checkbox')
 		{
 			$posted_configs[$name] = $value;
 
 			continue;
 		}
 
-		if ($validator['type'] == 'email')
+		if ($validator['type'] === 'email')
 		{
 			if (isset($validator['max_inputs']))
 			{
@@ -634,7 +635,7 @@ if ($post)
 			continue;
 		}
 
-		if ($validator['type'] == 'url')
+		if ($validator['type'] === 'url')
 		{
 			if ($value != '')
 			{
@@ -647,7 +648,7 @@ if ($post)
 			continue;
 		}
 
-		if ($validator['type'] == 'textarea')
+		if ($validator['type'] === 'textarea')
 		{
 			$posted_configs[$name] = $value;
 
@@ -660,6 +661,11 @@ if ($post)
 			{
 				$errors[] = 'Fout: de waarde moet minimaal ' . $validator['attr']['minlength'] . ' tekens lang zijn.' . $err_n;
 			}
+		}
+
+		if ($validator['type'] === 'sortable')
+		{
+
 		}
 	}
 
@@ -693,10 +699,7 @@ if ($post)
 
 		$value = substr($value, 0, 60);
 
-		if ($app['db']->fetchColumn('select setting from config where setting = ?', [$name]))
-		{
-			$app['db']->update('config', ['value' => $value, '"default"' => 'f'], ['setting' => $name]);
-		}
+		$app['db']->update('config', ['value' => $value, '"default"' => 'f'], ['setting' => $name]);
 
 		$p_acts = is_array($post_actions[$name]) ? $post_actons[$name] : [$post_actions[$name]];
 
@@ -723,7 +726,7 @@ if ($post)
 	cancel();
 }
 
-$app['assets']->add(['summernote', 'rich_edit.js', 'config.js']);
+$app['assets']->add(['sortable', 'summernote', 'rich_edit.js', 'config.js']);
 
 $h1 = 'Instellingen';
 $fa = 'gears';
@@ -823,6 +826,70 @@ foreach ($tab_panes as $id => $pane)
 
 			echo '<p>' . vsprintf($input['inline'], $input_ary) . '</p>';
 		}
+		else if (isset($input['type']) && $input['type'] === 'sortable')
+		{
+			$v_options = $active = $inactive = [];		
+			$value_ary = explode(',', ltrim($config[$name], '+ '));
+			
+			foreach ($value_ary as $v)
+			{
+				list($block, $option) = explode('.', $v);
+				$v_options[$block] = $option;
+				$active[] = $block;
+			}
+
+			foreach ($input['ary'] as $block => $options)
+			{
+				if (!isset($v_options[$block]))
+				{
+					$inactive[] = $block;
+				}
+			}
+
+			echo isset($input['lbl']) ? '<h4>' . $input['lbl'] . '</h4>' : '';
+
+			if (isset($input['explain_top']))
+			{
+				echo '<p><small>' . $input['explain_top'] . '</small></p>';
+			}
+
+			echo '<div class="row">';
+
+			echo '<div class="col-md-6">';
+			echo '<div class="panel panel-default">';
+			echo '<div class="panel-heading">';
+			echo isset($input['lbl_active']) ? '<h5>' . $input['lbl_active'] . '</h5>' : '';		
+			echo '</div>';
+			echo '<div class="panel-body">';
+			echo '<ul id="list_active" class="list-group">';
+
+			render_sortable_items($input['ary'], $v_options, $active, 'bg-success');
+
+			echo '</ul>';
+			echo '</div>';
+			echo '</div>';
+			echo '</div>'; // col
+
+			echo '<div class="col-md-6">';
+			echo '<div class="panel panel-default">';
+			echo '<div class="panel-heading">';
+			echo isset($input['lbl_inactive']) ? '<h5>' . $input['lbl_inactive'] . '</h5>' : '';
+			echo '</div>';
+			echo '<div class="panel-body">';
+			echo '<ul id="list_inactive" class="list-group">';
+
+			render_sortable_items($input['ary'], $v_options, $inactive, 'bg-danger');
+
+			echo '</ul';
+			echo '</div>';
+			echo '</div>';
+			echo '</div>'; // col
+
+			echo '</div>'; // row
+
+			echo '<input type="hidden" name="' . $name . '" ';
+			echo 'value="' . $config[$name] . '" id="' . $name . '">';
+		}
 		else
 		{
 			echo '<div class="form-group">';
@@ -847,7 +914,7 @@ foreach ($tab_panes as $id => $pane)
 				echo '</span>';
 			}
 
-			if (isset($input['type']) && $input['type'] == 'select')
+			if (isset($input['type']) && $input['type'] === 'select')
 			{
 				echo '<select class="form-control" name="' . $name . '"';
 				echo isset($input['required']) ? ' required' : '';
@@ -857,7 +924,7 @@ foreach ($tab_panes as $id => $pane)
 
 				echo '</select>';
 			}
-			else if (isset($input['type']) && $input['type'] == 'textarea')
+			else if (isset($input['type']) && $input['type'] === 'textarea')
 			{
 				echo '<textarea name="' . $name . '" id="' . $name . '" class="form-control';
 				echo isset($input['rich_edit']) ? ' rich-edit' : '';
@@ -956,4 +1023,74 @@ function cancel()
 
 	header('Location: ' . generate_url('config', ['active_tab' => $active_tab]));
 	exit;
+}
+
+function render_sortable_items($input_ary, $v_options, $items, $class)
+{
+	foreach ($items as $a)
+	{
+		$options = $input_ary[$a];
+
+		if (!count($options))
+		{
+			continue;
+		}
+		else if (count($options) === 1)
+		{
+			$lbl = reset($options);
+			$option = key($options);
+			echo '<li class="list-group-item ' . $class . '" ';
+			echo 'data-block="';
+			echo $a;
+			echo '" ';
+			echo 'data-option="';
+			echo $option;
+			echo '" >';
+			echo '<span class="lbl">';
+			echo $lbl;
+			echo '</span>';
+			echo '</li>';
+
+			continue;
+		}
+
+		if (isset($v_options[$a]))
+		{
+			$option = $v_options[$a];
+			$lbl = $options[$option];
+		}
+		else
+		{
+			$lbl = reset($options);
+			$option = key($options);
+		}
+
+		echo '<li class="list-group-item ' . $class . '" ';
+		echo 'data-block="' . $a . '" ';
+		echo 'data-option="' . $option . '">';
+		echo '<span class="lbl">';
+		echo $lbl;
+		echo '</span>';
+		echo '&nbsp;&nbsp;';		
+		echo '<button type="button" class="btn btn-default ';
+		echo 'dropdown-toggle" ';
+		echo 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+		echo ' <span class="caret"></span>';
+		echo '</button>';
+		echo '<ul class="dropdown-menu">';
+
+		foreach ($options as $k => $lbl)
+		{
+			echo '<li><a href="#" data-o="' . $k . '">';
+			echo $lbl;
+			echo '</a></li>';
+		}
+
+		echo '</ul></li>';
+	}
+
+	for($i = 0; $i < 5; $i++)
+	{
+		echo '<li class="list-group-item"></li>';
+	}
 }

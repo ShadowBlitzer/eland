@@ -34,7 +34,8 @@ class saldo extends schema_task
 	private $interlets_groups;
 	private $config;
 
-	public function __construct(db $db, xdb $xdb, Redis $redis, cache $cache, Logger $monolog, mail $mail,
+	public function __construct(db $db, xdb $xdb, Redis $redis, cache $cache, 
+		Logger $monolog, mail $mail,
 		string $s3_img_url, string $s3_doc_url, string $protocol,
 		date_format $date_format, distance $distance, schedule $schedule,
 		groups $groups, this_group $this_group,
@@ -84,6 +85,36 @@ class saldo extends schema_task
 
 		$mailaddr = $mailaddr_public = $saldo_mail = [];
 
+	// get blocks
+
+		$forum_en = $this->config->get('forum_en', $this->schema) ? true : false;
+		$interlets_en = $this->config->get('interlets_en', $this->schema) ? true : false;
+		$interlets_en = $interlets_en && $this->config->get('template_lets', $this->schema) ? true : false;
+
+		$blocks_sorted = $block_options = [];
+	
+		$block_ary = $this->config->get('periodic_mail_block_ary', $this->schema);
+
+		$block_ary = explode(',', ltrim($block_ary, '+'));
+
+		foreach ($block_ary as $v)
+		{
+			list($block, $option) = explode('.', $v);
+
+			if ($block === 'forum' && !$forum_en)
+			{
+				continue;
+			}
+
+			if ($block === 'interlets' && !$interlets_en)
+			{
+				continue;
+			}
+
+			$block_options[$block] = $option;
+			$blocks_sorted[] = $block;
+		}
+
 	// fetch active users
 
 		$rs = $this->db->prepare('SELECT u.id,
@@ -127,95 +158,96 @@ class saldo extends schema_task
 
 	// fetch images
 
-		$image_ary = [];
-
-		$rs = $this->db->prepare('select m.id, p."PictureFile"
-			from ' . $this->schema . '.msgpictures p, ' . $this->schema . '.messages m
-			where p.msgid = m.id
-				and m.cdate >= ?', [$treshold_time]);
-
-		$rs->bindValue(1, $treshold_time);
-		$rs->execute();
-
-		while ($row = $rs->fetch())
+		if (isset($block_options['messages']))
 		{
-			$image_ary[$row['id']][] = $row['PictureFile'];
-		}
+			$image_ary = [];
 
-	// fetch addresses
+			$rs = $this->db->prepare('select m.id, p."PictureFile"
+				from ' . $this->schema . '.msgpictures p, ' . $this->schema . '.messages m
+				where p.msgid = m.id
+					and m.cdate >= ?', [$treshold_time]);
 
-		$addr = $addr_public = $addr_p = [];
+			$rs->bindValue(1, $treshold_time);
+			$rs->execute();
 
-		$rs = $this->db->prepare('select u.id, c.value, c.flag_public
-			from ' . $this->schema . '.users u, ' . $this->schema . '.contact c, ' . $this->schema . '.type_contact tc
-			where u.status in (1, 2)
-				and u.id = c.id_user
-				and c.id_type_contact = tc.id
-				and tc.abbrev = \'adr\'');
-
-		$rs->execute();
-
-		while ($row = $rs->fetch())
-		{
-			$addr[$row['id']] = $row['value'];
-			$addr_public[$row['id']] = $row['flag_public'];
-			$users[$row['id']]['adr'] = $row['value'];
-
-			$geo = $this->cache->get('geo_' . $row['value']);
-
-			if (count($geo))
+			while ($row = $rs->fetch())
 			{
-				if (isset($geo['lat']) && isset($geo['lng']))
+				$image_ary[$row['id']][] = $row['PictureFile'];
+			}
+
+		// fetch addresses
+
+			$addr = $addr_public = $addr_p = [];
+
+			$rs = $this->db->prepare('select u.id, c.value, c.flag_public
+				from ' . $this->schema . '.users u, ' . $this->schema . '.contact c, ' . $this->schema . '.type_contact tc
+				where u.status in (1, 2)
+					and u.id = c.id_user
+					and c.id_type_contact = tc.id
+					and tc.abbrev = \'adr\'');
+
+			$rs->execute();
+
+			while ($row = $rs->fetch())
+			{
+				$addr[$row['id']] = $row['value'];
+				$addr_public[$row['id']] = $row['flag_public'];
+				$users[$row['id']]['adr'] = $row['value'];
+
+				$geo = $this->cache->get('geo_' . $row['value']);
+
+				if (count($geo))
 				{
-					$users_geo[$row['id']] = $geo;
+					if (isset($geo['lat']) && isset($geo['lng']))
+					{
+						$users_geo[$row['id']] = $geo;
+					}
 				}
 			}
-		}
 
-	// fetch messages
+		// fetch messages
 
-		$rs = $this->db->prepare('select m.id, m.content,
-			m."Description" as description, m.msg_type, m.id_user,
-			m.amount, m.units,
-			u.name, u.letscode, u.postcode
-			from ' . $this->schema . '.messages m, ' . $this->schema . '.users u
-			where m.id_user = u.id
-				and u.status IN (1, 2)
-				and m.cdate >= ?
-			order BY m.cdate DESC');
+			$rs = $this->db->prepare('select m.id, m.content,
+				m."Description" as description, m.msg_type, m.id_user,
+				m.amount, m.units,
+				u.name, u.letscode, u.postcode
+				from ' . $this->schema . '.messages m, ' . $this->schema . '.users u
+				where m.id_user = u.id
+					and u.status IN (1, 2)
+					and m.cdate >= ?
+				order BY m.cdate DESC');
 
-		$rs->bindValue(1, $treshold_time);
-		$rs->execute();
+			$rs->bindValue(1, $treshold_time);
+			$rs->execute();
 
-		while ($row = $rs->fetch())
-		{
-			$uid = $row['id_user'];
-			$adr = isset($addr_public[$uid]) && $addr_public[$uid] ? $addr[$uid] : '';
-
-			$row['type'] = $row['msg_type'] ? 'offer' : 'want';
-			$row['offer'] = $row['type'] == 'offer' ? true : false;
-			$row['want'] = $row['type'] == 'want' ? true : false;
-			$row['images'] = $image_ary[$row['id']];
-			$row['url'] = $base_url . '/messages.php?id=' . $row['id'];
-			$row['mail'] = $mailaddr[$uid] ?? '';
-			$row['user'] = $row['letscode'] . ' ' . $row['name'];
-			$row['user_url'] = $base_url . '/users.php?id=' . $uid;
-			$row['addr'] = str_replace(' ', '+', $adr);
-			$row['adr'] = $adr;
-
-			if (isset($users_geo[$uid]))
+			while ($row = $rs->fetch())
 			{
-				$row['geo'] = $users_geo[$uid];
-			}
+				$uid = $row['id_user'];
+				$adr = isset($addr_public[$uid]) && $addr_public[$uid] ? $addr[$uid] : '';
 
-			$messages[] = $row;
+				$row['type'] = $row['msg_type'] ? 'offer' : 'want';
+				$row['offer'] = $row['type'] == 'offer' ? true : false;
+				$row['want'] = $row['type'] == 'want' ? true : false;
+				$row['images'] = $image_ary[$row['id']];
+				$row['url'] = $base_url . '/messages.php?id=' . $row['id'];
+				$row['mail'] = $mailaddr[$uid] ?? '';
+				$row['user'] = $row['letscode'] . ' ' . $row['name'];
+				$row['user_url'] = $base_url . '/users.php?id=' . $uid;
+				$row['addr'] = str_replace(' ', '+', $adr);
+				$row['adr'] = $adr;
+
+				if (isset($users_geo[$uid]))
+				{
+					$row['geo'] = $users_geo[$uid];
+				}
+
+				$messages[] = $row;
+			}
 		}
 
 	// interlets messages
 
-		if ($this->config->get('weekly_mail_show_interlets', $this->schema) == 'recent'
-			&& $this->config->get('interlets_en') && $this->config->get('template_lets')
-		)
+		if (isset($block_options['interlets']) && $block_options['interlets'] == 'recent')
 		{
 			$eland_ary = $this->interlets_groups->get_eland($this->schema);
 
@@ -292,9 +324,7 @@ class saldo extends schema_task
 
 	// news
 
-		$show_news = $this->config->get('weekly_mail_show_news', $this->schema);
-
-		if ($show_news != 'none')
+		if (isset($block_options['news']))
 		{
 			$rows = $this->xdb->get_many(['agg_schema' => $this->schema, 'agg_type' => 'news_access']);
 
@@ -309,13 +339,13 @@ class saldo extends schema_task
 					and n.published = \'t\'
 					and n.id_user = u.id ';
 
-			$query .= ($show_news == 'recent') ? 'and n.cdate > ? ' : '';
+			$query .= ($block_options['news'] == 'recent') ? 'and n.cdate > ? ' : '';
 
 			$query .= 'order by n.cdate desc';
 
 			$rs = $this->db->prepare($query);
 
-			if ($show_news == 'recent')
+			if ($block_options['news'] == 'recent')
 			{
 				$rs->bindValue(1, $treshold_time);
 			}
@@ -350,9 +380,7 @@ class saldo extends schema_task
 
 	// new users
 
-		$show_new_users = $this->config->get('weekly_mail_show_new_users', $this->schema);
-
-		if ($show_new_users != 'none')
+		if (isset($block_options['new_users']))
 		{
 
 			$rs = $this->db->prepare('select u.id, u.name, u.letscode, u.postcode
@@ -361,7 +389,7 @@ class saldo extends schema_task
 					and u.adate > ?');
 
 			$time = gmdate('Y-m-d H:i:s', time() - $this->config->get('newuserdays', $this->schema) * 86400);
-			$time = ($show_new_users == 'recent') ? $treshold_time: $time;
+			$time = ($block_options['new_users'] === 'recent') ? $treshold_time: $time;
 
 			$rs->bindValue(1, $time);
 			$rs->execute();
@@ -377,20 +405,17 @@ class saldo extends schema_task
 
 	// leaving users
 
-		$show_leaving_users = $this->config->get('weekly_mail_show_leaving_users', $this->schema);
-
-		if ($show_leaving_users != 'none')
+		if (isset($block_options['leaving_users']))
 		{
-
 			$query = 'select u.id, u.name, u.letscode, u.postcode
 				from ' . $this->schema . '.users u
 				where u.status = 2';
 
-			$query .= ($show_leaving_users == 'recent') ? ' and mdate > ?' : '';
+			$query .= ($block_options['leaving_users'] == 'recent') ? ' and mdate > ?' : '';
 
 			$rs = $this->db->prepare($query);
 
-			if ($show_leaving_users == 'recent')
+			if ($block_options['leaving_users'] === 'recent')
 			{
 				$rs->bindValue(1, $treshold_time);
 			}
@@ -408,11 +433,8 @@ class saldo extends schema_task
 
 	// transactions
 
-		$show_transactions = $this->config->get('weekly_mail_show_transactions', $this->schema);
-
-		if ($show_transactions != 'none')
+		if (isset($block_options['transactions']))
 		{
-
 			$rs = $this->db->prepare('select t.id_from, t.id_to, t.real_from, t.real_to,
 					t.amount, t.cdate, t.description,
 					uf.name as from_name, uf.letscode as from_letscode,
@@ -446,11 +468,7 @@ class saldo extends schema_task
 
 		$forum_topics = $forum_topics_replied = [];
 
-		$forum_en = $this->config->get('forum_en', $this->schema);
-
-		$show_forum = $forum_en ? $this->config->get('weekly_mail_show_forum', $this->schema) : 'none';
-
-		if ($show_forum != 'none')
+		if (isset($block_options['forum']))
 		{
 
 			// new topics
@@ -519,9 +537,7 @@ class saldo extends schema_task
 
 	// docs
 
-		$show_docs = $this->config->get('weekly_mail_show_docs', $this->schema);
-
-		if ($show_docs != 'none')
+		if (isset($block_options['docs']))
 		{
 			$rows = $this->xdb->get_many(['agg_schema' => $this->schema,
 				'agg_type' => 'doc',
@@ -558,34 +574,27 @@ class saldo extends schema_task
 
 			's3_img'				=> $this->s3_img_url,
 			'new_users'				=> $new_users,
-			'show_new_users'		=> $show_new_users,
 			'leaving_users'			=> $leaving_users,
-			'show_leaving_users'	=> $show_leaving_users,
 			'news'					=> $news,
 			'news_url'				=> $base_url . '/news.php?src=p',
-			'show_news'				=> $show_news,
 			'transactions'			=> $transactions,
 			'transactions_url'		=> $base_url . '/transactions.php?src=p',
-			'show_transactions'		=> $show_transactions,
 			'new_transaction_url'	=> $base_url . '/transactions.php?add=1',
 			'forum'					=> $forum,
 			'forum_url'				=> $base_url . '/forum.php?src=p',
-			'show_forum'			=> $show_forum,
-			'forum_en'				=> $forum_en,
 			'docs'					=> $docs,
 			'docs_url'				=> $base_url . '/docs.php?src=p',
-			'show_docs'				=> $show_docs,
 			'messages'				=> $messages,
 			'messages_url'			=> $base_url . '/messages.php?src=p',
 			'new_message_url'		=> $base_url . '/messages.php?add=1',
 			'interlets'				=> $interlets,
+			'block_options'			=> $block_options,
+			'blocks_sorted'			=> $blocks_sorted,
 		];
 
 	// queue mail
 
 		$log_to = [];
-
-		$template = 'periodic_overview_' . $this->config->get('weekly_mail_template', $this->schema);
 
 		foreach ($saldo_mail as $id => $b)
 		{
@@ -609,7 +618,7 @@ class saldo extends schema_task
 				'validate_email'	=> true,
 				'schema'	=> $this->schema,
 				'to'		=> $id,
-				'template'	=> $template,
+				'template'	=> 'periodic_overview',
 				'vars'		=> array_merge($vars, [
 					'user'			=> $users[$id],
 					'url_login'		=> $base_url . '/login.php?login=' . $users[$id]['letscode'],

@@ -4,6 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "1686f9fa89a8b206d5356a66b252c1e5",
     "packages": [
         {
@@ -18,6 +19,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d34a5779803ae7bc3efd3c6cab6e4e6f3b7409dd",
                 "reference": "d34a5779803ae7bc3efd3c6cab6e4e6f3b7409dd",
+=======
+    "content-hash": "493e8394e50c80d06d8ac65e6d7dfbd5",
+    "packages": [
+        {
+            "name": "aws/aws-sdk-php",
+            "version": "3.32.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aws/aws-sdk-php.git",
+                "reference": "9e2ad0ee0a1269190e411b7409e9b64361626e0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9e2ad0ee0a1269190e411b7409e9b64361626e0a",
+                "reference": "9e2ad0ee0a1269190e411b7409e9b64361626e0a",
+>>>>>>> master
                 "shasum": ""
             },
             "require": {
@@ -84,6 +101,7 @@
                 "s3",
                 "sdk"
             ],
+<<<<<<< HEAD
             "time": "2017-08-01T21:51:56+00:00"
         },
         {
@@ -140,6 +158,9 @@
                 "validation"
             ],
             "time": "2017-05-04T02:00:24+00:00"
+=======
+            "time": "2017-08-11T21:16:28+00:00"
+>>>>>>> master
         },
         {
             "name": "bramus/ansi-php",
@@ -968,6 +989,7 @@
             "time": "2017-01-03T13:21:43+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "fgrosse/phpasn1",
             "version": "1.5.2",
             "source": {
@@ -1085,6 +1107,8 @@
             "time": "2016-02-24T16:23:07+00:00"
         },
         {
+=======
+>>>>>>> master
             "name": "guzzlehttp/guzzle",
             "version": "6.3.0",
             "source": {
@@ -1489,6 +1513,7 @@
             "time": "2017-03-16T00:45:59+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "lusitanian/oauth",
             "version": "v0.8.10",
             "source": {
@@ -1500,16 +1525,43 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/09f4af38f17db6938253f4d1b171d537913ac1ed",
                 "reference": "09f4af38f17db6938253f4d1b171d537913ac1ed",
+=======
+            "name": "monolog/monolog",
+            "version": "1.23.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+>>>>>>> master
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
             "require-dev": {
+<<<<<<< HEAD
                 "phpunit/phpunit": "3.7.*",
                 "predis/predis": "0.8.*@dev",
                 "squizlabs/php_codesniffer": "2.*",
                 "symfony/http-foundation": "~2.1"
+=======
+                "aws/aws-sdk-php": "^2.4.9 || ^3.0",
+                "doctrine/couchdb": "~1.0@dev",
+                "graylog2/gelf-php": "~1.0",
+                "jakub-onderka/php-parallel-lint": "0.9",
+                "php-amqplib/php-amqplib": "~2.4",
+                "php-console/php-console": "^3.1.3",
+                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit-mock-objects": "2.3.0",
+                "ruflin/elastica": ">=0.90 <3.0",
+                "sentry/sentry": "^0.13",
+                "swiftmailer/swiftmailer": "^5.3|^6.0"
+>>>>>>> master
             },
             "suggest": {
                 "ext-openssl": "Allows for usage of secure connections with the stream-based HTTP client.",
@@ -1553,7 +1605,11 @@
                 "oauth",
                 "security"
             ],
+<<<<<<< HEAD
             "time": "2016-07-12T22:15:40+00:00"
+=======
+            "time": "2017-06-19T01:22:40+00:00"
+>>>>>>> master
         },
         {
             "name": "mdanter/ecc",
@@ -2456,8 +2512,62 @@
             "time": "2017-03-25T21:07:11+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "spomky-labs/base64url",
             "version": "v1.0.2",
+=======
+            "name": "psr/container",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "time": "2017-02-14T16:28:37+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+>>>>>>> master
             "source": {
                 "type": "git",
                 "url": "https://github.com/Spomky-Labs/base64url.git",
@@ -2590,6 +2700,7 @@
             "time": "2017-02-06T18:22:51+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "spomky-labs/php-aes-gcm",
             "version": "v1.2.0",
             "source": {
@@ -2608,6 +2719,35 @@
                 "lib-openssl": "*",
                 "php": ">=5.4",
                 "symfony/polyfill-mbstring": "^1.1"
+=======
+            "name": "silex/silex",
+            "version": "v2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silexphp/Silex.git",
+                "reference": "ec7d5b5334465414952d4b2e935e73bd085dbbbb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silexphp/Silex/zipball/ec7d5b5334465414952d4b2e935e73bd085dbbbb",
+                "reference": "ec7d5b5334465414952d4b2e935e73bd085dbbbb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "pimple/pimple": "~3.0",
+                "symfony/event-dispatcher": "~2.8|^3.0",
+                "symfony/http-foundation": "~2.8|^3.0",
+                "symfony/http-kernel": "~2.8|^3.0",
+                "symfony/routing": "~2.8|^3.0"
+            },
+            "conflict": {
+                "phpunit/phpunit": "<4.8.35 || >= 5.0, <5.4.3"
+            },
+            "replace": {
+                "silex/api": "self.version",
+                "silex/providers": "self.version"
+>>>>>>> master
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.5|^5.0",
@@ -2619,7 +2759,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
+<<<<<<< HEAD
                     "dev-master": "1.2.x-dev"
+=======
+                    "dev-master": "2.2.x-dev"
+>>>>>>> master
                 }
             },
             "autoload": {
@@ -2649,7 +2793,11 @@
                 "aes",
                 "gcm"
             ],
+<<<<<<< HEAD
             "time": "2016-11-22T21:11:11+00:00"
+=======
+            "time": "2017-07-23T07:40:14+00:00"
+>>>>>>> master
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2818,6 +2966,7 @@
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
             "time": "2017-07-12T13:03:20+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "symfony/cache",
@@ -2890,6 +3039,8 @@
                 "psr6"
             ],
             "time": "2017-07-23T08:41:58+00:00"
+=======
+>>>>>>> master
         },
         {
             "name": "symfony/config",
@@ -3251,6 +3402,7 @@
             "time": "2017-06-09T14:53:08+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "symfony/expression-language",
             "version": "v3.3.6",
             "source": {
@@ -3262,6 +3414,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/expression-language/zipball/48abe52c5b80babe29e956d900b7ab06faf50eef",
                 "reference": "48abe52c5b80babe29e956d900b7ab06faf50eef",
+=======
+            "name": "symfony/event-dispatcher",
+            "version": "v3.3.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/event-dispatcher.git",
+                "reference": "67535f1e3fd662bdc68d7ba317c93eecd973617e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/67535f1e3fd662bdc68d7ba317c93eecd973617e",
+                "reference": "67535f1e3fd662bdc68d7ba317c93eecd973617e",
+>>>>>>> master
                 "shasum": ""
             },
             "require": {
@@ -3298,7 +3463,11 @@
             ],
             "description": "Symfony ExpressionLanguage Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2017-05-01T15:01:29+00:00"
+=======
+            "time": "2017-06-09T14:53:08+00:00"
+>>>>>>> master
         },
         {
             "name": "symfony/filesystem",
@@ -4422,6 +4591,7 @@
             "description": "Symfony Security Component",
             "homepage": "https://symfony.com",
             "time": "2017-07-29T21:27:59+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "symfony/stopwatch",
@@ -4471,6 +4641,8 @@
             "description": "Symfony Stopwatch Component",
             "homepage": "https://symfony.com",
             "time": "2017-04-12T14:14:56+00:00"
+=======
+>>>>>>> master
         },
         {
             "name": "symfony/translation",
@@ -4702,6 +4874,7 @@
             "description": "Symfony Validator Component",
             "homepage": "https://symfony.com",
             "time": "2017-07-26T06:42:48+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "symfony/var-dumper",
@@ -4836,6 +5009,8 @@
             "description": "Symfony WebProfilerBundle",
             "homepage": "https://symfony.com",
             "time": "2017-07-23T09:41:59+00:00"
+=======
+>>>>>>> master
         },
         {
             "name": "symfony/yaml",
@@ -4891,6 +5066,7 @@
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
             "time": "2017-07-23T12:43:26+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "twig/extensions",
@@ -4947,6 +5123,8 @@
                 "text"
             ],
             "time": "2017-06-08T18:19:53+00:00"
+=======
+>>>>>>> master
         },
         {
             "name": "twig/twig",
