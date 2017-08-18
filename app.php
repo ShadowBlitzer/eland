@@ -66,11 +66,11 @@ $app->extend('twig', function($twig, $app) {
 $app->register(new Silex\Provider\AssetServiceProvider(), [
     'assets.version' => '15',
     'assets.version_format' => '%s?v=%s',
-    'assets.base_path' => '/assets',
+    'assets.base_path' => '/js',
     'assets.named_packages' => [
-        'css' 		=> ['base_path' => '/assets/css', 'version' => '15', 'version_format' => '%s?v=%s'],
-        'js'		=> ['base_path'	=> '/assets/js', 'version' => '15', 'version_format' => '%s?v=%s'],
-        'loc_img'	=> ['base_path'	=> '/assets/img', 'version' => '15', 'version_format' => '%s?v=%s'],
+        'css' 		=> ['base_path' => '/css', 'version' => '15', 'version_format' => '%s?v=%s'],
+        'js'		=> ['base_path'	=> '/js', 'version' => '15', 'version_format' => '%s?v=%s'],
+        'loc_img'	=> ['base_path'	=> '/img', 'version' => '15', 'version_format' => '%s?v=%s'],
         'img' 		=> ['base_urls' => ['http://' . getenv('S3_IMG')]],
         'doc'		=> ['base_urls' => ['http://' . getenv('S3_DOC')]],
         'maxcdn'	=> ['base_urls' => ['https://maxcdn.bootstrapcdn.com']],

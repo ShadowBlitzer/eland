@@ -25,11 +25,23 @@ abstract class base
 		$this->schema = $schema;
 	}
 
+	public function set_section(string $section)
+	{
+		
+	}
+
 	public function execute()
 	{
 		if (!isset($this->schema))
 		{
 			throw new Exception('Schema is not set');
+		}
+
+		if (!$this->db->fetchColumn('select schema_name 
+			from information_schema.schemata
+			where schema_name = ?', [$this->schema]))
+		{
+			throw new Exception('eLAS schema ' . $this->schema . ' not found.');
 		}
 	}
 }

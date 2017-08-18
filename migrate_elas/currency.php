@@ -42,7 +42,7 @@ class currency extends base implements base_interface
 	{
 		parent::execute();
 
-
+		
 
 
 
