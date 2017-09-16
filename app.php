@@ -254,7 +254,7 @@ $app['xdb'] = function ($app){
 };
 
 $app['ev'] = function ($app){
-	return new service\ev($app['db'], $app['predis']);
+	return new service\ev($app['db'], $app['predis'], $app['uuid']);
 };
 
 $app['c_ev'] = function ($app){
@@ -322,10 +322,6 @@ $app['user_cache'] = function ($app){
 
 $app['token'] = function ($app){
 	return new service\token();
-};
-
-$app['unique_id'] = function ($app){
-	return new service\unique_id($app['ev'], $app['token']);
 };
 
 $app['email_validate'] = function ($app){

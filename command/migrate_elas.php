@@ -30,7 +30,7 @@ class migrate_elas extends Command
         $output->getFormatter()->setStyle('cyan', $cyan);
         $schema = $input->getArgument('schema');
         $io->title('Migration from eLAS of schema ' . $schema);
-        $cid = $app['unique_id']->get(); 
+        $cid = $app['ev']->get_new_id(); 
         $io->text('<info>New id of currency: </>' . $cid);
 
         $io->text('<cyan>Get users</>');
@@ -47,11 +47,16 @@ class migrate_elas extends Command
 
         $io->table([], $mail);
 
-$io->listing(array(
-    'Element #1 Lorem ipsum dolor sit amet',
-    'Element #2 Lorem ipsum dolor sit amet',
-    'Element #3 Lorem ipsum dolor sit amet',
-));
+        $users = $app['db']->fetchAll('select letscode, name, fullname, status, accountrole
+            from ' . $schema . '.users');
+
+        $io->table(['code', 'name', 'full name', 'status', 'role'], $users);
+
+        $io->listing(array(
+            'Element #1 Lorem ipsum dolor sit amet',
+            'Element #2 Lorem ipsum dolor sit amet',
+            'Element #3 Lorem ipsum dolor sit amet',
+        ));
         
 
 

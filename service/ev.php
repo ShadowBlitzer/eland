@@ -4,13 +4,14 @@ namespace service;
 
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as Redis;
+use service\uuid;
 
 /*
 Table "xdb.ev"
 Column  |            Type             |              Modifiers
----------+-----------------------------+--------------------------------------
+--------+-----------------------------+--------------------------------------
 ts      | timestamp without time zone | default timezone('utc'::text, now())
-id      | character varying(32)       | not null
+id      | uuid                        | not null
 version | integer                     | not null
 data    | jsonb                       |
 meta    | jsonb                       |
@@ -19,11 +20,11 @@ Indexes:
 
 Table "xdb.ag"
 Column  |            Type             |              Modifiers
----------+-----------------------------+--------------------------------------
+--------+-----------------------------+--------------------------------------
 ts      | timestamp without time zone | default timezone('utc'::text, now())
-id      | character varying(32)       | not null
+id      | uuid                        | not null
 type    | character varying(32)       |
-segment | character varying(32)       |
+segment | uuid                        |
 version | integer                     | not null
 data    | jsonb                       |
 meta    | jsonb                       |
@@ -37,11 +38,26 @@ class ev
 {
 	private $db;
 	private $redis;
+	private $uuid;
 
-	public function __construct(db $db, Redis $redis)
+	public function __construct(db $db, Redis $redis, uuid $uuid)
 	{
 		$this->db = $db;
 		$this->redis = $redis;
+		$this->uuid = $uuid;
+	}
+
+	public function get_new_id()
+	{
+		while(true)
+		{
+			$id = $this->uuid->gen();
+
+			if (!$this->db->fetchColumn('select id from xdb.ag where id = ?', [$id]))
+			{
+				return $id;
+			}
+		}		
 	}
 
 	public function set(string $id, array $data = [], array $meta = [])
@@ -147,12 +163,8 @@ class ev
 		}
 		catch(Exception $e)
 		{
-/** rewrite this **/
 			$this->db->rollback();
-			echo 'Database transactie niet gelukt.';
-//			$this->monolog->debug('Database transactie niet gelukt. ' . $e->getMessage());
 			throw $e;
-			exit;
 		}
 	}
 
@@ -198,12 +210,8 @@ class ev
 		}
 		catch(Exception $e)
 		{
-/** change this **/
 			$this->db->rollback();
-			echo 'Database transactie niet gelukt.';
-			//$this->monolog->debug('Database transactie niet gelukt. ' . $e->getMessage());
 			throw $e;
-			exit;
 		}
 	}
 
@@ -234,7 +242,7 @@ class ev
 
 		if (!$row)
 		{
-			// not found exception
+			// 'object not found exception';
 			return false;
 		}
 

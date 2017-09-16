@@ -78,9 +78,9 @@ expires timestamp without time zone);
 
 create table if not exists xdb.ag (
 ts timestamp without time zone default timezone('utc'::text, now()),
-id varchar(32) primary key not null,
+id uuid primary key not null,
 type varchar(32),
-segment varchar(32),
+segment uuid,
 version int not null,
 data jsonb,
 meta jsonb
@@ -90,7 +90,7 @@ create index on xdb.ag(type, segment);
 
 create table if not exists xdb.ev (
 ts timestamp without time zone default timezone('utc'::text, now()),
-id varchar(32) not null,
+id uuid not null,
 version int not null,
 data jsonb,
 meta jsonb
