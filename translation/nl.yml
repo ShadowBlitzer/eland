@@ -192,6 +192,23 @@ permission:
 
 category_index:
   title: Categorieën
+  name: Naam
+  count_wants: Vraag
+  count_offers: Aanbod
+  explain_delete: >
+    Categorieën met berichten of hoofdcategorieën 
+    met subcategorieën kan je niet verwijderen.
+  explain_subcategory: >
+    Enkel subcategorieën kunnen berichten bevatten.
+
+category_add:
+  title: Categorie toevoegen
+
+category_edit:
+  title: Categorie aanpassen
+
+category_del:
+  title: Categorie verwijderen
 
 custom_field_index:
   title: Custom velden

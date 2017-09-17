@@ -337,6 +337,9 @@ $cat->match('/add', 'controller\\category::add')
 $cat->match('/{category}/edit', 'controller\\category::edit')
 	->convert('category', 'service\\xdb::get')
 	->bind('category_edit');
+$cat->match('/{category}/del', 'controller\\category::del')
+	->convert('category', 'service\\xdb::get')
+	->bind('category_del');
 
 $a->mount('/categories', $cat);
 

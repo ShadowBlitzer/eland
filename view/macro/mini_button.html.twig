@@ -1,0 +1,28 @@
+{% macro add(href, title) -%}
+    {% import _self as b %}
+    {{ b.button(href, title, 'add', 'success', 'plus') }}
+{%- endmacro add %}
+
+{% macro edit(href, title) -%}
+    {% import _self as b %}
+    {{ b.button(href, title, 'add', '', 'plus') }}
+{%- endmacro edit %}
+
+{% macro delete(href, title) -%}
+    {% import _self as b %}
+    {{ b.button(href, title, 'delete', 'danger', 'times') }}
+{%- endmacro delete %}
+
+{% macro list(href, title, fa) -%}
+    {% import _self as b %}
+    {{ b.button(href, title, 'list', 'default', fa) }}
+{%- endmacro list %}
+
+{% macro button(href, title, label, class, fa) -%}
+    <a href="{{ href }}" 
+    class="btn btn-{{ class }} btn-xs" 
+    title="{{ title|trans }}">
+    <i class="fa fa-{{ fa }}"></i>
+    {{ label|trans }}
+    </a>
+{%- endmacro button %}

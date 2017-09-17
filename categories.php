@@ -271,7 +271,7 @@ if ($del)
 	exit;
 }
 
-$cats = $app['db']->fetchAll('SELECT * FROM categories ORDER BY fullname');
+$cats = $app['db']->fetchAll('select * from categories order by fullname');
 
 $child_count_ary = [];
 
