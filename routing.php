@@ -332,7 +332,8 @@ $cat = $app['controllers_factory'];
 
 $cat->get('/', 'controller\\category::index')
 	->bind('category_index');
-$cat->match('/add', 'controller\\category::add')
+$cat->match('/add/{parent_category}', 'controller\\category::add')
+	->value('parent_category', 0)
 	->bind('category_add');
 $cat->match('/{category}/edit', 'controller\\category::edit')
 	->convert('category', 'service\\xdb::get')

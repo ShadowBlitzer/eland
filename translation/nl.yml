@@ -203,6 +203,9 @@ category_index:
 
 category_add:
   title: Categorie toevoegen
+  main_category: Hoofdcategorie
+  name: Naam
+  parent: Hoofdcategorie of deelcategorie van
 
 category_edit:
   title: Categorie aanpassen

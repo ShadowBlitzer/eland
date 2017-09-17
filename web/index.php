@@ -1,9 +1,5 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use util\app;
-
 // development server
 
 if (php_sapi_name() === 'cli-server')

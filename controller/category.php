@@ -4,6 +4,12 @@ namespace controller;
 
 use util\app;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class category
 {
@@ -38,9 +44,66 @@ class category
 		]);
 	}
 
-	public function add(Request $request, app $app, string $schema)
+	public function add(Request $request, app $app, string $schema, int $parent_category)
 	{
+		$parent_categories = [
+			'-- ' . $app->trans('category_add.main_category') . ' --' => 0,
+		];
+		
+		$rs = $app['db']->prepare('select id, name 
+			from ' . $schema . '.categories 
+			where leafnote = 0 
+			order by name asc');
 
+		$rs->execute();
+		
+		while ($row = $rs->fetch())
+		{
+			$parent_categories[$row['name']] = $row['id'];
+		}
+
+		$data = [
+			'name'		=> '',
+			'id_parent'	=> $parent_category,
+		];
+
+		$form = $app->form($data)
+	
+	/*
+		$cat['name'] = $_POST['name'];
+		$cat['id_parent'] = $_POST['id_parent'];
+		$cat['leafnote'] = ($_POST['id_parent'] == 0) ? 0 : 1;
+*/
+			->add('name')
+			->add('id_parent', ChoiceType::class, [
+				'choices'  					=> $parent_categories,
+				'choice_translation_domain' => false,
+			])
+			->add('submit', SubmitType::class)
+
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			$data = $form->getData();
+
+			return $app->redirect('edit');
+		}
+
+
+
+
+
+	
+		$id_parent = $cat['id_parent'] ?? 0;
+
+		return $app['twig']->render('category/a_add.html.twig', [
+			'form'					=> $form->createView(),
+			'parent_categories'		=> $parent_categories,
+			'id_parent'				=> $id_parent,
+		]);
 	}
 
 	public function edit(Request $request, app $app, string $schema)
