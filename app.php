@@ -103,11 +103,24 @@ $app->extend('translator', function($translator, $app) {
 	return $translator;
 });
 
+$app['etoken_manager'] = function ($app){
+	return new form\etoken_manager($app['predis']);
+};
+
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\CsrfServiceProvider());
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\VarDumperServiceProvider());
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
+
+$app->extend('form.type.extensions', function($extensions) use ($app) {
+    $extensions[] = new form\form_type_etoken_extension(
+		$app['etoken_manager'], $app['translator']
+	);
+
+    return $extensions;
+});
+
 
 /*
 $app->extend('monolog', function($monolog, $app) {

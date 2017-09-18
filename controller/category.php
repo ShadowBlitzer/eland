@@ -10,11 +10,14 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class category
 {
 	public function index(Request $request, app $app, string $schema)
 	{
+//		dump($this->get_user());
+
 		$categories = $app['db']->fetchAll('select * 
 			from ' . $schema . '.categories 
 			order by fullname');
@@ -74,11 +77,20 @@ class category
 		$cat['id_parent'] = $_POST['id_parent'];
 		$cat['leafnote'] = ($_POST['id_parent'] == 0) ? 0 : 1;
 */
-			->add('name')
+			->add('name', TextType::class, [			
+				'constraints' 	=> [
+					new Assert\Length(['max' => 40, 'min' => 1]),
+				],
+				'attr'	=> [
+					'maxlength'	=> 40,
+				],
+			])
+
 			->add('id_parent', ChoiceType::class, [
 				'choices'  					=> $parent_categories,
 				'choice_translation_domain' => false,
 			])
+
 			->add('submit', SubmitType::class)
 
 			->getForm();
@@ -89,20 +101,26 @@ class category
 		{
 			$data = $form->getData();
 
+			$data['cdate'] = gmdate('Y-m-d H:i:s');
+			$data['id_creator'] = ($s_master) ? 0 : $s_id;
+			$data['fullname'] = '';
+			$data['leafnote'] = 0;
+
+			if ($data['id_parent'])
+			{
+				$data['leafnote'] = 1;
+				$data['fullname'] = $app['db']->fetchColumn('select name 
+					from ' . $schema . '.categories 
+					where id = ?', [(int) $data['id_parent']]);	
+				$data['fullname'] .= ' - ';	
+			}
+			$data['fullname'] .= $data['name'];
+
 			return $app->redirect('edit');
 		}
 
-
-
-
-
-	
-		$id_parent = $cat['id_parent'] ?? 0;
-
 		return $app['twig']->render('category/a_add.html.twig', [
 			'form'					=> $form->createView(),
-			'parent_categories'		=> $parent_categories,
-			'id_parent'				=> $id_parent,
 		]);
 	}
 

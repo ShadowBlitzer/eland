@@ -52,8 +52,7 @@ csv: csv
 generate: Genereer
 
 error:
-  internal_configuration: Interne configuratie fout van de web app
-  form_token_expired: De maximale duurtijd van het formulier is overschreden.
+  internal_configuration: Interne configuratie fout van de web app.
   404_page_not_found: Pagina niet gevonden.
 
 hosting_request:
@@ -237,9 +236,13 @@ periodic_charge:
 log:
   title: Logs
 
-
-
-
+form:
+  etoken:
+    expired: > 
+      De maximale duurtijd van het formulier is overschreden.
+      Gelieve het opnieuw te proberen. 
+    double: >
+      Een dubbele invoer van het formulier werd voorkomen.
 
 mail:
   no_reply: >

@@ -1,49 +1,21 @@
 {% extends 'admin.html.twig' %}
 
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
+
 {% block heading -%}{{ 'category_add.title'|trans }}{%- endblock %}
 
 {% block inner -%}
 
-	<div class="panel panel-info">
-	<div class="panel-heading">
-
-    {{ form_start(form) }}
-    {{ form_row(form.name, {'label': 'category_add.name', 'attr': {'class': 'input-lg'}}) }}
-    {{ form_row(form.id_parent, {'label': 'category_add.parent', 'attr': {'class': 'input-lg'}}) }}
-    <a href="{{ path('category_index', {'schema': schema })}}" class="btn btn-default btn-lg">
-    {{ 'cancel'|trans }}
-    </a>&nbsp;
-    {{ form_widget(form.submit, {'label': 'add', 'attr': {'class': 'btn-success btn-lg'}}) }}
-    {{ form_end(form) }}
-
-{#
-	<form  method="post" class="form-horizontal">
-
-	<div class="form-group">
-	<label for="name" class="col-sm-2 control-label">Naam</label>
-	<div class="col-sm-10">
-	<input type="text" class="form-control" id="name" name="name" 
-	value="' . $cat['name'] . '" required maxlength="40">
-	</div>
-	</div>
-
-	<div class="form-group">
-	<label for="id_parent" class="col-sm-2 control-label">Hoofdcategorie of deelcategorie van</label>
-	<div class="col-sm-10">
-	<select name="id_parent" id="id_parent" class="form-control">
-	render_select_options($parent_cats, $id_parent);
-	</select>
-	</div>
-	</div>
-
-	echo aphp('categories', [], 'Annuleren', 'btn btn-default') . '&nbsp;
-	<input type="submit" name="zend" value="Toevoegen" class="btn btn-success">
-	$app['form_token']->generate();
-
-	</form>
-#}
-	</div>
-	</div>
+{{ p.post() }}
+{{ form_start(form) }}
+{{ form_errors(form) }}
+{{ form_row(form.name, {'label': 'category_add.name', 'attr': {'class': 'input-lg'}}) }}
+{{ form_row(form.id_parent, {'label': 'category_add.parent', 'attr': {'class': 'input-lg'}}) }}
+{{ b.cancel(path('category_index', {'schema': schema})) }}
+{{ b.add(form.submit) }}
+{{ form_end(form) }}
+{{ p.end }}
 
 {%- endblock inner %}
 
