@@ -6,3 +6,10 @@
 {{ form_widget(form_submit, {'label': 'add', 'attr': {'class': 'btn-success btn-lg'}}) }}&nbsp;
 {%- endmacro add %}
 
+{% macro edit(form_submit) -%}
+{{ form_widget(form_submit, {'label': 'edit', 'attr': {'class': 'btn-info btn-lg'}}) }}&nbsp;
+{%- endmacro edit %}
+
+{% macro del(form_submit) -%}
+{{ form_widget(form_submit, {'label': 'delete', 'attr': {'class': 'btn-danger btn-lg'}}) }}&nbsp;
+{%- endmacro del %}

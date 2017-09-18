@@ -205,12 +205,15 @@ category_add:
   main_category: Hoofdcategorie
   name: Naam
   parent: Hoofdcategorie of deelcategorie van
+  success: De categorie %name% is toegevoegd.
+  error: Er trad een fout op bij het opslaan van categorie %name%.
 
 category_edit:
-  title: Categorie aanpassen
+  title: 'Categorie aanpassen: "%name%"'
 
 category_del:
-  title: Categorie verwijderen
+  title: 'Categorie verwijderen: "%name%"'
+  warning: 'Ben je zeker dat categorie "%name%" verwijderd moet worden?'
 
 custom_field_index:
   title: Custom velden

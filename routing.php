@@ -336,10 +336,10 @@ $cat->match('/add/{parent_category}', 'controller\\category::add')
 	->value('parent_category', 0)
 	->bind('category_add');
 $cat->match('/{category}/edit', 'controller\\category::edit')
-	->convert('category', 'service\\xdb::get')
+//	->convert('category', 'service\\xdb::get')
 	->bind('category_edit');
 $cat->match('/{category}/del', 'controller\\category::del')
-	->convert('category', 'service\\xdb::get')
+//	->convert('category', 'service\\xdb::get')
 	->bind('category_del');
 
 $a->mount('/categories', $cat);

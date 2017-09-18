@@ -3,14 +3,9 @@
 namespace controller;
 
 use util\app;
+use form\category_type;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Validator\Constraints as Assert;
 
 class category
 {
@@ -49,50 +44,12 @@ class category
 
 	public function add(Request $request, app $app, string $schema, int $parent_category)
 	{
-		$parent_categories = [
-			'-- ' . $app->trans('category_add.main_category') . ' --' => 0,
-		];
-		
-		$rs = $app['db']->prepare('select id, name 
-			from ' . $schema . '.categories 
-			where leafnote = 0 
-			order by name asc');
-
-		$rs->execute();
-		
-		while ($row = $rs->fetch())
-		{
-			$parent_categories[$row['name']] = $row['id'];
-		}
-
 		$data = [
 			'name'		=> '',
 			'id_parent'	=> $parent_category,
 		];
 
-		$form = $app->form($data)
-	
-	/*
-		$cat['name'] = $_POST['name'];
-		$cat['id_parent'] = $_POST['id_parent'];
-		$cat['leafnote'] = ($_POST['id_parent'] == 0) ? 0 : 1;
-*/
-			->add('name', TextType::class, [			
-				'constraints' 	=> [
-					new Assert\Length(['max' => 40, 'min' => 1]),
-				],
-				'attr'	=> [
-					'maxlength'	=> 40,
-				],
-			])
-
-			->add('id_parent', ChoiceType::class, [
-				'choices'  					=> $parent_categories,
-				'choice_translation_domain' => false,
-			])
-
-			->add('submit', SubmitType::class)
-
+		$form = $app['form.factory']->createBuilder(category_type::class, $data)
 			->getForm();
 
 		$form->handleRequest($request);
@@ -102,7 +59,7 @@ class category
 			$data = $form->getData();
 
 			$data['cdate'] = gmdate('Y-m-d H:i:s');
-			$data['id_creator'] = ($s_master) ? 0 : $s_id;
+			$data['id_creator'] = 14;//($s_master) ? 0 : $s_id;
 			$data['fullname'] = '';
 			$data['leafnote'] = 0;
 
@@ -116,17 +73,127 @@ class category
 			}
 			$data['fullname'] .= $data['name'];
 
-			return $app->redirect('edit');
+			if ($app['db']->insert($schema . '.categories', $data))
+			{
+				$app->success($app->trans('category_add.success', [
+					'%name%'  => $data['name'],
+				]));
+
+				return $app->redirect($app->path('category_index', [
+					'schema' => $schema,
+				]));				
+			}
+
+			$app->error($app->trans('category_add.error', [
+				'%name%' 	=> $data['name'],
+			]));
 		}
 
 		return $app['twig']->render('category/a_add.html.twig', [
-			'form'					=> $form->createView(),
+			'form'	=> $form->createView(),
 		]);
 	}
 
-	public function edit(Request $request, app $app, string $schema)
+	public function edit(Request $request, app $app, string $schema, int $category)
 	{
+		$data = $app['db']->fetchAssoc('select *
+			from ' . $schema . '.categories 
+			where id = ?', [$category]);
 
+		$form = $app['form.factory']->createBuilder(category_type::class, $data)
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			$data = $form->getData();
+
+			$data['fullname'] = '';
+			$data['leafnote'] = 0;
+
+			if ($data['id_parent'])
+			{
+				$data['leafnote'] = 1;
+				$data['fullname'] = $app['db']->fetchColumn('select name 
+					from ' . $schema . '.categories 
+					where id = ?', [(int) $data['id_parent']]);	
+				$data['fullname'] .= ' - ';	
+			}
+			$data['fullname'] .= $data['name'];
+
+			if ($app['db']->update($schema . '.categories', $data, ['id' => $category]))
+			{
+				$app->success($app->trans('category_edit.success', [
+					'%name%'  => $data['name'],
+				]));
+
+				return $app->redirect($app->path('category_index', [
+					'schema' => $schema,
+				]));				
+			}
+
+			$app->error($app->trans('category_edit.error', [
+				'%name%' 	=> $data['name'],
+			]));
+		}
+
+		return $app['twig']->render('category/a_edit.html.twig', [
+			'form'	=> $form->createView(),
+			'name'	=> $data['name'],
+		]);
+	}
+
+
+	public function del(Request $request, app $app, string $schema, int $category)
+	{
+		$data = $app['db']->fetchAssoc('select *
+			from ' . $schema . '.categories 
+			where id = ?', [$category]);
+
+		$form = $app->form()
+			->add('submit', SubmitType::class)
+			->getForm();
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			$data = $form->getData();
+
+			$data['fullname'] = '';
+			$data['leafnote'] = 0;
+
+			if ($data['id_parent'])
+			{
+				$data['leafnote'] = 1;
+				$data['fullname'] = $app['db']->fetchColumn('select name 
+					from ' . $schema . '.categories 
+					where id = ?', [(int) $data['id_parent']]);	
+				$data['fullname'] .= ' - ';	
+			}
+			$data['fullname'] .= $data['name'];
+
+			if ($app['db']->update($schema . '.categories', $data, ['id' => $category]))
+			{
+				$app->success($app->trans('category_edit.success', [
+					'%name%'  => $data['name'],
+				]));
+
+				return $app->redirect($app->path('category_index', [
+					'schema' => $schema,
+				]));				
+			}
+
+			$app->error($app->trans('category_edit.error', [
+				'%name%' 	=> $data['name'],
+			]));
+		}
+
+		return $app['twig']->render('category/a_del.html.twig', [
+			'form'		=> $form->createView(),
+			'name'		=> $data['name'],
+			'fullname'	=> $data['fullname'],
+		]);
 	}
 }
 

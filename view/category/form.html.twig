@@ -1,0 +1,25 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
+
+{% block inner -%}
+
+{{ p.post() }}
+{{ form_start(form) }}
+{{ form_errors(form) }}
+
+{% block form_fields -%}
+    {{ form_row(form.name, {'label': 'category_add.name', 'attr': {'class': 'input-lg'}}) }}
+    {{ form_row(form.id_parent, {'label': 'category_add.parent', 'attr': {'class': 'input-lg'}}) }}
+{%- endblock form_fields %}
+
+{{ b.cancel(path('category_index', {'schema': schema})) }}
+
+{% block submit %}{% endblock %}
+
+{{ form_end(form) }}
+{{ p.end() }}
+
+{%- endblock inner %}
+

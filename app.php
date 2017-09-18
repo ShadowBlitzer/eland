@@ -121,6 +121,18 @@ $app->extend('form.type.extensions', function($extensions) use ($app) {
     return $extensions;
 });
 
+$app->extend('form.types', function ($types) use ($app) {
+
+	$schema = $app['request_stack']
+		->getCurrentRequest()
+		->attributes->get('_route_params')['schema'];
+
+    $types[] = new form\category_type(
+		$app['db'], $schema, $app['translator']);
+
+    return $types;
+});
+
 
 /*
 $app->extend('monolog', function($monolog, $app) {

@@ -3,10 +3,12 @@
 {% import 'macro/button.html.twig' as b %}
 
 {% block heading -%}
-    {{ 'category_add.title'|trans }}
+    {{ 'category_edit.title'|trans({'%name%': name}) }}
 {%- endblock %}
 
 {% block submit -%}
-    {{ b.add(form.submit) }}
-{% endblock %}
+    {{ b.edit(form.submit) }}
+{%- endblock %}
+
+
 
