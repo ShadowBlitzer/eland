@@ -19,7 +19,7 @@
 
 {% block url_index %}{% endblock url_index %}
 
-{% block content %}
+{% block content -%}
 
 <div class="row-offcanvas row-offcanvas-left">
 <div id="sidebar" class="sidebar-offcanvas">
@@ -37,7 +37,7 @@
 
 {% block flash %}{{ f.flash() }}{% endblock flash %}
 
-{% block top_buttons_container %}
+{% block top_buttons_container -%}
 
 <div class="row">
 <div class="col-md-12 top-buttons">
@@ -51,15 +51,15 @@
 </div>
 </div>
 
-{% endblock top_buttons_container %}
+{%- endblock top_buttons_container %}
 
-{% block top_right_container %}
+{% block top_right_container -%}
 <div class="pull-right">
 {% block top_right %}{% endblock %}
 </div>
-{% endblock top_right_container %}
+{%- endblock top_right_container %}
 
-{% block heading_container %}
+{% block heading_container -%}
 <h1>
 {% block heading_pre %}{% endblock %}
 {% block heading_fa_container %}
@@ -68,18 +68,22 @@
 {% block heading %}{{ menu_el['title']|trans }}{% endblock heading %}
 {% block heading_post %}{% endblock %}
 </h1>
-{% endblock heading_container %}
+{%- endblock heading_container %}
 
-{% block inner %}{% endblock inner %}
+{% block pre_inner %}{% endblock %}
+
+{% block inner %}{% endblock %}
+
+{% block post_inner %}{% endblock %}
 
 </div>
-{% endblock content %}
+{%- endblock content %}
 
-{% block footer_extra %}
+{% block footer_extra -%}
 <p>{{ 'eland.github'|trans({
 	'%link_a_open%': '<a href="https://github.com/eeemarv/eland/issues">',
 	'%link_a_close%': '</a>',
 	'%link_b_open%': '<a href="https://github.com">',
 	'%link_b_close%': '</a>'
 })|raw }}</p>
-{% endblock footer_extra %}
+{%- endblock footer_extra %}

@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Connection as db;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class category_type extends AbstractType
 {	
@@ -30,20 +31,30 @@ class category_type extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $parent_categories = [
-            '-- ' . $this->translator->trans('category_add.main_category') . ' --' => 0,
-        ];
-
-        $rs = $this->db->prepare('select id, name 
-            from ' . $this->schema . '.categories 
-            where leafnote = 0 
-            order by name asc');
-
-        $rs->execute();
-
-        while ($row = $rs->fetch())
+        if ($options['root_selectable'])
         {
-            $parent_categories[$row['name']] = $row['id'];
+            $parent_categories = [
+                '-- ' . $this->translator->trans('category.main_category') . ' --' => 0,
+            ];
+        }
+        else
+        {
+            $parent_categories = [];
+        }
+
+        if ($options['sub_selectable'])
+        {
+            $rs = $this->db->prepare('select id, name 
+                from ' . $this->schema . '.categories 
+                where leafnote = 0 
+                order by name asc');
+
+            $rs->execute();
+
+            while ($row = $rs->fetch())
+            {
+                $parent_categories[$row['name']] = $row['id'];
+            }
         }
 
         $builder->add('name', TextType::class, [			
@@ -61,5 +72,13 @@ class category_type extends AbstractType
             ])
 
             ->add('submit', SubmitType::class);
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'root_selectable'   => true,
+            'sub_selectable'    => true,
+        ]);
     }
 }

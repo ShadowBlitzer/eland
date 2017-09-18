@@ -10,11 +10,11 @@
 {{ form_errors(form) }}
 
 {% block form_fields -%}
-    {{ form_row(form.name, {'label': 'category.name', 'attr': {'class': 'input-lg'}}) }}
-    {{ form_row(form.id_parent, {'label': 'category.parent', 'attr': {'class': 'input-lg'}}) }}
+    {{ form_row(form.name, {'label': 'type_contact.name', 'attr': {'class': 'input-lg'}}) }}
+    {{ form_row(form.abbrev, {'label': 'type_contact.abbreviation', 'attr': {'class': 'input-lg'}}) }}
 {%- endblock form_fields %}
 
-{{ b.cancel(path('category_index', {'schema': schema})) }}
+{{ b.cancel(path('typecontact_index', {'schema': schema})) }}
 
 {% block submit %}{% endblock %}
 

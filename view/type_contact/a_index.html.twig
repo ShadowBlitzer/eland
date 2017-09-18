@@ -1,0 +1,86 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/top_button.html.twig' as tb %}
+{% import 'macro/mini_button.html.twig' as mb %}
+
+{% block top_buttons -%}
+{{ tb.add(path('typecontact_add', {'schema': schema}), 'type_contact_add.title') }}
+{%- endblock top_buttons %}
+
+{% block inner -%}
+
+<div class="panel panel-default printview">
+<div class="table-responsive">
+<table class="table table-striped table-hover table-bordered footable" data-sort="false">
+<thead>
+<tr>
+<th>{{ 'type_contact.abbreviation'|trans }}</th>
+<th data-hide="phone">{{ 'type_contact.name'|trans }}</th>
+<th data-hide="phone">{{ 'delete'|trans }}</th>
+<th data-hide="phone">{{ 'type_contact_index.contact_count'|trans }}</th>
+</tr>
+</thead>
+<tbody>
+
+{% for t in types %}
+
+    {% set protected = t.abbrev in protected_types ? true : false %}
+    <tr>
+    <td>
+    <strong>
+    {% if protected %}
+    {{ t.abbrev }}*
+    {% else %}
+    <a href="{{ path('typecontact_edit', {'schema': schema, 'type_contact': t.id}) }}">
+    {{ t.abbrev }}
+    </a>
+    {% endif %}
+    </strong> 
+    </td>
+
+    <td>
+    {% if protected %}
+    {{ t.name }}*
+    {% else %}
+    <a href="{{ path('typecontact_edit', {'schema': schema, 'type_contact': t.id}) }}">
+    {{ t.name }}
+    </a>
+    {% endif %}
+    </td>
+
+    {% set can_delete = not protected and contact_count_ary[t.id] is not defined %}
+
+    <td>
+    {% if not protected and contact_count_ary[t.id] is not defined %}
+        {{ mb.del(path('typecontact_del', {'schema': schema, 'type_contact': t.id}), 'type_contact_del.btn') }}
+    {% endif %}
+    </td>
+
+    <td>
+    {% if contact_count_ary[t.id] is defined %}
+    <a href="{{ path('contactdetail_index', {'schema': schema, 'type_contact': t.id}) }}">
+    {{ contact_count_ary[t.id] }}
+    {% endif %}
+    </td>
+
+    </tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+</div>
+
+{%- endblock inner %}
+
+{% block post_inner -%}
+
+<p>
+<ul>
+<li>{{ 'type_contact_index.explain_protected'|trans }}</li>
+</ul>
+</p>
+
+{%- endblock post_inner %}
+

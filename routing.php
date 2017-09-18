@@ -334,11 +334,14 @@ $cat->get('/', 'controller\\category::index')
 	->bind('category_index');
 $cat->match('/add/{parent_category}', 'controller\\category::add')
 	->value('parent_category', 0)
+	->assert('parent_category', '\d+')
 	->bind('category_add');
 $cat->match('/{category}/edit', 'controller\\category::edit')
 //	->convert('category', 'service\\xdb::get')
+	->assert('category', '\d+')
 	->bind('category_edit');
 $cat->match('/{category}/del', 'controller\\category::del')
+	->assert('category', '\d+')
 //	->convert('category', 'service\\xdb::get')
 	->bind('category_del');
 
@@ -348,34 +351,38 @@ $a->mount('/categories', $cat);
  * custom fields
  */
 
-$cat = $app['controllers_factory'];
+$cust = $app['controllers_factory'];
 
-$cat->get('/', 'controller\\custom_field::index')
+$cust->get('/', 'controller\\custom_field::index')
 	->bind('custom_field_index');
-$cat->match('/add', 'controller\\custom_field::add')
+$cust->match('/add', 'controller\\custom_field::add')
 	->bind('custom_field_add');
-$cat->match('/{custom_field}/edit', 'controller\\custom_field::edit')
+$cust->match('/{custom_field}/edit', 'controller\\custom_field::edit')
 	->convert('custom_field', 'service\\xdb::get')
 	->bind('custom_field_edit');
 
-$a->mount('/custom-fields', $cat);
+$a->mount('/custom-fields', $cust);
 
 /**
  * Contact types
  */
 
-$contact_type = $app['controllers_factory'];
+$type_contact = $app['controllers_factory'];
 
-$contact_type->get('/', 'controller\\contact_type::index')
-	->bind('contact_type_index');
-$contact_type->match('/add', 'controller\\contact_type::add')
-	->bind('contact_type_add');
-$contact_type->match('/{contact_type}/edit', 'controller\\contact_type::edit')
-	->assert('contact_type', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
-	->convert('contact_type', 'service\\xdb::get')
-	->bind('contact_type_add');
+$type_contact->get('/', 'controller\\type_contact::index')
+	->bind('typecontact_index');
+$type_contact->match('/add', 'controller\\type_contact::add')
+	->bind('typecontact_add');
+$type_contact->match('/{type_contact}/edit', 'controller\\type_contact::edit')
+	->assert('type_contact', '\d+')
+//	->convert('type_contact', 'service\\xdb::get')
+	->bind('typecontact_edit');
+$type_contact->match('/{type_contact}/del', 'controller\\type_contact::del')
+	->assert('type_contact', '\d+')
+//	->convert('type_contact', 'service\\xdb::get')
+	->bind('typecontact_del');
 
-$a->mount('/contact_types', $contact_type);
+$a->mount('/contact-types', $type_contact);
 
 /**
  * Contacts (temp)
@@ -384,13 +391,13 @@ $a->mount('/contact_types', $contact_type);
 $contact_detail = $app['controllers_factory'];
 
 $contact_detail->get('/', 'controller\\contact_detail::index')
-	->bind('contact_detail_index');
+	->bind('contactdetail_index');
 $contact_detail->match('/add', 'controller\\contact_detail::add')
-	->bind('contact_detail_add');
+	->bind('contactdetail_add');
 $contact_detail->match('/{contact_detail}/edit', 'controller\\contact_detail::edit')
 	->assert('contact_detail', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
 	->convert('contact_detail', 'service\\xdb::get')
-	->bind('contact_type_add');
+	->bind('contactdetail_add');
 
 $a->mount('/contact-details', $contact_detail);
 

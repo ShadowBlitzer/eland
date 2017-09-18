@@ -1,10 +1,14 @@
 language: Nederlands
 
 eland:
-  explain: %link_open%eLAND%link_close% web app voor gemeenschapsmunten
+  explain: >
+    %link_open%eLAND%link_close% web app voor gemeenschapsmunten
   github: >
-    Rapporteer bugs in de %link_a_open%Github issue tracker%link_a_close%
-    (Maak eerst een %link_b_open%Github%link_b_close% account aan.)
+    Rapporteer bugs in de 
+    %link_a_open%Github issue tracker%link_a_close%
+    (Maak eerst een 
+    %link_b_open%Github%link_b_close% 
+    account aan.)
   title: eLAND
 
 toggle_navigation: Navigatie
@@ -52,14 +56,17 @@ csv: csv
 generate: Genereer
 
 error:
-  internal_configuration: Interne configuratie fout van de web app.
-  404_page_not_found: Pagina niet gevonden.
+  internal_configuration: >
+    Interne configuratie fout van de web app.
+  404_page_not_found: >
+    Pagina niet gevonden.
 
 hosting_request:
   title: Aanvraag hosting eLAND
   privacy: >
-    Privacy: uw email adres wordt voor geen enkel ander doel
-    gebruikt dan u terug te kunnen contacteren.
+    Privacy: uw email adres wordt voor 
+      geen enkel ander doel
+      gebruikt dan u terug te kunnen contacteren.
   success: >
     <h3>Uw aanvraag voor eLAND hosting is verstuurd.</h3>
     <p>We nemen zo spoedig mogelijk contact met u op.</p>
@@ -105,8 +112,10 @@ transaction_show:
 transaction_edit:
   title: Transactie aanpassen
   explain: >
-    Enkel admins kunnen de omschrijving van een transactie aanpassen.
-    Dit kan nuttig zijn wanneer transacties zichtbaar zijn onder leden en 
+    Enkel admins kunnen de omschrijving van 
+    een transactie aanpassen.
+    Dit kan nuttig zijn wanneer transacties 
+    zichtbaar zijn onder leden en 
     de omschrijving ongepast is.
 
 transaction_add:
@@ -128,19 +137,24 @@ contact:
   title: Contact
   email: Je emailadres
   email_explain: >
-    Er wordt een bevestigingslink naar je gestuurd die je moet aanklikken.
+    Er wordt een bevestigingslink naar je 
+    gestuurd die je moet aanklikken.
   message: Je bericht
   confirm_email:
     info: >
-      Gelieve de link ter bevestiging aan te klikken in de email die we naar u verzonden hebben.
+      Gelieve de link ter bevestiging aan te 
+      klikken in de email die we naar u verzonden hebben.
       Deze link blijft vier uur geldig.
     subject: >
       Bevestig uw bericht in het contactformulier
     top: >
-      Klik deze link aan om uw bericht in het contactformulier te bevestigen.
+      Klik deze link aan om uw bericht in 
+      het contactformulier te bevestigen.
     bottom: >
-      Deze link blijft vier uur geldig. Gelieve deze mail te negeren indien u niet
-      zelf een bericht hebt ingegeven in het contactformulier van %systemname%
+      Deze link blijft vier uur geldig. Gelieve 
+      deze mail te negeren indien u niet
+      zelf een bericht hebt ingegeven in het 
+      contactformulier van %systemname%
 
 notification_index:
   title: Notificaties
@@ -160,14 +174,17 @@ logout:
 
 password_reset:
   explain: >
-    Stuur een link naar je mailbox waarmee je je paswoord opnieuw kan instellen.
+    Stuur een link naar je mailbox waarmee 
+    je je paswoord opnieuw kan instellen.
   submit_btn: Reset paswoord
   mail:
     subject: Reset paswoord
     top: >
-      Gebruik deze link om een nieuw paswoord in te stellen voor je account.
+      Gebruik deze link om een nieuw 
+      paswoord in te stellen voor je account.
     bottom: >
-      Deze link blijft 4 uur geldig. Gelieve deze mail te negeren indien je niet zelf
+      Deze link blijft 4 uur geldig. Gelieve deze 
+      mail te negeren indien je niet zelf
       een paswoord reset hebt aangevraagd.
 
 register:
@@ -177,7 +194,8 @@ register:
   postcode: Postcode
   email: Email
   email_explain: >
-    Er wordt een bevestigingslink naar je gestuurd die je moet aanklikken
+    Er wordt een bevestigingslink naar je 
+    gestuurd die je moet aanklikken
   mobile: GSM
   telephone: telefoon
   accept: Ik heb de privacy en aanvaard deze.
@@ -188,6 +206,11 @@ status:
 
 permission:
   title: Rechten
+
+category:
+  main_category: Hoofdcategorie
+  name: Naam
+  parent: Hoofdcategorie of subcategorie van
 
 category_index:
   title: Categorieën
@@ -202,18 +225,84 @@ category_index:
 
 category_add:
   title: Categorie toevoegen
-  main_category: Hoofdcategorie
-  name: Naam
-  parent: Hoofdcategorie of deelcategorie van
-  success: De categorie %name% is toegevoegd.
-  error: Er trad een fout op bij het opslaan van categorie %name%.
+  success: De categorie "%name%" is toegevoegd.
+  error: >
+    Er trad een fout op bij het opslaan van 
+    categorie "%name%."
 
 category_edit:
   title: 'Categorie aanpassen: "%name%"'
+  explain_sub: >
+    Een subcategorie met één of meerdere
+    vraag en aanbod berichten 
+    kan geen hoofdcategorie worden.
+  explain_root: >
+    Een hoofdcategorie met één of meerdere 
+    subcategorieën kan geen subcategorie 
+    worden.
+  success: >
+    De wijzigingen aan categorie "%name%" werden 
+    met succes opgeslagen.
+  error: >
+    Er trad een fout op bij het opslaan van de 
+    wijzigingen aan categorie "%name%".
 
 category_del:
   title: 'Categorie verwijderen: "%name%"'
-  warning: 'Ben je zeker dat categorie "%name%" verwijderd moet worden?'
+  btn: Categorie verwijderen
+  warning: >
+    Ben je zeker dat categorie "%name%" 
+    verwijderd moet worden?
+  success: >
+    Categorie "%name%" is met succes verwijderd.
+  error: >
+    Er trad een fout op bij het verwijderen 
+    van categorie "%name%".
+
+type_contact:
+  abbreviation: Afkorting
+  name: Naam
+
+type_contact_index:
+  title: Contact types
+  contact_count: Contacten
+  explain_protected: >
+    Beschermde contact types (*)
+    en contact types waarvan 
+    contacten bestaan kunnen niet 
+    verwijderd worden.
+
+type_contact_add:
+  title: Contact type toevoegen
+  success: >
+    Het contact type "%name%" is toegevoegd.
+  error: >
+    Er trad een fout op bij het opslaan van 
+    het contact type "%name%."
+
+type_contact_edit:
+  title: 'Contact type aanpassen: "%name%"'
+  success: >
+    De wijzigingen aan het contact type 
+    "%name%" werden 
+    met succes opgeslagen.
+  error: >
+    Er trad een fout op bij het opslaan van de 
+    wijzigingen aan het contact type
+    "%name%".
+
+type_contact_del:
+  title: 'Contact type verwijderen: "%name%"'
+  btn: Contact type verwijderen
+  warning: >
+    Ben je zeker dat contact type "%name%" 
+    verwijderd moet worden?
+  success: >
+    Contact type "%name%" is met 
+    succes verwijderd.
+  error: >
+    Er trad een fout op bij het verwijderen 
+    van contact type "%name%".
 
 custom_field_index:
   title: Custom velden
@@ -242,7 +331,8 @@ log:
 form:
   etoken:
     expired: > 
-      De maximale duurtijd van het formulier is overschreden.
+      De maximale duurtijd van het formulier 
+      is overschreden.
       Gelieve het opnieuw te proberen. 
     double: >
       Een dubbele invoer van het formulier werd voorkomen.
@@ -280,9 +370,6 @@ mail:
       Deze lijst toont de transacties van de laatste %saldofreqdays% dagen.
     transactions_none: >
       Er zijn geen recente transacties.
-
-
-
 
 index:
   title: eLAND

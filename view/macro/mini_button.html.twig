@@ -8,10 +8,10 @@
     {{ b.button(href, title, 'add', '', 'plus') }}
 {%- endmacro edit %}
 
-{% macro delete(href, title) -%}
+{% macro del(href, title) -%}
     {% import _self as b %}
     {{ b.button(href, title, 'delete', 'danger', 'times') }}
-{%- endmacro delete %}
+{%- endmacro del %}
 
 {% macro list(href, title, fa) -%}
     {% import _self as b %}
