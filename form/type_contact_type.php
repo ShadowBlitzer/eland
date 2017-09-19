@@ -8,27 +8,36 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use validator\unique_in_column;
 
 class type_contact_type extends AbstractType
-{	
-
+{
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', TextType::class, [			
+        $builder->add('abbrev', TextType::class, [			
             'constraints' 	=> [
-                new Assert\Length(['max' => 40, 'min' => 1]),
+                new Assert\NotBlank(),
+                new Assert\Length(['max' => 10, 'min' => 1]),
+                new unique_in_column([
+                    'db'        => $options['db'],
+                    'schema'    => $options['schema'],
+                    'table'     => 'type_contact',
+                    'column'    => 'abbrev',
+                    'ignore'    => $options['ignore'],
+                ]),
             ],
                 'attr'	=> [
-                    'maxlength'	=> 40,
+                    'maxlength'	=> 10,
                 ],
             ])
 
-            ->add('abbrev', TextType::class, [			
+            ->add('name', TextType::class, [			
             'constraints' 	=> [
-                new Assert\Length(['max' => 40, 'min' => 1]),
+                new Assert\NotBlank(),
+                new Assert\Length(['max' => 20, 'min' => 1]),
             ],
                 'attr'	=> [
-                    'maxlength'	=> 40,
+                    'maxlength'	=> 20,
                 ],
             ])    
 
@@ -38,7 +47,10 @@ class type_contact_type extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'blocked_ary' => [],
+            'blocked_ary'   => [],
+            'db'            => null,
+            'schema'        => null,
+            'ignore'        => null,
         ]);
     }
 }

@@ -7,7 +7,9 @@ eland:
     (Maak eerst een %link_b_open%Github%link_b_close% account aan.)
   title: eLAND
 
-uurr: IDIDIDIDI_en
+validation:
+  unique_in_column: The string has to be unique. "%value%" already exists.
+
 
 
 

@@ -59,6 +59,7 @@ class category_type extends AbstractType
 
         $builder->add('name', TextType::class, [			
             'constraints' 	=> [
+                new Assert\NotBlank(),
                 new Assert\Length(['max' => 40, 'min' => 1]),
             ],
                 'attr'	=> [

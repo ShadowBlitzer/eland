@@ -41,6 +41,10 @@ class category
 		]);
 	}
 
+	/*
+	*
+	*/
+
 	public function add(Request $request, app $app, string $schema, int $parent_category)
 	{
 		$data = [
@@ -48,10 +52,8 @@ class category
 			'id_parent'	=> $parent_category,
 		];
 
-		$form = $app['form.factory']->createBuilder(category_type::class, $data)
-			->getForm();
-
-		$form->handleRequest($request);
+		$form = $app->build_form(category_type::class, $data)
+			->handleRequest($request);
 
 		if ($form->isValid())
 		{
@@ -83,7 +85,7 @@ class category
 				]));				
 			}
 
-			$app->error($app->trans('category_add.error', [
+			$app->err($app->trans('category_add.error', [
 				'%name%' 	=> $data['name'],
 			]));
 		}
@@ -111,12 +113,10 @@ class category
 			from ' . $schema . '.categories 
 			where id = ?', [$category]);
 
-		$form = $app['form.factory']->createBuilder(category_type::class, $data, [
+		$form = $app->build_form(category_type::class, $data, [
 			'root_selectable'	=> $count_messages ? false : true,
 			'sub_selectable'	=> $count_subcategories ? false : true,
-		])->getForm();
-
-		$form->handleRequest($request);
+		])->handleRequest($request);
 
 		if ($form->isValid())
 		{
@@ -146,7 +146,7 @@ class category
 				]));				
 			}
 
-			$app->error($app->trans('category_edit.error', [
+			$app->err($app->trans('category_edit.error', [
 				'%name%' 	=> $data['name'],
 			]));
 		}
@@ -187,8 +187,8 @@ class category
 
 		$form = $app->form()
 			->add('submit', SubmitType::class)
-			->getForm();
-		$form->handleRequest($request);
+			->getForm()
+			->handleRequest($request);
 
 		if ($form->isValid())
 		{
@@ -203,7 +203,7 @@ class category
 				]));				
 			}
 
-			$app->error($app->trans('category_del.error', [
+			$app->err($app->trans('category_del.error', [
 				'%name%' 	=> $data['name'],
 			]));
 		}

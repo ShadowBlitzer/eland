@@ -72,7 +72,8 @@
 			"eland\\": "eland/",
 			"repository\\": "repository/",
 			"form\\": "form/",
-			"exception\\": "exception/"
+			"exception\\": "exception/",
+			"validator\\": "validator/"
         }
     }
 }

@@ -11,6 +11,10 @@ eland:
     account aan.)
   title: eLAND
 
+validation:
+  unique_in_column: >
+    De waarde moet uniek zijn. "%value%" bestaat al.
+
 toggle_navigation: Navigatie
 admin_modus: Admin modus
 

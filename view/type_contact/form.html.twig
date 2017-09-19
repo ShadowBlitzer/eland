@@ -10,8 +10,8 @@
 {{ form_errors(form) }}
 
 {% block form_fields -%}
-    {{ form_row(form.name, {'label': 'type_contact.name', 'attr': {'class': 'input-lg'}}) }}
     {{ form_row(form.abbrev, {'label': 'type_contact.abbreviation', 'attr': {'class': 'input-lg'}}) }}
+    {{ form_row(form.name, {'label': 'type_contact.name', 'attr': {'class': 'input-lg'}}) }}
 {%- endblock form_fields %}
 
 {{ b.cancel(path('typecontact_index', {'schema': schema})) }}

@@ -133,7 +133,6 @@ $app->extend('form.types', function ($types) use ($app) {
     return $types;
 });
 
-
 /*
 $app->extend('monolog', function($monolog, $app) {
 

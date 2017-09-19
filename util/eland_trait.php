@@ -28,4 +28,10 @@ trait eland_trait
 	{
 		return $this['session']->getFlashBag()->add('warning', $msg);
 	}
+
+	public function build_form($class, $data = [], $options = [])
+	{
+		return $this['form.factory']->createBuilder($class, $data, $options)
+			->getForm();		
+	}
 }
