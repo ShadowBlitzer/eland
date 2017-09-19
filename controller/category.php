@@ -52,8 +52,11 @@ class category
 			'id_parent'	=> $parent_category,
 		];
 
-		$form = $app->build_form(category_type::class, $data)
-			->handleRequest($request);
+		$form = $app->build_form(category_type::class, $data, [
+			'db'			=> $app['db'],
+			'schema'		=> $schema,
+			'translator'	=> $app['translator'],
+		])->handleRequest($request);
 
 		if ($form->isValid())
 		{
@@ -116,6 +119,9 @@ class category
 		$form = $app->build_form(category_type::class, $data, [
 			'root_selectable'	=> $count_messages ? false : true,
 			'sub_selectable'	=> $count_subcategories ? false : true,
+			'db'				=> $app['db'],
+			'schema'			=> $schema,
+			'translator'		=> $app['translator'],
 		])->handleRequest($request);
 
 		if ($form->isValid())

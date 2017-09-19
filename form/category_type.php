@@ -11,30 +11,63 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Connection as db;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use exception\missing_options_exception;
+use exception\required_argument_exception;
 
 class category_type extends AbstractType
 {	
-    private $db;
-    private $schema;
-    private $translator;
-
-    public function __construct(
-        db $db, 
-        string $schema, 
-        TranslatorInterface $translator
-    )
-	{
-		$this->db = $db;
-        $this->schema = $schema;
-        $this->translator = $translator;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if ($options['db'] === null)
+        {
+            throw new missing_options_exception(
+                sprintf('The option "db" is mandatory 
+                for constraint %s', __CLASS__));
+        }
+
+        if (!$options['db'] instanceof db)
+        {
+            throw new invalid_argument_exception(
+                sprintf('The option "db" must be an instance of 
+                Doctrine\DBAL\Connection for constraint %s', __CLASS__));
+        }
+
+        if ($options['translator'] === null)
+        {
+            throw new missing_options_exception(
+                sprintf('The option "translator" is mandatory 
+                for constraint %s', __CLASS__));
+        }
+
+        if (!$options['translator'] instanceof TranslatorInterface)
+        {
+            throw new invalid_argument_exception(
+                sprintf('The option "translator" must be a valid 
+                string for constraint %s', __CLASS__));
+        }
+
+        if ($options['schema'] === null)
+        {
+            throw new missing_options_exception(
+                sprintf('The option "schema" is mandatory 
+                for constraint %s', __CLASS__));
+        }
+
+        if (!is_string($options['schema']) || $options['schema'] === '')
+        {
+            throw new invalid_argument_exception(
+                sprintf('The option "schema" must be a valid 
+                string for constraint %s', __CLASS__));
+        }
+
         if ($options['root_selectable'])
         {
+            $main_cat_string = '-- ';
+            $main_cat_string .= $options['translator']->trans('category.main_category');
+            $main_cat_string .= ' --';
+
             $parent_categories = [
-                '-- ' . $this->translator->trans('category.main_category') . ' --' => 0,
+                $main_cat_string  => 0,
             ];
         }
         else
@@ -44,8 +77,8 @@ class category_type extends AbstractType
 
         if ($options['sub_selectable'])
         {
-            $rs = $this->db->prepare('select id, name 
-                from ' . $this->schema . '.categories 
+            $rs = $options['db']->prepare('select id, name 
+                from ' . $options['schema'] . '.categories 
                 where leafnote = 0 
                 order by name asc');
 
@@ -78,6 +111,9 @@ class category_type extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'db'                => null,
+            'schema'            => null,
+            'translator'        => null,
             'root_selectable'   => true,
             'sub_selectable'    => true,
         ]);

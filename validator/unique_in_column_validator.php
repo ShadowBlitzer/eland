@@ -27,6 +27,17 @@ class unique_in_column_validator extends ConstraintValidator
             }
         }
 
+        if (isset($constraint->filter)
+            && is_array($constraint->filter)
+            && count($constraint->filter))
+        {
+            foreach ($constraint->filter as $column => $filter_value)
+            {
+                $query .= ' and ' . $column . ' = ?';
+                $params[] = $filter_value;
+            }
+        }
+
         if ($constraint->db->fetchColumn($query, $params))
         {
             $this->context->buildViolation($constraint->message)

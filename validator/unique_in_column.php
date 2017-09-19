@@ -16,6 +16,7 @@ class unique_in_column extends Constraint
     public $column;
     public $schema;
     public $ignore;
+    public $filter;
 
     public function __construct($options = null)
     {
@@ -82,7 +83,14 @@ class unique_in_column extends Constraint
             throw new InvalidArgumentException(
                 sprintf('The option "igore" must be a valid 
                 array when set for constraint %s', __CLASS__));
-        }   
+        }
+
+        if (isset($this->filter) && !is_array($this->filter))
+        {
+            throw new InvalidArgumentException(
+                sprintf('The option "filter" must be a valid 
+                array when set for constraint %s', __CLASS__));
+        }  
     }
 
     public function validatedBy()
