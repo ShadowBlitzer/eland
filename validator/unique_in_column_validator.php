@@ -10,6 +10,11 @@ class unique_in_column_validator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
+        if ($value === '')
+        {
+            return;
+        }
+
         $query = 'select *
             from ' . $constraint->schema . '.' . $constraint->table . ' 
             where ' . $constraint->column . ' =  ?';
