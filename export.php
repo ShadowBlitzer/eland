@@ -176,7 +176,8 @@ foreach ($export_ary as $ex_key => $export)
 		exit;
 	}
 
-	$buttons .= '<form><input type="submit" name="' . $ex_key . '" ';
+	$buttons .= '<form>';
+	$buttons .= '<input type="submit" name="' . $ex_key . '" ';
 	$buttons .= 'value="' . $export['label'] . '" class="btn btn-default margin-bottom">';
 	$buttons .= '<input type="hidden" value="admin" name="r">';
 	$buttons .= '<input type="hidden" value="' . $s_id . '" name="u">';

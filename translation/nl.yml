@@ -319,6 +319,43 @@ config_index:
 
 export:
   title: Export
+  elas:
+    db:
+      title: >
+        eLAS database download (SQL)
+      explain: > 
+        Database in eLAS formaat. Wanneer
+        deze file in eLAS geïmporteerd 
+        dient te worden, verwijder dan de 
+        schema gerelateerde gegevens op regels ~16 - 24 
+        (de "CREATE SCHEMA" & "SET search_path" instructies)
+      btn_label: Download
+    csv:
+      title: eLAS Csv download
+      explain: Csv files zoals in eLAS
+      users:
+        btn_label: Gebruikers
+        column:
+          adate: Activeringsdatum
+      contacts:
+        btn_label: Contactgegevens
+      categories:
+        btn_label: Categorieën
+      messages:
+        btn_label: Vraag en aanbod
+      transactions:
+        btn_label: Transacties
+        column:
+          cdate: Datum
+          from_user: Van
+          real_from: interlets
+          to_user: Aan
+          real_to: interlets
+          amount: Bedrag
+          description: Dienst
+          transid: transactie id
+  
+
 
 auto_min_limit:
   title: Auto min limiet

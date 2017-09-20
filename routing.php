@@ -424,7 +424,7 @@ $a->get('/groups/typeahead', 'controller\\group::typeahead')
 
 $export = $app['controllers_factory'];
 
-$export->get('/', 'controller\\export::index')
+$export->match('/', 'controller\\export::index')
 	->bind('export');
 
 $a->mount('/export', $export);

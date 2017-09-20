@@ -1,7 +1,25 @@
 {% extends 'admin.html.twig' %}
 
-{% block inner %}
+{% import 'macro/panel.html.twig' as p %}
+{% import 'macro/button.html.twig' as b %}
 
+{% block inner -%}
 
-{% endblock inner %}
+{{ p.default() }}
+<h3>{{ 'export.elas.db.title'|trans }}</h3>
+<p>{{ 'export.elas.db.explain'|trans }}</p>
+{{ p.body() }}
+{{ b.buttonform(elas_db_form) }}
+{{ p.end() }}
+
+{{ p.default() }}
+<h3>{{ 'export.elas.csv.title'|trans }}</h3>
+<p>{{ 'export.elas.csv.explain'|trans }}</p>
+{{ p.body() }}
+{% for elas_csv_form in elas_csv_form_views %}
+{{ b.buttonform(elas_csv_form) }}
+<br>
+{% endfor %}
+{{ p.end()}}
+{%- endblock inner %}
 
