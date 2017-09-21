@@ -1,10 +1,13 @@
 language: English
 
 eland:
-  explain: %link_open%eLAND%link_close% web app voor letsgroepen
+  explain: >
+    %link_eland_open%eLAND%link_eland_close% web app voor letsgroepen
   github: >
-    Rapporteer bugs in de %link_a_open%Github issue tracker%link_a_close%
-    (Maak eerst een %link_b_open%Github%link_b_close% account aan.)
+    Rapporteer bugs in de %link_issues_open%
+    Github issue tracker%link_issues_close%
+    (Maak eerst een %link_github_open%Github%link_github_close% 
+    account aan.)
   title: eLAND
 
 validation:

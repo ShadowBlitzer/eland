@@ -2,12 +2,12 @@ language: Nederlands
 
 eland:
   explain: >
-    %link_open%eLAND%link_close% web app voor gemeenschapsmunten
+    %link_eland_open%eLAND%link_eland_close% web app voor gemeenschapsmunten
   github: >
     Rapporteer bugs in de 
-    %link_a_open%Github issue tracker%link_a_close%
+    %link_issues_open%Github issue tracker%link_issues_close%
     (Maak eerst een 
-    %link_b_open%Github%link_b_close% 
+    %link_github_open%Github%link_github_close% 
     account aan.)
   title: eLAND
 
@@ -314,8 +314,42 @@ custom_field_index:
 contact_detail_index:
   title: Contacten
 
-config_index:
+config:
   title: Instellingen
+  balance_limits:
+    menu: Limieten
+    title: Saldo Limieten
+  index:
+    title: ''
+  ads:
+    menu: Vraag en Aanbod
+    title: Vraag en Aanbod
+  naming:
+    menu: Benaming
+    title: Benaming
+  mail_addresses:
+    menu: E-Mail Adressen
+    title: E-Mail Adressen
+  periodic_mail:
+    menu: Overzichtsmail
+    title: Periodieke Overzichtsmail
+  contact_form:
+    menu: Contact
+    title: Contactformulier
+  registration_form:
+    menu: Inschrijving
+    title: Inschrijvingsformulier
+  forum:
+    menu: Forum
+    title: Forum
+  members:
+    menu: Leden
+    title: Leden
+  system:
+    menu: Systeem
+    title: Systeem
+  
+
 
 export:
   title: Export
