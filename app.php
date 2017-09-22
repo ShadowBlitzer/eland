@@ -39,7 +39,8 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 		'debug'		=> getenv('DEBUG'),
 	],
 	'twig.form.templates'	=> [
-		'bootstrap_3_layout.html.twig',
+//		'bootstrap_3_layout.html.twig',
+		'form.html.twig',
 	],
 ]);
 
@@ -114,9 +115,12 @@ $app->register(new Silex\Provider\VarDumperServiceProvider());
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
 
 $app->extend('form.type.extensions', function($extensions) use ($app) {
+
     $extensions[] = new form\form_type_etoken_extension(
 		$app['etoken_manager'], $app['translator']
 	);
+
+	$extensions[] = new form\form_type_extra_var_extension();
 
     return $extensions;
 });

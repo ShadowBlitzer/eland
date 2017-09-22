@@ -5,21 +5,18 @@
 
 {% block inner -%}
 
-{{ p.post() }}
-{{ form_start(form) }}
-{{ form_errors(form) }}
+{{ p.form_start(form) }}
 
 {% block form_fields -%}
-    {{ form_row(form.abbrev, {'label': 'type_contact.abbreviation', 'attr': {'class': 'input-lg'}}) }}
-    {{ form_row(form.name, {'label': 'type_contact.name', 'attr': {'class': 'input-lg'}}) }}
+    {{ form_row(form.abbrev, {'label': 'type_contact.label.abbreviation', 'attr': {'class': 'input-lg'}}) }}
+    {{ form_row(form.name, {'label': 'type_contact.label.name', 'attr': {'class': 'input-lg'}}) }}
 {%- endblock form_fields %}
 
 {{ b.cancel(path('typecontact_index', {'schema': schema})) }}
 
 {% block submit %}{% endblock %}
 
-{{ form_end(form) }}
-{{ p.end() }}
+{{ p.form_end(form) }}
 
 {%- endblock inner %}
 

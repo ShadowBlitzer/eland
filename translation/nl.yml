@@ -2,12 +2,12 @@ language: Nederlands
 
 eland:
   explain: >
-    %link_eland_open%eLAND%link_eland_close% web app voor gemeenschapsmunten
+    %link_eland_open%eLAND%link_close% web app voor gemeenschapsmunten
   github: >
     Rapporteer bugs in de 
-    %link_issues_open%Github issue tracker%link_issues_close%
+    %link_issues_open%Github issue tracker%link_close%
     (Maak eerst een 
-    %link_github_open%Github%link_github_close% 
+    %link_github_open%Github%link_close% 
     account aan.)
   title: eLAND
 
@@ -212,9 +212,11 @@ permission:
   title: Rechten
 
 category:
-  main_category: Hoofdcategorie
-  name: Naam
-  parent: Hoofdcategorie of subcategorie van
+  label:
+    name: Naam
+    parent: Hoofdcategorie of subcategorie van
+  select_option:
+    main_category: Hoofdcategorie
 
 category_index:
   title: Categorieën
@@ -264,8 +266,9 @@ category_del:
     van categorie "%name%".
 
 type_contact:
-  abbreviation: Afkorting
-  name: Naam
+  label:
+    abbreviation: Afkorting
+    name: Naam
 
 type_contact_index:
   title: Contact types
@@ -348,8 +351,6 @@ config:
   system:
     menu: Systeem
     title: Systeem
-  
-
 
 export:
   title: Export
@@ -388,11 +389,46 @@ export:
           amount: Bedrag
           description: Dienst
           transid: transactie id
-  
-
 
 auto_min_limit:
-  title: Auto min limiet
+  title: Automatische minimimum limiet
+  menu: Auto min limiet
+  explain: >
+    Met dit formulier kan een automatische minimum 
+    limiet ingesteld worden. De individuele minimum 
+    limiet van gebruikers zal zo automatisch lager 
+    worden door ontvangen transacties tot de 
+    %link_balance_limits_open%minimum groepslimiet 
+    %link_close% bereikt wordt. De individuele minimum 
+    limiet wordt gewist wanneer de 
+    %link_balance_limits_open%
+    minimum groepslimiet%link_close% bereikt of 
+    onderschreden wordt.
+    Wanneer geen minimum groepslimiet is ingesteld, 
+    dan blijft de individuele minimum limiet telkens 
+    dalen bij elke transactie naar het account.
+  enabled:
+    label: >
+      Schakel de automatische minimum limiet in.
+  exclusive:
+    label: >
+      Exclusief de accounts
+    sub_label: >
+      De automatische minimum limiet is enkel 
+      van toepassing op actieve accounts die rol 
+      van gewone gebruiker hebben (user) en die 
+      niet de status uitstapper hebben. 
+      Hier kunnnen nog verder 
+      individuele accounts uitgesloten worden.
+  trans_percentage:
+    label: >
+      Percentage van ontvangen bedrag
+    sub_label: >
+      Ontvangen transacties laten de 
+      minimum limiet dalen volgens dit percentage.
+  trans_exclusive:
+    label: >
+      Exclusief de accounts van tegenpartijen
 
 mass_transaction:
   title: Massa transactie

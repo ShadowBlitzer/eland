@@ -1,7 +1,35 @@
 {% extends 'admin.html.twig' %}
 
-{% block inner %}
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
 
+{% block inner -%}
 
-{% endblock inner %}
+{{ p.default() }}
+    <p>{{ 'auto_min_limit.explain'
+    |trans({'%link_balance_limits_open%': 
+    '<a href="'~path('config_balance_limits', {'schema': schema})~'">', 
+    '%link_close%': '</a>'})|raw }}</p>
+{{ p.end() }}
+
+{{ p.form_start(form) }}
+
+{{ form_row(form.enabled, {
+    'label': 'auto_min_limit.enabled.label'}) }}
+
+{{ form_row(form.exclusive, {
+    'label': 'auto_min_limit.exclusive.label', 
+    'sub_label': 'auto_min_limit.exclusive.sub_label'}) }}
+
+{{ form_row(form.trans_percentage,{
+    'label': 'auto_min_limit.trans_percentage.label', 
+    'sub_label': 'auto_min_limit.trans_percentage.sub_label'}) }}
+
+{{ form_row(form.trans_exclusive, {
+    'label': 'auto_min_limit.trans_exclusive.label'}) }}
+
+{{ b.edit(form.submit) }}
+{{ p.form_end(form) }}
+
+{%- endblock inner %}
 

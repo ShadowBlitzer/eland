@@ -63,7 +63,7 @@ class category_type extends AbstractType
         if ($options['root_selectable'])
         {
             $main_cat_string = '-- ';
-            $main_cat_string .= $options['translator']->trans('category.main_category');
+            $main_cat_string .= $options['translator']->trans('category.select_option.main_category');
             $main_cat_string .= ' --';
 
             $parent_categories = [

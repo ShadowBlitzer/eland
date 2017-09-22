@@ -1,22 +1,16 @@
 {% extends 'bootstrap_3_layout.html.twig' %}
 
-
-
-
-{% macro start(method, class) %}
-<div class="panel panel-{{ class|default('info') }}">
-<div class="panel-heading">
-
-<form method="{{ method|default('post') }}" class="form-horizontal">
-
-{% endmacro %}
-
-{% macro end(form_token) %}
-<input type="hidden" name="form_token" value="{{ form_token|default('') }}">
-
-</form>
-</div>
-</div>
-{% endmacro %}
-
+{% block form_row -%}
+    <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
+        {{- form_label(form) -}}
+        {%- if sub_label is defined -%}    
+        &nbsp;&nbsp;<span>{{- sub_label|trans -}}</span>
+        {%- endif -%}
+        {{- form_widget(form) -}}     
+        {{- form_errors(form) -}}
+        {%- if explain is defined -%}
+        <span>{{- explain|trans -}}</span>
+        {%- endif -%}       
+    </div>
+{%- endblock form_row %}
 
