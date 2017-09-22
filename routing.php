@@ -156,6 +156,8 @@ $transaction->get('/{transaction}', 'controller\\transacion::show')
 	->bind('transaction_show');
 $transaction->match('/add', 'controller\\transaction::add')
 	->bind('transaction_add');
+$transaction->match('/add-interlets', 'controller\\transaction::add_interlets')
+	->bind('transaction_add_interlets');
 $transaction->match('/{transaction}/edit', 'controller\\transaction::edit')
 	->bind('transaction_edit');
 $transaction->get('/plot-account/{account}/{days}', 'controller\\transaction::plot_account')

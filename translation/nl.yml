@@ -15,6 +15,11 @@ validation:
   unique_in_column: >
     De waarde moet uniek zijn. "%value%" bestaat al.
 
+pagination:
+  items_per_page: 'Per pagina:'
+  count_items_and_pages: >
+    Totaal %total%, Pagina %page% van %pages_total%
+
 toggle_navigation: Navigatie
 admin_modus: Admin modus
 
