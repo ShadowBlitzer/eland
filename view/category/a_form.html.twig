@@ -8,8 +8,8 @@
 {{ p.form_start(form) }}
 
 {% block form_fields -%}
-    {{ form_row(form.name, {'label': 'category.label.name', 'attr': {'class': 'input-lg'}}) }}
-    {{ form_row(form.id_parent, {'label': 'category.label.parent', 'attr': {'class': 'input-lg'}}) }}
+    {{ form_row(form.name, {'label': 'category.label.name'}) }}
+    {{ form_row(form.id_parent, {'label': 'category.label.parent'}) }}
 {%- endblock form_fields %}
 
 {{ b.cancel(path('category_index', {'schema': schema})) }}

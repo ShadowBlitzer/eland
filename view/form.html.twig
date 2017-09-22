@@ -14,3 +14,14 @@
     </div>
 {%- endblock form_row %}
 
+{% block form_widget_simple -%}
+    {% if type is not defined or type not in ['file', 'hidden'] %}
+        {%- set attr = attr|merge({class: (attr.class|default('') ~ ' input-lg')|trim}) -%}
+    {% endif %}
+    {{- parent() -}}
+{%- endblock form_widget_simple %}
+
+{% block choice_widget_collapsed -%}
+    {% set attr = attr|merge({class: (attr.class|default('') ~ ' input-lg')|trim}) %}
+    {{- parent() -}}
+{%- endblock %}

@@ -35,30 +35,32 @@ class auto_min_limit
 		{
 			$data = [
 				'enabled'					=> false,
-				'exclusive'					=> [],
 				'trans_percentage'			=> 100,
+				'exclusive'					=> [],
 				'trans_exclusive'			=> [],
 			];
 		}
 
 		$form = $app->form($data)
 			->add('enabled', CheckboxType::class)
+			->add('trans_percentage', PercentType::class, [
+				'type'			=> 'integer',				
+			])
 			->add('exclusive', CollectionType::class, [
 				'entry_type'	=> TextType::class,
 				'entry_options'	=> [
 					'label'		=> false,
+					'required'	=> false,
 				],
 				'allow_add'		=> true,
 				'allow_delete'	=> true,
 				'prototype'		=> true,
 			])
-			->add('trans_percentage', PercentType::class, [
-				'type'			=> 'integer',				
-			])
 			->add('trans_exclusive', CollectionType::class, [
 				'entry_type'	=> TextType::class,
 				'entry_options'	=> [
 					'label'		=> false,
+					'required'	=> false,
 				],
 				'allow_add'		=> true,
 				'allow_delete'	=> true,
@@ -72,32 +74,16 @@ class auto_min_limit
 		{
 			$data = $form->getData();
 
+			$data['exclusive'] = implode(',', $data['exclusive']);
+			$data['trans_exclusive'] = implode(',', $data['trans_exclusive']);
 
+			$app['xdb']->set('setting', 'autominlimit', $data, $schema);
 
-			if ($data['id_parent'])
-			{
-				$data['leafnote'] = 1;
-				$data['fullname'] = $app['db']->fetchColumn('select name 
-					from ' . $schema . '.categories 
-					where id = ?', [(int) $data['id_parent']]);	
-				$data['fullname'] .= ' - ';	
-			}
-			$data['fullname'] .= $data['name'];
+			$app->success($app->trans('auto_min_limit.success'));
 
-			if ($app['db']->insert($schema . '.categories', $data))
-			{
-				$app->success($app->trans('category_add.success', [
-					'%name%'  => $data['name'],
-				]));
-
-				return $app->redirect($app->path('category_index', [
-					'schema' => $schema,
-				]));				
-			}
-
-			$app->err($app->trans('category_add.error', [
-				'%name%' 	=> $data['name'],
-			]));
+			return $app->redirect($app->path('auto_min_limit', [
+				'schema' => $schema,
+			]));				
 		}
 
 		return $app['twig']->render('auto_min_limit/a_form.html.twig', [

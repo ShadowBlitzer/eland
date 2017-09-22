@@ -61,20 +61,15 @@ class type_contact
 		{
 			$data = $form->getData();
 
-			if ($app['db']->insert($schema . '.type_contact', $data))
-			{
-				$app->success($app->trans('type_contact_add.success', [
-					'%name%'  => $data['name'],
-				]));
+			$app['db']->insert($schema . '.type_contact', $data);
 
-				return $app->redirect($app->path('typecontact_index', [
-					'schema' => $schema,
-				]));				
-			}
-
-			$app->err($app->trans('type_contact_add.error', [
-				'%name%' 	=> $data['name'],
+			$app->success($app->trans('type_contact_add.success', [
+				'%name%'  => $data['name'],
 			]));
+
+			return $app->redirect($app->path('typecontact_index', [
+				'schema' => $schema,
+			]));				
 		}
 
 		return $app['twig']->render('type_contact/a_add.html.twig', [
@@ -106,20 +101,15 @@ class type_contact
 		{
 			$data = $form->getData();
 
-			if ($app['db']->update($schema . '.type_contact', $data, ['id' => $type_contact]))
-			{
-				$app->success($app->trans('type_contact_edit.success', [
-					'%name%'  => $data['name'],
-				]));
+			$app['db']->update($schema . '.type_contact', $data, ['id' => $type_contact]);
 
-				return $app->redirect($app->path('typecontact_index', [
-					'schema' => $schema,
-				]));				
-			}
-
-			$app->err($app->trans('type_contact_edit.error', [
-				'%name%' 	=> $data['name'],
+			$app->success($app->trans('type_contact_edit.success', [
+				'%name%'  => $data['name'],
 			]));
+
+			return $app->redirect($app->path('typecontact_index', [
+				'schema' => $schema,
+			]));				
 		}
 
 		return $app['twig']->render('type_contact/a_edit.html.twig', [
@@ -159,20 +149,15 @@ class type_contact
 
 		if ($form->isValid())
 		{
-			if ($app['db']->delete($schema . '.type_contact', ['id' => $type_contact]))
-			{
-				$app->success($app->trans('type_contact_del.success', [
-					'%name%'  => $data['name'],
-				]));
+			$app['db']->delete($schema . '.type_contact', ['id' => $type_contact]);
 
-				return $app->redirect($app->path('typecontact_index', [
-					'schema' => $schema,
-				]));				
-			}
-
-			$app->err($app->trans('type_contact_del.error', [
-				'%name%' 	=> $data['name'],
+			$app->success($app->trans('type_contact_del.success', [
+				'%name%'  => $data['name'],
 			]));
+
+			return $app->redirect($app->path('typecontact_index', [
+				'schema' => $schema,
+			]));				
 		}
 
 		return $app['twig']->render('type_contact/a_del.html.twig', [

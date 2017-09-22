@@ -77,20 +77,15 @@ class category
 			}
 			$data['fullname'] .= $data['name'];
 
-			if ($app['db']->insert($schema . '.categories', $data))
-			{
-				$app->success($app->trans('category_add.success', [
-					'%name%'  => $data['name'],
-				]));
+			$app['db']->insert($schema . '.categories', $data);
 
-				return $app->redirect($app->path('category_index', [
-					'schema' => $schema,
-				]));				
-			}
-
-			$app->err($app->trans('category_add.error', [
-				'%name%' 	=> $data['name'],
+			$app->success($app->trans('category_add.success', [
+				'%name%'  => $data['name'],
 			]));
+
+			return $app->redirect($app->path('category_index', [
+				'schema' => $schema,
+			]));				
 		}
 
 		return $app['twig']->render('category/a_add.html.twig', [
@@ -141,20 +136,15 @@ class category
 			}
 			$data['fullname'] .= $data['name'];
 
-			if ($app['db']->update($schema . '.categories', $data, ['id' => $category]))
-			{
-				$app->success($app->trans('category_edit.success', [
-					'%name%'  => $data['name'],
-				]));
+			$app['db']->update($schema . '.categories', $data, ['id' => $category]);
 
-				return $app->redirect($app->path('category_index', [
-					'schema' => $schema,
-				]));				
-			}
-
-			$app->err($app->trans('category_edit.error', [
-				'%name%' 	=> $data['name'],
+			$app->success($app->trans('category_edit.success', [
+				'%name%'  => $data['name'],
 			]));
+
+			return $app->redirect($app->path('category_index', [
+				'schema' => $schema,
+			]));				
 		}
 
 		return $app['twig']->render('category/a_edit.html.twig', [
@@ -198,19 +188,14 @@ class category
 
 		if ($form->isValid())
 		{
-			if ($app['db']->delete($schema . '.categories', ['id' => $category]))
-			{
-				$app->success($app->trans('category_del.success', [
-					'%name%'  => $data['name'],
-				]));
+			$app['db']->delete($schema . '.categories', ['id' => $category]);
 
-				return $app->redirect($app->path('category_index', [
-					'schema' => $schema,
-				]));				
-			}
+			$app->success($app->trans('category_del.success', [
+				'%name%'  => $data['name'],
+			]));
 
-			$app->err($app->trans('category_del.error', [
-				'%name%' 	=> $data['name'],
+			return $app->redirect($app->path('category_index', [
+				'schema' => $schema,
 			]));
 		}
 

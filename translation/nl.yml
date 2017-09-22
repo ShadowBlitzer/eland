@@ -232,9 +232,6 @@ category_index:
 category_add:
   title: Categorie toevoegen
   success: De categorie "%name%" is toegevoegd.
-  error: >
-    Er trad een fout op bij het opslaan van 
-    categorie "%name%."
 
 category_edit:
   title: 'Categorie aanpassen: "%name%"'
@@ -249,9 +246,6 @@ category_edit:
   success: >
     De wijzigingen aan categorie "%name%" werden 
     met succes opgeslagen.
-  error: >
-    Er trad een fout op bij het opslaan van de 
-    wijzigingen aan categorie "%name%".
 
 category_del:
   title: 'Categorie verwijderen: "%name%"'
@@ -261,14 +255,10 @@ category_del:
     verwijderd moet worden?
   success: >
     Categorie "%name%" is met succes verwijderd.
-  error: >
-    Er trad een fout op bij het verwijderen 
-    van categorie "%name%".
 
 type_contact:
-  label:
-    abbreviation: Afkorting
-    name: Naam
+  abbreviation: Afkorting
+  name: Naam
 
 type_contact_index:
   title: Contact types
@@ -283,9 +273,6 @@ type_contact_add:
   title: Contact type toevoegen
   success: >
     Het contact type "%name%" is toegevoegd.
-  error: >
-    Er trad een fout op bij het opslaan van 
-    het contact type "%name%."
 
 type_contact_edit:
   title: 'Contact type aanpassen: "%name%"'
@@ -293,10 +280,6 @@ type_contact_edit:
     De wijzigingen aan het contact type 
     "%name%" werden 
     met succes opgeslagen.
-  error: >
-    Er trad een fout op bij het opslaan van de 
-    wijzigingen aan het contact type
-    "%name%".
 
 type_contact_del:
   title: 'Contact type verwijderen: "%name%"'
@@ -307,9 +290,6 @@ type_contact_del:
   success: >
     Contact type "%name%" is met 
     succes verwijderd.
-  error: >
-    Er trad een fout op bij het verwijderen 
-    van contact type "%name%".
 
 custom_field_index:
   title: Custom velden
@@ -410,6 +390,12 @@ auto_min_limit:
   enabled:
     label: >
       Schakel de automatische minimum limiet in.
+  trans_percentage:
+    label: >
+      Percentage van ontvangen bedrag
+    sub_label: >
+      Ontvangen transacties laten de 
+      minimum limiet dalen volgens dit percentage.
   exclusive:
     label: >
       Exclusief de accounts
@@ -420,15 +406,12 @@ auto_min_limit:
       niet de status uitstapper hebben. 
       Hier kunnnen nog verder 
       individuele accounts uitgesloten worden.
-  trans_percentage:
-    label: >
-      Percentage van ontvangen bedrag
-    sub_label: >
-      Ontvangen transacties laten de 
-      minimum limiet dalen volgens dit percentage.
   trans_exclusive:
     label: >
       Exclusief de accounts van tegenpartijen
+  success: >
+    De automatische minimum limiet 
+    instellingen zijn aangepast.
 
 mass_transaction:
   title: Massa transactie

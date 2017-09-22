@@ -82,21 +82,6 @@ class xdb
 		{
 			$this->ip = $_SERVER['REMOTE_ADDR'];
 		}
-
-/*
-		else if (isset($_SERVER['HTTP_CLIENT_IP']))
-		{
-			$this->ip = $_SERVER['HTTP_CLIENT_IP'];
-		}
-		else if (isset($_SERVER['HTTP_X_FORWARDE‌​D_FOR']))
-		{
-			$this->ip = $_SERVER['HTTP_X_FORWARDE‌​D_FOR'];
-		}
-		else
-		{
-			$this->ip = $_SERVER['REMOTE_ADDR'];
-		}
-*/
 	}
 
 	/*
@@ -112,25 +97,8 @@ class xdb
 	 *
 	 */
 
-	public function set(string $agg_type = '', string $eland_id = '', array $data = [], string $agg_schema = '', string $event_time = '')
+	public function set(string $agg_type, string $eland_id, array $data, string $agg_schema, string $event_time = '')
 	{
-		$agg_schema = ($agg_schema) ?: $this->this_group->get_schema();
-
-		if (!strlen($agg_type))
-		{
-			return 'xdb: No agg type set';
-		}
-
-		if (!strlen($eland_id))
-		{
-			return 'xdb: No eland id set';
-		}
-
-		if (!isset($agg_schema) || !$agg_schema)
-		{
-			return 'xdb: No schema set';
-		}
-
 		$agg_id = $agg_schema . '_' . $agg_type . '_' . $eland_id;
 
 		$row = $this->db->fetchAssoc('select data, agg_version
@@ -153,7 +121,7 @@ class xdb
 
 		if (!count($data))
 		{
-			return 'xdb: no (new) data';
+			return;
 		}
 
 		$event = $agg_type . '_' . $ev;
@@ -200,8 +168,6 @@ class xdb
 		catch(Exception $e)
 		{
 			$this->db->rollback();
-			echo 'Database transactie niet gelukt.';
-			$this->monolog->debug('Database transactie niet gelukt. ' . $e->getMessage());
 			throw $e;
 			exit;
 		}
@@ -211,25 +177,8 @@ class xdb
 	 *
 	 */
 
-	public function del(string $agg_type = '', string $eland_id = '', string $agg_schema = '')
+	public function del(string $agg_type, string $eland_id , string $agg_schema)
 	{
-		$agg_schema = ($agg_schema) ?: $this->this_group->get_schema();
-
-		if (!strlen($agg_type))
-		{
-			return 'No agg type set';
-		}
-
-		if (!strlen($eland_id))
-		{
-			return 'No eland id set';
-		}
-
-		if (!isset($agg_schema) || !$agg_schema)
-		{
-			return 'No schema set';
-		}
-
 		$agg_id = $agg_schema . '_' . $agg_type . '_' . $eland_id;
 
 		$agg_version = $this->db->fetchColumn('select agg_version
@@ -278,25 +227,8 @@ class xdb
 	 *
 	 */
 
-	public function get(string $agg_type = '', string $eland_id = '', string $agg_schema = '')
+	public function get(string $agg_type, string $eland_id, string $agg_schema)
 	{
-		$agg_schema = ($agg_schema) ?: $this->this_group->get_schema();
-
-		if (!strlen($agg_type))
-		{
-			return [];
-		}
-
-		if (!strlen($eland_id))
-		{
-			return [];
-		}
-
-		if (!isset($agg_schema) || !$agg_schema)
-		{
-			return [];
-		}
-
 		$agg_id = $agg_schema . '_' . $agg_type . '_' . $eland_id;
 
 		$row = $this->db->fetchAssoc('select * from xdb.aggs where agg_id = ?', [$agg_id]);
@@ -396,7 +328,7 @@ class xdb
 	 *
 	 */
 
-	public function count(string $agg_type = '', string $eland_id = '', string $agg_schema = '')
+	public function count(string $agg_type, string $eland_id, string $agg_schema)
 	{
 		$sql_where = $sql_params = [];
 
@@ -420,32 +352,7 @@ class xdb
 
 		$where = count($sql_where) ? ' where ' . implode(' and ', $sql_where) : '';
 
-		return $this->db->fetchColumn('select count(*) from xdb.aggs' . $where, $sq_params);
-	}
-
-	/**
-	 *
-	 */
-
-	public function free_eid_check(string $eid)
-	{
-		return $this->db->fetchColumn('select eid from xdb.aggs where eid = ?', [$eid]) ? false : true;
-	}
-
-	/*
-	 *
-	 */
-	public function set_by_eid(string $eid, array $data)
-	{
-
-	}
-
-	/**
-	 *
-	 */
-	public function get_by_eid(string $eid)
-	{
-
+		return $this->db->fetchColumn('select count(*) from xdb.aggs' . $where, $sql_params);
 	}
 }
 
