@@ -2,9 +2,12 @@
 
 {% import 'macro/menu.html.twig' as m %}
 
+{#
+  'account_self': {'title': 'account_self.title', 'fa': 'circle-o', 'route': 'account_self'},
+#}
+
 {% set personal_menu_ary = {
   'user_self': {'title': 'user_self.title', 'fa': 'user', 'route': 'user_self'},
-  'account_self': {'title': 'account_self.title', 'fa': 'circle-o', 'route': 'account_self'},
   'ad_self': {'title': 'ad_self.title', 'fa': 'newspaper-o', 'route': 'ad_self'},
   'transaction_self': {'title': 'transaction_self.title', 'fa': 'exchange', 'route': 'transaction_self'},
   'notification_self': {'title': 'notification_self.title', 'fa': 'bell-o', 'route': 'notification_self'},
@@ -13,7 +16,7 @@
 %}
 
 {% set personal_menu_en = [
-  'user_self', 'account_self', 'ad_self', 'transaction_self', 
+  'user_self', 'ad_self', 'transaction_self', 
   'notification_self'
 ]
 

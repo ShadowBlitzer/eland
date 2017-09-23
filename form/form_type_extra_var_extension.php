@@ -15,7 +15,11 @@ class form_type_extra_var_extension extends AbstractTypeExtension
         if (isset($options['explain'])) 
         {
             $view->vars['explain'] = $options['explain'];
-            $view->vars['sub_label'] = $options['sub_label'];
+        }
+
+        if (isset($options['sub_label']))
+        {
+             $view->vars['sub_label'] = $options['sub_label'];           
         }
     }
 

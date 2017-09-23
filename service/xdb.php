@@ -4,8 +4,6 @@ namespace service;
 
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as Redis;
-use Monolog\Logger;
-use service\this_group;
 
 /*
                                 Table "xdb.events"
@@ -64,15 +62,11 @@ class xdb
 	private $user_id = 0;
 	private $db;
 	private $predis;
-	private $monolog;
-	private $this_group;
 
-	public function __construct(db $db, Redis $predis, Logger $monolog, this_group $this_group)
+	public function __construct(db $db, Redis $predis)
 	{
 		$this->db = $db;
 		$this->predis = $predis;
-		$this->monolog = $monolog;
-		$this->this_group = $this_group;
 
 		if (php_sapi_name() == 'cli')
 		{
@@ -87,9 +81,9 @@ class xdb
 	/*
 	 */
 
-	public function set_user(string $user_schema = '', $user_id = 0)
+	public function set_user(string $user_schema, $user_id)
 	{
-		$this->user_schema = ($user_schema) ? $user_schema : $this->this_group->get_schema();
+		$this->user_schema = $user_schema;
 		$this->user_id = ctype_digit((string) $user_id) ? $user_id : 0;
 	}
 
@@ -216,8 +210,6 @@ class xdb
 		catch(Exception $e)
 		{
 			$this->db->rollback();
-			echo 'Database transactie niet gelukt.';
-			$this->monolog->debug('Database transactie niet gelukt. ' . $e->getMessage());
 			throw $e;
 			exit;
 		}

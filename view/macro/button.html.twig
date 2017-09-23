@@ -14,6 +14,10 @@
 {{ form_widget(form_submit, {'label': 'delete', 'attr': {'class': 'btn-danger btn-lg'}}) }}&nbsp;
 {%- endmacro del %}
 
+{% macro show(form_submit) -%}
+{{ form_widget(form_submit, {'label': 'show', 'attr': {'class': 'btn-default btn-lg btn-block'}}) }}
+{%- endmacro show %}
+
 {% macro buttonform(form) %}
 {{ form_start(form) }}
 {{ form_widget(form.submit, {'attr': {'class': 'btn-default btn-lg'}}) }}&nbsp;

@@ -55,48 +55,47 @@ $ad->assert('ad', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 $acc->mount('/ads', $ad);
 
 /*
- * accounts (elas:users)
+ * users
  */
 
-$account = $app['controllers_factory'];
+$user = $app['controllers_factory'];
 
-$account->get('/{account_type}', 'controller\\account::index')
-	->value('account_type', 'active')
-	->bind('account_index');
-$account->get('/self', 'controller\\account::show_self')
-	->bind('account_self');
-$account->get('/{account_type}/{account}', 'controller\\account::show')
-	->convert('account', 'service\\xdb::get')
-	->bind('account_show');
+$user->get('/{user_type}', 'controller\\user::index')
+	->value('user_type', 'active')
+	->bind('user_index');
 
-$account->get('/{account_type}/map', 'controller\\account::map')
-	->value('account_type', 'active')
-	->bind('account_map');
+$user->get('/self', 'controller\\user::show_self')
+	->bind('user_self');
+$user->get('/{user_type}/{user}', 'controller\\user::show')
+//	->convert('user', 'service\\xdb::get')
+	->bind('user_show');
 
-$account->get('/{account_type}/tile', 'controller\\account::tile')
-	->value('account_type', 'active')
-	->bind('account_tile');
-$account->match('/add', 'controller\\acccount::add')
-	->bind('account_add');
-$account->match('/{account}/edit', 'controller\\account::edit')
-	->convert('account', 'service\\xdb::get')
-	->bind('account_edit');
-$account->get('/typeahead/{account_type}', 'controller\\account::typeahead')
-	->bind('account_typeahead_self');
-$account->get('/typeahead/{account}/{account_type}', 'controller\\account::typeahead')
-	->assert('account', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
-	->convert('account', 'service\\xdb::get')
-	->bind('account_typeahead');
-$account->get('/weighted-balance/{account}/{days}', 'controller\\account::weighted_balance')
-	->assert('account', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
-	->assert('days', '/d+')
-	->convert('account', 'service\\xdb::get')
-	->bind('account_typeahead');
+$user->get('/{user_type}/map', 'controller\\user::map')
+	->value('user_type', 'active')
+	->bind('user_map');
 
-$account->assert('account_type', 'active|new|leaving|interlets|pre-active|post-active|all')
-	->assert('account', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
+$user->get('/{user_type}/tile', 'controller\\user::tile')
+	->value('user_type', 'active')
+	->bind('user_tile');
+$user->match('/add', 'controller\\user::add')
+	->bind('user_add');
+$user->match('/{user}/edit', 'controller\\user::edit')
+//	->convert('user', 'service\\xdb::get')
+	->bind('user_edit');
+$user->get('/typeahead/{user_type}', 'controller\\user_typeahead::get')
+	->bind('user_typeahead_self');
+$user->get('/typeahead/{user}', 'controller\\user_typeahead::get_interlets')
+//	->convert('user', 'service\\xdb::get')
+	->bind('user_typeahead_interlets');
+$user->get('/weighted-balance/{user}/{days}', 'controller\\user::weighted_balance')
+	->assert('days', '\d+')
+//	->convert('user', 'service\\xdb::get')
+	->bind('user_typeahead');
 
-$acc->mount('/accounts', $account);
+$user->assert('user_type', 'active|new|leaving|interlets|pre-active|post-active|all')
+	->assert('user', '\d+');
+
+$acc->mount('/users', $user);
 
 /**
  * images
@@ -116,12 +115,13 @@ $img->match('/{ad}/del', 'controller\\acccount::del_form')
 
 $img->assert('img', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
-$acc->mount('/imgs', $img);
+$acc->mount('/images', $img);
 
 /*
  *  users  (elas:login part of users)
  */
 
+ /*
 $user = $app['controllers_factory'];
 
 $user->get('/', 'controller\\user::index')
@@ -140,6 +140,8 @@ $user->match('/{user}/edit', 'controller\\user::edit')
 $user->assert('user', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
 $acc->mount('/users', $user);
+*/
+
 
 /*
  *  transactions
@@ -160,11 +162,11 @@ $transaction->match('/add-interlets', 'controller\\transaction::add_interlets')
 	->bind('transaction_add_interlets');
 $transaction->match('/{transaction}/edit', 'controller\\transaction::edit')
 	->bind('transaction_edit');
-$transaction->get('/plot-account/{account}/{days}', 'controller\\transaction::plot_account')
-	->assert('account', '[a-z0-9][a-z0-9-]{10}[a-z0-9]')
+$transaction->get('/plot-user/{user}/{days}', 'controller\\transaction::plot_user')
+	->assert('user', '\d+')
 	->assert('days', '\d+')
 	->value('days', 365)
-	->bind('transaction_plot_account');
+	->bind('transaction_plot_user');
 $transaction->get('/sum-in/{days}', 'controller\\transaction::sum_in')
 	->assert('days', '\d+')
 	->value('days', 365)
@@ -282,14 +284,14 @@ $ua = $app['controllers_factory'];
 
 $elas = $app['controllers_factory'];
 
-$elas->get('/soap-status/{account}', 'controller\\elas::soap_status')
-	->convert('account', 'service\\xdb::get')
+$elas->get('/soap-status/{user}', 'controller\\elas::soap_status')
+	->convert('user', 'service\\xdb::get')
 	->bind('elas_soap_status');
-$elas->get('/group-login/{account}', 'controller\\elas::soap_status')
-//	->convert('account', 'service\\xdb::get')
+$elas->get('/group-login/{user}', 'controller\\elas::soap_status')
+//	->convert('user', 'service\\xdb::get')
 	->bind('elas_group_login');
 
-$elas->assert('account', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
+$elas->assert('user', '\d+');
 
 $ua->mount('/elas', $elas);
 

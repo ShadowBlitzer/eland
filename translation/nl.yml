@@ -2,7 +2,8 @@ language: Nederlands
 
 eland:
   explain: >
-    %link_eland_open%eLAND%link_close% web app voor gemeenschapsmunten
+    %link_eland_open%eLAND%link_close% web app 
+    voor gemeenschapsmunten
   github: >
     Rapporteer bugs in de 
     %link_issues_open%Github issue tracker%link_close%
@@ -49,6 +50,8 @@ accept: Akkoord
 from: Van
 to: Naar
 from_date: Vanaf
+to_date: Tot en met
+keyword: Trefwoord
 
 and: en
 or: of
@@ -60,6 +63,7 @@ add: Toevoegen
 edit: Aanpassen
 delete: Verwijderen
 filter: Filter
+show: Toon
 filtered: Gefilterd
 csv: csv
 generate: Genereer

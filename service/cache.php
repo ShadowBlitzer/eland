@@ -4,7 +4,6 @@ namespace service;
 
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as Redis;
-use Monolog\Logger;
 
 /*
                           Table "xdb.cache"
@@ -22,13 +21,11 @@ class cache
 {
 	private $db;
 	private $redis;
-	private $monolog;
 
-	public function __construct(db $db, Redis $redis, Logger $monolog)
+	public function __construct(db $db, Redis $redis)
 	{
 		$this->db = $db;
 		$this->redis = $redis;
-		$this->monolog = $monolog;
 	}
 
 	/*
@@ -39,20 +36,6 @@ class cache
 	{
 		$id = trim($id);
 		$data = json_encode($data);
-
-		if (!strlen($id))
-		{
-			$error = 'Cache: no id set for data ' . $data;
-			$this->monolog->error($error);
-			return $error;
-		}
-
-		if (!ctype_digit((string) $expires))
-		{
-			$error = 'Cache: ' . $id . ' -> error Expires is no number: ' . $expires . ', data: ' . $data;
-			$this->monolog->error($error);
-			return $error;
-		}
 
 		$this->redis->set('cache_' . $id, $data);
 
@@ -66,7 +49,7 @@ class cache
 			'data'			=> $data,
 		];
 
-		if ($expires && $expires !== 0)
+		if ($expires !== 0)
 		{
 			$insert['expires'] = gmdate('Y-m-d H:i:s', time() + $expires);
 		}
@@ -90,8 +73,6 @@ class cache
 		{
 			$this->db->rollback();
 			$this->redis->del($id);
-			echo 'Database transactie niet gelukt (cache).';
-			$this->monolog->debug('Database transactie niet gelukt (queue). ' . $data . ' -- ' . $e->getMessage());
 			throw $e;
 			exit;
 		}

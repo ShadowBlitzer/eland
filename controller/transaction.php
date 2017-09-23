@@ -9,25 +9,31 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use form\typeahead_type;
+use form\addon_type;
+use form\datepicker_type;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class transaction
 {
 	public function index(Request $request, app $app, string $schema, string $access)
 	{
-		return $app['twig']->render('transaction/' . $access . '_index.html.twig', []);
-
 		$data = [
 			'andor'	=> 'and',
 		];
 
-		$filter = $app['form.factory']->createNamedBuilder('', FormType::class, $data, [
+		$filter = $app->namedForm('filter', $data, [
 				'csrf_protection'	=> false,
+				'etoken_enabled'	=> false,
 			])
 			->setMethod('GET')
-			->add('q', TextType::class, ['required' => false])
-			->add('fcode', TextType::class, ['required' => false])
-			->add('tcode', TextType::class, ['required' => false])
+			->add('q', addon_type::class, ['required' => false])
+			->add('from_code', typeahead_type::class, [
+				'required' 		=> false,
+			])
+			->add('to_code', typeahead_type::class, [
+				'required' 		=> false,
+			])
 			->add('andor', ChoiceType::class, [
 				'required' 	=> true,
 				'choices'	=> [
@@ -36,12 +42,18 @@ class transaction
 					'nor'	=> 'nor',
 				],
 			])
-			->add('fdate', TextType::class, ['required' => false])
-			->add('tdate', TextType::class, ['required' => false])
-			->add('z', SubmitType::class)
+			->add('from_date', datepicker_type::class, ['required' => false])
+			->add('to_date', datepicker_type::class, ['required' => false])
+			->add('submit', SubmitType::class)
 			->getForm();
 
 		$filter->handleRequest($request);
+
+		if ($filter->isValid())
+		{
+			$data = $filter->getData();
+
+		}
 
 
 		$inline = isset($_GET['inline']) ? true : false;
@@ -58,9 +70,6 @@ class transaction
 		$limit = $_GET['limit'] ?? 25;
 		$start = $_GET['start'] ?? 0;
 
-
-		$s_owner = (!$s_guest && $s_group_self && $s_id == $uid && $uid) ? true : false;
-
 		$params_sql = $where_sql = $where_code_sql = [];
 
 		$params = [
@@ -70,6 +79,7 @@ class transaction
 			'start'		=> $start,
 		];
 
+/*
 		if ($uid)
 		{
 			$user = readuser($uid);
@@ -82,6 +92,7 @@ class transaction
 			$fcode = $tcode = link_user($user, false, false);
 			$andor = 'or';
 		}
+*/
 
 		if ($q)
 		{
@@ -90,13 +101,16 @@ class transaction
 			$params['q'] = $q;
 		}
 
-		if (!$uid)
-		{
+
+//		if (!$uid)
+//		{
 			if ($fcode)
 			{
 				list($fcode) = explode(' ', trim($fcode));
 
-				$fuid = $app['db']->fetchColumn('select id from users where letscode = \'' . $fcode . '\'');
+				$fuid = $app['db']->fetchColumn('select id 
+					from ' . $schema . '.users 
+					where letscode = ?', [$fcode]);
 
 				if ($fuid)
 				{
@@ -117,7 +131,9 @@ class transaction
 			{
 				list($tcode) = explode(' ', trim($tcode));
 
-				$tuid = $app['db']->fetchColumn('select id from users where letscode = \'' . $tcode . '\'');
+				$tuid = $app['db']->fetchColumn('select id 
+					from ' . $schema . '.users 
+					where letscode = ?', [$tcode]);
 
 				if ($tuid)
 				{
@@ -143,13 +159,13 @@ class transaction
 
 				$params['andor'] = $andor;
 			}
-		}
+//		}
 
 		$where_sql = array_merge($where_sql, $where_code_sql);
 
 		if ($fdate)
 		{
-			$fdate_sql = $app['eland.date_format']->reverse($fdate);
+			$fdate_sql = $app['date_format']->reverse($fdate);
 
 			if ($fdate_sql === false)
 			{
@@ -165,11 +181,11 @@ class transaction
 
 		if ($tdate)
 		{
-			$tdate_sql = $app['eland.date_format']->reverse($tdate);
+			$tdate_sql = $app['date_format']->reverse($tdate);
 
 			if ($tdate_sql === false)
 			{
-				$app['eland.alert']->warning('De einddatum is fout geformateerd.');
+				$app->warning('De einddatum is fout geformateerd.');
 			}
 			else
 			{
@@ -188,10 +204,10 @@ class transaction
 			$where_sql = '';
 		}
 
-		$query = 'select t.*
-			from transactions t ' .
+		$query = 'select *
+			from ' . $schema . '.transactions ' .
 			$where_sql . '
-			order by t.' . $orderby . ' ';
+			order by ' . $orderby . ' ';
 		$query .= ($asc) ? 'asc ' : 'desc ';
 		$query .= ' limit ' . $limit . ' offset ' . $start;
 
@@ -230,11 +246,11 @@ class transaction
 		}
 
 		$row_count = $app['db']->fetchColumn('select count(t.*)
-			from transactions t ' . $where_sql, $params_sql);
+			from ' . $schema . '.transactions t ' . $where_sql, $params_sql);
 
 		return $app['twig']->render('transaction/' . $access . '_index.html.twig', [
 			'transactions'	=> $transactions,
-//			'pagination'	=> $app['util.pagination']->get('transactions', $row_count, $params),
+//			'pagination'	=> $app['pagination']->get($row_count, $params),
 			'filter'		=> $filter->createView(),
 		]);
 	}
@@ -358,3 +374,4 @@ class transaction
 	}
 
 }
+

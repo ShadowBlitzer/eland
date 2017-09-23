@@ -25,3 +25,40 @@
     {% set attr = attr|merge({class: (attr.class|default('') ~ ' input-lg')|trim}) %}
     {{- parent() -}}
 {%- endblock %}
+
+{% block addon_widget -%}
+    <div class="input-group">
+        <span class="input-group-addon">
+            {%- if addon_label is defined -%}
+                {{- addon_label|trans -}}
+            {%- endif -%}
+            {%- if addon_fa is defined -%}
+                {%- if addon_label is defined -%}&nbsp;{%- endif -%}
+                <i class="fa fa-{{- addon_fa -}}"></i>
+            {%- endif -%}
+        </span>   
+        {{- block('form_widget_simple') -}}
+    </div>
+{%- endblock addon_widget %}
+
+{% block typeahead_widget -%}
+    {{- block('addon_widget') -}}
+{%- endblock typeahead_widget %}
+
+{% block datepicker_widget -%}
+    {%- set attr = attr|merge({
+        'data-provide': 'datepicker',
+        'data-date-format': 'datepicker_format(schema)',
+        'data-date-default-view-date': '-1y',
+        'data-date-end-date': '0d',
+        'data-date-language': global.request.locale,
+        'data-date-today-highlight': 'true',
+        'data-date-autoclose': 'true',
+        'data-date-immediate-updates': 'true',
+        'data-date-orientation': 'bottom',
+        'placeholder': 'datepicker_placeholder($schema)',
+    }) -%}     
+    {%- set addon_fa = 'calendar' -%}
+    {{- block('addon_widget') -}}
+{%- endblock datepicker_widget %}
+

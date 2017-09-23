@@ -57,6 +57,11 @@ $app->extend('twig', function($twig, $app) {
 		twig\date_format::class => function() use ($app){
 			return new twig\date_format($app['config']);
 		},
+/*
+		twig\pagination::class => function() use ($app){
+			return new twig\pagination();
+		},
+*/
 	]));
 	$twig->addGlobal('s3_img', getenv('S3_IMG'));
 	$twig->addGlobal('s3_doc', getenv('S3_DOC'));
@@ -266,7 +271,7 @@ $app['this_group'] = function($app){
 };
 
 $app['xdb'] = function ($app){
-	return new service\xdb($app['db'], $app['predis'], $app['monolog'], $app['this_group']);
+	return new service\xdb($app['db'], $app['predis']);
 };
 
 $app['ev'] = function ($app){
@@ -290,7 +295,7 @@ $app['sync_elas'] =function ($app){
 };
 
 $app['cache'] = function ($app){
-	return new service\cache($app['db'], $app['predis'], $app['monolog']);
+	return new service\cache($app['db'], $app['predis']);
 };
 
 $app['boot_count'] = function ($app){
@@ -298,7 +303,7 @@ $app['boot_count'] = function ($app){
 };
 
 $app['queue'] = function ($app){
-	return new service\queue($app['db'], $app['monolog']);
+	return new service\queue($app['db']);
 };
 
 $app['date_format'] = function($app){
@@ -319,12 +324,13 @@ $app['distance'] = function ($app){
 };
 
 $app['config'] = function ($app){
-	return new service\config($app['monolog'], $app['db'], $app['xdb'],
-		$app['predis'], $app['this_group']);
+	return new service\config($app['db'], $app['xdb'],
+		$app['predis']);
 };
 
 $app['config_en'] = function ($app){
-	return new service\config($app['monolog'], $app['db'], $app['xdb'],
+	return new service\config($app['monolog'], 
+		$app['db'], $app['xdb'],
 		$app['predis']);
 };
 

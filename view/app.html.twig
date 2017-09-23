@@ -15,7 +15,7 @@
 	'undefined'
 %}
 
-{% block title %}{{ config('systemname', schema) }}{% endblock title %}
+{% block title -%}{{- config('systemname', schema) -}}{%- endblock title %}
 
 {% block url_index %}{% endblock url_index %}
 

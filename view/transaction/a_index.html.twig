@@ -1,11 +1,295 @@
 {% extends 'admin.html.twig' %}
 
 {% import 'macro/asset.html.twig' as a %}
+{% import 'macro/panel.html.twig' as p %}
+{% import 'macro/button.html.twig' as b %}
 
-{% block inner %}
+{% block css -%}
+{% include 'asset/datepicker_css.html.twig' %}
+{%- endblock css %}
 
-<p>ADMIN ACCOUNT INDEX</p>
+{% block js -%}
+{% include 'asset/datepicker_js.html.twig' %}
+{%- endblock js %}
 
-{% endblock inner %}
+{% block inner -%}
+
+{% set placeholder_code = config('template_lets', schema) ? 'letscode' : 'code' %}
+
+{{ p.form_filter_start(filter) }}
+
+<div class="row"><div class="col-sm-12">
+    {{ form_row(filter.q, {
+        'label': false,
+        'addon_fa': 'search',
+        'attr': {
+            'placeholder': 'keyword', 
+        }  
+    }) }}
+</div></div>
+
+<div class="row">
+<div class="col-sm-5">
+    {{ form_row(filter.from_code, {
+        'label': false,
+        'addon_label': 'from',
+        'addon_fa': 'user',
+        'attr': {
+            'placeholder': placeholder_code,
+        }
+    }) }}
+</div>
+<div class="col-sm-2">
+    {{ form_row(filter.andor, {'label': false}) }}
+</div>
+<div class="col-sm-5">
+    {{ form_row(filter.to_code, {
+        'label': false,
+        'addon_label': 'to',
+        'addon_fa': 'user',
+        'attr': {
+            'placeholder': placeholder_code,
+        }
+    }) }}
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-5">
+    {{ form_row(filter.from_date, {
+        'label': false,
+        'addon_label': 'from_date',
+        'addon_fa': 'calendar'
+    }) }}
+</div>
+<div class="col-sm-5">
+    {{ form_row(filter.to_date, {
+        'label': false,
+        'addon_label': 'to_date',
+        'addon_fa': 'calendar'
+    }) }}
+</div>
+<div class="col-sm-2">
+    {{ b.show(filter.submit) }}
+</div>
+</div>
+
+{{ p.form_end(filter) }}
+
+
+<div class="panel panel-primary printview">
+echo '<div class="table-responsive">';
+echo '<table class="table table-bordered table-striped table-hover footable csv transactions" ';
+echo 'data-sort="false">';
+echo '<thead>';
+echo '<tr>';
+
+foreach ($tableheader_ary as $key_orderby => $data)
+{
+	echo '<th';
+	echo (isset($data['data_hide'])) ? ' data-hide="' . $data['data_hide'] . '"' : '';
+	echo '>';
+	if (isset($data['no_sort']))
+	{
+		echo $data['lbl'];
+	}
+	else
+	{
+		$h_params = $params;
+
+		$h_params['orderby'] = $key_orderby;
+		$h_params['asc'] = $data['asc'];
+
+		echo '<a href="' . generate_url('transactions', $h_params) . '">';
+		echo $data['lbl'] . '&nbsp;<i class="fa fa-sort' . $data['indicator'] . '"></i>';
+		echo '</a>';
+	}
+	echo '</th>';
+}
+
+echo '</tr>';
+echo '</thead>';
+echo '<tbody>';
+
+if ($uid)
+{
+	foreach($transactions as $t)
+	{
+		echo '<tr>';
+		echo '<td>';
+		echo aphp('transactions', ['id' => $t['id']], $t['description']);
+		echo '</td>';
+
+		echo '<td>';
+		echo '<span class="text-';
+		echo ($t['id_from'] == $uid) ? 'danger">-' : 'success">+';
+		echo $t['amount'];
+		echo '</span></td>';
+
+		echo '<td>';
+		echo $app['date_format']->get($t['cdate']);
+		echo '</td>';
+
+		echo '<td>';
+
+		if ($t['id_from'] == $uid)
+		{
+			if ($t['real_to'])
+			{
+				echo '<span class="btn btn-default btn-xs"><i class="fa fa-share-alt"></i></span> ';
+
+				if (isset($t['inter_transaction']))
+				{
+					echo link_user($t['inter_transaction']['id_to'],
+						$t['inter_schema'],
+						$s_inter_schema_check[$t['inter_schema']]);
+				}
+				else
+				{
+					echo $t['real_to'];
+				}
+
+				echo '</dd>';
+			}
+			else
+			{
+				echo link_user($t['id_to']);
+			}
+		}
+		else
+		{
+			if ($t['real_from'])
+			{
+				echo '<span class="btn btn-default btn-xs"><i class="fa fa-share-alt"></i></span> ';
+
+				if (isset($t['inter_transaction']))
+				{
+					echo link_user($t['inter_transaction']['id_from'],
+						$t['inter_schema'],
+						$s_inter_schema_check[$t['inter_schema']]);
+				}
+				else
+				{
+					echo $t['real_from'];
+				}
+
+				echo '</dd>';
+			}
+			else
+			{
+				echo link_user($t['id_from']);
+			}
+		}
+
+		echo '</td>';
+		echo '</tr>';
+	}
+}
+else
+{
+	foreach($transactions as $t)
+	{
+		echo '<tr>';
+		echo '<td>';
+		echo aphp('transactions', ['id' => $t['id']], $t['description']);
+		echo '</td>';
+
+		echo '<td>';
+		echo $t['amount'];
+		echo '</td>';
+
+		echo '<td>';
+		echo $app['date_format']->get($t['cdate']);
+		echo '</td>';
+
+		echo '<td>';
+
+		if ($t['real_from'])
+		{
+			echo '<span class="btn btn-default btn-xs"><i class="fa fa-share-alt"></i></span> ';
+
+			if (isset($t['inter_transaction']))
+			{
+				echo link_user($t['inter_transaction']['id_from'],
+					$t['inter_schema'],
+					$s_inter_schema_check[$t['inter_schema']]);
+			}
+			else
+			{
+				echo $t['real_from'];
+			}
+
+			echo '</dd>';
+		}
+		else
+		{
+			echo link_user($t['id_from']);
+		}
+
+		echo '</td>';
+
+		echo '<td>';
+
+		if ($t['real_to'])
+		{
+			echo '<span class="btn btn-default btn-xs"><i class="fa fa-share-alt"></i></span> ';
+
+			if (isset($t['inter_transaction']))
+			{
+				echo link_user($t['inter_transaction']['id_to'],
+					$t['inter_schema'],
+					$s_inter_schema_check[$t['inter_schema']]);
+			}
+			else
+			{
+				echo $t['real_to'];
+			}
+
+			echo '</dd>';
+		}
+		else
+		{
+			echo link_user($t['id_to']);
+		}
+
+		echo '</td>';
+
+		echo '</tr>';
+	}
+}
+echo '</table></div></div>';
+
+$app['pagination']->render();
+
+if ($inline)
+{
+	echo '</div></div>';
+}
+else
+{
+	echo '<ul><small><i>';
+
+	if ($app['config']->get('currencyratio') > 0)
+	{
+		echo '<li>Valuatie: <span class="num">';
+		echo $app['config']->get('currencyratio');
+		echo '</span> ' . $app['config']->get('currency') . ' per uur.</li>';
+	}
+
+	echo '</i></small></ul>';
+
+	include __DIR__ . '/include/footer.php';
+
+
+
+
+
+
+
+
+
+
+
+{%- endblock inner %}
 
 

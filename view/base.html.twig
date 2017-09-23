@@ -1,30 +1,30 @@
 {% import 'macro/asset.html.twig' as a %}
 
 {% spaceless %}
-{% block all %}
+{% block all -%}
 <!DOCTYPE html{% block html %}{% endblock %}>
 <html lang="{{ global.request.locale }}">
 <head>
 
 <title>{% block title %}eLAND{% endblock title %}</title>
 
-{% block common_css %}
+{% block common_css -%}
 {{ a.css('bootstrap/3.3.7/css/bootstrap.min.css', 'maxcdn') }}
 {{ a.css('font-awesome/4.7.0/css/font-awesome.min.css', 'maxcdn') }}
 {{ a.css('jquery-footable/2.0.3/css/footable.core.min.css', 'cdnjs') }}
 {{ a.css('Swiper/3.4.2/css/swiper.min.css', 'cdnjs') }}
 {{ a.css('base.css') }}
 {{ a.css('print.css', 'css', 'print') }}
-{% endblock common_css %}
+{%- endblock common_css %}
 
-{% block css %}
+{% block css -%}
 {#
 {% include 'asset/summernote_css.html.twig' %}
 {% include 'asset/fileupload_css.html.twig' %}
 {% include 'asset/datepicker_css.html.twig' %}
 {% include 'asset/leaflet_css.html.twig' %}
 #}
-{% endblock css %}
+{%- endblock css %}
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -54,8 +54,8 @@
 <a href="{% block url_index %}#{% endblock %}" class="pull-left hidden-xs">
 <div class="logo"></div>
 </a>
-<a href="{{ block('url_index') }}" class="navbar-brand">
-{{ block('title') }}</a>
+<a href="{{- block('url_index') -}}" class="navbar-brand">
+{{- block('title') -}}</a>
 </div>
 
 {% block navbar_menu %}{% endblock %}
@@ -65,21 +65,21 @@
 
 {% block content %}{% endblock %}
 
-{% block footer %}
+{% block footer -%}
 
 <footer class="footer">
 
-<p>{{ 'eland.explain'|trans({'%link_eland_open%': '<a href="http://letsa.net">', '%link_close%': '</a>'})|raw }}</p>
+<p>{{- 'eland.explain'|trans({'%link_eland_open%': '<a href="http://letsa.net">', '%link_close%': '</a>'})|raw -}}</p>
 
 {% block footer_extra %}{% endblock %}
 
 </footer>
 
-{% endblock footer %}
+{%- endblock footer %}
 
 </div>
 
-{% block js_common %}
+{% block js_common -%}
 {{ a.js('jquery-3.2.1.min.js', 'jquery') }}
 {{ a.js('bootstrap/3.3.7/js/bootstrap.min.js', 'maxcdn') }}
 {{ a.js('jquery-footable/2.0.3/js/footable.min.js', 'cdnjs') }}
@@ -88,9 +88,9 @@
 {{ a.js('Swiper/3.4.2/js/swiper.jquery.min.js', 'cdnjs') }}
 {{ a.js('typeahead.js/0.11.1/typeahead.bundle.min.js', 'cdnjs') }}
 {{ a.js('base.js') }}
-{% endblock js_common %}
+{%- endblock js_common %}
 
-{% block js %}
+{% block js -%}
 {#
 {% include 'asset/summernote_js.html.twig' %}
 {% include 'asset/fileupload_js.html.twig' %}
@@ -100,9 +100,9 @@
 {% include 'asset/isotope_js.html.twig' %}
 {% include 'asset/leaflet_js.html.twig' %}
 #}
-{% endblock %}
+{%- endblock %}
 
 </body>
 </html>
-{% endblock all %}
+{%- endblock all %}
 {% endspaceless %}

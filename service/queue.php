@@ -3,7 +3,6 @@
 namespace service;
 
 use Doctrine\DBAL\Connection as db;
-use Monolog\Logger;
 
 /*
                                         Table "xdb.queue"
@@ -23,49 +22,18 @@ Indexes:
 class queue
 {
 	private $db;
-	private $monolog;
 
-	public function __construct(db $db, Logger $monolog)
+	public function __construct(db $db)
 	{
 		$this->db = $db;
-		$this->monolog = $monolog;
 	}
 
 	/*
 	 *
 	 */
 
-	public function set(string $topic, array $data)
+	public function set(string $topic, array $data, int $priority = 1000)
 	{
-		if (!strlen($topic))
-		{
-			$error = 'No queue topic set for data ' . json_encode($data);
-			$this->monolog->error('queue: ' . $error);
-			return $error;
-		}
-
-		if (!$data)
-		{
-			$error = 'Queue topic: ' . $topic . ' -> No data set';
-			$this->monolog->error('queue: ' .  $error);
-			return $error;
-		}
-
-		if (!isset($data['priority']))
-		{
-			$priority = 1000;
-		}
-		else if (!ctype_digit((string) $data['priority']))
-		{
-			$error = 'Queue topic: ' . $topic . ' -> error Priority is no number: ' . $data['priority'];
-			$this->monolog->error('queue error: ' . $error);
-			return $error;
-		}
-		else
-		{
-			$priority = $data['priority'];
-		}
-
 		$insert = [
 			'topic'			=> $topic,
 			'data'			=> json_encode($data),
@@ -79,8 +47,6 @@ class queue
 		catch(Exception $e)
 		{
 			$this->db->rollback();
-			echo 'Database transactie niet gelukt (queue).';
-			$this->monolog->debug('Database transactie niet gelukt (queue). ' . $e->getMessage());
 			throw $e;
 			exit;
 		}
@@ -90,7 +56,7 @@ class queue
 	 *
 	 */
 
-	public function get(array $topic_ary = [])
+	public function get(array $topic_ary)
 	{
 		$sql_where = $sql_params = $sql_types = [];
 
@@ -109,8 +75,8 @@ class queue
 				order by priority desc, id asc
 				limit 1';
 
-		try{
-
+		try
+		{
 			$stmt = $this->db->executeQuery($query, $sql_params, $sql_types);
 
 			if ($row = $stmt->fetch())
@@ -122,7 +88,8 @@ class queue
 					'priority'	=> $row['priority'],
 				];
 
-				error_log('delete: ' . $row['id'] . ' : ' . $this->db->delete('xdb.queue', ['id' => $row['id']]));
+				error_log('delete: ' . $row['id'] . ' : ' . 
+					$this->db->delete('xdb.queue', ['id' => $row['id']]));
 
 				return $return;
 			}
@@ -133,8 +100,6 @@ class queue
 			error_log('err queue: ' . $e->getMessage());
 
 			throw $e;
-
-			return [];
 		}
 
 		return [];
@@ -144,10 +109,8 @@ class queue
 	 *
 	 */
 
-	public function count(string $topic = '')
+	public function count(string $topic)
 	{
-		$topic = trim($topic);
-
 		if ($topic)
 		{
 			return $this->db->fetchColumn('select count(*)

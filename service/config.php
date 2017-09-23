@@ -45,57 +45,44 @@ class config
 		'interlets_en'						=> '1',
 	];
 
-	public function __construct(monolog $monolog, db $db, xdb $xdb,
-		predis $predis, this_group $this_group)
+	public function __construct(db $db, xdb $xdb,
+		predis $predis)
 	{
-		$this->this_group = $this_group;
-		$this->monolog = $monolog;
 		$this->predis = $predis;
 		$this->db = $db;
 		$this->xdb = $xdb;
 	}
 
-	public function set(string $name, string $value)
+	public function set(string $name, string $value, string $schema)
 	{
-		$this->xdb->set('setting', $name, ['value' => $value]);
+		$this->xdb->set('setting', $name, ['value' => $value], $schema);
 
-		$this->predis->del($this->this_group->get_schema() . '_config_' . $name);
+		$this->predis->del($schema . '_config_' . $name);
 
 		// prevent string too long error for eLAS database
-
 		$value = substr($value, 0, 60);
 
-		$this->db->update('config', ['value' => $value, '"default"' => 'f'], ['setting' => $name]);
+		$this->db->update($schema . '.config', [
+			'value' => $value, 
+			'"default"' => 'f',
+			], ['setting' => $name]);
 	}
 
-	public function get(string $key, string $sch = '')
+	public function get(string $key, string $schema)
 	{
-		global $s_guest, $s_master;
-
-		if (!$sch)
+		if (isset($this->local_cache[$schema][$key]))
 		{
-			$sch = $this->this_group->get_schema();
+			return $this->local_cache[$schema][$key];
 		}
 
-		if (!$sch)
-		{
-			$this->monolog->error('no schema set in config:get');
-			return '';
-		}
-
-		if (isset($this->local_cache[$sch][$key]))
-		{
-			return $this->local_cache[$sch][$key];
-		}
-
-		$redis_key = $sch . '_config_' . $key;
+		$redis_key = $schema . '_config_' . $key;
 
 		if ($this->predis->exists($redis_key))
 		{
-			return $this->local_cache[$sch][$key] = $this->predis->get($redis_key);
+			return $this->local_cache[$schema][$key] = $this->predis->get($redis_key);
 		}
 
-		$row = $this->xdb->get('setting', $key, $sch);
+		$row = $this->xdb->get('setting', $key, $schema);
 
 		if ($row)
 		{
@@ -104,17 +91,17 @@ class config
 		else if ($key === 'periodic_mail_block_ary')
 		{
 			$value = '+';
-			$template = $this->get('weekly_mail_template', $sch);
-			$news = $this->get('weekly_mail_show_news', $sch);
-			$forum = $this->get('weekly_mail_show_forum', $sch);
-			$forum_en = $this->get('forum_en', $sch);
-			$docs = $this->get('weekly_mail_show_docs', $sch);
-			$new_users = $this->get('weekly_mail_show_new_users', $sch);
-			$leaving_users = $this->get('weekly_mail_show_leaving_users', $sch);
-			$interlets = $this->get('weekly_mail_show_interlets', $sch);
-			$template_lets = $this->get('template_lets', $sch);
-			$interlets_en = $this->get('interlets_en', $sch);
-			$transactions = $this->get('weekly_mail_show_transactions', $sch);
+			$template = $this->get('weekly_mail_template', $schema);
+			$news = $this->get('weekly_mail_show_news', $schema);
+			$forum = $this->get('weekly_mail_show_forum', $schema);
+			$forum_en = $this->get('forum_en', $schema);
+			$docs = $this->get('weekly_mail_show_docs', $schema);
+			$new_users = $this->get('weekly_mail_show_new_users', $schema);
+			$leaving_users = $this->get('weekly_mail_show_leaving_users', $schema);
+			$interlets = $this->get('weekly_mail_show_interlets', $schema);
+			$template_lets = $this->get('template_lets', $schema);
+			$interlets_en = $this->get('interlets_en', $schema);
+			$transactions = $this->get('weekly_mail_show_transactions', $schema);
 
 			$value .= $template === 'news_top' && $news !== 'none' ? 'news.' . $news . ',' : ''; 
 			$value .= 'messages.recent,';
@@ -133,19 +120,17 @@ class config
 		}
 		else
 		{
-			$value = $this->db->fetchColumn('select value from ' . $sch . '.config where setting = ?', [$key]);
-
-			if (!$s_guest && !$s_master)
-			{
-				$this->xdb->set('setting', $key, ['value' => $value], $sch);
-			}
+			$value = $this->db->fetchColumn('select value 
+				from ' . $schema . '.config 
+				where setting = ?', [$key]);
+			$this->xdb->set('setting', $key, ['value' => $value], $schema);
 		}
 
 		if (isset($value))
 		{
 			$this->predis->set($redis_key, $value);
 			$this->predis->expire($redis_key, 2592000);
-			$this->local_cache[$sch][$key] = $value;
+			$this->local_cache[$schema][$key] = $value;
 		}
 
 		return $value;

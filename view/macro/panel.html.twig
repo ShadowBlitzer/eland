@@ -5,6 +5,13 @@
 	{{ form_errors(form) }}
 {%- endmacro form_start %}
 
+{% macro form_filter_start(form) -%}
+	{% import _self as p %}
+	{{ p.filter() }}
+	{{ form_start(form) }}
+	{{ form_errors(form) }}
+{%- endmacro form_filter_start %}
+
 {% macro form_end(form) -%}
 	{% import _self as p %}
 	{{ form_end(form) }}
@@ -35,7 +42,7 @@
 {%- endmacro filter_indicator %}
 
 {% macro filter() -%}
-	<div class="panel panel-warning" id="filter">
+	<div class="panel panel-info" id="filter">
 	<div class="panel-heading">
 {%- endmacro filter %}
 
@@ -83,49 +90,6 @@
 	</div>
 	</div>
 {%- endmacro %}
-
-{% macro filter(form_item, param, width) -%}
-	<div class="col-sm-{{ width|default('6') }}">
-	{{ form_errors(form_item) }}
-	{{ form_widget(form_item, param) }}
-	</div>
-{%- endmacro filter %}
-
-{% macro filter_addon_fa(form_item, param, width, fa) -%}
-	<div class="col-sm-{{ width|default('6') }}">
-	<div class="input-group margin-bottom">
-	{{ form_errors(form_item) }}
-	<span class="input-group-addon" 
-	id="{{ form_item.vars.id }}_addon">
-	<i class="fa fa-{{ fa }}">
-	</i></span>
-	{{ form_widget(form_item, 
-	param|merge({'attr': {'aria-describedby': 
-	form_item.vars.id ~ '_addon'}})) }}
-	</div>
-	</div>
-{%- endmacro filter_addon_fa %}
-
-{% macro filter_addon_text(form_item, param, width, text) -%}
-	<div class="col-sm-{{ width|default('6') }}">
-	<div class="input-group margin-bottom">
-	{{ form_errors(form_item) }}
-	<span class="input-group-addon" 
-	id="{{ form_item.vars.id }}_addon">
-	{{ text|trans }}</span>
-	{{ form_widget(form_item, 
-	param|merge({'attr': {'aria-describedby': 
-	form_item.vars.id ~ '_addon'}})) }}
-	</div>
-	</div>
-{%- endmacro filter_addon_text %}
-
-{% macro filter_btn(form_item, param, width) -%}
-	<div class="col-sm-{{ width|default('2') }}">
-	{{ form_widget(form_item, 
-	param|merge({'attr': {'class': 'btn-default btn-block'}})) }}
-	</div>
-{%- endmacro filter_btn %}
 
 {% macro filter_datepicker(form_item) -%}
 	<div class="col-sm-5">
