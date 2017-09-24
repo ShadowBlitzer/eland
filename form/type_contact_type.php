@@ -2,6 +2,7 @@
 
 namespace form;
 
+use Doctrine\DBAL\Connection as db;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -12,6 +13,15 @@ use validator\unique_in_column;
 
 class type_contact_type extends AbstractType
 {
+    private $db;
+    private $schema;
+
+    public function __construct(db $db, string $schema)
+    {
+        $this->db = $db;
+        $this->schema = $schema;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('abbrev', TextType::class, [			
@@ -19,8 +29,8 @@ class type_contact_type extends AbstractType
                 new Assert\NotBlank(),
                 new Assert\Length(['max' => 10, 'min' => 1]),
                 new unique_in_column([
-                    'db'        => $options['db'],
-                    'schema'    => $options['schema'],
+                    'db'        => $this->db,
+                    'schema'    => $this->schema,
                     'table'     => 'type_contact',
                     'column'    => 'abbrev',
                     'ignore'    => $options['ignore'],
@@ -48,8 +58,6 @@ class type_contact_type extends AbstractType
     {
         $resolver->setDefaults([
             'blocked_ary'   => [],
-            'db'            => null,
-            'schema'        => null,
             'ignore'        => null,
         ]);
     }

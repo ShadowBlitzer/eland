@@ -3,7 +3,6 @@
 namespace controller;
 
 use util\app;
-use form\type_contact_type;
 use exception\not_empty_exception;
 use exception\protected_exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,10 +50,7 @@ class type_contact
 			'abbrev'	=> '',
 		];
 
-		$form = $app->build_form(
-				type_contact_type::class, 
-				$data, 
-				['schema' => $schema, 'db' => $app['db']])
+		$form = $app->build_form('type_contact_type', $data)
 			->handleRequest($request);
 
 		if ($form->isValid())
@@ -87,15 +83,9 @@ class type_contact
 			from ' . $schema . '.type_contact 
 			where id = ?', [$type_contact]);
 
-		$form = $app->build_form(
-				type_contact_type::class, 
-				$data,
-				[
-					'schema' => $schema, 
-					'db' => $app['db'],
-					'ignore' => ['id' => $type_contact],
-				])
-			->handleRequest($request);
+		$form = $app->build_form('type_contact_type', $data, [
+			'ignore' => ['id' => $type_contact],
+		])->handleRequest($request);
 
 		if ($form->isValid())
 		{

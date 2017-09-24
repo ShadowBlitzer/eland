@@ -83,14 +83,16 @@ $user->match('/{user}/edit', 'controller\\user::edit')
 //	->convert('user', 'service\\xdb::get')
 	->bind('user_edit');
 $user->get('/typeahead/{user_type}', 'controller\\user_typeahead::get')
-	->bind('user_typeahead_self');
-$user->get('/typeahead/{user}', 'controller\\user_typeahead::get_interlets')
+	->bind('user_typeahead');
+$user->get('/typeahead-interlets/{user}', 
+	'controller\\user_typeahead::get_interlets')
 //	->convert('user', 'service\\xdb::get')
 	->bind('user_typeahead_interlets');
-$user->get('/weighted-balance/{user}/{days}', 'controller\\user::weighted_balance')
+$user->get('/weighted-balance/{user}/{days}', 
+	'controller\\user::weighted_balance')
 	->assert('days', '\d+')
 //	->convert('user', 'service\\xdb::get')
-	->bind('user_typeahead');
+	->bind('user_weighted_balance');
 
 $user->assert('user_type', 'active|new|leaving|interlets|pre-active|post-active|all')
 	->assert('user', '\d+');

@@ -22,7 +22,7 @@
 {%- endblock form_widget_simple %}
 
 {% block choice_widget_collapsed -%}
-    {% set attr = attr|merge({class: (attr.class|default('') ~ ' input-lg')|trim}) %}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' input-lg')|trim}) -%}
     {{- parent() -}}
 {%- endblock %}
 
@@ -42,6 +42,7 @@
 {%- endblock addon_widget %}
 
 {% block typeahead_widget -%}
+    {%- set attr = attr|merge(typeahead_attr) -%}
     {{- block('addon_widget') -}}
 {%- endblock typeahead_widget %}
 
@@ -61,4 +62,3 @@
     {%- set addon_fa = 'calendar' -%}
     {{- block('addon_widget') -}}
 {%- endblock datepicker_widget %}
-

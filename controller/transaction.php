@@ -9,9 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use form\typeahead_type;
 use form\addon_type;
-use form\datepicker_type;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class transaction
@@ -29,11 +27,16 @@ class transaction
 			])
 			->setMethod('GET')
 			->add('q', addon_type::class, ['required' => false])
-			->add('from_code', typeahead_type::class, [
+			->add('from_code', 'typeahead_type', [
 				'required' 		=> false,
 			])
-			->add('to_code', typeahead_type::class, [
+			->add('to_code', 'typeahead_type', [
 				'required' 		=> false,
+				'data_path'		=> $app->path('user_typeahead', [
+					'schema' 		=> $schema, 
+					'access' 		=> 'a', 
+					'user_type'		=> 'active',
+				]),
 			])
 			->add('andor', ChoiceType::class, [
 				'required' 	=> true,

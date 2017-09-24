@@ -36,22 +36,6 @@ class typeahead
 		{
 			$rec = [];
 
-/*
-			$rec =  . '|';
-
-			if (strpos($name, 'users_') !== false)
-			{
-				$status = str_replace('users_', '', $name);
-				$out .= './ajax/typeahead_users.php?status=' . $status;
-				$out .= ($group_id) ? '&group_id=' . $group_id : '';
-				$out .= '&' . http_build_query(get_session_query_param());
-			}
-			else
-			{
-				$out .= './ajax/typeahead_' . $name . '.php?';
-				$out .= http_build_query(get_session_query_param());
-			}
-*/
 			$users_en = strpos($name, 'users_') === false ? false : true;
 
 			$rec = [
@@ -77,8 +61,6 @@ class typeahead
 		}
 
 		return htmlspecialchars(json_encode($out));
-
-//		return rtrim($out, '|');
 	}
 
 	/**

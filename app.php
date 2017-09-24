@@ -130,6 +130,15 @@ $app->extend('form.type.extensions', function($extensions) use ($app) {
     return $extensions;
 });
 
+$app->extend('form.types', function ($types) use ($app) {
+	$types[] = 'datepicker_type';
+	$types[] = 'category_type';
+	$types[] = 'type_contact_type';
+	$types[] = 'typeahead_type';
+
+    return $types;
+});
+
 $app['datepicker_transformer'] = function ($app){
 	return new transformer\datepicker_transformer($app['schema']);
 };
@@ -138,11 +147,22 @@ $app['datepicker_type'] = function ($app) {
     return new form\datepicker_type($app['datepicker_transformer']);
 };
 
-$app->extend('form.types', function ($types) use ($app) {
-    $types[] = 'datepicker_type';
+$app['category_type'] = function ($app) {
+	return new form\category_type($app['db'], 
+		$app['translator'], $app['schema']);
+};
 
-    return $types;
-});
+$app['type_contact_type'] = function ($app) {
+	return new form\type_contact_type($app['db'], $app['schema']);
+};
+
+$app['typeahead_type_attr'] = function ($app) {
+	return new form\typeahead_type_attr($app['thumbprint']);
+};
+
+$app['typeahead_type'] = function ($app) {
+	return new form\typeahead_type($app['typeahead_type_attr']);
+};
 
 /*
 $app->extend('monolog', function($monolog, $app) {
@@ -191,6 +211,11 @@ $app->register(new Silex\Provider\SessionServiceProvider(), [
 		'cookie_lifetime'			=> 172800,
 	],
 ]);
+
+$app['thumbprint'] = function ($app){
+	$version = getenv('THUMBPRINT_VERSION') ?: '';
+	return new service\thumbprint($app['predis'], $version);
+};
 
 $app['schema'] = function ($app){
 	$request = $app['request_stack']->getCurrentRequest();
