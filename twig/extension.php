@@ -8,6 +8,9 @@ class extension extends \Twig_Extension
 	{
 		return [
 			new \Twig_Filter('underline', [$this, 'underline']),
+			new \Twig_Filter('date_format', 'twig\\date_format::get', [
+				'needs_context'		=> true,
+			]),
 		];
 	}
 
@@ -15,8 +18,12 @@ class extension extends \Twig_Extension
 	{
 		return [
 			new \Twig_Function('distance_p', 'twig\\distance::format_p'),
-			new \Twig_Function('datepicker_format', 'twig\\date_format::datepicker_format'),
-			new \Twig_Function('datepicker_placeholder', 'twig\\date_format::datepicker_placeholder'),
+			new \Twig_Function('datepicker_format', 'twig\\date_format::datepicker_format', [
+				'needs_context'		=> true,
+			]),
+			new \Twig_Function('datepicker_placeholder', 'twig\\date_format::datepicker_placeholder', [
+				'needs_context'		=> true,
+			]),
 			new \Twig_Function('config', 'twig\\config::get'),
 		];
 	}

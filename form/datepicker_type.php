@@ -9,10 +9,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use form\addon_type;
+use transformer\datepicker_transformer;
 
 class datepicker_type extends AbstractType
 {
+    private $transformer;
+    
+    public function __construct(datepicker_transformer $transformer)
+    {
+        $this->transformer = $transformer;
+    }
 
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->addModelTransformer($this->transformer);
+    }
 /*
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

@@ -3,9 +3,51 @@
 namespace twig;
 
 use service\config;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class date_format
 {
+	private $request;
+	private $schema;
+	private $config;
+
+	private static $format_keys = [
+		'technical',
+		'numerical',
+		'month_abbrev',
+		'month_full',
+		'weekday_included',
+	];
+
+	private static $datepicker_keys = [
+		'%e' => 'd',
+		'%d' => 'dd',
+		'%m' => 'mm',
+		'%Y' => 'yyyy',
+		'%b' => 'M',
+		'%B' => 'MM',
+		'%a' => 'D',
+		'%A' => 'DD',
+	];
+
+
+
+	/*
+	datepicker:
+	placeholder:
+	  %e: d
+	  %d: dd
+	  %m: mm
+	  %Y: jjjj
+	  %b: mnd
+	  %B: maand
+	  %a: (wd)
+	  %A: (weekdag)
+*/
+
+
+
 	private static $formats = [
 		'%Y-%m-%d %H:%M:%S' => [
 			'day'	=> '%Y-%m-%d',
@@ -40,15 +82,20 @@ class date_format
 		['okt', 'oktober'], ['nov', 'november'], ['dec', 'december']
 	];
 
+
+		
+
 	/**
 	 *
 	 */
 
-	public function __construct(config $config)
+	public function __construct(config $config, RequestStack $requestStack)
 	{
 		$this->config = $config;
+		$this->request = $requestStack->getCurrentRequest();
+		$this->schema = $this->request->attributes->get('_route_params')['schema'];
 
-		$this->format = $this->config->get('date_format');
+		$this->format = $this->config->get('date_format', $this->schema);
 
 		if (!$this->format)
 		{
@@ -223,7 +270,7 @@ class date_format
 
 		if (!isset($format_ary))
 		{
-			$format = $this->config->get('date_format');
+			$format = $this->config->get('date_format', $this->schema);
 
 			if (!$format)
 			{

@@ -73,7 +73,8 @@
 			"repository\\": "repository/",
 			"form\\": "form/",
 			"exception\\": "exception/",
-			"validator\\": "validator/"
+			"validator\\": "validator/",
+			"transformer\\": "transformer/"
         }
     }
 }

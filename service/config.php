@@ -3,10 +3,8 @@
 namespace service;
 
 use service\xdb;
-use service\this_group;
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as predis;
-use Monolog\Logger as monolog;
 
 class config
 {
@@ -45,8 +43,7 @@ class config
 		'interlets_en'						=> '1',
 	];
 
-	public function __construct(db $db, xdb $xdb,
-		predis $predis)
+	public function __construct(db $db, xdb $xdb, predis $predis)
 	{
 		$this->predis = $predis;
 		$this->db = $db;

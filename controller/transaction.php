@@ -19,6 +19,7 @@ class transaction
 	public function index(Request $request, app $app, string $schema, string $access)
 	{
 		$data = [
+			'from_date' => '',
 			'andor'	=> 'and',
 		];
 
@@ -42,8 +43,8 @@ class transaction
 					'nor'	=> 'nor',
 				],
 			])
-			->add('from_date', datepicker_type::class, ['required' => false])
-			->add('to_date', datepicker_type::class, ['required' => false])
+			->add('from_date', 'datepicker_type', ['required' => false])
+			->add('to_date', 'datepicker_type', ['required' => false])
 			->add('submit', SubmitType::class)
 			->getForm();
 

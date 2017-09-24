@@ -32,8 +32,6 @@ class mailaddr
 
 	function get($m, string $sending_schema = '')
 	{
-		global $s_admin;
-
 		$sch = ($sending_schema) ?: $this->this_group->get_schema();
 
 		if (!is_array($m))
@@ -84,7 +82,7 @@ class mailaddr
 			}
 			else if (ctype_digit((string) $in))
 			{
-				$status_sql = ($s_admin) ? '' : ' and u.status in (1,2)';
+//				$status_sql = ($s_admin) ? '' : ' and u.status in (1,2)';
 
 				$st = $this->db->prepare('select c.value, u.name, u.letscode
 					from contact c,

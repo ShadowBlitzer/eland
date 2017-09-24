@@ -2509,16 +2509,16 @@
         },
         {
             "name": "spomky-labs/jose",
-            "version": "v6.1.4",
+            "version": "v6.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Spomky-Labs/jose.git",
-                "reference": "fccd7e024b10ad05e9374d745893b13311c4d49a"
+                "reference": "66ab874570f920e97bade761dd1a8a6b2b03ca3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Spomky-Labs/jose/zipball/fccd7e024b10ad05e9374d745893b13311c4d49a",
-                "reference": "fccd7e024b10ad05e9374d745893b13311c4d49a",
+                "url": "https://api.github.com/repos/Spomky-Labs/jose/zipball/66ab874570f920e97bade761dd1a8a6b2b03ca3a",
+                "reference": "66ab874570f920e97bade761dd1a8a6b2b03ca3a",
                 "shasum": ""
             },
             "require": {
@@ -2587,7 +2587,7 @@
                 "jwa",
                 "jwt"
             ],
-            "time": "2017-02-06T18:22:51+00:00"
+            "time": "2017-09-23T19:40:44+00:00"
         },
         {
             "name": "spomky-labs/php-aes-gcm",

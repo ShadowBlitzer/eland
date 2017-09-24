@@ -55,7 +55,7 @@ $app->extend('twig', function($twig, $app) {
 			return new twig\distance($app['db'], $app['cache']);
 		},
 		twig\date_format::class => function() use ($app){
-			return new twig\date_format($app['config']);
+			return new twig\date_format($app['config'], $app['request_stack']);
 		},
 /*
 		twig\pagination::class => function() use ($app){
@@ -130,6 +130,20 @@ $app->extend('form.type.extensions', function($extensions) use ($app) {
     return $extensions;
 });
 
+$app['datepicker_transformer'] = function ($app){
+	return new transformer\datepicker_transformer($app['schema']);
+};
+
+$app['datepicker_type'] = function ($app) {
+    return new form\datepicker_type($app['datepicker_transformer']);
+};
+
+$app->extend('form.types', function ($types) use ($app) {
+    $types[] = 'datepicker_type';
+
+    return $types;
+});
+
 /*
 $app->extend('monolog', function($monolog, $app) {
 
@@ -177,6 +191,11 @@ $app->register(new Silex\Provider\SessionServiceProvider(), [
 		'cookie_lifetime'			=> 172800,
 	],
 ]);
+
+$app['schema'] = function ($app){
+	$request = $app['request_stack']->getCurrentRequest();
+	return $request->attributes->get('_route_params')['schema'];
+};
 
 $app['schemas'] = function ($app){
 	return new service\schemas($app['db']);
@@ -311,11 +330,13 @@ $app['date_format'] = function($app){
 };
 
 $app['mailaddr'] = function ($app){
-	return new service\mailaddr($app['db'], $app['monolog'], $app['this_group'], $app['config']);
+	return new service\mailaddr($app['db'], $app['monolog'], 
+	$app['this_group'], $app['config']);
 };
 
 $app['interlets_groups'] = function ($app){
-	return new service\interlets_groups($app['db'], $app['predis'], $app['groups'],
+	return new service\interlets_groups($app['db'], 
+		$app['predis'], $app['groups'],
 		$app['config'], $app['protocol']);
 };
 
@@ -325,12 +346,6 @@ $app['distance'] = function ($app){
 
 $app['config'] = function ($app){
 	return new service\config($app['db'], $app['xdb'],
-		$app['predis']);
-};
-
-$app['config_en'] = function ($app){
-	return new service\config($app['monolog'], 
-		$app['db'], $app['xdb'],
 		$app['predis']);
 };
 
