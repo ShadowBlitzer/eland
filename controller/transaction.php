@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use form\addon_type;
+use form\typeahead_user_type;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class transaction
@@ -27,16 +28,18 @@ class transaction
 			])
 			->setMethod('GET')
 			->add('q', addon_type::class, ['required' => false])
-			->add('from_code', 'typeahead_type', [
+			->add('from_code', 'typeahead_user_type', [
 				'required' 		=> false,
+				'source_id'		=> 'filter_to_code',
 			])
-			->add('to_code', 'typeahead_type', [
+			->add('to_code', 'typeahead_user_type', [
 				'required' 		=> false,
 				'data_path'		=> $app->path('user_typeahead', [
 					'schema' 		=> $schema, 
 					'access' 		=> 'a', 
 					'user_type'		=> 'active',
 				]),
+				'process'	=> 'user',
 			])
 			->add('andor', ChoiceType::class, [
 				'required' 	=> true,
@@ -57,6 +60,7 @@ class transaction
 		{
 			$data = $filter->getData();
 
+			error_log($data['to_code']);
 		}
 
 

@@ -150,6 +150,11 @@ user_index:
 user_self:
   title: Mijn gegevens
 
+transaction:
+  title_top_btn:
+    add: Transactie toevoegen
+    edit: Omschrijving transactie aanpassen
+
 transaction_index:
   title: Transacties
 

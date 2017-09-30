@@ -14,7 +14,7 @@ span.twitter-typeahead .tt-dropdown-menu {
   float: left;
   min-width: 300px;
   padding: 5px 0;
-  margin: 2px 0 0;
+  margin: 16px 0 0;
   list-style: none;
   font-size: 16px;
   text-align: left;
@@ -28,12 +28,13 @@ span.twitter-typeahead .tt-dropdown-menu {
 }
 span.twitter-typeahead .tt-suggestion {
   display: block;
-  padding: 3px 20px;
+  padding: 8px 20px; /*3px 20px; */
   clear: both;
   font-weight: normal;
   line-height: 1.5;
   color: #333333;
   white-space: nowrap;
+  cursor: pointer;
 }
 span.twitter-typeahead .tt-suggestion.tt-cursor,
 span.twitter-typeahead .tt-suggestion:hover,

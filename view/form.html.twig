@@ -46,6 +46,10 @@
     {{- block('addon_widget') -}}
 {%- endblock typeahead_widget %}
 
+{% block typeahead_user_widget -%}
+    {{- block('typeahead_widget') -}}
+{%- endblock typeahead_user_widget -%}
+
 {% block datepicker_widget -%}
     {%- set attr = attr|merge({
         'data-provide': 'datepicker',

@@ -1,29 +1,29 @@
 {% macro add(href, title) -%}
     {% import _self as b %}
-    {{ b.button(href, title, 'add', 'success', 'plus') }}
+    {{- b.button(href, title, 'add', 'success', 'plus') -}}
 {%- endmacro add %}
 
 {% macro edit(href, title) -%}
     {% import _self as b %}
-    {{ b.button(href, title, 'add', '', 'plus') }}
+    {{- b.button(href, title, 'add', '', 'pencil') -}}
 {%- endmacro edit %}
 
 {% macro delete(href, title) -%}
     {% import _self as b %}
-    {{ b.button(href, title, 'delete', 'danger', 'times') }}
+    {{- b.button(href, title, 'delete', 'danger', 'times') -}}
 {%- endmacro delete %}
 
 {% macro list(href, title, fa) -%}
     {% import _self as b %}
-    {{ b.button(href, title, 'list', 'default', fa) }}
+    {{- b.button(href, title, 'list', 'default', fa) -}}
 {%- endmacro list %}
 
 {% macro button(href, title, label, class, fa) -%}
-    <a href="{{ href }}" 
-    class="btn btn-{{ class }}" 
-    title="{{ title|trans }}">
-    <i class="fa fa-{{ fa }}"></i>
-    <span class="hidden-xs hidden-sm">
-    {{ label|trans }}
+    <a href="{{- href -}}" 
+    class="btn btn-{{- class -}}" 
+    title="{{- title|trans -}}">
+    <i class="fa fa-{{- fa -}}"></i>
+    <span class="hidden-xs hidden-sm">&nbsp;
+    {{- label|trans -}}
     </span></a>
 {%- endmacro button %}

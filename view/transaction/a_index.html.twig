@@ -3,6 +3,7 @@
 {% import 'macro/asset.html.twig' as a %}
 {% import 'macro/panel.html.twig' as p %}
 {% import 'macro/button.html.twig' as b %}
+{% import 'macro/top_button.html.twig' as tb %}
 
 {% block css -%}
 {% include 'asset/datepicker_css.html.twig' %}
@@ -12,77 +13,79 @@
 {% include 'asset/datepicker_js.html.twig' %}
 {%- endblock js %}
 
+{% block top_buttons -%}
+{{- tb.add(path('transaction_add', {'schema': schema, 'access': access}), 'transaction.title_top_btn.add') -}}
+{%- endblock top_buttons -%}
+
 {% block inner -%}
 
 {% set placeholder_code = config('template_lets', schema) ? 'letscode' : 'code' %}
 
-{{ p.form_filter_start(filter) }}
+{{- p.form_filter_start(filter) -}}
 
 <div class="row"><div class="col-sm-12">
-    {{ form_row(filter.q, {
+    {{- form_row(filter.q, {
         'label': false,
         'addon_fa': 'search',
         'attr': {
             'placeholder': 'keyword', 
         }  
-    }) }}
+    }) -}}
 </div></div>
 
 <div class="row">
 <div class="col-sm-5">
-    {{ form_row(filter.from_code, {
+    {{- form_row(filter.from_code, {
         'label': false,
         'addon_label': 'from',
         'addon_fa': 'user',
         'attr': {
             'placeholder': placeholder_code,
         }
-    }) }}
+    }) -}}
 </div>
 <div class="col-sm-2">
-    {{ form_row(filter.andor, {'label': false}) }}
+    {{- form_row(filter.andor, {'label': false}) -}}
 </div>
 <div class="col-sm-5">
-    {{ form_row(filter.to_code, {
+    {{- form_row(filter.to_code, {
         'label': false,
         'addon_label': 'to',
         'addon_fa': 'user',
         'attr': {
             'placeholder': placeholder_code,
         }
-    }) }}
+    }) -}}
 </div>
 </div>
 
 <div class="row">
 <div class="col-sm-5">
-    {{ form_row(filter.from_date, {
+    {{- form_row(filter.from_date, {
         'label': false,
         'addon_label': 'from_date',
         'addon_fa': 'calendar'
-    }) }}
+    }) -}}
 </div>
 <div class="col-sm-5">
-    {{ form_row(filter.to_date, {
+    {{- form_row(filter.to_date, {
         'label': false,
         'addon_label': 'to_date',
         'addon_fa': 'calendar'
-    }) }}
+    }) -}}
 </div>
 <div class="col-sm-2">
-    {{ b.show(filter.submit) }}
+    {{- b.show(filter.submit) -}}
 </div>
 </div>
 
-{{ p.form_end(filter) }}
-
+{{- p.form_end(filter) -}}
 
 <div class="panel panel-primary printview">
-echo '<div class="table-responsive">';
-echo '<table class="table table-bordered table-striped table-hover footable csv transactions" ';
-echo 'data-sort="false">';
-echo '<thead>';
-echo '<tr>';
+<div class="table-responsive">
+<table class="table table-bordered table-striped table-hover footable csv transactions" data-sort="false">
+<thead>
+<tr>
 
 foreach ($tableheader_ary as $key_orderby => $data)
 {

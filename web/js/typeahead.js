@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 	var $data_text_inputs = $('form input[type="text"][data-typeahead]');
 	var $data_options = $('form select option[data-typeahead]');
-	var $target_text_inputs = $('form input[type="text"][data-typeahead-source]');
+	var $target_text_inputs = $('form input[type="text"][data-typeahead-source-id]');
 
 	var session_params = $('body').data('session-params');
 
@@ -17,6 +17,7 @@ $(document).ready(function(){
 		var data = $(this).data('typeahead');
 
 		var newuserdays = $(this).data('newuserdays');
+		var process = $(this).data('typeahead-process');
 
 		var treshold = now - (newuserdays * 86400);
 
@@ -24,39 +25,27 @@ $(document).ready(function(){
 
 			var rec = data[i];
 
-			if (rec.hasOwnProperty('params')){
-				var params = rec.params;
-			} else {
-				params = [];
-			}
+			if (process === 'user'){
 
-			$.extend(params, session_params);
-
-			if (rec['name'] == 'users'){
+				console.log('process is user');
 
 				var filter = function(users){
 					return $.map(users, function(user){
 
 						var cl = (user.a && (user.a > treshold)) ? ' class="success"' : '';
 
-						switch (user.s){
-							case 0:
+						switch (user.t){
+							case 'post-active':
 								cl = ' class="inactive"';
 								break;
-							case 2:
+							case 'leaving':
 								cl = ' class="danger"';
 								break;
-							case 3:
-								cl = ' class="success"';
-								break;
-							case 5:
-								cl = ' class="warning"';
-								break;
-							case 6:
+							case 'pre-active':
 								cl = ' class="info"';
 								break;
-							case 7:
-								cl = ' class="extern"';
+							case 'interlets':
+								cl = ' class="warning"';
 								break;
 							default:
 								break;
@@ -68,7 +57,7 @@ $(document).ready(function(){
 							letscode: user.c,
 							name: user.n,
 							class: cl,
-							leaving: user.s === 2,
+							type: user.t,
 							postcode: user.p,
 							balance: user.b,
 							min: user.min,
@@ -101,9 +90,9 @@ $(document).ready(function(){
 
 			datasets.push({data: new Bloodhound({
 					prefetch: {
-						url: './ajax/typeahead_' + rec.name + '.php?' + $.param(params),
+						url: rec.path,
 						cache: true,
-						ttl: 2592000000,	//30 days
+						ttl: 604800000,	//1 week
 						thumbprint: rec.thumbprint,
 						filter: filter
 					},
@@ -156,7 +145,7 @@ $(document).ready(function(){
 
 	$target_text_inputs.each(function(){
 
-		args = $data_sources.filter('#' + $(this).data('typeahead-source')).data('typeahead-args');
+		args = $data_sources.filter('#' + $(this).data('typeahead-source-id')).data('typeahead-args');
 
 		if (args){
 
@@ -164,7 +153,7 @@ $(document).ready(function(){
 
 		} else {
 
-			$select = $('form select').filter('#' + $(this).data('typeahead-source'));
+			$select = $('form select').filter('#' + $(this).data('typeahead-source-id'));
 
 			$source = $select.find('option:selected');
 

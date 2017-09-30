@@ -94,7 +94,7 @@ $user->get('/weighted-balance/{user}/{days}',
 //	->convert('user', 'service\\xdb::get')
 	->bind('user_weighted_balance');
 
-$user->assert('user_type', 'active|new|leaving|interlets|pre-active|post-active|all')
+$user->assert('user_type', 'active|new|leaving|direct|interlets|pre-active|post-active|all')
 	->assert('user', '\d+');
 
 $acc->mount('/users', $user);

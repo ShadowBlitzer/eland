@@ -21,6 +21,7 @@ class cache
 {
 	private $db;
 	private $redis;
+	private $prefix = 'cache_';
 
 	public function __construct(db $db, Redis $redis)
 	{
@@ -34,14 +35,15 @@ class cache
 
 	public function set(string $id, array $data = [], int $expires = 0)
 	{
-		$id = trim($id);
 		$data = json_encode($data);
 
-		$this->redis->set('cache_' . $id, $data);
+		$key = $this->prefix . $id;
+
+		$this->redis->set($key, $data);
 
 		if ($expires)
 		{
-			$this->redis->expire('cache_' . $id, $expires);
+			$this->redis->expire($key, $expires);
 		}
 
 		$insert = [
@@ -72,7 +74,7 @@ class cache
 		catch(Exception $e)
 		{
 			$this->db->rollback();
-			$this->redis->del($id);
+			$this->redis->del($key);
 			throw $e;
 			exit;
 		}
@@ -84,14 +86,9 @@ class cache
 
 	public function get(string $id, bool $decoded = true)
 	{
-		if (!$id)
-		{
-			return $decoded ? [] : '';
-		}
+		$key = $this->prefix . $id;
 
-		$id = trim($id);
-
-		$data = $this->redis->get('cache_' . $id);
+		$data = $this->redis->get($key);
 
 		if ($data)
 		{
@@ -111,11 +108,11 @@ class cache
 
 		if ($row)
 		{
-			$this->redis->set('cache_' . $id, $row['data']);
+			$this->redis->set($key, $row['data']);
 
 			if (isset($data['expires']))
 			{
-				$this->redis->expireat('cache_' . $id, $data['expires']);
+				$this->redis->expireat($key, $data['expires']);
 			}
 
 			if (!$decoded)
@@ -133,32 +130,20 @@ class cache
 	 *
 	 */
 
-	public function exists(string $id)
+	public function exists(string $id): bool 
 	{
-		$id = trim($id);
+		$key = $this->prefix . $id;
 
-		if (!$id)
-		{
-			return false;
-		}
-
-		if ($this->redis->exists('cache_' . $id))
+		if ($this->redis->exists($key))
 		{
 			return true;
 		}
 
-		$exists = $this->db->fetchColumn('select id
+		return $this->db->fetchColumn('select id
 			from xdb.cache
 			where id = ?
 				and (expires < timezone(\'utc\'::text, now())
-					or expires is null)', [$id]);
-
-		if ($exists)
-		{
-			return true;
-		}
-
-		return false;
+					or expires is null)', [$id]) ? true : false;
 	}
 
 	/**

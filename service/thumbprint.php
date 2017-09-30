@@ -8,7 +8,7 @@ class thumbprint
 {
 	private $redis;
 	private $version;
-	private $ttl = 5184000; // 60 days
+	private $ttl = 604800; // 1 week
 	private $redis_prefix = 'thumbprint_';
 
 	public function __construct(Redis $redis, string $version)
@@ -37,7 +37,14 @@ class thumbprint
 	public function set(string $key, string $content)
 	{
 		$redis_key = $this->redis_prefix . $key;
-		$this->redis->set($redis_key, crc32($content));	
+		$thumbprint = (string) crc32($content);
+
+		$log = $thumbprint === $this->redis->get($redis_key) ? '' : '(new) ';
+
+		error_log('set ' . $log .  'thumbprint for ' . 
+			$key .' : ' . $thumbprint);
+
+		$this->redis->set($redis_key, $thumbprint);	
 		$this->redis->expire($redis_key, $this->ttl);		
 	}
 

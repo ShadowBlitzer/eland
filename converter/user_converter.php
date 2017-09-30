@@ -1,30 +1,32 @@
 <?php
 
-namespace service;
+namespace converter;
 
 use service\xdb;
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as redis;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class user_cache
+class user_converter
 {
 	private $db;
 	private $xdb;
 	private $redis;
 	private $ttl = 2592000;
-	private $local;
 	private $redis_prefix = 'user_cache_';
+	private $schema;
 	private $is_cli;
 
-	public function __construct(db $db, xdb $xdb, redis $redis)
+	public function __construct(db $db, xdb $xdb, redis $redis, string $schema)
 	{
 		$this->db = $db;
 		$this->xdb = $xdb;
 		$this->redis = $redis;
+		$this->schema = $schema;
 		$this->is_cli = php_sapi_name() === 'cli' ? true : false;
 	}
 
-	public function clear(int $id, string $schema)
+	public function clear(int $id)
 	{
 		$redis_key = $this->redis_prefix . $schema . '_' . $id;
 
@@ -34,7 +36,7 @@ class user_cache
 		return;
 	}
 
-	public function get(int $id, string $schema)
+	public function get(int $id)
 	{
 		$redis_key = $this->redis_prefix . $schema . '_' . $id;
 
@@ -72,9 +74,7 @@ class user_cache
 
 	private function read_from_db(int $id, string $schema)
 	{
-		$user = $this->db->fetchAssoc('select * 
-			from ' . $schema . '.users 
-			where id = ?', [$id]);
+		$user = $this->db->fetchAssoc('select * from ' . $schema . '.users where id = ?', [$id]);
 
 		if (!is_array($user))
 		{
@@ -97,15 +97,9 @@ class user_cache
 			$this->xdb->set('user_fullname_access', $id, ['fullname_access' => 'admin'], $schema);
 		}
 
-		if ($user['accountrole'] === 'interlets'
-			&& $user['letscode'] !== '' 
-			&& $user['letscode'] !== null)
+		if ($user['accountrole'] === 'interlets')
 		{
-			$interlets_group = $app['db']->fetchAssoc('select *
-				from ' . $schema . '.letsgroups
-				where letcode = ?', [$user['letscode']]);
 
-			
 		}
 
 		return $user;

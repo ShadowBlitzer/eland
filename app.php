@@ -135,6 +135,7 @@ $app->extend('form.types', function ($types) use ($app) {
 	$types[] = 'category_type';
 	$types[] = 'type_contact_type';
 	$types[] = 'typeahead_type';
+	$types[] = 'typeahead_user_type';
 
     return $types;
 });
@@ -162,6 +163,14 @@ $app['typeahead_type_attr'] = function ($app) {
 
 $app['typeahead_type'] = function ($app) {
 	return new form\typeahead_type($app['typeahead_type_attr']);
+};
+
+$app['typeahead_user_transformer'] = function ($app) {
+	return new transformer\typeahead_user_transformer($app['db'], $app['schema']);
+};
+
+$app['typeahead_user_type'] = function ($app) {
+	return new form\typeahead_user_type($app['typeahead_user_transformer']);
 };
 
 /*
@@ -283,16 +292,7 @@ $app['s3'] = function($app){
 	return new service\s3($app['s3_img'], $app['s3_doc']);
 };
 
-/*
- * The locale must be installed in the OS for formatting dates.
- */
-
-setlocale(LC_TIME, 'nl_NL.UTF-8');
-date_default_timezone_set((getenv('TIMEZONE')) ?: 'Europe/Brussels');
-
-$app['typeahead'] = function($app){
-	return new service\typeahead($app['predis'], $app['monolog']);
-};
+/**/
 
 $app['pagination'] = function (){
 	return new service\pagination();
@@ -379,7 +379,7 @@ $app['type_template'] = function ($app){
 };
 
 $app['user_cache'] = function ($app){
-	return new service\user_cache($app['db'], $app['xdb'], $app['predis'], $app['this_group']);
+	return new service\user_cache($app['db'], $app['xdb'], $app['predis']);
 };
 
 $app['token'] = function ($app){
@@ -423,7 +423,7 @@ $app['task.get_elas_interlets_domains'] = function ($app){
 };
 
 $app['task.fetch_elas_interlets'] = function ($app){
-	return new task\fetch_elas_interlets($app['cache'], $app['predis'], $app['typeahead'],
+	return new task\fetch_elas_interlets($app['cache'], $app['predis'], $app['thumbprint'],
 		$app['monolog'], $app['schedule']);
 };
 
@@ -474,7 +474,7 @@ $app['schema_task.saldo'] = function ($app){
 
 $app['schema_task.interlets_fetch'] = function ($app){
 	return new schema_task\interlets_fetch($app['predis'], $app['db'], $app['xdb'], $app['cache'],
-		$app['typeahead'], $app['monolog'],
+		$app['thumbprint'], $app['monolog'],
 		$app['schedule'], $app['groups'], $app['this_group']);
 };
 
@@ -490,43 +490,7 @@ $app['queue.geocode'] = function ($app){
 	return new queue\geocode($app['db'], $app['cache'], $app['queue'], $app['monolog'], $app['user_cache']);
 };
 
-/**
- * functions
- */
-
-function link_user($user, string $sch = '', $link = true, $show_id = false, $field = '')
-{
-	global $rootpath, $app;
-
-	if (!$user)
-	{
-		return '<i>** leeg **</i>';
-	}
-
-	$user = is_array($user) ? $user : $app['user_cache']->get($user, $sch);
-	$str = ($field) ? $user[$field] : $user['letscode'] . ' ' . $user['name'];
-	$str = ($str == '' || $str == ' ') ? '<i>** leeg **</i>' : htmlspecialchars($str, ENT_QUOTES);
-
-	if ($link)
-	{
-		$param = ['id' => $user['id']];
-		if (is_string($link))
-		{
-			$param['link'] = $link;
-		}
-		$out = '<a href="';
-		$out .= generate_url('users', $param, $sch);
-		$out .= '">' . $str . '</a>';
-	}
-	else
-	{
-		$out = $str;
-	}
-
-	$out .= ($show_id) ? ' (id: ' . $user['id'] . ')' : '';
-
-	return $out;
-}
+//
 
 $app->register(new Knp\Provider\ConsoleServiceProvider());
 
@@ -543,6 +507,7 @@ $app['uuid'] = function($app){
 };
 
 $app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $request, $code) use ($app) {
+
     if ($app['debug'])
     {
         return;
@@ -562,6 +527,28 @@ $app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $r
     return new Response($message);
 });
 
+// converters
+
+$app['user_converter'] = function ($app){
+	return converter\user_converter($app['db'], $app['xdb'], $app['redis'], $app['schema']);
+};
+
+$app['type_contact_converter'] = function ($app){
+	return converter\type_contact_converter($app['db'], $app['schema']);
+};
+
+$app['category_converter'] = function ($app){
+	return converter\category_converter($app['db'], $app['schema']);
+};
+
+$app['news_converter'] = function ($app){
+	return converter\news_converter($app['db'], $app['xdb'], $app['schema']);
+};
+
+$app['forum_converter'] = function ($app){
+	return converter\forum_converter($app['xdb'], $app['schema']);
+};
+ 
 require __DIR__ . '/routing.php';
 
 return $app;
