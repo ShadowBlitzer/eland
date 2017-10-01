@@ -11,32 +11,8 @@ class category
 {
 	public function index(Request $request, app $app, string $schema)
 	{
-		$categories = $app['db']->fetchAll('select * 
-			from ' . $schema . '.categories 
-			order by fullname');
-		
-		$child_count_ary = [];
-		
-		foreach ($categories as $cat)
-		{
-			if (!isset($child_count_ary[$cat['id_parent']]))
-			{
-				$child_count_ary[$cat['id_parent']] = 0;
-			}
-		
-			$child_count_ary[$cat['id_parent']]++;
-		}
-
-		foreach ($categories as &$cat)
-		{
-			if (isset($child_count_ary[$cat['id']]))
-			{
-				$cat['child_count'] = $child_count_ary[$cat['id']];
-			}
-		}
-
 		return $app['twig']->render('category/a_index.html.twig', [
-			'categories'	=> $categories,
+			'categories'	=> $app['category_repository']->get_all($schema),
 		]);
 	}
 
@@ -93,21 +69,19 @@ class category
 	*
 	*/
 
-	public function edit(Request $request, app $app, string $schema, int $category)
+	public function edit(Request $request, app $app, string $schema, array $category)
 	{
+		$id = $category['id'];
+
 		$count_messages = $app['db']->fetchColumn('select count(*)
 			from ' . $schema . '.messages
-			where id_category = ?', [$category]);
+			where id_category = ?', [$id]);
 
 		$count_subcategories = $app['db']->fetchColumn('select count(*)
 			from ' . $schema . '.categories 
-			where id_parent = ?', [$category]);
+			where id_parent = ?', [$id]);
 
-		$data = $app['db']->fetchAssoc('select *
-			from ' . $schema . '.categories 
-			where id = ?', [$category]);
-
-		$form = $app->build_form('category_type', $data, [
+		$form = $app->build_form('category_type', $category, [
 			'root_selectable'	=> $count_messages ? false : true,
 			'sub_selectable'	=> $count_subcategories ? false : true,
 		])->handleRequest($request);
@@ -129,7 +103,7 @@ class category
 			}
 			$data['fullname'] .= $data['name'];
 
-			$app['db']->update($schema . '.categories', $data, ['id' => $category]);
+			$app['db']->update($schema . '.categories', $data, ['id' => $id]);
 
 			$app->success($app->trans('category_edit.success', [
 				'%name%'  => $data['name'],
@@ -142,7 +116,7 @@ class category
 
 		return $app['twig']->render('category/a_edit.html.twig', [
 			'form'	=> $form->createView(),
-			'name'	=> $data['name'],
+			'name'	=> $category['name'],
 		]);
 	}
 
@@ -150,11 +124,13 @@ class category
 	*
 	*/
 
-	public function del(Request $request, app $app, string $schema, int $category)
+	public function del(Request $request, app $app, string $schema, array $category)
 	{
+		$id = $category['id'];
+
 		if ($app['db']->fetchColumn('select count(*)
 			from ' . $schema . '.categories 
-			where id_parent = ?', [$category]))
+			where id_parent = ?', [$id]))
 		{
 			throw new not_empty_exception(
 				'The category has subcategories and thus cannot be deleted.'
@@ -163,16 +139,12 @@ class category
 
 		if ($app['db']->fetchColumn('select count(*)
 			from ' . $schema . '.messages
-			where id_category = ?', [$category]))
+			where id_category = ?', [$id]))
 		{
 			throw new not_empty_exception(
 				'The category has messages and thus cannot be deleted.'
 			);			
 		}
-
-		$data = $app['db']->fetchAssoc('select *
-			from ' . $schema . '.categories 
-			where id = ?', [$category]);
 
 		$form = $app->form()
 			->add('submit', SubmitType::class)
@@ -181,10 +153,10 @@ class category
 
 		if ($form->isValid())
 		{
-			$app['db']->delete($schema . '.categories', ['id' => $category]);
+			$app['db']->delete($schema . '.categories', ['id' => $id]);
 
 			$app->success($app->trans('category_del.success', [
-				'%name%'  => $data['name'],
+				'%name%'  => $category['name'],
 			]));
 
 			return $app->redirect($app->path('category_index', [
@@ -194,8 +166,8 @@ class category
 
 		return $app['twig']->render('category/a_del.html.twig', [
 			'form'		=> $form->createView(),
-			'name'		=> $data['name'],
-			'fullname'	=> $data['fullname'],
+			'name'		=> $category['name'],
+			'fullname'	=> $category['fullname'],
 		]);
 	}
 }

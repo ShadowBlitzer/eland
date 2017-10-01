@@ -343,12 +343,12 @@ $cat->match('/add/{parent_category}', 'controller\\category::add')
 	->assert('parent_category', '\d+')
 	->bind('category_add');
 $cat->match('/{category}/edit', 'controller\\category::edit')
-//	->convert('category', 'service\\xdb::get')
+	->convert('category', 'category_converter:get')
 	->assert('category', '\d+')
 	->bind('category_edit');
 $cat->match('/{category}/del', 'controller\\category::del')
 	->assert('category', '\d+')
-//	->convert('category', 'service\\xdb::get')
+	->convert('category', 'category_converter:get')
 	->bind('category_del');
 
 $a->mount('/categories', $cat);
@@ -381,11 +381,11 @@ $type_contact->match('/add', 'controller\\type_contact::add')
 	->bind('typecontact_add');
 $type_contact->match('/{type_contact}/edit', 'controller\\type_contact::edit')
 	->assert('type_contact', '\d+')
-//	->convert('type_contact', 'service\\xdb::get')
+	->convert('type_contact', 'type_contact_converter:get')
 	->bind('typecontact_edit');
 $type_contact->match('/{type_contact}/del', 'controller\\type_contact::del')
 	->assert('type_contact', '\d+')
-//	->convert('type_contact', 'service\\xdb::get')
+	->convert('type_contact', 'type_contact_converter:get')
 	->bind('typecontact_del');
 
 $a->mount('/contact-types', $type_contact);

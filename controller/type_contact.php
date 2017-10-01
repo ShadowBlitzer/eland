@@ -33,9 +33,9 @@ class type_contact
 		}
 
 		return $app['twig']->render('type_contact/a_index.html.twig', [
-			'types'				=> $types,
+			'types'					=> $types,
 			'contact_count_ary' 	=> $contact_count_ary,
-			'protected_types'	=> $this->protected_types,
+			'protected_types'		=> $this->protected_types,
 		]);
 	}
 

@@ -3,13 +3,13 @@
 namespace converter;
 
 use Symfony\Component\HttpFoundation\Request;
-use repository\category_repository;
+use repository\type_contact_repository;
 
-class category_converter
+class type_contact_converter
 {
 	private $repo;
 
-	public function __construct(category_repository $repo)
+	public function __construct(type_contact_repository $repo)
 	{
 		$this->repo = $repo;
 	}

@@ -527,26 +527,44 @@ $app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $r
     return new Response($message);
 });
 
-// converters
+// repositories
 
-$app['user_converter'] = function ($app){
-	return converter\user_converter($app['db'], $app['xdb'], $app['redis'], $app['schema']);
+$app['user_repository'] = function ($app){
+	return new repository\user_repository($app['db'], $app['xdb'], $app['redis']);
+};
+
+$app['type_contact_repository'] = function ($app){
+	return new repository\type_contact_repository($app['db']);
+};
+
+$app['category_repository'] = function ($app){
+	return new repository\category_repository($app['db']);
+};
+
+$app['news_repository'] = function ($app){
+	return new repository\news_repository($app['db'], $app['xdb']);
+};
+
+$app['forum_repository'] = function ($app){
+	return new repository\forum_repository($app['xdb']);
+};
+
+// converters 
+
+$app['category_converter'] = function ($app){
+	return new converter\category_converter($app['category_repository']);
 };
 
 $app['type_contact_converter'] = function ($app){
-	return converter\type_contact_converter($app['db'], $app['schema']);
+	return new converter\type_contact_converter($app['type_contact_repository']);
 };
 
-$app['category_converter'] = function ($app){
-	return converter\category_converter($app['db'], $app['schema']);
+$app['user_converter'] = function ($app){
+	return new converter\user_converter($app['user_repository']);
 };
 
-$app['news_converter'] = function ($app){
-	return converter\news_converter($app['db'], $app['xdb'], $app['schema']);
-};
-
-$app['forum_converter'] = function ($app){
-	return converter\forum_converter($app['xdb'], $app['schema']);
+$app['news_covert'] = function ($app){
+	return new converter\news_converter($app['news_repository']);
 };
  
 require __DIR__ . '/routing.php';

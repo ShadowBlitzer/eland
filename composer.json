@@ -60,7 +60,6 @@
 			"schema_task\\": "schema_task/",
 			"util\\": "util/",
 			"controller\\": "controller/",
-			"converter\\": "converter/",
 			"provider\\": "provider/",
 			"security\\": "security/",
 			"twig\\": "twig/",
