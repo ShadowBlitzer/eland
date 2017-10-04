@@ -14,19 +14,17 @@ class user_repository
 	private $redis;
 	private $ttl = 2592000;
 	private $redis_prefix = 'user_cache_';
-	private $schema;
 	private $is_cli;
 
-	public function __construct(db $db, xdb $xdb, redis $redis, string $schema)
+	public function __construct(db $db, xdb $xdb, redis $redis)
 	{
 		$this->db = $db;
 		$this->xdb = $xdb;
 		$this->redis = $redis;
-		$this->schema = $schema;
 		$this->is_cli = php_sapi_name() === 'cli' ? true : false;
 	}
 
-	public function clear(int $id)
+	public function clear(int $id, string $schema)
 	{
 		$redis_key = $this->redis_prefix . $schema . '_' . $id;
 
@@ -36,7 +34,7 @@ class user_repository
 		return;
 	}
 
-	public function get(int $id)
+	public function get(int $id, string $schema):array
 	{
 		$redis_key = $this->redis_prefix . $schema . '_' . $id;
 

@@ -4,8 +4,9 @@ namespace repository;
 
 use Doctrine\DBAL\Connection as db;
 use service\pagination;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class transaction
+class transaction_repository
 {
 	private $db;
 
@@ -21,10 +22,16 @@ class transaction
 
 	public function get(int $id, string $schema):array
 	{
-		$transaction = $this->db->fetchAssoc('select *
+		$data = $this->db->fetchAssoc('select *
 			from ' . $schema . '.transactions
 			where id = ?', [$id]);
 
-		return $transaction;
+		if (!$data)
+		{
+			throw new NotFoundHttpException(sprintf('Transaction %d does not exist in %s', 
+				$id, __CLASS__));
+		}
+
+		return $data;
 	}
 }

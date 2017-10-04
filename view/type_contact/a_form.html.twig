@@ -12,7 +12,7 @@
     {{ form_row(form.name, {'label': 'type_contact.name'}) }}
 {%- endblock form_fields %}
 
-{{ b.cancel(path('typecontact_index', {'schema': schema})) }}
+{{ b.cancel(path('typecontact_index', {'schema': schema, 'access': access})) }}
 
 {% block submit %}{% endblock %}
 

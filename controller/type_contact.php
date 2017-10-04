@@ -14,7 +14,7 @@ class type_contact
 		'mail', 'web', 'adr', 'gsm', 'tel',
 	];
 
-	public function index(Request $request, app $app, string $schema)
+	public function index(Request $request, app $app, string $schema, string $access)
 	{
 		$types = $app['db']->fetchAll('select * 
 			from ' . $schema . '.type_contact tc');
@@ -43,7 +43,7 @@ class type_contact
 	*
 	*/
 
-	public function add(Request $request, app $app, string $schema)
+	public function add(Request $request, app $app, string $schema, string $access)
 	{
 		$data = [
 			'name'		=> '',
@@ -64,7 +64,8 @@ class type_contact
 			]));
 
 			return $app->redirect($app->path('typecontact_index', [
-				'schema' => $schema,
+				'schema' 	=> $schema,
+				'access'	=> $access,
 			]));				
 		}
 
@@ -77,7 +78,7 @@ class type_contact
 	*
 	*/
 
-	public function edit(Request $request, app $app, string $schema, array $type_contact)
+	public function edit(Request $request, app $app, string $schema, string $access, array $type_contact)
 	{
 		$id = $type_contact['id'];
 
@@ -104,7 +105,8 @@ class type_contact
 			]));
 
 			return $app->redirect($app->path('typecontact_index', [
-				'schema' => $schema,
+				'schema' 	=> $schema,
+				'access'	=> $access,
 			]));				
 		}
 
@@ -114,7 +116,7 @@ class type_contact
 		]);
 	}
 
-	public function del(Request $request, app $app, string $schema, array $type_contact)
+	public function del(Request $request, app $app, string $schema, string $access, array $type_contact)
 	{
 		$id = $type_contact['id'];
 
@@ -150,7 +152,8 @@ class type_contact
 			]));
 
 			return $app->redirect($app->path('typecontact_index', [
-				'schema' => $schema,
+				'schema' 	=> $schema,
+				'access'	=> $access,
 			]));				
 		}
 

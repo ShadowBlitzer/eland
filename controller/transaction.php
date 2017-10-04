@@ -233,43 +233,8 @@ class transaction
 
 	public function show(Request $request, app $app, string $schema, string $access, array $transaction)
 	{
-		$news = $app['db']->fetchAssoc('SELECT n.*
-			FROM news n
-			WHERE n.id = ?', [$id]);
-
-		if (!$s_admin && !$news['approved'])
-		{
-			$app['eland.alert']->error('Je hebt geen toegang tot dit nieuwsbericht.');
-			cancel();
-		}
-
-		$news_access = $app['eland.xdb']->get('news_access', $id)['data']['access'];
-
-		if (!$app['eland.access_control']->is_visible($news_access))
-		{
-			$app['eland.alert']->error('Je hebt geen toegang tot dit nieuwsbericht.');
-			cancel();
-		}
-
-		$and_approved_sql = ($s_admin) ? '' : ' and approved = \'t\' ';
-
-		$rows = $app['eland.xdb']->get_many(['agg_schema' => $app['eland.this_group']->get_schema(),
-			'agg_type' => 'news_access',
-			'eland_id' => ['<' => $news['id']],
-			'access' => $app['eland.access_control']->get_visible_ary()], 'order by eland_id desc limit 1');
-
-		$prev = (count($rows)) ? reset($rows)['eland_id'] : false;
-
-		$rows = $app['eland.xdb']->get_many(['agg_schema' => $app['eland.this_group']->get_schema(),
-			'agg_type' => 'news_access',
-			'eland_id' => ['>' => $news['id']],
-			'access' => $app['eland.access_control']->get_visible_ary()], 'order by eland_id asc limit 1');
-
-		$next = (count($rows)) ? reset($rows)['eland_id'] : false;
-
-
 		return $app['twig']->render('transaction/' . $access . '_show.html.twig', [
-			'news'	=> $news,
+			'transaction'	=> $transaction,
 		]);
 	}
 

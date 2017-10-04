@@ -4,7 +4,7 @@
 {% import 'macro/mini_button.html.twig' as mb %}
 
 {% block top_buttons -%}
-{{ tb.add(path('typecontact_add', {'schema': schema}), 'type_contact_add.title') }}
+{{ tb.add(path('typecontact_add', {'schema': schema, 'access': access}), 'type_contact_add.title') }}
 {%- endblock top_buttons %}
 
 {% block inner -%}
@@ -31,7 +31,7 @@
     {% if protected %}
     {{ t.abbrev }}*
     {% else %}
-    <a href="{{ path('typecontact_edit', {'schema': schema, 'type_contact': t.id}) }}">
+    <a href="{{ path('typecontact_edit', {'schema': schema, 'access': access, 'type_contact': t.id}) }}">
     {{ t.abbrev }}
     </a>
     {% endif %}
@@ -42,7 +42,7 @@
     {% if protected %}
     {{ t.name }}*
     {% else %}
-    <a href="{{ path('typecontact_edit', {'schema': schema, 'type_contact': t.id}) }}">
+    <a href="{{ path('typecontact_edit', {'schema': schema, 'access': access, 'type_contact': t.id}) }}">
     {{ t.name }}
     </a>
     {% endif %}
@@ -52,13 +52,13 @@
 
     <td>
     {% if not protected and contact_count_ary[t.id] is not defined %}
-        {{ mb.del(path('typecontact_del', {'schema': schema, 'type_contact': t.id}), 'type_contact_del.btn') }}
+        {{ mb.del(path('typecontact_del', {'schema': schema, 'access': access, 'type_contact': t.id}), 'type_contact_del.btn') }}
     {% endif %}
     </td>
 
     <td>
     {% if contact_count_ary[t.id] is defined %}
-    <a href="{{ path('contactdetail_index', {'schema': schema, 'type_contact': t.id}) }}">
+    <a href="{{ path('contactdetail_index', {'schema': schema, 'access': access, 'type_contact': t.id}) }}">
     {{ contact_count_ary[t.id] }}
     {% endif %}
     </td>

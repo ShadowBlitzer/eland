@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class category
 {
-	public function index(Request $request, app $app, string $schema)
+	public function index(Request $request, app $app, string $schema, string $access)
 	{
 		return $app['twig']->render('category/a_index.html.twig', [
 			'categories'	=> $app['category_repository']->get_all($schema),
@@ -20,7 +20,7 @@ class category
 	*
 	*/
 
-	public function add(Request $request, app $app, string $schema, int $parent_category)
+	public function add(Request $request, app $app, string $schema, string $access, int $parent_category)
 	{
 		$data = [
 			'name'		=> '',
@@ -56,7 +56,8 @@ class category
 			]));
 
 			return $app->redirect($app->path('category_index', [
-				'schema' => $schema,
+				'schema' 	=> $schema,
+				'access'	=> $access,
 			]));				
 		}
 
@@ -69,7 +70,7 @@ class category
 	*
 	*/
 
-	public function edit(Request $request, app $app, string $schema, array $category)
+	public function edit(Request $request, app $app, string $schema, string $access, array $category)
 	{
 		$id = $category['id'];
 
@@ -110,7 +111,8 @@ class category
 			]));
 
 			return $app->redirect($app->path('category_index', [
-				'schema' => $schema,
+				'schema' 	=> $schema,
+				'access'	=> $access,
 			]));				
 		}
 
@@ -124,7 +126,7 @@ class category
 	*
 	*/
 
-	public function del(Request $request, app $app, string $schema, array $category)
+	public function del(Request $request, app $app, string $schema, string $access, array $category)
 	{
 		$id = $category['id'];
 
@@ -160,7 +162,8 @@ class category
 			]));
 
 			return $app->redirect($app->path('category_index', [
-				'schema' => $schema,
+				'schema' 	=> $schema,
+				'access'	=> $access,
 			]));
 		}
 

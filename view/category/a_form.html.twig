@@ -12,7 +12,7 @@
     {{ form_row(form.id_parent, {'label': 'category.label.parent'}) }}
 {%- endblock form_fields %}
 
-{{ b.cancel(path('category_index', {'schema': schema})) }}
+{{ b.cancel(path('category_index', {'schema': schema, 'access': access})) }}
 
 {% block submit %}{% endblock %}
 

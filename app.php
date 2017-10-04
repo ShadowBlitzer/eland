@@ -536,11 +536,19 @@ $app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $r
 // repositories
 
 $app['user_repository'] = function ($app){
-	return new repository\user_repository($app['db'], $app['xdb'], $app['redis']);
+	return new repository\user_repository($app['db'], $app['xdb'], $app['predis']);
+};
+
+$app['ad_repository'] = function ($app){
+	return new repository\ad_repository($app['db']);
 };
 
 $app['type_contact_repository'] = function ($app){
 	return new repository\type_contact_repository($app['db']);
+};
+
+$app['contact_repository'] = function ($app){
+	return new repository\contact_repository($app['db']);
 };
 
 $app['category_repository'] = function ($app){
@@ -551,8 +559,16 @@ $app['news_repository'] = function ($app){
 	return new repository\news_repository($app['db'], $app['xdb']);
 };
 
+$app['doc_repository'] = function ($app){
+	return new repository\doc_repository($app['xdb']);
+};
+
 $app['forum_repository'] = function ($app){
 	return new repository\forum_repository($app['xdb']);
+};
+
+$app['transaction_repository'] = function ($app){
+	return new repository\transaction_repository($app['db']);
 };
 
 // converters 
@@ -561,16 +577,36 @@ $app['category_converter'] = function ($app){
 	return new converter\category_converter($app['category_repository']);
 };
 
+$app['ad_converter'] = function ($app){
+	return new converter\ad_converter($app['ad_repository']);
+};
+
 $app['type_contact_converter'] = function ($app){
 	return new converter\type_contact_converter($app['type_contact_repository']);
+};
+
+$app['contact_converter'] = function ($app){
+	return new converter\contact_converter($app['contact_repository']);
 };
 
 $app['user_converter'] = function ($app){
 	return new converter\user_converter($app['user_repository']);
 };
 
-$app['news_covert'] = function ($app){
+$app['news_converter'] = function ($app){
 	return new converter\news_converter($app['news_repository']);
+};
+
+$app['transaction_converter'] = function ($app){
+	return new converter\transaction_converter($app['transaction_repository']);
+};
+
+$app['doc_converter'] = function ($app){
+	return new converter\doc_converter($app['doc_repository']);
+};
+
+$app['forum_converter'] = function ($app){
+	return new converter\forum_converter($app['forum_repository']);
 };
  
 require __DIR__ . '/routing.php';
