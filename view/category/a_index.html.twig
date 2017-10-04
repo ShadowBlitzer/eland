@@ -4,7 +4,7 @@
 {% import 'macro/mini_button.html.twig' as mb %}
 
 {% block top_buttons -%}
-{{ tb.add(path('category_add', {'schema': schema, 'access': access}), 'category_add.title') }}
+{{ tb.add(path('category_add', acc_sch), 'category_add.title') }}
 {%- endblock top_buttons %}
 
 {% block inner -%}
@@ -28,14 +28,14 @@
         <tr>    
 		<td>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="{{ path('category_edit', {'schema': schema, 'access': access, 'category': c.id}) }}">
+        <a href="{{ path('category_edit', acc_sch|merge({'category': c.id})) }}">
         {{ c.name }}
         </a>        
     {% else %}
         <tr class="info">
         <td>
         <strong>
-        <a href="{{ path('category_edit', {'schema': schema, 'access': access, 'category': c.id}) }}">
+        <a href="{{ path('category_edit', acc_sch|merge({'category': c.id}) }}">
         {{ c.name }}
         </a> 
         </strong> 
@@ -53,7 +53,7 @@
 
     <td>
     {% if (c.stat_msgs_wanted|default(0) + c.stat_msgs_offers|default(0) + c.child_count|default(0)) == 0 %}
-       {{ mb.del(path('category_del', {'schema': schema, 'access': access, 'category': c.id}), 'category_del.btn') }} 
+       {{ mb.del(path('category_del', acc_sch|merge({'category': c.id})), 'category_del.btn') }} 
     {% else %}
         &nbsp;
     {% endif %}

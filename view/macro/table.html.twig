@@ -1,66 +1,55 @@
-{% macro table_head(data) -%}
+{% macro start() -%}
+    <div class="panel panel-default printview">
+    <div class="table-responsive">
+    <table class="table table-striped 
+    table-hover table-bordered footable" 
+    data-sort="false">
+{%- endmacro start %}
 
-<div class="panel panel-default printview">
-<div class="table-responsive">
-<table class="table table-striped 
-table-hover table-bordered footable" 
-data-sort="false">
-<thead>
-<tr>
-<th>{{ 'category_index.name'|trans }}</th>
-<th data-hide="phone">{{ 'category_index.count_wants'|trans }}</th>
-<th data-hide="phone">{{ 'category_index.count_offers'|trans }}</th>
-<th data-hide="phone">{{ 'delete'|trans }}</th>
-</tr>
-</thead>
-<tbody>
-
-{% for c in categories %}
-
-    {% if c.id_parent %}
-        <tr>    
-		<td>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="{{ path('category_edit', {'schema': schema, 'category': c.id}) }}">
-        {{ c.name }}
-        </a>        
-    {% else %}
-        <tr class="info">
-        <td>
-        <strong>
-        <a href="{{ path('category_edit', {'schema': schema, 'category': c.id}) }}">
-        {{ c.name }}
-        </a> 
-        </strong> 
-    {% endif %}
-
-    </td>
-
-    <td>
-    {{ c.stat_msgs_wanted ?: '' }}
-    </td>
-
-    <td>
-    {{ c.stat_msgs_offers ?: '' }}
-    </td>
-
-    <td>
-    {% if (c.stat_msgs_wanted|default(0) + c.stat_msgs_offers|default(0) + c.child_count|default(0)) == 0 %}
-       {{ mb.delete(path('category_del', {'schema': schema, 'category': c.id}), 'category_del.title') }} 
-    {% else %}
-        &nbsp;
-    {% endif %}
-    </td>
-
+{% macro head(cols, route, route_params, default_sort) -%}
+    {%- set sort = route_params.sort ?? default_sort|default(null) -%}
+    <thead>
+    <tr>
+    {%- for column, data in cols -%}
+    <th{%- if data.hide is defined %} data-hide="{{- data.hide|join(',') -}}"{%- endif -%}>
+    {%- if data.sortable is defined -%}
+    {%- set asc = sort == column ? (route_params.asc ? 0 : 1) : (data.desc is defined ? 0 : 1) -%} 
+    <a href="{{- path(route, route_params|merge({'sort': column, 'asc': asc})) -}}">
+    {%- endif -%}
+    {{- data['lbl']|trans({'lbl_var': data.lbl_var|default('')}) -}}
+    {%- if data.sortable is defined -%}
+    {%- if column == sort -%} <i class="fa fa-sort-{%- if asc -%}asc{%- else -%}desc{%- endif -%}
+    {%- endif -%}
+    </a>
+    {%- endif -%}
+    </th>
+    {%- endfor -%}    
     </tr>
+    </thead>
+{%- endmacro head %}   
 
-{% endfor %}
+{% macro body(rows, cols) -%}
+    <tbody>
+    {%- for row in rows -%}
+    <tr{%- if row.class is defined -%} class="{{- row.class -}}"{%- endif -%}>
+    {%- for c, cd in cols -%}
+    <td>
+    {%- if c.route is defined -%}
+    <a href="{{ path(cd.route, row[c].route_params|merge(c.route_params|default({}))) }}">
+    {{- row[c] ?? '' -}}
+    </a>
+    {%- else -%}
+    {{- row[c] ?? '' -}}
+    {%- endif -%}
+    </td>
+    {%- endfor -%}
+    </tr>
+    {%- endfor -%}
+    </tbody>
+{%- endmacro body %}
 
-</tbody>
-</table>
-</div>
-</div>
-
-{%- endmacro table %}
-
-{% macro }
+{% macro end() -%}  
+    </table>
+    </div>
+    </div>
+{%- endmacro end %}

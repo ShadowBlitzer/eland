@@ -11,23 +11,23 @@
 </ul></li>
 {%- endmacro nav_dropdown_end %}
 
-{% macro li_param(key, item, active_menu, schema, access, param) -%}
+{% macro li_param(key, item, active_menu, acc_sch, param) -%}
 <li{% if active_menu == key %} class="active"{% endif %}>
-<a href="{{ path(item['route'], {'schema': schema, 'access': access }|merge(param|default({}))) }}">
+<a href="{{ path(item['route'], acc_sch|merge(param|default({}))) }}">
 <i class="fa fa-{{ item['fa']|default('question') }}"></i> {{ item['title']|trans }}
 </a></li>
 {%- endmacro li_param %}
 
-{% macro li(key, item, active_menu, schema, access) -%}
+{% macro li(key, item, active_menu, acc_sch) -%}
 <li{% if active_menu == key %} class="active"{% endif %}>
-<a href="{{ path(item['route'], {'schema': schema, 'access': access }) }}">
+<a href="{{ path(item['route'], acc_sch) }}">
 <i class="fa fa-{{ item['fa']|default('question') }}"></i> {{ item['title']|trans }}
 </a></li>
 {%- endmacro li %}
 
-{% macro li_302(item, schema, access) -%}
+{% macro li_302(item, acc_sch) -%}
 <li>
-<a href="{{ path(item['route'], {'schema': schema, 'access': access }) }}">
+<a href="{{ path(item['route'], acc_sch) }}">
 <i class="fa fa-{{ item['fa']|default('question') }}"></i> {{ item['title']|trans }}
 </a></li>
 {%- endmacro li_302 %}
@@ -41,7 +41,7 @@
 
 {% macro li_anon(key, item, active_menu, schema) -%}
 <li{% if active_menu == key %} class="active"{% endif %}>
-<a href="{{ path(item['route'], {'schema': schema }) }}">
+<a href="{{ path(item['route'], {'schema': schema}) }}">
 <i class="fa fa-{{ item['fa']|default('question') }}"></i> {{ item['title']|trans }}
 </a></li>
 {%- endmacro li_anon %}
@@ -50,13 +50,3 @@
 <li class="divider"></li>
 {%- endmacro divider %}
 
-{#
-{% macro acc_li(route, prop, active_route, schema, access) -%}
-{% if prop['menu'] is defined %}
-<li{% if active_route == route %} class="active"{% endif %}>
-<a href="{{ path(route, {'schema': schema, 'access': access}) }}">
-<i class="fa fa-{{ prop['fa']|default('question') }}"></i> {{ ('title.'~route)|trans }}
-</a></li>
-{% endif %}
-{%- endmacro acc_li %}
-#}

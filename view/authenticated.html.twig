@@ -79,7 +79,7 @@
 
   {% for key in menu_en %}
     {% if menu_ary[key] is defined %}
-		{{ m.li(key, menu_ary[key], active_menu, schema, access) }}
+		{{ m.li(key, menu_ary[key], active_menu, acc_sch) }}
     {% endif %}
   {% endfor %}
   

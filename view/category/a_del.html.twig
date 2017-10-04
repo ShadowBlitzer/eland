@@ -3,15 +3,15 @@
 {% import 'macro/button.html.twig' as b %}
 
 {% block heading -%}
-    {{ 'category_del.title'|trans({'%name%': fullname}) }}
+    {{- 'category_del.title'|trans({'%name%': fullname}) -}}
 {%- endblock %}
 
 {% block form_fields -%}
 <p class="text-danger"><strong>
-    {{ 'category_del.warning'|trans({'%name%': fullname}) }}
+    {{- 'category_del.warning'|trans({'%name%': fullname}) -}}
 </strong></p>
 {%- endblock %}
 
 {% block submit -%}
-    {{ b.del(form.submit) }}
+    {{- b.del(form.submit) -}}
 {%- endblock %}

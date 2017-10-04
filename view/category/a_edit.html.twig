@@ -3,18 +3,18 @@
 {% import 'macro/button.html.twig' as b %}
 
 {% block heading -%}
-    {{ 'category_edit.title'|trans({'%name%': name}) }}
+    {{- 'category_edit.title'|trans({'%name%': name}) -}}
 {%- endblock %}
 
 {% block submit -%}
-    {{ b.edit(form.submit) }}
+    {{- b.edit(form.submit) -}}
 {%- endblock %}
 
 {% block post_inner -%}
 <p>
 <ul>
-<li>{{ 'category_edit.explain_root'|trans }}</li>
-<li>{{ 'category_edit.explain_sub'|trans }}</li>
+<li>{{- 'category_edit.explain_root'|trans -}}</li>
+<li>{{- 'category_edit.explain_sub'|trans -}}</li>
 </ul>
 </p>
 {%- endblock post_inner %}

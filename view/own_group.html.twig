@@ -26,7 +26,7 @@
 
   {% for key in personal_menu_en %}
     {% if personal_menu_ary[key] is defined %}
-		{{ m.li(key, personal_menu_ary[key], active_menu, schema, access) }}
+		{{ m.li(key, personal_menu_ary[key], active_menu, acc_sch) }}
     {% endif %}
   {% endfor %}
 

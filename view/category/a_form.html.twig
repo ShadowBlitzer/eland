@@ -5,18 +5,18 @@
 
 {% block inner -%}
 
-{{ p.form_start(form) }}
+{{- p.form_start(form) -}}
 
 {% block form_fields -%}
-    {{ form_row(form.name, {'label': 'category.label.name'}) }}
-    {{ form_row(form.id_parent, {'label': 'category.label.parent'}) }}
+    {{- form_row(form.name, {'label': 'category.label.name'}) -}}
+    {{- form_row(form.id_parent, {'label': 'category.label.parent'}) -}}
 {%- endblock form_fields %}
 
-{{ b.cancel(path('category_index', {'schema': schema, 'access': access})) }}
+{{- b.cancel(path('category_index', acc_sch)) -}}
 
 {% block submit %}{% endblock %}
 
-{{ p.form_end(form) }}
+{{- p.form_end(form) -}}
 
 {%- endblock inner %}
 
