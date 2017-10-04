@@ -9,6 +9,7 @@ class ad
 {
 	public function index(Request $request, app $app, string $schema, string $access)
 	{
+
 		return $app['twig']->render('ad/' . $access . '_index.html.twig', []);
 	}
 

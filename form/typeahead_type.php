@@ -10,7 +10,6 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use form\addon_type;
 use form\typeahead_type_attr;
-use exception\conflicting_options_exception;
 
 class typeahead_type extends AbstractType
 {
@@ -30,7 +29,9 @@ class typeahead_type extends AbstractType
     {
         $resolver->setDefaults([
             'source_id'         => null,
-            'data_path'         => null,
+            'source_route'      => null,     
+            'source_params'     => null,
+            'source'            => null, 
             'process'           => null,
         ]);
     }

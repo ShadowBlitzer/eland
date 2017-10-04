@@ -34,4 +34,10 @@ trait eland_trait
 		return $this['form.factory']->createBuilder($class, $data, $options)
 			->getForm();		
 	}
+
+	public function build_named_form($name, $class, $data = [], $options = [])
+	{
+		return $this['form.factory']->createNamedBuilder($name, $class, $data, $options)
+			->getForm();		
+	}	
 }

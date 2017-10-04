@@ -77,21 +77,27 @@ class type_contact
 	*
 	*/
 
-	public function edit(Request $request, app $app, string $schema, int $type_contact)
+	public function edit(Request $request, app $app, string $schema, array $type_contact)
 	{
-		$data = $app['db']->fetchAssoc('select *
-			from ' . $schema . '.type_contact 
-			where id = ?', [$type_contact]);
+		$id = $type_contact['id'];
 
-		$form = $app->build_form('type_contact_type', $data, [
-			'ignore' => ['id' => $type_contact],
+		if (in_array($type_contact['abbrev'], $this->protected_types))
+		{
+			throw new protected_exception(
+				'This contact type is protected 
+					and cannot be edited.'
+			);			
+		}
+
+		$form = $app->build_form('type_contact_type', $type_contact, [
+			'ignore' => ['id' => $id],
 		])->handleRequest($request);
 
 		if ($form->isValid())
 		{
 			$data = $form->getData();
 
-			$app['db']->update($schema . '.type_contact', $data, ['id' => $type_contact]);
+			$app['db']->update($schema . '.type_contact', $data, ['id' => $id]);
 
 			$app->success($app->trans('type_contact_edit.success', [
 				'%name%'  => $data['name'],
@@ -104,17 +110,15 @@ class type_contact
 
 		return $app['twig']->render('type_contact/a_edit.html.twig', [
 			'form'	=> $form->createView(),
-			'name'	=> $data['name'],
+			'name'	=> $type_contact['name'],
 		]);
 	}
 
-	public function del(Request $request, app $app, string $schema, int $type_contact)
+	public function del(Request $request, app $app, string $schema, array $type_contact)
 	{
-		$data = $app['db']->fetchAssoc('select *
-			from ' . $schema . '.type_contact 
-			where id = ?', [$type_contact]);
+		$id = $type_contact['id'];
 
-		if (in_array($data['abbrev'], $this->protected_types))
+		if (in_array($type_contact['abbrev'], $this->protected_types))
 		{
 			throw new protected_exception(
 				'This contact type is protected 
@@ -124,7 +128,7 @@ class type_contact
 
 		if ($app['db']->fetchColumn('select count(*)
 			from ' . $schema . '.contact 
-			where id_type_contact = ?', [$type_contact]))
+			where id_type_contact = ?', [$id]))
 		{
 			throw new not_empty_exception(
 				'The contact type cannot be deleted 
@@ -139,10 +143,10 @@ class type_contact
 
 		if ($form->isValid())
 		{
-			$app['db']->delete($schema . '.type_contact', ['id' => $type_contact]);
+			$app['db']->delete($schema . '.type_contact', ['id' => $id]);
 
 			$app->success($app->trans('type_contact_del.success', [
-				'%name%'  => $data['name'],
+				'%name%'  => $type_contact['name'],
 			]));
 
 			return $app->redirect($app->path('typecontact_index', [
@@ -152,8 +156,8 @@ class type_contact
 
 		return $app['twig']->render('type_contact/a_del.html.twig', [
 			'form'		=> $form->createView(),
-			'name'		=> $data['name'],
-			'abbrev'	=> $data['abbrev'],
+			'name'		=> $type_contact['name'],
+			'abbrev'	=> $type_contact['abbrev'],
 		]);
 	}
 }

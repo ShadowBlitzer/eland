@@ -136,6 +136,7 @@ $app->extend('form.types', function ($types) use ($app) {
 	$types[] = 'type_contact_type';
 	$types[] = 'typeahead_type';
 	$types[] = 'typeahead_user_type';
+	$types[] = 'transaction_filter_type';
 
     return $types;
 });
@@ -158,7 +159,8 @@ $app['type_contact_type'] = function ($app) {
 };
 
 $app['typeahead_type_attr'] = function ($app) {
-	return new form\typeahead_type_attr($app['thumbprint']);
+	return new form\typeahead_type_attr($app['thumbprint'],
+		$app['request_stack'], $app['url_generator']);
 };
 
 $app['typeahead_type'] = function ($app) {
@@ -166,11 +168,15 @@ $app['typeahead_type'] = function ($app) {
 };
 
 $app['typeahead_user_transformer'] = function ($app) {
-	return new transformer\typeahead_user_transformer($app['db'], $app['schema']);
+	return new transformer\typeahead_user_transformer();
 };
 
 $app['typeahead_user_type'] = function ($app) {
 	return new form\typeahead_user_type($app['typeahead_user_transformer']);
+};
+
+$app['transaction_filter_type'] = function ($app) {
+	return new form\transaction_filter_type();
 };
 
 /*

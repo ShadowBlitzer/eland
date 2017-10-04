@@ -18,43 +18,11 @@ class transaction
 	public function index(Request $request, app $app, string $schema, string $access)
 	{
 		$data = [
-			'from_date' => '',
 			'andor'	=> 'and',
 		];
 
-		$filter = $app->namedForm('filter', $data, [
-				'csrf_protection'	=> false,
-				'etoken_enabled'	=> false,
-			])
-			->setMethod('GET')
-			->add('q', addon_type::class, ['required' => false])
-			->add('from_code', 'typeahead_user_type', [
-				'required' 		=> false,
-				'source_id'		=> 'filter_to_code',
-			])
-			->add('to_code', 'typeahead_user_type', [
-				'required' 		=> false,
-				'data_path'		=> $app->path('user_typeahead', [
-					'schema' 		=> $schema, 
-					'access' 		=> 'a', 
-					'user_type'		=> 'active',
-				]),
-				'process'	=> 'user',
-			])
-			->add('andor', ChoiceType::class, [
-				'required' 	=> true,
-				'choices'	=> [
-					'and'	=> 'and',
-					'or'	=> 'or',
-					'nor'	=> 'nor',
-				],
-			])
-			->add('from_date', 'datepicker_type', ['required' => false])
-			->add('to_date', 'datepicker_type', ['required' => false])
-			->add('submit', SubmitType::class)
-			->getForm();
-
-		$filter->handleRequest($request);
+		$filter = $app->build_named_form('filter', 'transaction_filter_type', $data)
+			->handleRequest($request);
 
 		if ($filter->isValid())
 		{
@@ -62,7 +30,6 @@ class transaction
 
 			error_log($data['to_code']);
 		}
-
 
 		$inline = isset($_GET['inline']) ? true : false;
 

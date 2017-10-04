@@ -25,13 +25,6 @@
 </a></li>
 {%- endmacro li %}
 
-{% macro li_admin(key, item, active_menu, schema) -%}
-<li{% if active_menu == key %} class="active"{% endif %}>
-<a href="{{ path(item['route'], {'schema': schema}) }}">
-<i class="fa fa-{{ item['fa']|default('question') }}"></i> {{ item['title']|trans }}
-</a></li>
-{%- endmacro li_admin %}
-
 {% macro li_302(item, schema, access) -%}
 <li>
 <a href="{{ path(item['route'], {'schema': schema, 'access': access }) }}">

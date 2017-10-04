@@ -14,7 +14,7 @@ class category_repository
 		$this->db = $db;
 	}
 
-	public function get_all(string $schema)
+	public function get_all(string $schema):array
 	{
 		$categories = $this->db->fetchAll('select * 
 			from ' . $schema . '.categories 
@@ -43,18 +43,18 @@ class category_repository
 		return $categories;
 	}
 
-	public function get(int $id, string $schema)
+	public function get(int $id, string $schema):array
 	{
-		$category = $this->db->fetchAssoc('select * 
+		$data = $this->db->fetchAssoc('select * 
 			from ' . $schema . '.categories 
 			where id = ?', [$id]);
 	
-		if (!$category)
+		if (!$data)
 		{
 			throw new NotFoundHttpException(sprintf('Category %d does not exist in %s', 
 				$id, __CLASS__));
         }
 		
-		return $category;
+		return $data;
 	}
 }

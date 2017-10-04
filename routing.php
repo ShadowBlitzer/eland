@@ -87,7 +87,7 @@ $user->get('/typeahead/{user_type}', 'controller\\user_typeahead::get')
 $user->get('/typeahead-interlets/{user}', 
 	'controller\\user_typeahead::get_interlets')
 //	->convert('user', 'service\\xdb::get')
-	->bind('user_typeahead_interlets');
+	->bind('user_interlets_typeahead');
 $user->get('/weighted-balance/{user}/{days}', 
 	'controller\\user::weighted_balance')
 	->assert('days', '\d+')
@@ -178,7 +178,7 @@ $transaction->get('/sum-out/{days}', 'controller\\transaction::sum_out')
 	->value('days', 365)
 	->bind('transaction_sum_out');
 
-$transaction->assert('transaction', '^[a-z0-9][a-z0-9-]{8}[a-z0-9]$');
+$transaction->assert('transaction', '\d+');
 
 $acc->mount('/transactions', $transaction);
 
@@ -202,7 +202,7 @@ $news->post('/{news}/approve', 'controller\\news::approve')
 	->convert('news', 'service\\xdb::get')
 	->bind('news_approve');
 
-$news->assert('news', '^[a-z0-9][a-z0-9-]{10}[a-z0-9]$');
+$news->assert('news', '\d+');
 
 $acc->mount('/news', $news);
 
@@ -254,7 +254,6 @@ $acc->mount('/forum', $forum);
 * notifications
 */
 
-
 $notification = $app['controllers_factory'];
 
 $notification->get('/', 'controller\\notification::index')
@@ -273,7 +272,6 @@ $notification->match('/{notification}/edit', 'controller\\notification::edit')
 $notification->assert('notification', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
 $acc->mount('/notifications', $notification);
-
 
 $acc->assert('access', '[giua]');
 $cc->mount('/{access}', $acc);
@@ -484,7 +482,8 @@ $a->get('/logs', 'controller\\log::index')
 $a->get('/logs/typeahead', 'controller\\log::typeahead')
 	->bind('log_typeahead');
 
-$cc->mount('/a', $a);
+$a->assert('access', 'a');
+$cc->mount('/{access}', $a);
 
 //
 

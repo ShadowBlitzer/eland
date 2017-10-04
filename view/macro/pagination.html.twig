@@ -1,8 +1,8 @@
 {% macro pagination(p) -%}
 	{% import _self as pag %}
 
-	{{ pag.pagination_pages(p) }}
-	{{ pag.pagination_limit_select(p) }}
+	{{- pag.pagination_pages(p) -}}
+	{{- pag.pagination_limit_select(p) -}}
 
 	</div>
 	</div>
@@ -14,7 +14,7 @@
 {% macro pagination_inline(p) -%}
 	{% import _self as pag %}
 
-	{{ pag.pagination_pages(p) }}
+	{{- pag.pagination_pages(p) -}}
 
 	</div>
 	</div>
@@ -24,19 +24,19 @@
 {% macro pagination_limit_select(p) -%}
 
 	<div>
-	<form action="{{ path(p.path) }}">
-	{{ 'pagination.items_per_page'|trans }}:
+	<form action="{{- path(p.path) -}}">
+	{{- 'pagination.items_per_page'|trans -}}:
 	
 	<select name="limit" onchange="this.form.submit();">
 	{% for o in p.limit_options %}
-	<option value="{{ o }}"{% if o == p.limit %} selected="selected"{% endif %}>{{ o }}</option>
+	<option value="{{- o -}}"{% if o == p.limit %} selected="selected"{% endif %}>{{- o -}}</option>
 	{% endfor %}
 	</select>
 
 	{% set action_params = p.params|merge({'start': 0}) %}
 
 	{% for name, value in action_params %}
-		<input name="{{ name }}" value="{{ value }}" type="hidden">
+		<input name="{{- name -}}" value="{{- value -}}" type="hidden">
 	{% endfor %}
 
 	</form>
@@ -54,7 +54,7 @@
 	{% endif %}
 
 	{% if p.min > 1 %}
-	<li><a href="{{ path(p.path, p.params|merge({'start': 0}) ) }}">1</a></li>
+	<li><a href="{{- path(p.path, p.params|merge({'start': 0}) ) -}}">1</a></li>
 	{% endif %}
 
 	{% for pa in p.min..p.max %}
@@ -64,11 +64,11 @@
 	{% endfor %}
 
 	{% if p.max < p.page_num %}
-	<li><a href="{{ path(p.path, p.params|merge({'start': (p.page_num - 1) * p.limit}) ) }}">{{ p.page_num }}</a></li>
+	<li><a href="{{- path(p.path, p.params|merge({'start': (p.page_num - 1) * p.limit}) ) -}}">{{- p.page_num -}}</a></li>
 	{% endif %}
 
 	{% if p.page < p.page_num %}
-	<li><a href="{{ path(p.path, p.params|merge({'start': p.page * p.limit}) ) }}">&#9658;</a></li>
+	<li><a href="{{- path(p.path, p.params|merge({'start': p.page * p.limit}) ) -}}">&#9658;</a></li>
 	{% endif %}
 
 	</ul>

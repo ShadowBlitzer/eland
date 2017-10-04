@@ -7,17 +7,12 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class typeahead_user_transformer implements DataTransformerInterface
 {
-    private $db;
-    private $schema;
-
-    public function __construct(db $db, string $schema)
+    public function __construct()
     {
-        $this->db = $db;
-        $this->schema = $schema;
     }
 
     /*
-    * add username to code 
+    * from db to input
     */
     public function transform($code)
     {
@@ -26,15 +21,11 @@ class typeahead_user_transformer implements DataTransformerInterface
             return '';
         }
 
-        $username = $this->db->selectColumn('select name 
-            from ' . $schema . '.users 
-            where letscode = ?', [$code]);
-
-        return $code . ($username ? ' ' . $username : '');
+        return $code;
     }
 
     /*
-    * remove username from code
+    * from input to db (remove username)
     */
     public function reverseTransform($code)
     {

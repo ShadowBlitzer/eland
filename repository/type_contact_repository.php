@@ -16,45 +16,22 @@ class type_contact_repository
 
 	public function get_all(string $schema)
 	{
-		$categories = $this->db->fetchAll('select * 
-			from ' . $schema . '.categories 
-			order by fullname');
-	
-		$child_count_ary = [];
-		
-		foreach ($categories as $cat)
-		{
-			if (!isset($child_count_ary[$cat['id_parent']]))
-			{
-				$child_count_ary[$cat['id_parent']] = 0;
-			}
-		
-			$child_count_ary[$cat['id_parent']]++;
-		}
 
-		foreach ($categories as &$cat)
-		{
-			if (isset($child_count_ary[$cat['id']]))
-			{
-				$cat['child_count'] = $child_count_ary[$cat['id']];
-			}
-		}
-
-		return $categories;
 	}
 
-	public function get(int $id, string $schema)
+	public function get(int $id, string $schema):array
 	{
-		$category = $this->db->fetchAssoc('select * 
-			from ' . $schema . '.categories 
+		$data = $this->db->fetchAssoc('select *
+			from ' . $schema . '.type_contact 
 			where id = ?', [$id]);
 	
-		if (!$category)
+		if (!$data)
 		{
-			throw new NotFoundHttpException(sprintf('Category %d does not exist in %s', 
+			throw new NotFoundHttpException(sprintf(
+				'Contact type %d does not exist in %s', 
 				$id, __CLASS__));
         }
 		
-		return $category;
+		return $data;
 	}
 }

@@ -39,7 +39,7 @@
 
   {% for key in admin_menu_en %}
     {% if admin_menu_ary[key] is defined %}
-    {{ m.li_admin(key, admin_menu_ary[key], active_menu, schema) }}
+    {{ m.li(key, admin_menu_ary[key], active_menu, schema, access) }}
     {% endif %}
   {% endfor %}
 
