@@ -1,26 +1,25 @@
 {% macro start() -%}
-    <div class="panel panel-default printview">
+    <div class="panel panel-primary printview">
     <div class="table-responsive">
     <table class="table table-striped 
     table-hover table-bordered footable" 
     data-sort="false">
 {%- endmacro start %}
 
-{% macro head(cols, route, route_params, default_sort) -%}
-    {%- set sort = route_params.sort ?? default_sort|default(null) -%}
+{% macro head(cols, route, all_params, default_sort_column) -%}
+    {%- set sort = all_params.s.col ?? default_sort_column|default(null) -%}
     <thead>
     <tr>
     {%- for column, data in cols -%}
-    <th{%- if data.hide is defined %} data-hide="{{- data.hide|join(',') -}}"{%- endif -%}>
+    <th{%- if data.hide is defined %} data-hide="{{- data.hide -}}"{%- endif -%}>
     {%- if data.sortable is defined -%}
-    {%- set asc = sort == column ? (route_params.asc ? 0 : 1) : (data.desc is defined ? 0 : 1) -%} 
-    <a href="{{- path(route, route_params|merge({'sort': column, 'asc': asc})) -}}">
+    {%- set order = sort == column ? (all_params.s.order is defined and all_params.s.order == 'desc' ? 'asc' : 'desc') : (data.order is defined ? data.order : 'asc') -%} 
+    <a href="{{- path(route, all_params|merge({'s':{'col': column, 'order': order}, 'p':{'start': 1, 'limit': all_params.p.limit ?? null}})) -}}">
     {%- endif -%}
     {{- data['lbl']|trans({'lbl_var': data.lbl_var|default('')}) -}}
-    {%- if data.sortable is defined -%}
-    {%- if column == sort -%} <i class="fa fa-sort-{%- if asc -%}asc{%- else -%}desc{%- endif -%}
-    {%- endif -%}
-    </a>
+    {%- if data.sortable is defined %} <i class="fa fa-sort
+    {%- if column == sort -%}-{%- if order == 'desc' -%}asc{%- else -%}desc{%- endif -%}
+    {%- endif -%}"></a>    
     {%- endif -%}
     </th>
     {%- endfor -%}    

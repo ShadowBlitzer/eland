@@ -83,15 +83,22 @@
 {{- p.form_end(filter) -}}
 
 {%- set cols = {
-	'description': {'lbl': 'descripton', 'route': 'transaction_show', 'route_params': {'id': 'id'}},
-	'amount': {'lbl': 'amount'},
-	'id_from': {'lbl': 'from', hide:['phone']},
-	'id_to': {'lbl': 'to', hide:['phone']}
+	'description': {
+		'lbl': 'description', 'sortable': true, 
+		'route': 'transaction_show', 'route_params': {'id': 'id'}
+	},
+	'amount': {'lbl': 'amount', 'sortable': true},
+	'cdate': {'lbl': 'time', 
+		'sortable': true, 'order': 'desc', 
+		'hide': 'phone'
+	},
+	'id_from': {'lbl': 'from', 'hide':'phone'},
+	'id_to': {'lbl': 'to', 'hide':'phone'}
 }
 -%}
 
 {{- t.start() -}}
-{{- t.head(cols) -}}
+{{- t.head(cols, route, all_params, 'cdate') -}}
 {{- t.body(transactions, cols) -}}
 {{- t.end() -}}
 

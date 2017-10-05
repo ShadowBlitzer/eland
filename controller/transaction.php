@@ -21,7 +21,7 @@ class transaction
 			'andor'	=> 'and',
 		];
 
-		$filter = $app->build_named_form('filter', 'transaction_filter_type', $data)
+		$filter = $app->build_named_form('f', 'transaction_filter_type', $data)
 			->handleRequest($request);
 
 		if ($filter->isValid())
