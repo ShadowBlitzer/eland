@@ -13,6 +13,8 @@ class config
 	private $xdb;
 	private $predis;
 	private $this_group;
+	private $local_cache;
+	private $is_cli;
 
 	private $default = [
 		'preset_minlimit'					=> '',
@@ -42,6 +44,7 @@ class config
 		$this->predis = $predis;
 		$this->db = $db;
 		$this->xdb = $xdb;
+		$this->is_cli = php_sapi_name() === 'cli' ? true : false;
 	}
 
 	public function set(string $name, string $value, string $schema)
@@ -66,7 +69,7 @@ class config
 			return $this->local_cache[$schema][$key];
 		}
 
-		$redis_key = $schema . '_config_' . $key;
+		$redis_key = $sch . '_config_' . $key;
 
 		if ($this->predis->exists($redis_key))
 		{
@@ -95,7 +98,11 @@ class config
 		{
 			$this->predis->set($redis_key, $value);
 			$this->predis->expire($redis_key, 2592000);
-			$this->local_cache[$schema][$key] = $value;
+
+			if (!$this->is_cli)
+			{
+				$this->local_cache[$schema][$key] = $value;
+			}
 		}
 
 		return $value;
