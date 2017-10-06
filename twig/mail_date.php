@@ -5,7 +5,6 @@ namespace twig;
 use service\config;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Translation\TranslatorInterface;
 
 class date_format
 {
@@ -90,12 +89,9 @@ class date_format
 	 *
 	 */
 
-	public function __construct(config $config, TranslatorInterface $translator)
+	public function __construct(config $config, RequestStack $requestStack)
 	{
 		$this->config = $config;
-		$this->translator = $translator;
-	
-	/*
 		$this->request = $requestStack->getCurrentRequest();
 		$this->schema = $this->request->attributes->get('_route_params')['schema'];
 
@@ -115,7 +111,6 @@ class date_format
 
 		$this->format_ary = self::$formats[$sec];
 		$this->format_ary['sec'] = $sec;
-*/
 	}
 
 	/*
@@ -262,7 +257,7 @@ class date_format
 	 * to do: get schema for static method version
 	 */
 
-	public function get(string $ts, string $schema, string $precision = 'min')
+	public function get($ts = false, $precision = 'min')
 	{
 		static $format_ary, $format;
 

@@ -490,6 +490,7 @@ $cc->mount('/{access}', $a);
 
 //
 
+/*
 $cc->before(function(Request $request) use ($app){
 
 	$schema = $request->attributes->get('_route_params')['schema'];
@@ -503,6 +504,7 @@ $cc->before(function(Request $request) use ($app){
 
 	$app['schema'] = $schema;
 });
+*/
 
 $cc->assert('schema', '[a-z][a-z0-9]*');
 

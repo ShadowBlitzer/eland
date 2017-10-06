@@ -55,7 +55,7 @@ $app->extend('twig', function($twig, $app) {
 			return new twig\distance($app['db'], $app['cache']);
 		},
 		twig\date_format::class => function() use ($app){
-			return new twig\date_format($app['config'], $app['request_stack']);
+			return new twig\date_format($app['config'], $app['schema']);
 		},
 /*
 		twig\pagination::class => function() use ($app){

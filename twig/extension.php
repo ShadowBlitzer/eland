@@ -8,9 +8,7 @@ class extension extends \Twig_Extension
 	{
 		return [
 			new \Twig_Filter('underline', [$this, 'underline']),
-			new \Twig_Filter('date_format', 'twig\\date_format::get', [
-				'needs_context'		=> true,
-			]),
+			new \Twig_Filter('date_format', 'twig\\date_format::get'),
 		];
 	}
 

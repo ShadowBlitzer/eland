@@ -7,16 +7,21 @@
 {% import 'macro/table.html.twig' as t %}
 
 {% block css -%}
-{% include 'asset/datepicker_css.html.twig' %}
+{%- include 'asset/datepicker_css.html.twig' -%}
 {%- endblock css %}
 
 {% block js -%}
-{% include 'asset/datepicker_js.html.twig' %}
+{%- include 'asset/datepicker_js.html.twig' -%}
+{{- a.js('csv.js') -}}
 {%- endblock js %}
 
 {% block top_buttons -%}
-{{- tb.add(path('transaction_add', {'schema': schema, 'access': access}), 'transaction.title_top_btn.add') -}}
+{{- tb.add(path('transaction_add', acc_sch), 'transaction.title_top_btn.add') -}}
 {%- endblock top_buttons -%}
+
+{% block top_right -%}
+{{- p.csv() -}}
+{%- endblock %}
 
 {% block inner -%}
 
@@ -84,22 +89,36 @@
 
 {%- set cols = {
 	'description': {
-		'lbl': 'description', 'sortable': true, 
-		'route': 'transaction_show', 'route_params': {'id': 'id'}
+		'lbl': 'description', 
+		'sortable': true, 
+		'route': 'transaction_show',
+		'route_key': 'transaction',
+		'route_col_id': 'id'
 	},
-	'amount': {'lbl': 'amount', 'sortable': true},
-	'cdate': {'lbl': 'time', 
+	'amount': {
+		'lbl': 'amount', 
+		'sortable': true	
+	},
+	'cdate': {
+		'lbl': 'time', 
 		'sortable': true, 'order': 'desc', 
-		'hide': 'phone'
+		'hide': 'phone',
+		'render': 'date'
 	},
-	'id_from': {'lbl': 'from', 'hide':'phone'},
-	'id_to': {'lbl': 'to', 'hide':'phone'}
+	'id_from': {
+		'lbl': 'from', 
+		'hide':'phone'
+	},
+	'id_to': {
+		'lbl': 'to', 
+		'hide':'phone'
+	}
 }
 -%}
 
 {{- t.start() -}}
 {{- t.head(cols, route, all_params, 'cdate') -}}
-{{- t.body(transactions, cols) -}}
+{{- t.body(transactions, cols, acc_sch) -}}
 {{- t.end() -}}
 
 {%- endblock inner %}
