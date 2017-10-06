@@ -69,7 +69,7 @@ class config
 			return $this->local_cache[$schema][$key];
 		}
 
-		$redis_key = $sch . '_config_' . $key;
+		$redis_key = $schema . '_config_' . $key;
 
 		if ($this->predis->exists($redis_key))
 		{

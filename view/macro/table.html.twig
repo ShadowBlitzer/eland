@@ -39,7 +39,7 @@
     </a>
     {%- elseif cd.render is defined -%}
         {%- if cd.render == 'date' -%}
-        {# {{- (row[c])|date_format -}} #} date
+        {{- (row[c])|web_date(cd.date_precision ?? 'min') -}}
         {%- elseif cd.render == 'user' -%}
         user
         {%- endif -%}

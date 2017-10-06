@@ -3,13 +3,10 @@
 namespace twig;
 
 use service\config;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class web_date
 {
-	private $request;
 	private $schema;
 	private $config;
 	private $translator;
@@ -17,73 +14,38 @@ class web_date
 	private $format;
 	private $format_ary = [];
 
-	/**
-	 *
-	 */
-
 	public function __construct(
 		config $config, 
-//		RequestStack $requestStack, 
 		TranslatorInterface $translator,
 		string $schema
 	)
 	{
 		$this->config = $config;
-//		$this->request = $requestStack->getCurrentRequest();
-//		$this->schema = $this->request->attributes->get('_route_params')['schema'];
+		$this->translator = $translator;
 		$this->schema = $schema;
-
-		$this->format = $this->config->get('date_format', $this->schema);
-
-		if (!$this->format)
-		{
-			$this->format = '%e %b %Y, %H:%M:%S';
-		}
-
-		$sec = $this->format;
-
-		if (!isset(self::$formats[$sec]))
-		{
-			$sec = '%e %b %Y, %H:%M:%S';
-		}
-
-		$this->format_ary = self::$formats[$sec];
-		$this->format_ary['sec'] = $sec;
 	}
 
-	/**
-	 * to do: get schema for static method version
-	 */
-
-	public function get($ts = false, $precision = 'min')
+	public function get(array $context, string $ts, string $precision = 'min'):string
 	{
 		$time = strtotime($ts . ' UTC');
 
-		if (isset($this))
+		if (!isset($this->format))
 		{
-			return strftime($this->format_ary[$precision], $time);
+			$this->format = $this->config->get('date_format', $this->schema);
+
+			if (strpos($this->format, '%') !== false)
+			{
+				$this->format = 'month_abbrev';
+				$this->config->set('date_format', $this->format, $this->schema);
+			}
 		}
 
-		if (!isset($format_ary))
+		if (!isset($this->format_ary[$precision]))
 		{
-			$format = $this->config->get('date_format', $this->schema);
-
-			if (!$format)
-			{
-				$format = '%e %b %Y, %H:%M:%S';
-			}
-
-			$sec = $format;
-
-			if (!isset(self::$formats[$sec]))
-			{
-				$sec = '%e %b %Y, %H:%M:%S';
-			}
-
-			$format_ary = self::$formats[$sec];
-			$format_ary['sec'] = $sec;
+			$this->format_ary[$precision] = $this->translator
+				->trans('date_format.' . $this->format . '.' . $precision);
 		}
 
-		return strftime($format_ary[$precision], $time);
+		return strftime($this->format_ary[$precision], $time);
 	}
 }

@@ -90,14 +90,11 @@ class date_format
 	 *
 	 */
 
-	public function __construct(config $config, TranslatorInterface $translator)
+	public function __construct(config $config, TranslatorInterface $translator, string $schema)
 	{
 		$this->config = $config;
 		$this->translator = $translator;
-	
-	/*
-		$this->request = $requestStack->getCurrentRequest();
-		$this->schema = $this->request->attributes->get('_route_params')['schema'];
+		$this->schema = $schema;
 
 		$this->format = $this->config->get('date_format', $this->schema);
 
@@ -115,7 +112,6 @@ class date_format
 
 		$this->format_ary = self::$formats[$sec];
 		$this->format_ary['sec'] = $sec;
-*/
 	}
 
 	/*

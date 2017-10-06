@@ -9,6 +9,9 @@ class extension extends \Twig_Extension
 		return [
 			new \Twig_Filter('underline', [$this, 'underline']),
 			new \Twig_Filter('date_format', 'twig\\date_format::get'),
+			new \Twig_Filter('web_date', 'twig\\web_date::get', [
+				'needs_context' 	=> true,
+			])
 		];
 	}
 

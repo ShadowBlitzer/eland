@@ -55,7 +55,13 @@ $app->extend('twig', function($twig, $app) {
 			return new twig\distance($app['db'], $app['cache']);
 		},
 		twig\date_format::class => function() use ($app){
-			return new twig\date_format($app['config'], $app['schema']);
+			return new twig\date_format($app['config'], $app['translator'], $app['schema']);
+		},
+		twig\mail_date::class => function() use ($app){
+			return new twig\mail_date($app['config'], $app['translator']);
+		},
+		twig\web_date::class => function() use ($app){
+			return new twig\web_date($app['config'], $app['translator'], $app['schema']);
 		},
 /*
 		twig\pagination::class => function() use ($app){
