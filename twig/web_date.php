@@ -2,50 +2,38 @@
 
 namespace twig;
 
-use service\config;
-use Symfony\Component\Translation\TranslatorInterface;
+use service\date_format_cache;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class web_date
 {
+	private $date_format_cache;
 	private $schema;
-	private $config;
-	private $translator;
+	private $locale;
 
-	private $format;
-	private $format_ary = [];
+	private $format = [];
 
 	public function __construct(
-		config $config, 
-		TranslatorInterface $translator,
-		string $schema
+		date_format_cache $date_format_cache,
+		RequestStack $request_stack
 	)
 	{
-		$this->config = $config;
-		$this->translator = $translator;
-		$this->schema = $schema;
+		$this->date_format_cache = $date_format_cache;
+		$request = $request_stack->getCurrentRequest();
+		$this->locale = $request->getLocale();
+		$this->schema = $request->attributes->get('schema');	
 	}
 
-	public function get(array $context, string $ts, string $precision = 'min'):string
+	public function get(string $ts, string $precision):string
 	{
 		$time = strtotime($ts . ' UTC');
 
-		if (!isset($this->format))
+		if (!isset($this->format[$precision]))
 		{
-			$this->format = $this->config->get('date_format', $this->schema);
-
-			if (strpos($this->format, '%') !== false)
-			{
-				$this->format = 'month_abbrev';
-				$this->config->set('date_format', $this->format, $this->schema);
-			}
+			$this->format[$precision] = $this->date_format_cache
+				->get($precision, $this->locale, $this->schema);
 		}
 
-		if (!isset($this->format_ary[$precision]))
-		{
-			$this->format_ary[$precision] = $this->translator
-				->trans('date_format.' . $this->format . '.' . $precision);
-		}
-
-		return strftime($this->format_ary[$precision], $time);
+		return strftime($this->format[$precision], $time);
 	}
 }

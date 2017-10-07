@@ -73,7 +73,8 @@
 			"form\\": "form/",
 			"exception\\": "exception/",
 			"validator\\": "validator/",
-			"transformer\\": "transformer/"
+			"transformer\\": "transformer/",
+			"converter\\": "converter/"
         }
     }
 }

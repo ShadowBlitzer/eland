@@ -44,6 +44,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 	],
 ]);
 
+
 $app->extend('twig', function($twig, $app) {
 
 	$twig->addExtension(new twig\extension());
@@ -58,10 +59,10 @@ $app->extend('twig', function($twig, $app) {
 			return new twig\date_format($app['config'], $app['translator'], $app['schema']);
 		},
 		twig\mail_date::class => function() use ($app){
-			return new twig\mail_date($app['config'], $app['translator']);
+			return new twig\mail_date($app['date_format_cache']);
 		},
 		twig\web_date::class => function() use ($app){
-			return new twig\web_date($app['config'], $app['translator'], $app['schema']);
+			return new twig\web_date($app['date_format_cache'], $app['request_stack']);
 		},
 /*
 		twig\pagination::class => function() use ($app){
@@ -74,6 +75,7 @@ $app->extend('twig', function($twig, $app) {
 
 	return $twig;
 });
+
 
 $app->register(new Silex\Provider\AssetServiceProvider(), [
     'assets.version' => '15',
@@ -239,8 +241,7 @@ $app['thumbprint'] = function ($app){
 };
 
 $app['schema'] = function ($app){
-	$request = $app['request_stack']->getCurrentRequest();
-	return $request->attributes->get('_route_params')['schema'];
+	return $app['request_stack']->getCurrentRequest()->attributes->get('schema');
 };
 
 $app['schemas'] = function ($app){
@@ -305,6 +306,12 @@ $app['s3'] = function($app){
 };
 
 /**/
+
+$app['date_format_cache'] = function ($app){
+	return new service\date_format_cache($app['predis'], $app['config'], $app['translator']);
+};
+
+// 
 
 $app['pagination'] = function (){
 	return new service\pagination();
