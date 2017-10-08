@@ -9,7 +9,7 @@ use migrate_elas\base_interface;
 
 class currency extends base implements base_interface
 {
-	$map = [
+	private $map = [
 		'preset_minlimit'					=> '',
 		'preset_maxlimit'					=> '',
 		'users_can_edit_username'			=> '0',

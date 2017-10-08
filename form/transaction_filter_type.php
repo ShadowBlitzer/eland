@@ -24,11 +24,11 @@ class transaction_filter_type extends AbstractType
 			->add('q', addon_type::class, [
                 'required' => false,
             ])
-			->add('from_code', 'typeahead_user_type', [
+			->add('from_user', 'typeahead_user_type', [
 				'required' 		=> false,
-				'source_id'		=> 'filter_to_code',
+				'source_id'		=> 'f_to_user',
 			])
-			->add('to_code', 'typeahead_user_type', [
+			->add('to_user', 'typeahead_user_type', [
 				'required' 		=> false,
                 'source_route'  => 'user_typeahead',
                 'source_params' => [
@@ -41,7 +41,7 @@ class transaction_filter_type extends AbstractType
 					'and'	=> 'and',
 					'or'	=> 'or',
 					'nor'	=> 'nor',
-				],
+                ],
 			])
 			->add('from_date', 'datepicker_type', [
                 'required' => false,

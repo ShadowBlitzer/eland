@@ -2,6 +2,7 @@
 
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -180,7 +181,7 @@ $app['typeahead_type'] = function ($app) {
 };
 
 $app['typeahead_user_transformer'] = function ($app) {
-	return new transformer\typeahead_user_transformer();
+	return new transformer\typeahead_user_transformer($app['db'], $app['schema']);
 };
 
 $app['typeahead_user_type'] = function ($app) {
@@ -327,10 +328,6 @@ $app['log_db'] = function($app){
 
 $app['groups'] = function ($app){
 	return new service\groups($app['db']);
-};
-
-$app['template_vars'] = function ($app){
-	return new service\template_vars($app['config']);
 };
 
 $app['this_group'] = function($app){
@@ -533,7 +530,7 @@ $app['uuid'] = function($app){
 	return new service\uuid();
 };
 
-$app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $request, $code) use ($app) {
+$app->error(function (\Exception $e, Request $request, $code) use ($app) {
 
     if ($app['debug'])
     {

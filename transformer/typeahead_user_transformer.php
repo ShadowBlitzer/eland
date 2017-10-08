@@ -7,25 +7,39 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class typeahead_user_transformer implements DataTransformerInterface
 {
-    public function __construct()
+    private $db;
+    private $schema;
+
+    public function __construct(db $db, string $schema)
     {
+        $this->db = $db;
+        $this->schema = $schema;
     }
 
     /*
-    * from db to input
+    * from db to input (id to code + username)
     */
-    public function transform($code)
+    public function transform($id)
     {
-        if (null === $code) 
+        if (null === $id) 
         {
             return '';
         }
 
-        return $code;
+        $user = $this->db->fetchAssoc('select letscode, name 
+            from ' . $this->schema . '.users
+             where id = ?', [$id]);
+
+        if (!$user)
+        {
+            return '';
+        }  
+
+        return $user['letscode'] . ' ' . $user['code'];
     }
 
     /*
-    * from input to db (remove username)
+    * from input to db (code to id)
     */
     public function reverseTransform($code)
     {
@@ -36,6 +50,15 @@ class typeahead_user_transformer implements DataTransformerInterface
 
         list($code) = explode(' ', $code);
 
-        return $code;
+        $id = $this->db->fetchColumn('select id 
+            from ' . $this->schema . '.users 
+            where letscode = ?', [$code]);
+
+        if (!$id)
+        {
+            return;
+        }
+
+        return $id;
     }
 }

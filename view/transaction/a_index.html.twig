@@ -41,7 +41,7 @@
 
 <div class="row">
 <div class="col-sm-5">
-    {{- form_row(filter.from_code, {
+    {{- form_row(filter.from_user, {
         'label': false,
         'addon_label': 'from',
         'addon_fa': 'user',
@@ -54,7 +54,7 @@
     {{- form_row(filter.andor, {'label': false}) -}}
 </div>
 <div class="col-sm-5">
-    {{- form_row(filter.to_code, {
+    {{- form_row(filter.to_user, {
         'label': false,
         'addon_label': 'to',
         'addon_fa': 'user',
@@ -89,19 +89,16 @@
 
 {%- set cols = {
 	'description': {
-		'lbl': 'description', 
-		'sortable': true, 
+		'lbl': 'description',
 		'route': 'transaction_show',
 		'route_key': 'transaction',
 		'route_col_id': 'id'
 	},
 	'amount': {
-		'lbl': 'amount', 
-		'sortable': true	
+		'lbl': 'amount'	
 	},
 	'cdate': {
-		'lbl': 'time', 
-		'sortable': true, 'order': 'desc', 
+		'lbl': 'time',
 		'hide': 'phone',
 		'render': 'date'
 	},
@@ -119,7 +116,7 @@
 -%}
 
 {{- t.start() -}}
-{{- t.head(cols, route, all_params, 'cdate') -}}
+{{- t.head(cols, route, all_params, sort) -}}
 {{- t.body(transactions, cols, acc_sch) -}}
 {{- t.end() -}}
 

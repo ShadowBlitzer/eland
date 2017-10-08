@@ -4,21 +4,17 @@ namespace controller;
 
 use util\app;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use form\addon_type;
-use form\typeahead_user_type;
-use Symfony\Component\Validator\Constraints as Assert;
+use util\sort;
 
 class transaction
 {
 	public function index(Request $request, app $app, string $schema, string $access)
 	{
+		$where = [];
+		$params = [];
+
 		$data = [
-			'andor'	=> 'and',
+			'andor' => 'and',
 		];
 
 		$filter = $app->build_named_form('f', 'transaction_filter_type', $data)
@@ -28,22 +24,77 @@ class transaction
 		{
 			$data = $filter->getData();
 
-			error_log($data['to_code']);
+			if (isset($data['q']))
+			{
+				$where[] = 't.description ilike ?';
+				$params[] = '%' . $data['q'] . '%';
+			}
+
+			$where_code = [];
+
+			if (isset($data['from_user']))
+			{
+				$where_code[] = 't.id_from = ?';
+				$params[] = $data['from_user'];
+			}
+
+			if (isset($data['to_user']))
+			{
+				$where_code[] = 't.id_to = ?';
+				$params[] = $data['to_user'];
+			}
+
+			if (count($where_code) > 1)
+			{
+				if ($data['andor'] === 'or')
+				{
+					$where_code = ['(' . implode(' or ', $where_code) . ')'];
+				}
+				else if ($data['andor'] === 'nor')
+				{
+					$where_code = ['t.id_from <> ? and t.id_to <> ?'];
+				}
+			}
+
+			$where = array_merge($where, $where_code);
+
+			if (isset($data['from_date']))
+			{
+				$where[] = 't.date >= ?';
+				$params[] = $data['from_date'];
+			}
+
+			if (isset($data['to_date']))
+			{
+				$where[] = 't.date <= ?';
+				$params[] = $data['to_date'];
+			}
 		}
 
-		$inline = isset($_GET['inline']) ? true : false;
+		$filtered = count($where) ? true : false;
+		$where = $filtered ? ' where ' . implode(' and ', $where) . ' ' : '';
 
-		$q = $_GET['q'] ?? '';
-		$fcode = $_GET['fcode'] ?? '';
-		$tcode = $_GET['tcode'] ?? '';
-		$andor = $_GET['andor'] ?? 'and';
-		$fdate = $_GET['fdate'] ?? '';
-		$tdate = $_GET['tdate'] ?? '';
+		$query = ' from ' . $schema . '.transactions t' . $where;
+		$row_count = $app['db']->fetchColumn('select count(t.*)' . $query, $params);
+		$query = 'select t.*' . $query;
 
-		$orderby = $_GET['orderby'] ?? 'cdate';
-		$asc = $_GET['asc'] ?? 0;
-		$limit = $_GET['limit'] ?? 25;
-		$start = $_GET['start'] ?? 0;
+		$sort = new sort($request);
+
+		$sort->add_columns([
+			'description'	=> 'asc',
+			'amount'		=> 'asc',
+			'cdate'			=> 'desc',
+		])
+			->set_default('cdate');
+
+		$query .= $sort->query();
+//		$query .= $app['pagination']->query();
+
+
+
+//		$query .= ' limit ' . $limit . ' offset ' . $start;
+
+/*
 
 		$params_sql = $where_sql = $where_code_sql = [];
 
@@ -54,7 +105,7 @@ class transaction
 			'start'		=> $start,
 		];
 
-/*
+
 		if ($uid)
 		{
 			$user = readuser($uid);
@@ -67,7 +118,7 @@ class transaction
 			$fcode = $tcode = link_user($user, false, false);
 			$andor = 'or';
 		}
-*/
+
 
 		if ($q)
 		{
@@ -170,7 +221,7 @@ class transaction
 			}
 		}
 
-		if (count($where_sql))
+		if (count($where))
 		{
 			$where_sql = ' where ' . implode(' and ', $where_sql) . ' ';
 		}
@@ -185,8 +236,8 @@ class transaction
 			order by ' . $orderby . ' ';
 		$query .= ($asc) ? 'asc ' : 'desc ';
 		$query .= ' limit ' . $limit . ' offset ' . $start;
-
-		$transactions = $app['db']->fetchAll($query, $params_sql);
+*/
+		$transactions = $app['db']->fetchAll($query, $params);
 
 		foreach ($transactions as $key => $t)
 		{
@@ -220,13 +271,15 @@ class transaction
 			}
 		}
 
-		$row_count = $app['db']->fetchColumn('select count(t.*)
-			from ' . $schema . '.transactions t ' . $where_sql, $params_sql);
+//		$row_count = $app['db']->fetchColumn('select count(t.*)
+//			from ' . $schema . '.transactions t ' . $where_sql, $params_sql);
 
 		return $app['twig']->render('transaction/' . $access . '_index.html.twig', [
 			'transactions'	=> $transactions,
 //			'pagination'	=> $app['pagination']->get($row_count, $params),
 			'filter'		=> $filter->createView(),
+			'filtered'		=> $filtered,
+			'sort'			=> $sort->get_params(),
 		]);
 	}
 
@@ -309,7 +362,8 @@ class transaction
 		}
 
 		return $app['twig']->render('transaction/' . $access . '_register.html.twig', [
-			'form' => $form->createView(),
+			'form' 		=> $form->createView(),
+			'filtered'	=> $filtered,
 		]);
 	}
 

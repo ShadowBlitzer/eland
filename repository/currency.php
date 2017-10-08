@@ -42,8 +42,6 @@ class currency
 		$data['type'] = 'currency';
 	
 		$config = $this->db->fetchAssoc('select * from ' . $this->schema . '.config');
-
-		foreach ($config as )
 	}
 
 

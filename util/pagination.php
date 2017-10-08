@@ -2,6 +2,8 @@
 
 namespace util;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class pagination
 {
 	private $start;
@@ -28,9 +30,9 @@ class pagination
 
 	public function get(request $request)
 	{
-		$request->attributes->get('limit');
-		$request->attributes->get('start');
-		$request->attributes->get('row_count');
+		$request->query->get('limit');
+		$request->query->get('start');
+		$request->query->get('row_count');
 
 		
 
