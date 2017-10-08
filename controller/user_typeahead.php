@@ -19,11 +19,11 @@ class user_typeahead
 		switch($user_type)
 		{
 			case 'post-active':
-				$where_sql = 'status = 0
+				$where_sql = '(status = 0 and adate is not null)
 					or (status = 7 and accountrole in (\'user\', \'admin\'))';
 				break;
 			case 'pre-active':
-				$where_sql = 'status in (5, 6)';
+				$where_sql = 'status in (5, 6) or (status = 0 and adate is null)';
 				break;
 			case 'active':
 				$where_sql = 'status in (1, 2)

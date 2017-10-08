@@ -64,6 +64,10 @@ $app->extend('twig', function($twig, $app) {
 		twig\web_date::class => function() use ($app){
 			return new twig\web_date($app['date_format_cache'], $app['request_stack']);
 		},
+		twig\web_user::class => function () use ($app){
+			return new twig\web_user($app['user_simple_cache'], $app['request_stack'],
+				$app['url_generator']);
+		},
 /*
 		twig\pagination::class => function() use ($app){
 			return new twig\pagination();
@@ -399,6 +403,10 @@ $app['type_template'] = function ($app){
 
 $app['user_cache'] = function ($app){
 	return new service\user_cache($app['db'], $app['xdb'], $app['predis']);
+};
+
+$app['user_simple_cache'] = function ($app){
+	return new service\user_simple_cache($app['db'], $app['predis']);
 };
 
 $app['token'] = function ($app){

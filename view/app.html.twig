@@ -10,6 +10,7 @@
 {% set route_ary = route|split('_') %}
 {% set active_menu = route_ary[1] is defined and route_ary[1] == 'self' ? route : route_ary[0] %}
 {% set schema = global.request.attributes.get('schema') %}
+{# {% set access = global.request.attributes.get('access') %} #}
 {% set acc_sch = {'schema': schema, 'access': access} %}
 
 {% set menu_el =

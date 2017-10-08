@@ -41,7 +41,7 @@
         {%- if cd.render == 'date' -%}
         {{- (row[c])|web_date(cd.date_precision ?? 'min') -}}
         {%- elseif cd.render == 'user' -%}
-        user
+        {{- (row[c])|web_user|raw -}}
         {%- endif -%}
     {%- else -%}
     {{- row[c] ?? '' -}}
