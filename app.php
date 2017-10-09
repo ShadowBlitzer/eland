@@ -335,7 +335,7 @@ $app['this_group'] = function($app){
 };
 
 $app['xdb'] = function ($app){
-	return new service\xdb($app['db'], $app['predis']);
+	return new service\xdb($app['db']);
 };
 
 $app['ev'] = function ($app){
@@ -585,6 +585,10 @@ $app['forum_repository'] = function ($app){
 	return new repository\forum_repository($app['xdb']);
 };
 
+$app['page_repository'] = function ($app){
+	return new repository\page_repository($app['xdb']);
+};
+
 $app['transaction_repository'] = function ($app){
 	return new repository\transaction_repository($app['db']);
 };
@@ -625,6 +629,10 @@ $app['doc_converter'] = function ($app){
 
 $app['forum_converter'] = function ($app){
 	return new converter\forum_converter($app['forum_repository']);
+};
+
+$app['page_converter'] = function ($app){
+	return new converter\page_converter($app['page_repository']);
 };
  
 require __DIR__ . '/routing.php';

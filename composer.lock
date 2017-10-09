@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.36.22",
+            "version": "3.36.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "9f7bad332fd0a24b01e3c4237ba80975ec02735a"
+                "reference": "755ff10ad2ea4ebb04b4e2b150a4a4fb13a22060"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9f7bad332fd0a24b01e3c4237ba80975ec02735a",
-                "reference": "9f7bad332fd0a24b01e3c4237ba80975ec02735a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/755ff10ad2ea4ebb04b4e2b150a4a4fb13a22060",
+                "reference": "755ff10ad2ea4ebb04b4e2b150a4a4fb13a22060",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-10-06T19:12:12+00:00"
+            "time": "2017-10-06T22:26:58+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -1426,16 +1426,16 @@
         },
         {
             "name": "league/html-to-markdown",
-            "version": "4.4.1",
+            "version": "4.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/html-to-markdown.git",
-                "reference": "82ea375b5b2b1da1da222644c0565c695bf88186"
+                "reference": "1b66954493dea7cd116fd1bb2921757c9f296169"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/82ea375b5b2b1da1da222644c0565c695bf88186",
-                "reference": "82ea375b5b2b1da1da222644c0565c695bf88186",
+                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/1b66954493dea7cd116fd1bb2921757c9f296169",
+                "reference": "1b66954493dea7cd116fd1bb2921757c9f296169",
                 "shasum": ""
             },
             "require": {
@@ -1454,7 +1454,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.5-dev"
+                    "dev-master": "4.6-dev"
                 }
             },
             "autoload": {
@@ -1486,7 +1486,7 @@
                 "html",
                 "markdown"
             ],
-            "time": "2017-03-16T00:45:59+00:00"
+            "time": "2017-10-09T17:23:12+00:00"
         },
         {
             "name": "lusitanian/oauth",
@@ -1557,23 +1557,23 @@
         },
         {
             "name": "mdanter/ecc",
-            "version": "v0.4.3",
+            "version": "v0.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpecc/phpecc.git",
-                "reference": "fa3405da1b2bb4772a0c908c65b0c3e9dde4ccfd"
+                "reference": "fa7cb47ed5225c86c9a6538faf07b351aa55d888"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpecc/phpecc/zipball/fa3405da1b2bb4772a0c908c65b0c3e9dde4ccfd",
-                "reference": "fa3405da1b2bb4772a0c908c65b0c3e9dde4ccfd",
+                "url": "https://api.github.com/repos/phpecc/phpecc/zipball/fa7cb47ed5225c86c9a6538faf07b351aa55d888",
+                "reference": "fa7cb47ed5225c86c9a6538faf07b351aa55d888",
                 "shasum": ""
             },
             "require": {
                 "ext-gmp": "*",
                 "fgrosse/phpasn1": "~1.5",
                 "paragonie/random_compat": "^1|^2",
-                "php": ">=5.6.0"
+                "php": ">=5.6.0, <7.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.1|~5.0",
@@ -1619,7 +1619,7 @@
                 "phpecc",
                 "secp256k1"
             ],
-            "time": "2017-09-22T15:12:06+00:00"
+            "time": "2017-10-09T00:49:31+00:00"
         },
         {
             "name": "minishlink/web-push",

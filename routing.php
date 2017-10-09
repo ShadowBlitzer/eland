@@ -1,5 +1,6 @@
 <?php
 
+use util\app;
 use Symfony\Component\HttpFoundation\Request;
 
 $cc = $app['controllers_factory'];
@@ -20,10 +21,11 @@ $cc->match('/contact', 'controller\\contact::form')
 	->bind('contact');
 $cc->get('/contact/{token}', 'controller\\contact::confirm')
 	->bind('contact_confirm');
-
-$cc->get('/', function (Request $request, app $app, $schema){
-	return ' ok test ' . $schema;
-});
+$cc->get('/{page}', 'controller\\page::show')
+	->value('page', 'index')
+	->assert('page', '|[a-z0-9-]{3,}')
+	->convert('page', 'page_converter:get')
+	->bind('page_show');
 
 $cc->get('/pop.php', function(Request $request, app $app, $schema){
 	return $app->render('pop pop ' . $schema);
@@ -319,6 +321,29 @@ $a = $app['controllers_factory'];
 
 $a->get('/status', 'controller\\status::index')
 	->bind('status');
+
+/**
+ * pages
+ */
+
+$page = $app['controllers_factory'];
+
+$page->match('/', 'controller\\page::a_index')
+	->bind('page_a_index');
+$page->match('/add', 'controller\\page::a_add')
+	->bind('page_a_add');
+$page->get('/{page}', 'controller\\page::a_show')
+	->convert('page', 'page_converter:get')
+	->bind('page_a_show');
+$page->match('/{page}/edit', 'controller\\page::a_edit')
+	->convert('page', 'page_converter:get')
+	->bind('page_a_edit');
+$page->match('/{page}/del', 'controller\\page::a_del')
+	->convert('page', 'page_converter:get')
+	->bind('page_a_del');
+	
+$page->assert('page', '[a-z0-9-]{3,}');
+$a->mount('/pages', $page);
 
 /**
  * permissions

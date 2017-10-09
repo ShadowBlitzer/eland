@@ -3,7 +3,6 @@
 namespace service;
 
 use Doctrine\DBAL\Connection as db;
-use Predis\Client as Redis;
 
 /*
                                 Table "xdb.events"
@@ -61,12 +60,10 @@ class xdb
 	private $user_schema = '';
 	private $user_id = 0;
 	private $db;
-	private $predis;
 
-	public function __construct(db $db, Redis $predis)
+	public function __construct(db $db)
 	{
 		$this->db = $db;
-		$this->predis = $predis;
 
 		if (php_sapi_name() == 'cli')
 		{

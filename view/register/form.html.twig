@@ -38,12 +38,12 @@
 
 {{ form_start(form) }}
 
-{{ form_row(form.first_name, {'label': 'first_name', 'attr': {'class': 'input-lg'}}) }}
-{{ form_row(form.last_name, {'label': 'last_name', 'attr': {'class': 'input-lg'}}) }}
-{{ form_row(form.email, {'label': 'email', 'attr': {'class': 'input-lg'}}) }}
-{{ form_row(form.postcode, {'label': 'postcode', 'attr': {'class': 'input-lg'}}) }}
-{{ form_row(form.mobile, {'label': 'mobile', 'attr': {'class': 'input-lg'}}) }}
-{{ form_row(form.telephone, {'label': 'telephone', 'attr': {'class': 'input-lg'}}) }}
+{{ form_row(form.first_name, {'label': 'first_name'}) }}
+{{ form_row(form.last_name, {'label': 'last_name'}) }}
+{{ form_row(form.email, {'label': 'email'}) }}
+{{ form_row(form.postcode, {'label': 'postcode'}) }}
+{{ form_row(form.mobile, {'label': 'mobile'}) }}
+{{ form_row(form.telephone, {'label': 'telephone'}) }}
 {#
 {% set accept_label = 'register.accept'|trans({'%url%': path('terms')}) %}
 {{ form_widget(form.accept, {'label': accept_label}) }}

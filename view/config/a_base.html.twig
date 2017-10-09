@@ -13,15 +13,15 @@
 
 {% block inner -%}
 
-  {% set config_lang_key = 'config.'~active_route[7:] %}
+  {% set config_lang_key = 'config.'~route[7:] %}
 
   <ul class="nav nav-pills" role="tablist">
 
   {% for cm in config_menu_en %}
 
     {% set c_route = 'config_'~cm %}
-    <li role="presentation"{% if active_route == c_route %} class="active"{% endif %}>
-    <a href="{{ path(c_route, {'schema': schema}) }}" role="tab">
+    <li role="presentation"{% if route == c_route %} class="active"{% endif %}>
+    <a href="{{ path(c_route, acc_sch) }}" role="tab">
     {{ ('config.'~cm~'.menu')|trans }}
     </a>
     </li>

@@ -11,7 +11,9 @@
 {% set active_menu = route_ary[1] is defined and route_ary[1] == 'self' ? route : route_ary[0] %}
 {% set schema = global.request.attributes.get('schema') %}
 {# {% set access = global.request.attributes.get('access') %} #}
-{% set acc_sch = {'schema': schema, 'access': access} %}
+{% if access is defined %}
+	{% set acc_sch = {'schema': schema, 'access': access} %}
+{% endif %}
 
 {% set menu_el =
 	menu_ary[active_menu] ??

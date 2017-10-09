@@ -96,7 +96,6 @@ description: Omschrijving
 amount: Bedrag
 time: Tijdstip
 
-
 and: en
 or: of
 nor: noch
@@ -129,6 +128,18 @@ hosting_request:
     <p>We nemen zo spoedig mogelijk contact met u op.</p>
   mail:
     subject: 'Aanvraag hosting: %group_name%'
+
+page_a_index:
+  title: Pagina's
+
+page_a_add:
+  title: Pagina toevoegen
+
+page_a_edit:
+  title: 'Pagina aanpassen: %name%'
+
+page_a_del:
+  title: 'Pagina verwijderen: %name%'
 
 ad_index:
   title: Vraag en Aanbod
@@ -235,6 +246,7 @@ logout:
   title: Uitloggen
 
 password_reset:
+  title: Paswoord reset
   explain: >
     Stuur een link naar je mailbox waarmee 
     je je paswoord opnieuw kan instellen.
