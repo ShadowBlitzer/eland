@@ -5,6 +5,7 @@
 {% import 'macro/button.html.twig' as b %}
 {% import 'macro/top_button.html.twig' as tb %}
 {% import 'macro/table.html.twig' as t %}
+{% import 'macro/pagination.html.twig' as pg %}
 
 {% block css -%}
 {%- include 'asset/datepicker_css.html.twig' -%}
@@ -115,10 +116,12 @@
 }
 -%}
 
+{{- pg.pagination(route, all_params, pagination) -}}
 {{- t.start() -}}
 {{- t.head(cols, route, all_params, sort) -}}
 {{- t.body(transactions, cols, acc_sch) -}}
 {{- t.end() -}}
+{{- pg.pagination(route, all_params, pagination) -}}
 
 {%- endblock inner %}
 

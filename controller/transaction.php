@@ -5,6 +5,7 @@ namespace controller;
 use util\app;
 use Symfony\Component\HttpFoundation\Request;
 use util\sort;
+use util\pagination;
 
 class transaction
 {
@@ -87,8 +88,10 @@ class transaction
 		])
 			->set_default('cdate');
 
+		$pagination = new pagination($request, $row_count);
+
 		$query .= $sort->query();
-//		$query .= $app['pagination']->query();
+		$query .= $pagination->query();
 
 
 
@@ -276,10 +279,10 @@ class transaction
 
 		return $app['twig']->render('transaction/' . $access . '_index.html.twig', [
 			'transactions'	=> $transactions,
-//			'pagination'	=> $app['pagination']->get($row_count, $params),
 			'filter'		=> $filter->createView(),
 			'filtered'		=> $filtered,
-			'sort'			=> $sort->get_params(),
+			'pagination'	=> $pagination->get($row_count),		
+			'sort'			=> $sort->get(),
 		]);
 	}
 

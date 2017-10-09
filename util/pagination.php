@@ -8,15 +8,9 @@ class pagination
 {
 	private $start;
 	private $limit;
-	private $page = 0;
-	private $table;
+	private $row_count = 0;
 
 	private $adjacent_num = 1;
-	private $row_count = 0;
-	private $page_num = 0;
-	private $entity = '';
-	private $params = [];
-	private $inline = false;
 
 	private $limit_options = [
 		10 		=> 10,
@@ -28,14 +22,70 @@ class pagination
 		1000 	=> 1000,
 	];
 
-	public function get(request $request)
+	public function __construct(Request $request, int $row_count)
+	{		
+		$params = $request->query->get('p') ?? [];
+		$this->limit = $params['limit'] ?? 25;
+		$this->start = $params['start'] ?? 0;
+		$this->row_count = $row_count;
+	}
+
+	public function query():string
 	{
-		$request->query->get('limit');
-		$request->query->get('start');
-		$request->query->get('row_count');
+		return ' limit ' . $this->limit . ' offset ' . $this->start;
+	}
 
-		
+	public function get():array
+	{
+		if (!$this->limit_options[$this->limit])
+		{
+			$this->limit_options[$this->limit] = $this->limit;
+			ksort($this->limit_options);
+		}
 
+		$page = floor($this->start / $this->limit) + 1;
+		$page_count = ceil($this->row_count / $this->limit);
+	
+		$min = $page - $this->adjacent_num;
+		$max = $page + $this->adjacent_num;
+
+		$min = $min < 1 ? 1 : $min;
+		$max = $max > $page_count ? $page_count : $max;
+
+		return [
+			'limit_options'		=> $this->limit_options,
+			'limit'				=> $this->limit,
+			'start'				=> $this->start,
+			'row_count'			=> $this->row_count,
+			'min'				=> $min,
+			'max'				=> $max,
+			'page'				=> $page,
+			'page_count'		=> $page_count,
+		];
+	}
+
+	public function set_limit_options(array $limit_options):pagination
+	{
+		$this->limit_options = [];
+	
+		foreach ($limit_options as $option)
+		{
+			$this->limit_options[$option] = $option;
+		}
+
+		return $this;
+	}
+
+	public function remove_limit_option(int $option):pagination
+	{
+		unset($this->limit_options[$option]);
+		return $this;
+	}
+
+	public function add_limit_option(int $option):pagination
+	{
+		$this->limit_options[$option] = $option;
+		return $this;
 	}
 
 	public function init($entity = '', $row_count = 0, $params = [], $inline = false)

@@ -59,7 +59,7 @@ class sort
 		return ' order by ' . $this->col . ' ' . $this->order;
 	}
 
-	public function get_params():array
+	public function get():array
 	{
 		return [
 			'columns' 	=> $this->columns,
