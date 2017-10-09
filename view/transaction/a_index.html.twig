@@ -6,6 +6,7 @@
 {% import 'macro/top_button.html.twig' as tb %}
 {% import 'macro/table.html.twig' as t %}
 {% import 'macro/pagination.html.twig' as pg %}
+{% import 'macro/filter.html.twig' as fi %}
 
 {% block css -%}
 {%- include 'asset/datepicker_css.html.twig' -%}
@@ -86,6 +87,7 @@
 </div>
 </div>
 
+{{- fi.context(all_params) -}}
 {{- p.form_end(filter) -}}
 
 {%- set cols = {

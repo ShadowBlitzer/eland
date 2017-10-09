@@ -1,5 +1,8 @@
 language: Nederlands
 
+#placeholder for untranslated elements
+var: %var%
+
 eland:
   explain: >
     %link_eland_open%eLAND%link_close% web app 
@@ -89,6 +92,10 @@ to: Naar
 from_date: Vanaf
 to_date: Tot en met
 keyword: Trefwoord
+description: Omschrijving
+amount: Bedrag
+time: Tijdstip
+
 
 and: en
 or: of
