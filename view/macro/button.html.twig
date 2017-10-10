@@ -22,6 +22,10 @@
 {{- form_widget(form_submit, {'label': 'send', 'attr': {'class': 'btn-default btn-lg'}}) -}}
 {%- endmacro send %}
 
+{% macro default(form_submit, label) -%}
+{{- form_widget(form_submit, {'label': label, 'attr': {'class': 'btn-default btn-lg'}}) -}}
+{%- endmacro default %}
+
 {% macro buttonform(form) -%}
 {{- form_start(form) -}}
 {{- form_widget(form.submit, {'attr': {'class': 'btn-default btn-lg'}}) -}}&nbsp;
