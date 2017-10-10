@@ -1,7 +1,4 @@
-{% set acc = global.request.attributes.get('access') %}
-{% set ext = acc == 'a' ? 'admin' : (acc == 'u' ? 'user' : 'unknown') %}
-
-{% extends ext~'.html.twig' %}
+{% extends 'anon.html.twig' %}
 
 {% block css %}
 {% include 'asset/summernote_css.html.twig' %}
@@ -9,13 +6,27 @@
 
 {% block inner %}
 
-{# {{ config('contact_form_top_text', schema) }} #}
+{{ config('contact_form_top_text', schema) }}
 
 {{ form_start(form) }}
 
 <p>
+
+<div class="input-group input-group-lg">
+<span class="input-group-addon addon-info"><i class="fa fa-envelope-o"></i>
+</span>
+{{ form_widget(form.email, {'attr': {'placeholder': 'contact.email'}}) }}
+</div>
+{{ form_errors(form.email) }}
+<p>{{ 'contact.email_explain'|trans }}</p>
+
+</p>
+
+<p>
+
 {{ form_widget(form.message, {'attr': {'class': 'rich-edit'}}) }}
 {{ form_errors(form.message) }}
+
 </p>
 
 <p>
@@ -24,7 +35,7 @@
 
 {{ form_end(form) }}
 
-{# {{ config('contact_form_bottom_text', schema) }} #}
+{{ config('contact_form_bottom_text', schema) }}
 
 {% endblock inner %}
 

@@ -26,7 +26,8 @@ class support
 			->add('message', TextareaType::class, [
 				'constraints' => [
 					new Assert\NotBlank(),
-					new Assert\Length(['min' => 20, 'max' => 2000])],
+					new Assert\Length(['min' => 20, 'max' => 2000]),
+				],
 			])
 
 			->add('submit', SubmitType::class)
@@ -69,7 +70,7 @@ class support
 			return $app->redirect($app->path('login', ['schema' => $schema]));
 		}
 
-		return $app['twig']->render('support/support.html.twig', [
+		return $app['twig']->render('support/' . $access . '_form.html.twig', [
 			'form' => $form->createView(),
 		]);
 	}

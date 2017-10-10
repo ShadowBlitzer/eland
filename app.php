@@ -48,6 +48,8 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 
 $app->extend('twig', function($twig, $app) {
 
+	$policy = new Twig_Sandbox_SecurityPolicy();
+	$twig->addExtension(new Twig_Extension_Sandbox($policy));
 	$twig->addExtension(new twig\extension());
 	$twig->addRuntimeLoader(new \Twig_FactoryRuntimeLoader([
 		twig\config::class => function() use ($app){

@@ -1,44 +1,44 @@
 {% macro form_start(form) -%}
-	{% import _self as p %}
-	{{ p.post() }}
-	{{ form_start(form) }}
-	{{ form_errors(form) }}
+	{%- import _self as p -%}
+	{{- p.post() -}}
+	{{- form_start(form) -}}
+	{{- form_errors(form) -}}
 {%- endmacro form_start %}
 
 {% macro form_filter_start(form) -%}
-	{% import _self as p %}
-	{{ p.filter() }}
-	{{ form_start(form) }}
-	{{ form_errors(form) }}
+	{%- import _self as p -%}
+	{{- p.filter() -}}
+	{{- form_start(form) -}}
+	{{- form_errors(form) -}}
 {%- endmacro form_filter_start %}
 
 {% macro form_end(form) -%}
-	{% import _self as p %}
-	{{ form_end(form) }}
-	{{ p.end() }}
+	{%- import _self as p -%}
+	{{- form_end(form) -}}
+	{{- p.end() -}}
 {%- endmacro form_end %}
 
 {% macro csv() -%}
 	<a href="#" class="csv">
 	<i class="fa fa-file"></i>
-	&nbsp;{{ 'csv'|trans }}</a>
+	&nbsp;{{- 'csv'|trans -}}</a>
 {%- endmacro csv %}
 
 {% macro filter_toggle_btn() -%}
 	<div class="pull-right">
 	&nbsp;
 	<button class="btn btn-default hidden-xs" 
-	title="{{ 'input.filter'|trans }}" 
+	title="{{- 'input.filter'|trans -}}" 
 	data-toggle="collapse" 
 	data-target="#filter">
 	<i class="fa fa-caret-down"></i>
-	<span class="hidden-xs hidden-sm"> {{ 'filter'|trans }}
+	<span class="hidden-xs hidden-sm">&nbsp;{{- 'filter'|trans -}}
 	</span></button>
 	</div>
 {%- endmacro filter_toggle_btn %}
 
 {% macro filter_indicator() -%}
-	&nbsp;<small>{{ 'filtered'|trans }}</small>
+	&nbsp;<small>{{- 'filtered'|trans -}}</small>
 {%- endmacro filter_indicator %}
 
 {% macro filter() -%}

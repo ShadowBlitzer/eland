@@ -1,25 +1,29 @@
 {% macro cancel(location) -%}
-<a href="{{ location }}" class="btn btn-default btn-lg">{{ 'cancel'|trans }}</a>&nbsp;
+<a href="{{- location -}}" class="btn btn-default btn-lg">{{- 'cancel'|trans -}}</a>&nbsp;
 {%- endmacro cancel %}
 
 {% macro add(form_submit) -%}
-{{ form_widget(form_submit, {'label': 'add', 'attr': {'class': 'btn-success btn-lg'}}) }}&nbsp;
+{{- form_widget(form_submit, {'label': 'add', 'attr': {'class': 'btn-success btn-lg'}}) -}}&nbsp;
 {%- endmacro add %}
 
 {% macro edit(form_submit) -%}
-{{ form_widget(form_submit, {'label': 'edit', 'attr': {'class': 'btn-info btn-lg'}}) }}&nbsp;
+{{- form_widget(form_submit, {'label': 'edit', 'attr': {'class': 'btn-info btn-lg'}}) -}}&nbsp;
 {%- endmacro edit %}
 
 {% macro del(form_submit) -%}
-{{ form_widget(form_submit, {'label': 'delete', 'attr': {'class': 'btn-danger btn-lg'}}) }}&nbsp;
+{{- form_widget(form_submit, {'label': 'delete', 'attr': {'class': 'btn-danger btn-lg'}}) -}}&nbsp;
 {%- endmacro del %}
 
 {% macro show(form_submit) -%}
-{{ form_widget(form_submit, {'label': 'show', 'attr': {'class': 'btn-default btn-lg btn-block'}}) }}
+{{- form_widget(form_submit, {'label': 'show', 'attr': {'class': 'btn-default btn-lg btn-block'}}) -}}
 {%- endmacro show %}
 
-{% macro buttonform(form) %}
-{{ form_start(form) }}
-{{ form_widget(form.submit, {'attr': {'class': 'btn-default btn-lg'}}) }}&nbsp;
-{{ form_end(form) }}
-{% endmacro %}
+{% macro send(form_submit) -%}
+{{- form_widget(form_submit, {'label': 'send', 'attr': {'class': 'btn-default btn-lg'}}) -}}
+{%- endmacro send %}
+
+{% macro buttonform(form) -%}
+{{- form_start(form) -}}
+{{- form_widget(form.submit, {'attr': {'class': 'btn-default btn-lg'}}) -}}&nbsp;
+{{- form_end(form) -}}
+{%- endmacro %}

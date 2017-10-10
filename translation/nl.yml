@@ -69,6 +69,10 @@ members: Leden
 interlets: InterLETS
 public: Publiek
 
+label:
+  your_email: Je email adres
+  your_message: Je bericht
+
 email: Email
 password: Paswoord
 message: Bericht
