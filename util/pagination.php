@@ -37,7 +37,7 @@ class pagination
 
 	public function get():array
 	{
-		if (!$this->limit_options[$this->limit])
+		if (!isset($this->limit_options[$this->limit]))
 		{
 			$this->limit_options[$this->limit] = $this->limit;
 			ksort($this->limit_options);

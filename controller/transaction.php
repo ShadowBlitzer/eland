@@ -35,26 +35,19 @@ class transaction
 
 			if (isset($data['from_user']))
 			{
-				$where_code[] = 't.id_from = ?';
+				$where_code[] = $data['andor'] === 'nor' ? 't.id_from <> ?' : 't.id_from = ?';
 				$params[] = $data['from_user'];
 			}
 
 			if (isset($data['to_user']))
 			{
-				$where_code[] = 't.id_to = ?';
+				$where_code[] = $data['andor'] === 'nor' ? 't.id_to <> ?' : 't.id_to = ?';
 				$params[] = $data['to_user'];
 			}
 
-			if (count($where_code) > 1)
+			if (count($where_code) > 1 && $data['andor'] === 'or')
 			{
-				if ($data['andor'] === 'or')
-				{
-					$where_code = ['(' . implode(' or ', $where_code) . ')'];
-				}
-				else if ($data['andor'] === 'nor')
-				{
-					$where_code = ['t.id_from <> ? and t.id_to <> ?'];
-				}
+				$where_code = ['(' . implode(' or ', $where_code) . ')'];
 			}
 
 			$where = array_merge($where, $where_code);
