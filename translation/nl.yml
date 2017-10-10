@@ -79,6 +79,10 @@ label:
   mobile: GSM
   telephone: Telefoon
   accept: Akkoord
+  from: Van
+  to: Naar
+  amount: Bedrag
+  description: Omschrijving
 
 email: Email
 password: Paswoord

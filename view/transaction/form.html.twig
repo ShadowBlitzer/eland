@@ -1,0 +1,25 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
+
+{% block inner -%}
+
+{{- p.form_start(form) -}}
+
+{% block form_fields -%}
+    {{- form_row(form.id_from, {'label': 'label.from', 'addon_fa': 'user'}) -}}
+    {{- form_row(form.id_to, {'label': 'label.to', 'addon_fa': 'user'}) -}}
+    {{- form_row(form.amount, {'label': 'label.amount'}) -}}
+    {{- form_row(form.description, {'label': 'label.description'}) -}}
+{%- endblock form_fields %}
+
+{{- b.cancel(path('transaction_index', acc_sch)) -}}
+
+{% block submit -%}
+{{-  b.add(form.submit) -}}
+{%- endblock %}
+
+{{- p.form_end(form) -}}
+
+{%- endblock inner %}

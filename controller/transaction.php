@@ -7,6 +7,15 @@ use Symfony\Component\HttpFoundation\Request;
 use util\sort;
 use util\pagination;
 
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints as Assert;
+
 class transaction
 {
 	public function index(Request $request, app $app, string $schema, string $access)
@@ -86,155 +95,9 @@ class transaction
 		$query .= $sort->query();
 		$query .= $pagination->query();
 
-
-
-//		$query .= ' limit ' . $limit . ' offset ' . $start;
-
-/*
-
-		$params_sql = $where_sql = $where_code_sql = [];
-
-		$params = [
-			'orderby'	=> $orderby,
-			'asc'		=> $asc,
-			'limit'		=> $limit,
-			'start'		=> $start,
-		];
-
-
-		if ($uid)
-		{
-			$user = readuser($uid);
-
-			$where_sql[] = 't.id_from = ? or t.id_to = ?';
-			$params_sql[] = $uid;
-			$params_sql[] = $uid;
-			$params['uid'] = $uid;
-
-			$fcode = $tcode = link_user($user, false, false);
-			$andor = 'or';
-		}
-
-
-		if ($q)
-		{
-			$where_sql[] = 't.description ilike ?';
-			$params_sql[] = '%' . $q . '%';
-			$params['q'] = $q;
-		}
-
-
-//		if (!$uid)
-//		{
-			if ($fcode)
-			{
-				list($fcode) = explode(' ', trim($fcode));
-
-				$fuid = $app['db']->fetchColumn('select id 
-					from ' . $schema . '.users 
-					where letscode = ?', [$fcode]);
-
-				if ($fuid)
-				{
-					$where_code_sql[] = 't.id_from = ?';
-					$params_sql[] = $fuid;
-
-					$fcode = link_user($fuid, false, false);
-				}
-				else
-				{
-					$where_code_sql[] = '1 = 2';
-				}
-
-				$params['fcode'] = $fcode;
-			}
-
-			if ($tcode)
-			{
-				list($tcode) = explode(' ', trim($tcode));
-
-				$tuid = $app['db']->fetchColumn('select id 
-					from ' . $schema . '.users 
-					where letscode = ?', [$tcode]);
-
-				if ($tuid)
-				{
-					$where_code_sql[] = 't.id_to = ?';
-					$params_sql[] = $tuid;
-
-					$tcode = link_user($tuid, false, false);
-				}
-				else
-				{
-					$where_code_sql[] = '1 = 2';
-				}
-
-				$params['tcode'] = $tcode;
-			}
-
-			if (count($where_code_sql) > 1)
-			{
-				if ($andor == 'or')
-				{
-					$where_code_sql = [' ( ' . implode(' or ', $where_code_sql) . ' ) '];
-				}
-
-				$params['andor'] = $andor;
-			}
-//		}
-
-		$where_sql = array_merge($where_sql, $where_code_sql);
-
-		if ($fdate)
-		{
-			$fdate_sql = $app['date_format']->reverse($fdate);
-
-			if ($fdate_sql === false)
-			{
-				$app['eland.alert']->warning('De begindatum is fout geformateerd.');
-			}
-			else
-			{
-				$where_sql[] = 't.date >= ?';
-				$params_sql[] = $fdate_sql;
-				$params['fdate'] = $fdate;
-			}
-		}
-
-		if ($tdate)
-		{
-			$tdate_sql = $app['date_format']->reverse($tdate);
-
-			if ($tdate_sql === false)
-			{
-				$app->warning('De einddatum is fout geformateerd.');
-			}
-			else
-			{
-				$where_sql[] = 't.date <= ?';
-				$params_sql[] = $tdate_sql;
-				$params['tdate'] = $tdate;
-			}
-		}
-
-		if (count($where))
-		{
-			$where_sql = ' where ' . implode(' and ', $where_sql) . ' ';
-		}
-		else
-		{
-			$where_sql = '';
-		}
-
-		$query = 'select *
-			from ' . $schema . '.transactions ' .
-			$where_sql . '
-			order by ' . $orderby . ' ';
-		$query .= ($asc) ? 'asc ' : 'desc ';
-		$query .= ' limit ' . $limit . ' offset ' . $start;
-*/
 		$transactions = $app['db']->fetchAll($query, $params);
 
+	//
 		foreach ($transactions as $key => $t)
 		{
 			if (!($t['real_from'] || $t['real_to']))
@@ -301,13 +164,29 @@ class transaction
 		];
 
 		$form = $app['form.factory']->createBuilder(FormType::class, $data)
-			->add('first_name')
-			->add('last_name')
-			->add('email', EmailType::class)
-			->add('postcode')
-			->add('gsm', TextType::class, ['required'	=> false])
-			->add('tel', TextType::class, ['required'	=> false])
-			->add('zend', SubmitType::class)
+			->add('id_from', 'typeahead_user_type', [
+				'source_id'	=> 'form_id_to',		
+			])
+			->add('id_to', 'typeahead_user_type', [
+                'source_route'  => 'user_typeahead',
+                'source_params' => [
+                    'user_type'     => 'all',
+                ],
+			])
+			->add('amount', NumberType::class, [
+				'constraints'	=> [
+				],
+			])
+			->add('description', TextType::class, [
+				'constraints' 	=> [
+					new Assert\NotBlank(),
+					new Assert\Length(['max' => 60, 'min' => 1]),
+				],
+				'attr'	=> [
+					'maxlength'	=> 60,
+				],
+			])
+			->add('submit', SubmitType::class)
 			->getForm();
 
 		$form->handleRequest($request);
