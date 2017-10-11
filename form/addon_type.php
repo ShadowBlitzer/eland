@@ -22,6 +22,11 @@ class addon_type extends AbstractType
         {
             $view->vars['addon_label'] = $options['addon_label'];
         }
+
+        if (isset($options['addon_class']))
+        {
+            $view->vars['addon_class'] = $options['addon_class'];
+        }
     }    
 
     public function configureOptions(OptionsResolver $resolver)
@@ -29,6 +34,7 @@ class addon_type extends AbstractType
         $resolver->setDefaults([
             'addon_fa'      => null,
             'addon_label'   => null,
+            'addon_class'   => null,
         ]);
     }
 

@@ -42,8 +42,8 @@
 {{- form_row(form.last_name, {'label': 'label.last_name'}) -}}
 {{- form_row(form.email, {'label': 'label.email'}) -}}
 {{- form_row(form.postcode, {'label': 'label.postcode'}) -}}
-{{- form_row(form.mobile, {'label': 'label.mobile'}) -}}
-{{- form_row(form.telephone, {'label': 'label.telephone'}) -}}
+{{- form_row(form.mobile, {'label': 'label.mobile', 'addon_fa': 'mobile'}) -}}
+{{- form_row(form.telephone, {'label': 'label.telephone', 'addon_fa': 'phone'}) -}}
 {#
 {% set accept_label = 'register.accept'|trans({'%url%': path('terms')}) %}
 {{ form_widget(form.accept, {'label': accept_label}) }}

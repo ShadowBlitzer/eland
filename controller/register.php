@@ -11,18 +11,14 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints as Assert;
+use form\email_addon_type;
+use form\addon_type;
 
 class register
 {
 	public function form(Request $request, app $app, string $schema)
 	{
 		$data = [
-			'first_name'	=> '',
-			'last_name'		=> '',
-			'email'			=> '',
-			'postcode'		=> '',
-			'mobile'		=> '',
-			'telephone'		=> '',
 			'accept'		=> false,
 		];
 
@@ -30,15 +26,15 @@ class register
 
 			->add('first_name')
 			->add('last_name')
-			->add('email', EmailType::class, [
+			->add('email', email_addon_type::class, [
 				'constraints' => new Assert\Email(),
 			])
 
 			->add('postcode')
-			->add('mobile', TextType::class, [
+			->add('mobile', addon_type::class, [
 				'required'	=> false,
 			])
-			->add('telephone', TextType::class, [
+			->add('telephone', addon_type::class, [
 				'required'	=> false,
 			])
 			->add('accept', CheckboxType::class, [

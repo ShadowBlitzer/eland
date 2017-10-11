@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints as Assert;
+use form\login_type;
 
 class login
 {
@@ -23,6 +24,10 @@ class login
 			'password'	=> '',
 		];
 
+		$form = $app->build_form(login_type::class, $data)
+			->handleRequest($request);
+
+/*
 		$form = $app->form($data)
 
 			->add('login')
@@ -35,6 +40,7 @@ class login
 			->getForm();
 
 		$form->handleRequest($request);
+*/
 
 		if ($form->isValid())
 		{

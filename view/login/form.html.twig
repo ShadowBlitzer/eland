@@ -1,43 +1,27 @@
 {% extends 'anon.html.twig' %}
 
-{% block summernote_css %}{% endblock %}
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
 
-{% block inner %}
 
-{{ form_start(form) }}
+{% block inner -%}
 
-<p>
+{%- set label_login = config('template_lets', schema) ? 'login.login_lets' : 'login.login' -%}
 
-<div class="input-group input-group-lg">
-      <span class="input-group-addon addon-info"><i class="fa fa-user"></i>
-      </span>
-{% set login_placeholder = config('template_lets', schema) ? 'login.login_lets' : 'login.login' %}
+{{- p.form_start(form) -}}
 
-     {{ form_widget(form.login, {'attr': {'placeholder': login_placeholder}}) }}
-</div>
-{{ form_errors(form.login) }}
+{{- form_row(form.login, {'label': label_login, 
+  'addon_fa': 'user', 'addon_class': 'addon-info'}) -}}
+{{- form_row(form.password, {'label': 'label.password',
+  'addon_class': 'addon-info'}) -}}
 
-</p>
+{{- b.default(form.submit, 'login.submit_btn') -}}
 
-<p>
+{{- p.form_end(form) -}}
 
-<div class="input-group input-group-lg">
-  <span class="input-group-addon addon-info"><i class="fa fa-key"></i>
-  </span>
-{{ form_widget(form.password, {'attr': {'placeholder': 'password' }}) }}
-</div>
-{{ form_errors(form.password) }}
-</p>
+<a href="{{- path('password_reset', {'schema': schema}) -}}">{{- 'login.password_reset_link'|trans -}}</a>
 
-<p>
-	{{ form_widget(form.submit, {'label': 'login.submit_btn', 'attr': {'class': 'btn btn-default btn-lg'}}) }}
-</p>
+{%- endblock inner %}
 
-{{ form_end(form) }}
 
-<a href="{{ path('password_reset', {'schema': schema}) }}">{{ 'login.password_reset_link'|trans }}</a>
-
-{% endblock inner %}
-
-{% block summernote_js %}{% endblock %}
 
