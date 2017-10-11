@@ -8,7 +8,7 @@
 {{ p.default() }}
     <p>{{ 'auto_min_limit.explain'
     |trans({'%link_balance_limits_open%': 
-    '<a href="'~path('config_balance_limits', {'schema': schema})~'">', 
+    '<a href="'~path('config_balance_limits', acc_sch)~'">', 
     '%link_close%': '</a>'})|raw }}</p>
 {{ p.end() }}
 

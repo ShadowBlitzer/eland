@@ -533,7 +533,7 @@ $cc->before(function(Request $request) use ($app){
 
 $cc->assert('schema', '[a-z][a-z0-9]*');
 
-$app->mount('/{schema}', $cc);
+$app->mount('/{schema}/{_locale}', $cc);
 
 $register = $app['controllers_factory'];
 $register->match('/', 'controller\\register::index')->bind('register');

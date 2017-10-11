@@ -110,10 +110,10 @@ date_default_timezone_set((getenv('TIMEZONE')) ?: 'Europe/Brussels');
 
 $app->register(new Silex\Provider\LocaleServiceProvider());
 
-$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+$app->register(new Silex\Provider\TranslationServiceProvider(), [
     'locale_fallbacks' => ['nl', 'en'],
     'locale'			=> 'nl',
-));
+]);
 
 $app->extend('translator', function($translator, $app) {
 	$loader = new Symfony\Component\Translation\Loader\YamlFileLoader();
