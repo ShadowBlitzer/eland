@@ -336,7 +336,7 @@ $page->get('/{page}', 'controller\\page::a_show')
 	->convert('page', 'page_converter:get')
 	->bind('page_a_show');
 $page->match('/{page}/edit', 'controller\\page::a_edit')
-	->convert('page', 'page_converter:get')
+//	->convert('page', 'page_converter:get')
 	->bind('page_a_edit');
 $page->match('/{page}/del', 'controller\\page::a_del')
 	->convert('page', 'page_converter:get')

@@ -83,6 +83,14 @@ label:
   to: Naar
   amount: Bedrag
   description: Omschrijving
+  menu: Menu
+  slug: Slak
+  slug_explain: >
+    De "Slak" is het laatste gedeelte van de URL. 
+    Deze kan uit kleine letters, cijfers en een koppeltekens bestaan. 
+    Gebruik minstens 4 tekens en "index" voor de thuispagina.
+  access: Toegang
+  content: Inhoud
 
 email: Email
 password: Paswoord

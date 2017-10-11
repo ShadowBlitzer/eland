@@ -1,16 +1,15 @@
-{% extends 'admin.html.twig' %}
+{% extends 'page/a_form.html.twig' %}
 
-{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/button.html.twig' as b %}
 
 {% block heading -%}
     {{- 'page_a_add.title'|trans -}}
 {%- endblock %}
 
+{% block submit -%}
+    {{- b.add(form.submit) -}}
+{%- endblock submit %}
 
-{% block inner -%}
 
-<p>ADMIN PAGE ADD</p>
-
-{%- endblock inner %}
 
 

@@ -147,6 +147,7 @@ $app->extend('form.type.extensions', function($extensions) use ($app) {
 
 $app->extend('form.types', function ($types) use ($app) {
 	$types[] = 'datepicker_type';
+	$types[] = 'page_type';
 	$types[] = 'category_type';
 	$types[] = 'type_contact_type';
 	$types[] = 'typeahead_type';
@@ -162,6 +163,10 @@ $app['datepicker_transformer'] = function ($app){
 
 $app['datepicker_type'] = function ($app) {
     return new form\datepicker_type($app['datepicker_transformer']);
+};
+
+$app['page_type'] = function ($app){
+	return new form\page_type();
 };
 
 $app['category_type'] = function ($app) {

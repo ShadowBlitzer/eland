@@ -1,15 +1,13 @@
-{% extends 'admin.html.twig' %}
+{% extends 'page/a_form.html.twig' %}
 
-{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/asset.html.twig' as b %}
 
 {% block heading -%}
     {{- 'page_a_edit.title'|trans -}}
 {%- endblock %}
 
-{% block inner %}
-
-<p>ADMIN PAGE EDIT</p>
-
-{% endblock inner %}
+{% block submit -%}
+    {{- b.edit(form.submit) -}}
+{%- endblock submit %}
 
 
