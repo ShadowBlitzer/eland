@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints as Assert;
+use form\number_addon_type;
+use form\addon_type;
 
 class transaction
 {
@@ -173,11 +175,11 @@ class transaction
                     'user_type'     => 'all',
                 ],
 			])
-			->add('amount', NumberType::class, [
+			->add('amount', number_addon_type::class, [
 				'constraints'	=> [
 				],
 			])
-			->add('description', TextType::class, [
+			->add('description', addon_type::class, [
 				'constraints' 	=> [
 					new Assert\NotBlank(),
 					new Assert\Length(['max' => 60, 'min' => 1]),

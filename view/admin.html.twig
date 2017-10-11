@@ -1,8 +1,14 @@
 {% extends 'own_group.html.twig' %}
 
 {% import 'macro/menu.html.twig' as m %}
+{% import 'macro/asset.html.twig' as a %}
 
 {% set access = 'a' %}
+
+{% block common_css -%}
+	{{- parent() -}}
+	{{- a.css('admin.css') -}}
+{%- endblock common_css -%}
 
 {% set admin_menu_ary = {
   'status': {'title': 'status.title', 'fa': 'exclamation-triangle', 'route': 'status'},

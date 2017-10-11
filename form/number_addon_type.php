@@ -3,13 +3,15 @@
 namespace form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
+use form\addon_type;
 
-class addon_type extends AbstractType
+class number_addon_type extends AbstractType
 {
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -34,11 +36,11 @@ class addon_type extends AbstractType
 
     public function getParent()
     {
-        return TextType::class;
+        return NumberType::class;
     }
 
     public function getBlockPrefix()
     {
-        return 'addon';
+        return 'number_addon';
     }
 }

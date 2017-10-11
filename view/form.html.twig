@@ -41,6 +41,10 @@
     </div>
 {%- endblock addon_widget %}
 
+{% block number_addon_widget -%}
+    {{- block('addon_widget') -}}
+{%- endblock number_addon_widget %}
+
 {% block typeahead_widget -%}
     {%- set attr = attr|merge(typeahead_attr) -%}
     {{- block('addon_widget') -}}
