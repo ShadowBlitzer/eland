@@ -12,20 +12,16 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints as Assert;
+use form\email_addon_type;
 
 class password_reset
 {
 	public function form(Request $request, app $app, string $schema)
 	{
-		$data = [
-			'email'	=> '',
-		];
-
-		$form = $app->form($data)
-			->add('email', EmailType::class, [
+		$form = $app->form([])
+			->add('email', email_addon_type::class, [
 				'constraints' => new Assert\Email(),
 			])
-
 			->add('submit', SubmitType::class)
 			->getForm();
 
@@ -71,11 +67,11 @@ class password_reset
 					$data['template'] = 'link';
 					$data['schema'] = $schema;
 					$data['to'] = $data['email'];
-					$data['url'] =
-
 					$data['priority'] = 10000;
 
 					$app['mail']->queue($data);
+
+					$app->success($app->trans('password_reset.link_send_success', ['%email%' => $email]));
 
 					return $app->redirect($app->path('login', ['schema' => $schema]));
 				}

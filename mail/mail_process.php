@@ -1,6 +1,6 @@
 <?php
 
-namespace service;
+namespace mail;
 
 use League\HTMLToMarkdown\HtmlConverter;
 use service\queue;
@@ -12,8 +12,9 @@ use service\token;
 use service\email_validate;
 use exception\missing_schema_exception;
 use exception\missing_parameter_exception;
+use exception\configuration_exception;
 
-class mail
+class mail_process
 {
 	private $converter;
 	private $mailer;
@@ -189,165 +190,57 @@ class mail
 	}
 
 
-	public function queue(array $data)
+	public function put(array $data)
 	{
-		if(!isset($data['schema']))
+		if (!isset($data['schema']))
 		{
 			throw new missing_schema_exception(
-				'Schema is missing in mail ' . json_encode($data));
+				'Schema is missing in mail ' . json_encode($data)
+			);
 		}
 
+		if (!$this->config('mailenabled', $data['schema']))
+		{
+			throw new configuration_exception(sprintf(
+				'mail functionality not enabled in 
+				configuration in schema %s for mail %s',
+				$schema, json_encode($data)
+			);
+		}
 
+		if (!isset($data['template']))
+		{
+			throw new missing_parameter_exception(
+				'No template set in mail ' . json_encode($data)
+			);
+		}
+
+		if (!isset($data['subject']))
+		{
+			throw new missing_parameter_exception(
+				'No subject set in mail ' . json_encode($data)
+			);			
+		}
+
+		if (!isset($data['vars']) || !is_array($data['vars']))
+		{
+			throw new missing_parameter_exception(
+				'No vars array set in mail ' . json_encode($data)
+			);			
+		}
 	
+		if (!isset($data['to']))
+		{
+			throw new missing_parameter_exception(
+				'No "to" set in mail ' . json_encode($data)
+			);	
+		}
+
 		if (!isset($data['priority']))
 		{
 			$data['priority'] = 1000;
 		}
 
-		if (!$data['schema'])
-		{
-			$m = 'Mail: no schema set, data: ' . json_encode($data) . "\n";
-			$this->monolog->info('mail: ' . $m);
-			return $m;
-		}
-
-		$data['vars']['validate_param'] = '';
-
-		if (!$this->config->get('mailenabled', $data['schema']))
-		{
-			$m = 'Mail functions are not enabled. ' . "\n";
-			$this->monolog->info('mail: ' . $m, ['schema' => $data['schema']]);
-			return $m;
-		}
-
-		if (!isset($data['template']) && !isset($data['template_from_config']))
-		{
-			if (!isset($data['subject']) || $data['subject'] == '')
-			{
-				$m = 'Mail "subject" is missing.';
-				$this->monolog->error('mail: '. $m, ['schema' => $data['schema']]);
-				return $m;
-			}
-
-			if ((!isset($data['text']) || $data['text'] == '')
-				&& (!isset($data['html']) || $data['html'] == ''))
-			{
-				$m = 'Mail "body" (text or html) is missing.';
-				$this->monolog->error('mail: ' . $m, ['schema' => $data['schema']]);
-				return $m;
-			}
-
-			$data['subject'] = '[' . $this->config->get('systemtag', $data['schema']) . '] ' . $data['subject'];
-		}
-
-		if (!isset($data['to']) || !$data['to'])
-		{
-			$m = 'Mail "to" is missing for "' . $data['subject'] . '"';
-			$this->monolog->error('mail: ' . $m, ['schema' => $data['schema']]);
-			return $m;
-		}
-
-		$data['to'] = $this->mailaddr->get($data['to']);
-
-		if (!count($data['to']))
-		{
-			$m = 'error: mail without "to" | subject: ' . $data['subject'];
-			$this->monolog->error('mail: ' . $m, ['schema' => $data['schema']]);
-			return $m;
-		}
-
-		$validate_ary = [];
-
-		if (isset($data['validate_email']) && isset($data['template']))
-		{
-			foreach ($data['to'] as $email => $name)
-			{
-				if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-				{
-					continue;
-				}
-
-				if (!$this->email_validate->is_validated($email, $data['schema']))
-				{
-					$token = $this->email_validate->get_token($email, $data['schema'], $data['template']);
-
-					$validate_ary[$email] = $token;
-				}
-			}
-		}
-
-		if (isset($data['reply_to']))
-		{
-			$data['reply_to'] = $this->mailaddr->get($data['reply_to'], $data['schema']);
-
-			if (!count($data['reply_to']))
-			{
-				$this->monolog->error('mail: error: invalid "reply to" : ' . $data['subject']);
-				unset($data['reply_to']);
-			}
-
-			$data['from'] = $this->mailaddr->get('from', $data['schema']);
-		}
-		else
-		{
-			$data['from'] = $this->mailaddr->get('noreply', $data['schema']);
-		}
-
-		if (!count($data['from']))
-		{
-			$m = 'error: mail without "from" | subject: ' . $data['subject'];
-			$this->monolog->error('mail: ' . $m);
-			return $m;
-		}
-
-		if (isset($data['cc']))
-		{
-			$data['cc'] = $this->mailaddr->get($data['cc']);
-
-			if (!count($data['cc']))
-			{
-				$this->monolog->error('mail error: invalid "reply to" : ' . $data['subject']);
-				unset($data['cc']);
-			}
-		}
-
-		$reply = (isset($data['reply_to'])) ? ' reply-to: ' . json_encode($data['reply_to']) : '';
-
-		foreach ($validate_ary as $email_to => $validate_token)
-		{
-			$val_data = $data;
-
-			$val_data['to'] = [$email_to => $data['to'][$email]];
-			$val_data['vars']['validate_param'] = '&ev=' . $validate_token;
-
-			unset($data['to'][$email_to]);
-
-			$error = $this->queue->set('mail', $val_data);
-
-			if (!$error)
-			{
-
-				$this->monolog->info('mail: Mail in queue with validate token ' . $validate_token .
-					', subject: ' .
-					($data['subject'] ?? '(template)') . ', from : ' .
-					json_encode($data['from']) . ' to : ' . json_encode($data['to']) . ' ' .
-					$reply . ' priority: ' . $data['priority'], ['schema' => $data['schema']]);
-			}
-		}
-
-		if (!count($data['to']))
-		{
-			return;
-		}
-
-		$error = $this->queue->set('mail', $data);
-
-		if (!$error)
-		{
-			$this->monolog->info('mail: Mail in queue, subject: ' .
-				($data['subject'] ?? '(template)') . ', from : ' .
-				json_encode($data['from']) . ' to : ' . json_encode($data['to']) . ' ' .
-				$reply . ' priority: ' . $data['priority'], ['schema' => $data['schema']]);
-		}
+		$this->queue->set('mail', $data);
 	}
 }

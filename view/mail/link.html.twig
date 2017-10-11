@@ -2,15 +2,15 @@
 
 {% block pretext %}{% endblock %}
 
-{% block content %}
+{% block content -%}
 
-<p>{{ top|trans }}</p>
+<p>{{- top|trans -}}</p>
 
-<p><a href="{{ url }}">{{ url }}</a></p>
+<p><a href="{{- url -}}">{{- url -}}</a></p>
 
-<p>{{ bottom|trans }}</p>
+<p>{{- bottom|trans -}}</p>
 
-{% endblock %}
+{%- endblock %}
 
 {% block accountinfo %}{% endblock %}
 {% block support %}{% endblock %}

@@ -427,6 +427,14 @@ $app['mail'] = function ($app){
 		$app['email_validate']);
 };
 
+$app['mail_queue'] = function ($app) {
+	return new mail\mail_queue($app['queue'], $app['config']);
+};
+
+$app['mail_process'] = function ($app) {
+	return new mail\mail_process($app['queue'], $app['config']);
+};
+
 // elas
 
 $app['elas_ev'] = function($app){

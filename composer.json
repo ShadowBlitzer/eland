@@ -74,7 +74,8 @@
 			"exception\\": "exception/",
 			"validator\\": "validator/",
 			"transformer\\": "transformer/",
-			"converter\\": "converter/"
+			"converter\\": "converter/",
+			"mail\\": "mail/"
         }
     }
 }

@@ -1,14 +1,23 @@
 {% extends 'anon.html.twig' %}
 
-{% block fa %}key{% endblock %}
-{% block heading %}{{ 'password_reset.title'|trans }}{% endblock heading %}
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
 
-{% block inner %}
+{% block fa -%}key{%- endblock %}
+{% block heading -%}{{- 'password_reset.title'|trans -}}{%- endblock heading %}
 
-{{ form_start(form) }}
+{% block inner -%}
 
-<p>{{ 'password_reset.explain'|trans }}</p>
+<p>{{- 'password_reset.explain'|trans -}}</p>
 
+{{- p.form_start(form) -}}
+{{- form_row(form.email, {'label': 'label.your_email'}) -}}
+{{- b.default(form.submit, 'password_reset.submit_btn') -}}
+{{- p.form_end(form) -}}
+
+{%- endblock inner %}
+
+{#
 <p>
 
 <div class="input-group input-group-lg">
@@ -22,8 +31,4 @@
 <p>
 {{ form_widget(form.submit, {'label': 'password_reset.submit_btn', 'attr': {'class': 'btn btn-default btn-lg'}}) }}
 </p>
-
-{{ form_end(form) }}
-
-{% endblock inner %}
-
+#}

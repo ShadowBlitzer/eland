@@ -13,18 +13,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints as Assert;
+use form\email_addon_type;
 
 class contact
 {
 	public function form(Request $request, app $app, string $schema)
 	{
-		$data = [
-			'email'		=> '',
-			'message'	=> '',
-		];
-
-		$form = $app->form($data)
-			->add('email', EmailType::class, [
+		$form = $app->form([])
+			->add('email', email_addon_type::class, [
 				'constraints' => new Assert\Email(),
 			])
 
