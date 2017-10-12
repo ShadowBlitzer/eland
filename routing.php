@@ -536,7 +536,8 @@ $cc->assert('schema', '[a-z][a-z0-9]*');
 $app->mount('/{schema}/{_locale}', $cc);
 
 $register = $app['controllers_factory'];
-$register->match('/', 'controller\\register::index')->bind('register');
+$register->match('/', 'controller\\register::index')
+	->bind('register');
 $register->get('/{token}', 'controller\\register::token')
 	->bind('register_token');
 
@@ -548,6 +549,11 @@ $public->get('/', function() use ($app){
 
 $app->mount('/', $public);
 
-$app->match('/hosting-request', 'controller\\main::hosting_request')->bind('hosting_request');
-$app->get('/monitor', 'controller\\main::monitor')->bind('monitor');
-$app->get('/', 'controller\\main::index')->bind('main_index');
+$app->match('/hosting-request', 'controller\\hosting_request::form')
+	->bind('hosting_request');
+$app->get('/hosting-request/{token}', 'controller\\hosting_request::confirm')
+	->bind('hosting_request_confirm');
+$app->get('/monitor', 'controller\\main::monitor')
+	->bind('monitor');
+$app->get('/', 'controller\\main::index')
+	->bind('main_index');

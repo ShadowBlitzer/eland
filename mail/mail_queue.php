@@ -18,20 +18,23 @@ class mail_queue
 
 	public function put(array $data)
 	{
-		if (!isset($data['schema']))
+		if (!isset($data['no_schema']))
 		{
-			throw new missing_schema_exception(
-				'Schema is missing in mail ' . json_encode($data)
-			);
-		}
+			if (!isset($data['schema']))
+			{
+				throw new missing_schema_exception(
+					'Schema is missing in mail ' . json_encode($data)
+				);
+			}
 
-		if (!$this->config('mailenabled', $data['schema']))
-		{
-			throw new configuration_exception(sprintf(
-				'mail functionality not enabled in 
-				configuration in schema %s for mail %s',
-				$schema, json_encode($data)
-			);
+			if (!$this->config('mailenabled', $data['schema']))
+			{
+				throw new configuration_exception(sprintf(
+					'mail functionality not enabled in 
+					configuration in schema %s for mail %s',
+					$schema, json_encode($data)
+				);
+			}
 		}
 
 		if (!isset($data['template']))

@@ -75,6 +75,9 @@ label:
   first_name: Voornaam
   last_name: Achternaam
   email: Email
+  email_confirmation_explain: >
+    We sturen je een confirmatie-link om je
+    email adres te valideren.
   postcode: Postcode
   mobile: GSM
   telephone: Telefoon
@@ -92,6 +95,7 @@ label:
   access: Toegang
   content: Inhoud
   password: Paswoord
+  currency_or_group_name: Naam van de munt of groep
 
 email: Email
 password: Paswoord
@@ -136,6 +140,9 @@ error:
 
 hosting_request:
   title: Aanvraag hosting eLAND
+  explain: >
+    Vraag met dit formulier vrijblijvend gratis 
+    hosting van eLAND voor je munt of groep aan. 
   privacy: >
     Privacy: uw email adres wordt voor 
       geen enkel ander doel

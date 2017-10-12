@@ -431,8 +431,8 @@ $app['mail_queue'] = function ($app) {
 	return new mail\mail_queue($app['queue'], $app['config']);
 };
 
-$app['mail_process'] = function ($app) {
-	return new mail\mail_process($app['queue'], $app['config']);
+$app['mail_send'] = function ($app) {
+	return new mail\mail_send($app['monolog'], $app['twig'], $app['config']);
 };
 
 // elas

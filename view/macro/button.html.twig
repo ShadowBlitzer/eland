@@ -6,6 +6,10 @@
 {{- form_widget(form_submit, {'label': 'add', 'attr': {'class': 'btn-success btn-lg'}}) -}}&nbsp;
 {%- endmacro add %}
 
+{% macro info(form_submit, label) -%}
+{{- form_widget(form_submit, {'label': label, 'attr': {'class': 'btn-info btn-lg'}}) -}}&nbsp;
+{%- endmacro info %}
+
 {% macro edit(form_submit) -%}
 {{- form_widget(form_submit, {'label': 'edit', 'attr': {'class': 'btn-info btn-lg'}}) -}}&nbsp;
 {%- endmacro edit %}
@@ -26,7 +30,7 @@
 {{- form_widget(form_submit, {'label': label, 'attr': {'class': 'btn-default btn-lg'}}) -}}
 {%- endmacro default %}
 
-{% macro buttonform(form) -%}
+{% macro buttonform(form) -%} {# used in "export" #}
 {{- form_start(form) -}}
 {{- form_widget(form.submit, {'attr': {'class': 'btn-default btn-lg'}}) -}}&nbsp;
 {{- form_end(form) -}}
