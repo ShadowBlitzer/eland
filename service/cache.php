@@ -29,11 +29,7 @@ class cache
 		$this->redis = $redis;
 	}
 
-	/*
-	 *
-	 */
-
-	public function set(string $id, array $data = [], int $expires = 0)
+	public function set(string $id, array $data, int $expires = 0)
 	{
 		$data = json_encode($data);
 
@@ -80,24 +76,20 @@ class cache
 		}
 	}
 
-	/*
-	 *
-	 */
+	public function get(string $id):array
+	{
+		return json_decode($this->get_string($id) ?? '{}', true);
+	}
 
-	public function get(string $id, bool $decoded = true)
+	public function get_string(string $id) // returns null when key not available // TODO conditional return ?string in php7.1 
 	{
 		$key = $this->prefix . $id;
 
 		$data = $this->redis->get($key);
 
-		if ($data)
+		if (isset($data))
 		{
-			if (!$decoded)
-			{
-				return $data;
-			}
-
-			return json_decode($data, true);
+			return $data;
 		}
 
 		$row = $this->db->fetchAssoc('select data, expires
@@ -115,15 +107,10 @@ class cache
 				$this->redis->expireat($key, $data['expires']);
 			}
 
-			if (!$decoded)
-			{
-				return $row['data'];
-			}
-
-			return json_decode($row['data'], true);
+			return $row['data'];
 		}
 
-		return $decoded ? [] : '';
+		return null;
 	}
 
 	/**

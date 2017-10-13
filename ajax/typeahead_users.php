@@ -87,7 +87,7 @@ if ($app['groups']->get_schema($group['domain']))
 	exit;
 }
 
-$active_users = $app['cache']->get($group['domain'] . '_typeahead_data', false);
+$active_users = $app['cache']->get_string($group['domain'] . '_typeahead_data');
 
 if ($active_users)
 {

@@ -417,6 +417,10 @@ $app['token'] = function ($app){
 	return new service\token();
 };
 
+$app['token_cache'] = function ($app){
+	return new service($app['token'], $app['cache']);
+};
+
 $app['email_validate'] = function ($app){
 	return new service\email_validate($app['cache'], $app['xdb'], $app['token'], $app['monolog']);
 };

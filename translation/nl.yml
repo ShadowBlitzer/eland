@@ -76,7 +76,7 @@ label:
   last_name: Achternaam
   email: Email
   email_confirmation_explain: >
-    We sturen je een confirmatie-link om je
+    We sturen je een bevestigings-link om je
     email adres te valideren.
   postcode: Postcode
   mobile: GSM
