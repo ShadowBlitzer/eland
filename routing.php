@@ -255,31 +255,9 @@ $forum->assert('forum', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
 $acc->mount('/forum', $forum);
 
-/*
-* notifications
-*/
-
-$notification = $app['controllers_factory'];
-
-$notification->get('/', 'controller\\notification::index')
-	->bind('notification_index');
-$notification->get('/self', 'controller\\notification::show_self')
-	->bind('notification_self');
-$notification->get('/{notification}', 'controller\\notification::show')
-	->convert('notification', 'notification_converter:get')
-	->bind('notification_show');
-$notification->match('/add', 'controller\\notification::add')
-	->bind('notification_add');
-$notification->match('/{notification}/edit', 'controller\\notification::edit')
-	->convert('notification', 'notification_converter:get')
-	->bind('notification_edit');
-
-$notification->assert('notification', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
-
-$acc->mount('/notifications', $notification);
-
 $acc->assert('access', '[giua]');
 $cc->mount('/{access}', $acc);
+
 
 /*
  * elas
@@ -300,218 +278,29 @@ $elas->assert('user', '\d+');
 
 $ua->mount('/elas', $elas);
 
-/**
- * support
- */
 
-$ua->match('/support', 'controller\\support::form')
-	->bind('support');
 
-//
+$app->mount('/{_locale}/{schema}/{access}/notifications', new provider\notification_controller_provider());
 
-$ua->assert('access', '[ua]');
-
-$cc->mount('/{access}', $ua);
+$app->mount('/{_locale}/{schema}/{access}/support', new provider\support_controller_provider());
 
 /**
  * a (admin)
  */
 
-$a = $app['controllers_factory'];
-
-$a->get('/status', 'controller\\status::index')
-	->bind('status');
-
-/**
- * pages
- */
-
-$page = $app['controllers_factory'];
-
-$page->match('/', 'controller\\page::a_index')
-	->bind('page_a_index');
-$page->match('/add', 'controller\\page::a_add')
-	->bind('page_a_add');
-$page->get('/{page}', 'controller\\page::a_show')
-	->convert('page', 'page_converter:get')
-	->bind('page_a_show');
-$page->match('/{page}/edit', 'controller\\page::a_edit')
-//	->convert('page', 'page_converter:get')
-	->bind('page_a_edit');
-$page->match('/{page}/del', 'controller\\page::a_del')
-	->convert('page', 'page_converter:get')
-	->bind('page_a_del');
-	
-$page->assert('page', '[a-z0-9-]{3,}');
-$a->mount('/pages', $page);
-
-/**
- * permissions
- */
-
-$pms = $app['controllers_factory'];
-
-$pms->get('/', 'controller\\permission::index')
-	->bind('permission');
-
-$a->mount('/permissions', $pms);
-
-/**
- * categories
- */
-
-$cat = $app['controllers_factory'];
-
-$cat->get('/', 'controller\\category::index')
-	->bind('category_index');
-$cat->match('/add/{parent_category}', 'controller\\category::add')
-	->value('parent_category', 0)
-	->assert('parent_category', '\d+')
-	->bind('category_add');
-$cat->match('/{category}/edit', 'controller\\category::edit')
-	->convert('category', 'category_converter:get')
-	->assert('category', '\d+')
-	->bind('category_edit');
-$cat->match('/{category}/del', 'controller\\category::del')
-	->assert('category', '\d+')
-	->convert('category', 'category_converter:get')
-	->bind('category_del');
-
-$a->mount('/categories', $cat);
-
-/**
- * custom fields
- */
-
-$cust = $app['controllers_factory'];
-
-$cust->get('/', 'controller\\custom_field::index')
-	->bind('custom_field_index');
-$cust->match('/add', 'controller\\custom_field::add')
-	->bind('custom_field_add');
-$cust->match('/{custom_field}/edit', 'controller\\custom_field::edit')
-	->convert('custom_field', 'custom_field_converter:get')
-	->bind('custom_field_edit');
-
-$a->mount('/custom-fields', $cust);
-
-/**
- * Contact types
- */
-
-$type_contact = $app['controllers_factory'];
-
-$type_contact->get('/', 'controller\\type_contact::index')
-	->bind('typecontact_index');
-$type_contact->match('/add', 'controller\\type_contact::add')
-	->bind('typecontact_add');
-$type_contact->match('/{type_contact}/edit', 'controller\\type_contact::edit')
-	->assert('type_contact', '\d+')
-	->convert('type_contact', 'type_contact_converter:get')
-	->bind('typecontact_edit');
-$type_contact->match('/{type_contact}/del', 'controller\\type_contact::del')
-	->assert('type_contact', '\d+')
-	->convert('type_contact', 'type_contact_converter:get')
-	->bind('typecontact_del');
-
-$a->mount('/contact-types', $type_contact);
-
-/**
- * Contacts (temp)
- */
-
-$contact_detail = $app['controllers_factory'];
-
-$contact_detail->get('/', 'controller\\contact_detail::index')
-	->bind('contactdetail_index');
-$contact_detail->match('/add', 'controller\\contact_detail::add')
-	->bind('contactdetail_add');
-$contact_detail->match('/{contact_detail}/edit', 'controller\\contact_detail::edit')
-	->assert('contact_detail', '\d+')
-	->convert('contact_detail', 'contact_converter:get')
-	->bind('contactdetail_edit');
-
-$a->mount('/contact-details', $contact_detail);
-
-
-/**
- * Config (includes autominlimit)
- */
-
-$config = $app['controllers_factory'];
-
-$config->match('/', 'controller\\config::index')
-	->bind('config_index');
-$config->match('/balance-limits', 'controller\\config::balance_limits')
-	->bind('config_balance_limits');
-$config->match('/ads', 'controller\\config::ads')
-	->bind('config_ads');
-$config->match('/naming', 'controller\\config::naming')
-	->bind('config_naming');
-$config->match('/mail-addresses', 'controller\\config::mail_addresses')
-	->bind('config_mail_addresses');
-$config->match('/periodic-mail', 'controller\\config::periodic_mail')
-	->bind('config_periodic_mail');
-$config->match('/contact-form', 'controller\\config::contact_form')
-	->bind('config_contact_form');
-$config->match('/registration-form', 'controller\\config::registration_form')
-	->bind('config_registration_form');
-$config->match('/forum', 'controller\\config::forum')
-	->bind('config_forum');
-$config->match('/members', 'controller\\config::members')
-	->bind('config_members');
-$config->match('/system', 'controller\\config::system')
-	->bind('config_system');
-
-$a->mount('/config', $config);
-
-//
-
-$a->get('/groups/typeahead', 'controller\\group::typeahead')
-	->bind('group_typeahead');
-
-/**
- * export
- */
-
-$export = $app['controllers_factory'];
-
-$export->match('/', 'controller\\export::index')
-	->bind('export');
-
-$a->mount('/export', $export);
-
-/**
- * auto min limit
- */
-
-$a->match('/auto-min-limit', 'controller\\auto_min_limit::form')
-	->bind('auto_min_limit');
-
-/*
- * mass_transaction
- */
-
-$a->match('/mass-transaction', 'controller\\mass_transaction::form')
-	->bind('mass_transaction');
-
-/*
- * periodic charge
- */
-
-$a->match('/periodic-charge', 'controller\\periodic_charge::form')
-	->bind('periodic_charge');
-/*
- * logs
- */
-
-$a->get('/logs', 'controller\\log::index')
-	->bind('log');
-$a->get('/logs/typeahead', 'controller\\log::typeahead')
-	->bind('log_typeahead');
-
-$a->assert('access', 'a');
-$cc->mount('/{access}', $a);
+$app->mount('/{_locale}/{schema}/{access}/status', new provider\status_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/pages', new provider\page_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/permissions', new provider\permission_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/categories', new provider\category_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/custom-fields', new provider\custom_field_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/contact-types', new provider\type_contact_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/contact-details', new provider\contact_detail_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/config', new provider\config_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/export', new provider\export_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/auto-min-limit', new provider\auto_min_limit_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/mass-transaction', new provider\mass_transaction_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/periodic-charge', new provider\periodic_charge_controller_provider());
+$app->mount('/{_locale}/{schema}/{access}/logs', new provider\log_controller_provider());
 
 //
 
@@ -557,3 +346,4 @@ $app->get('/monitor', 'controller\\main::monitor')
 	->bind('monitor');
 $app->get('/', 'controller\\main::index')
 	->bind('main_index');
+
