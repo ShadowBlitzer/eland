@@ -29,10 +29,10 @@ class queue
 	}
 
 	/*
-	 *
-	 */
+	*
+	*/
 
-	public function set(string $topic, array $data, int $priority = 1000)
+	public function set(string $topic, array $data, int $priority = 0)
 	{
 		$insert = [
 			'topic'			=> $topic,
@@ -40,23 +40,14 @@ class queue
 			'priority'		=> $priority,
 		];
 
-		try
-		{
-			$this->db->insert('xdb.queue', $insert);
-		}
-		catch(Exception $e)
-		{
-			$this->db->rollback();
-			throw $e;
-			exit;
-		}
+		$this->db->insert('xdb.queue', $insert);
 	}
 
 	/*
 	 *
 	 */
 
-	public function get(array $topic_ary)
+	public function get(array $topic_ary):array
 	{
 		$sql_where = $sql_params = $sql_types = [];
 
@@ -75,31 +66,21 @@ class queue
 				order by priority desc, id asc
 				limit 1';
 
-		try
+		$stmt = $this->db->executeQuery($query, $sql_params, $sql_types);
+
+		if ($row = $stmt->fetch())
 		{
-			$stmt = $this->db->executeQuery($query, $sql_params, $sql_types);
+			$return = [
+				'data'		=> json_decode($row['data'], true),
+				'id'		=> $row['id'],
+				'topic'		=> $row['topic'],
+				'priority'	=> $row['priority'],
+			];
 
-			if ($row = $stmt->fetch())
-			{
-				$return = [
-					'data'		=> json_decode($row['data'], true),
-					'id'		=> $row['id'],
-					'topic'		=> $row['topic'],
-					'priority'	=> $row['priority'],
-				];
+			error_log('delete: ' . $row['id'] . ' : ' . 
+				$this->db->delete('xdb.queue', ['id' => $row['id']]));
 
-				error_log('delete: ' . $row['id'] . ' : ' . 
-					$this->db->delete('xdb.queue', ['id' => $row['id']]));
-
-				return $return;
-			}
-
-		}
-		catch (\Exception $e)
-		{
-			error_log('err queue: ' . $e->getMessage());
-
-			throw $e;
+			return $return;
 		}
 
 		return [];
@@ -109,7 +90,7 @@ class queue
 	 *
 	 */
 
-	public function count(string $topic)
+	public function count(string $topic):int
 	{
 		if ($topic)
 		{

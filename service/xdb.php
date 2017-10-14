@@ -317,7 +317,7 @@ class xdb
 	 *
 	 */
 
-	public function count(string $agg_type, string $eland_id, string $agg_schema)
+	public function count(string $agg_type, string $eland_id, string $agg_schema):int
 	{
 		$sql_where = $sql_params = [];
 

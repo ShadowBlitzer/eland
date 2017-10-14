@@ -9,7 +9,7 @@ class thumbprint
 	private $redis;
 	private $version;
 	private $ttl = 604800; // 1 week
-	private $redis_prefix = 'thumbprint_';
+	private $prefix = 'thumbprint_';
 
 	public function __construct(Redis $redis, string $version)
 	{
@@ -22,9 +22,9 @@ class thumbprint
 		$this->ttl = $ttl;
 	}
 
-	public function get(string $key)
+	public function get(string $key):string
 	{
-		$thumbprint = $this->redis->get($this->redis_prefix . $key);
+		$thumbprint = $this->redis->get($this->prefix . $key);
 
 		if (!$thumbprint)
 		{
@@ -36,7 +36,7 @@ class thumbprint
 
 	public function set(string $key, string $content)
 	{
-		$redis_key = $this->redis_prefix . $key;
+		$redis_key = $this->prefix . $key;
 		$thumbprint = (string) crc32($content);
 
 		$log = $thumbprint === $this->redis->get($redis_key) ? '' : '(new) ';
@@ -50,6 +50,6 @@ class thumbprint
 
 	public function del(string $key)
 	{
-		$this->redis->del($this->redis_prefix . $key);
+		$this->redis->del($this->prefix . $key);
 	}
 }

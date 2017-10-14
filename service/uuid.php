@@ -8,7 +8,7 @@ class uuid
 	{
 	}
 
-	public function gen()
+	public function gen():string
 	{
 		$rnd = random_bytes(16);
 

@@ -323,11 +323,7 @@ $app['date_format_cache'] = function ($app){
 	return new service\date_format_cache($app['predis'], $app['config'], $app['translator']);
 };
 
-// 
-
-$app['pagination'] = function (){
-	return new service\pagination();
-};
+//
 
 $app['log_db'] = function($app){
 	return new service\log_db($app['db'], $app['predis']);
@@ -399,10 +395,6 @@ $app['distance'] = function ($app){
 $app['config'] = function ($app){
 	return new service\config($app['db'], $app['xdb'],
 		$app['predis']);
-};
-
-$app['type_template'] = function ($app){
-	return new service\type_template($app['config']);
 };
 
 $app['user_cache'] = function ($app){

@@ -8,7 +8,7 @@ class etoken_manager implements etoken_manager_interface
 {
     private $ttl = 14400;
     private $bytes = 15;
-    private $redis_prefix = 'etoken_';
+    private $prefix = 'etoken_';
     private $redis;
     private $value;
 
@@ -25,7 +25,7 @@ class etoken_manager implements etoken_manager_interface
         }
 
         $this->value = base64_encode(random_bytes($this->bytes));
-        $key = $this->redis_prefix . $this->value;
+        $key = $this->prefix . $this->value;
         $this->redis->set($key, '1');
         $this->redis->expire($key, $this->ttl);
         return $this->value;
@@ -33,7 +33,7 @@ class etoken_manager implements etoken_manager_interface
 
     public function get_error_message(string $value)
     {
-        $key = $this->redis_prefix . $value;
+        $key = $this->prefix . $value;
         $count = $this->redis->incr($key);
 
         if ($count === 1)
