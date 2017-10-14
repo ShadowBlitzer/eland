@@ -67,7 +67,7 @@ class mail_queue
 
 		if (!isset($data['priority']))
 		{
-			$data['priority'] = 1000;
+			$data['priority'] = 0;
 		}
 
 		$this->queue->set('mail', $data);

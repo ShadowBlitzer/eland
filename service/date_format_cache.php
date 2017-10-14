@@ -20,7 +20,7 @@ class date_format_cache
 		$this->translator = $translator;
 	}
 
-	public function get(string $precision, string $locale, string $schema)
+	public function get(string $precision, string $locale, string $schema):string
 	{
 		$key = $this->prefix . $schema . '_' . $locale . '_' . $precision;
 		$format = $this->redis->get($key);

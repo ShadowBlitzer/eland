@@ -117,7 +117,7 @@ class cache
 	 *
 	 */
 
-	public function exists(string $id): bool 
+	public function exists(string $id):bool 
 	{
 		$key = $this->prefix . $id;
 

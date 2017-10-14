@@ -410,7 +410,7 @@ $app['token'] = function ($app){
 };
 
 $app['token_cache'] = function ($app){
-	return new service($app['token'], $app['cache']);
+	return new service\token_cache($app['token'], $app['cache']);
 };
 
 $app['email_validate'] = function ($app){

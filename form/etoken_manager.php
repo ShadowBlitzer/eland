@@ -17,7 +17,7 @@ class etoken_manager implements etoken_manager_interface
         $this->redis = $redis;
     }
 
-    public function get()
+    public function get():string
     {
         if (isset($this->value))
         {
@@ -31,7 +31,7 @@ class etoken_manager implements etoken_manager_interface
         return $this->value;
     }
 
-    public function get_error_message(string $value)
+    public function get_error_message(string $value):string
     {
         $key = $this->prefix . $value;
         $count = $this->redis->incr($key);

@@ -84,14 +84,16 @@ class mail_send
 			return;
 		}
 
-		$template_html = $this->twig->loadTemplate('mail/' . $data['template'] . '.html.twig');
-		$template_text = $this->twig->loadTemplate('mail/' . $data['template'] . '.text.twig');
+		if (!isset($data['reply_to']))
+		{
+			$data['vars']['no_reply'] = true;
+		}
 
-		$text = $template_text->render($data['vars']);
-		$html = $template_html->render($data['vars']);
-
-		$subject = isset($schema) ? '[' . $this->config('systemtag', $schema) . ']' : '';
-		$subject .= $data['subject'];
+		$template = $twig->load('mail/' . $data['template'] . '.twig');
+	
+		$text = $template->renderBlock('text_body', $data['vars']);
+		$html = $template->renderBlock('html_body', $data['vars']);
+		$subject = $template->renderBlock('subject', $data['vars']);
 
 		$message = new \Swift_Message();
 		$message->setSubject($subject)

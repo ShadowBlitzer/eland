@@ -62,7 +62,7 @@ class config
 			], ['setting' => $name]);
 	}
 
-	public function get(string $key, string $schema)
+	public function get(string $key, string $schema):string
 	{
 		if (isset($this->local_cache[$schema][$key]))
 		{

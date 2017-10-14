@@ -11,6 +11,15 @@ class contact
 {
 	public function form(Request $request, app $app, string $schema)
 	{
+		var_dump($request->getLocale());
+
+
+		$template = $app['twig']->load('rblock/b.twig');
+		return $template->renderBlock('a');
+
+
+
+
 		$form = $app->build_form(contact_type::class)
 			->handleRequest($request);
 
@@ -18,15 +27,24 @@ class contact
 		{
 			$data = $form->getData();
 
-			$data['ip'] = $_SERVER['REMOTE_ADDR'];
-			$data['agent'] = $_SERVER['HTTP_USER_AGENT'];
+			$data = array_merge($data, [
+				'ip'		=> $request->getClientIp(),
+				'path'		=> $request->getPathInfo(),
+				'secure'	=> $request->isSecure(),
+				'host'		=> $request->getHost(),
+				'agent'		=> $request->headers->get('User-Agent'),
+				'locale'	=> $request->getLocale(),
+				'schema'	=> $request->get('schema'),
+			]);
 
 			$token = $app['token_cache']->set($data);
 
-			$app['mail_confirm']->set_subject(' ')
+			$app['confirm_link']->get('route', $data); 
+
+			$app['mail_confirm_link']
 				->set_data($data)
-				->set_template('')
-				->set_confirm_route('')
+				->set_template('contact_confirm')
+				->set_link_route('contact_confirm')
 				->queue();
 
 

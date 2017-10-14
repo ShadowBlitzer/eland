@@ -17,7 +17,7 @@ class token_cache
 		$this->cache = $cache;
 	}
 
-	private function set(array $data, int $expires = 14400):string  // 4 hours
+	public function set(array $data, int $expires = 14400):string  // 4 hours
 	{
 		$token = $this->token->gen();
 		$this->cache->set($prefix . $token, $data, $expires);

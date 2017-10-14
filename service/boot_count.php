@@ -16,7 +16,7 @@ class boot_count
 		$this->boot = $this->cache->get('boot');
 	}
 
-	public function get($key)
+	public function get(string $key):int
 	{
 		if (!isset($this->boot[$key]))
 		{

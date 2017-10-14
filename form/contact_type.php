@@ -14,7 +14,6 @@ class contact_type extends AbstractType
 {	
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder->add('email', email_addon_type::class, [
                 'constraints' => new Assert\Email(),
             ])
