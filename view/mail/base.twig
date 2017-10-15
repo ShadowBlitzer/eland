@@ -15,8 +15,13 @@
     {%- block text_account_info -%}{%- endblock -%}
     {%- block text_support -%}{%- endblock -%}
     {%- block text_unsubscribe -%}{%- endblock -%}
-    {%- block text_footer -%}{%- endblock -%}
-{%- enblock text_body -%}
+    {%- block text_footer -%}
+        {%- if schema is defined %}
+
+        {{ 'mail.footer'|trans({'%systemname%': config('systemname', schema)}) -}}
+        {%- endif -%}
+    {%- endblock text_footer -%}
+{%- endblock text_body -%}
 
 {%- block html_body -%}
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -35,6 +40,11 @@
     {%- block html_account_info -%}{%- endblock -%}
     {%- block html_support -%}{%- endblock -%}
     {%- block html_unsubscribe -%}{%- endblock -%}
-    {%- block html_footer -%}{%- endblock -%}
+    {%- block html_footer -%}
+        {%- if schema is defined %}
+        <br/>
+        <p>{{- 'mail.footer'|trans({'%systemname%': config('systemname', schema)}) -}}</p>
+        {%- endif -%}
+    {%- endblock html_footer -%}
     </body>
 {%- endblock html_body -%}

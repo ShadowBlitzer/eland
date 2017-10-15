@@ -199,7 +199,7 @@ $app['transaction_filter_type'] = function ($app) {
 	return new form\transaction_filter_type();
 };
 
-/*
+
 $app->extend('monolog', function($monolog, $app) {
 
 	$monolog->setTimezone(new DateTimeZone('UTC'));
@@ -208,6 +208,7 @@ $app->extend('monolog', function($monolog, $app) {
 	$handler->setFormatter(new \Bramus\Monolog\Formatter\ColoredLineFormatter());
 	$monolog->pushHandler($handler);
 
+	/*
 	$handler = new \Monolog\Handler\RedisHandler($app['predis'], 'monolog_logs', \Monolog\Logger::DEBUG, true, 20);
 	$handler->setFormatter(new \Monolog\Formatter\JsonFormatter());
 	$monolog->pushHandler($handler);
@@ -234,10 +235,11 @@ $app->extend('monolog', function($monolog, $app) {
 
 		return $record;
 	});
+	*/
 
 	return $monolog;
 });
-*/
+
 
 $app->register(new Silex\Provider\SessionServiceProvider(), [
 	'session.storage.handler'	=> new service\redis_session($app['predis']),
@@ -413,6 +415,10 @@ $app['token_cache'] = function ($app){
 	return new service\token_cache($app['token'], $app['cache']);
 };
 
+$app['token_url'] = function ($app){
+	return new service\token_url($app['request_stack'], $app['url_generator'], $app['token_cache']);
+};
+
 $app['email_validate'] = function ($app){
 	return new service\email_validate($app['cache'], $app['xdb'], $app['token'], $app['monolog']);
 };
@@ -421,6 +427,10 @@ $app['mail'] = function ($app){
 	return new service\mail($app['queue'], $app['monolog'],
 		$app['mailaddr'], $app['twig'], $app['config'],
 		$app['email_validate']);
+};
+
+$app['mail_confirmation_link'] = function ($app) {
+	return new mail\mail_confirmation_link($app['request_stack'], $app['token_url'], $app['mail_queue']);
 };
 
 $app['mail_queue'] = function ($app) {

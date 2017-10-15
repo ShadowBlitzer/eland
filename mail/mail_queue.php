@@ -16,7 +16,7 @@ class mail_queue
 		$this->config = $config;
 	}
 
-	public function put(array $data)
+	public function put(array $data, int $priority = 0)
 	{
 		if (!isset($data['no_schema']))
 		{
@@ -27,13 +27,13 @@ class mail_queue
 				);
 			}
 
-			if (!$this->config('mailenabled', $data['schema']))
+			if (!$this->config->get('mailenabled', $data['schema']))
 			{
 				throw new configuration_exception(sprintf(
 					'mail functionality not enabled in 
 					configuration in schema %s for mail %s',
 					$schema, json_encode($data)
-				);
+				));
 			}
 		}
 
@@ -42,13 +42,6 @@ class mail_queue
 			throw new missing_parameter_exception(
 				'No template set in mail ' . json_encode($data)
 			);
-		}
-
-		if (!isset($data['subject']))
-		{
-			throw new missing_parameter_exception(
-				'No subject set in mail ' . json_encode($data)
-			);			
 		}
 
 		if (!isset($data['vars']) || !is_array($data['vars']))
@@ -65,11 +58,6 @@ class mail_queue
 			);	
 		}
 
-		if (!isset($data['priority']))
-		{
-			$data['priority'] = 0;
-		}
-
-		$this->queue->set('mail', $data);
+		$this->queue->set('mail', $data, $priority);
 	}
 }

@@ -532,6 +532,14 @@ form:
 mail:
   no_reply: >
     Dit is een automatische mail. Niet beantwoorden a.u.b.
+  footer: %systemname%
+  confirmation:
+    title: Bevestiging gevraagd
+    explain: > 
+      Bevestig je email adres door op onderstaande
+      link te klikken
+    expiration: >
+      Deze link blijft 4 uur geldig.
   support: Support
   overview:
     offers_and_wants: >

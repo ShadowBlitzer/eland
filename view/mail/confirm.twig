@@ -1,0 +1,23 @@
+{% extends 'mail/base.twig' %}
+
+{%- block subject_line -%}{{- 'mail.confirmation.subject'|trans -}}{%- endblock -%}
+
+{%- block text_noreply_pretext -%}{%- endblock -%}
+
+{%- block text_content -%}
+{{- 'mail.confirmation.explain'|trans }}
+
+{{ confirmation_link }}
+
+{{ 'mail.confirmation.expiration'|trans -}}
+{%- endblock text_content -%}
+
+{%- block html_noreply_pretext -%}{%- endblock -%}
+
+{%- block html_content -%}
+<p>{{- 'mail.confirmation.explain'|trans -}}</p>
+<br/>
+<p><a href="{{- confirmation_link -}}">{{- confirmation_link -}}</a></p>
+<br/>
+<p>{{- 'mail.confirmation.expiration'|trans -}}</p>
+{%- endblock html_content -%}

@@ -50,12 +50,12 @@ class process_mail extends Command
 
             $record = $app['queue']->get(['mail']);
 
-            if (!count($record) or !$record)
+            if (!count($record))
             {
                 continue;
             }
 
-            $app['mail']->process($record['data']);
+            $app['mail_send']->send($record['data']);
         }
     }
 }

@@ -41,13 +41,13 @@ class mail_send
 			if (!isset($data['schema']))
 			{
 				$err[] = sprintf(
-					'no schema set for mail: %s', json_encode($data)));
+					'no schema set for mail: %s', json_encode($data));
 			}
 
 			$schema = $data['vars']['schema'] = $data['schema'];
 			$monolog_vars = ['schema' => $schema];
 		
-			if (!$this->config('mailenabled', $schema))
+			if (!$this->config->get('mailenabled', $schema))
 			{
 				$err[] = sprintf('mail functionality not enabled in 
 					configuration for mail %s', json_encode($data));
@@ -57,11 +57,6 @@ class mail_send
 		if (!isset($data['template']))
 		{
 			$err[] = sprintf('no template set for mail %s', json_encode($data));
-		}
-
-		if (!isset($data['subject']))
-		{
-			$err[] = sprintf('no subject set for mail %s', json_encode($data));
 		}
 
 		if (!isset($data['vars']) || !is_array($data['vars']))
@@ -78,7 +73,7 @@ class mail_send
 		{
 			foreach ($err as $msg)
 			{
-				$this->monolog->error($msg, $monolog_vars)
+				$this->monolog->error($msg, $monolog_vars);
 			}
 		
 			return;
@@ -89,7 +84,7 @@ class mail_send
 			$data['vars']['no_reply'] = true;
 		}
 
-		$template = $twig->load('mail/' . $data['template'] . '.twig');
+		$template = $this->twig->load('mail/' . $data['template'] . '.twig');
 	
 		$text = $template->renderBlock('text_body', $data['vars']);
 		$html = $template->renderBlock('html_body', $data['vars']);
@@ -99,7 +94,7 @@ class mail_send
 		$message->setSubject($subject)
 			->setBody($text)
 			->addPart($html, 'text/html')
-			->setTo($to);
+			->setTo($data['to']);
 
 		if (isset($data['reply_to']))
 		{

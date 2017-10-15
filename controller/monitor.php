@@ -35,7 +35,7 @@ class monitor
 				if (!$monitor_service_worker)
 				{
 					http_response_code(503);
-					$app['monolog']->error('web service is up but service worker is down')d;
+					$app['monolog']->error('web service is up but service worker is down');
 					exit;
 				}
 			}

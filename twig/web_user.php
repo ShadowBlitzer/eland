@@ -22,8 +22,8 @@ class web_user
 	{
 		$this->user_simple_cache = $user_simple_cache;
 		$request = $request_stack->getCurrentRequest();
-		$this->schema = $request->get('schema');
-		$this->access = $request->get('access');
+		$this->schema = $request->attributes->get('schema');
+		$this->access = $request->attributes->get('access');
 		$this->url_generator = $url_generator;	
 	}
 

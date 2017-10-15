@@ -17,17 +17,20 @@ class token_cache
 		$this->cache = $cache;
 	}
 
-	public function set(array $data, int $expires = 14400):string  // 4 hours
+	public function gen(array $data, int $expires = 14400):string  // 4 hours
 	{
 		$token = $this->token->gen();
-		$this->cache->set($prefix . $token, $data, $expires);
+		$this->cache->set($this->prefix . $token, $data, $expires);
 
 		return $token;
 	}
 
 	public function get(string $token):array
 	{
-		return $this->cache->get($prefix . $token);
+		$key = $this->prefix . $token;
+		$data = $this->cache->get($key);
+		$this->cache->del($key);
+		return $data;
 	}
 }
 

@@ -21,7 +21,7 @@ class web_date
 		$this->date_format_cache = $date_format_cache;
 		$request = $request_stack->getCurrentRequest();
 		$this->locale = $request->getLocale();
-		$this->schema = $request->get('schema');	
+		$this->schema = $request->attributes->get('schema');	
 	}
 
 	public function get(string $ts, string $precision):string
