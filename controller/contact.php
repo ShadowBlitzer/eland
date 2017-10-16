@@ -18,7 +18,7 @@ class contact
 		{
 			$data = $form->getData();
 
-			$app['mail_confirm_link']
+			$app['mail_queue_confirm_link']
 				->set_data($data)
 				->set_template('confirm')
 				->set_route('contact_confirm')
@@ -40,7 +40,7 @@ class contact
 
 	public function confirm(Request $request, app $app, string $schema, string $token)
 	{
-		$data = $app['mail_confirm_link']->get();
+		$data = $app['mail_validated_confirm_link']->get();
 
 		error_log(json_encode($data));
 		
@@ -49,10 +49,6 @@ class contact
 			$app->err($app->trans('contact.confirm_not_found'));
 			return $app->redirect($app->path('confirm', ['schema' => $schema]));
 		}
-
-		$email = strtolower($data['email']);
-
-		$app['xdb']->set('email_validated', $email, [], $schema);
 
 /*		
 		$app['mail']->queue([
@@ -65,6 +61,15 @@ class contact
 			'reply_to'	=> $email,
 		]);
 */
+/*
+		$app[]->set_fail_message()
+			->set_fail_route()
+			->set_success_message()
+			->set_success_route()
+			->set_success_mail_template()
+			->set_success_mail_template();
+*/
+
 
 		$app->success($app->trans('contact.success'));
 

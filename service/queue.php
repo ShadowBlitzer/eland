@@ -47,40 +47,23 @@ class queue
 	 *
 	 */
 
-	public function get(array $topic_ary):array
+	public function get(string $topic):array
 	{
-		$sql_where = $sql_params = $sql_types = [];
-
-		if (count($topic_ary))
-		{
-			$sql_where[] = 'topic in (?)';
-			$sql_params[] = $topic_ary;
-			$sql_types[] = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
-		}
-
-		$sql_where = count($sql_where) ? ' where ' . implode(' and ', $sql_where) : '';
-
-		$query = 'select topic, data, id, priority
+		$row = $this->db->fetchAssoc('select topic, data, id, priority
 				from xdb.queue
-				' . $sql_where . '
+				where topic = ?
 				order by priority desc, id asc
-				limit 1';
+				limit 1', [$topic]);
 
-		$stmt = $this->db->executeQuery($query, $sql_params, $sql_types);
-
-		if ($row = $stmt->fetch())
+		if (is_array($row))
 		{
-			$return = [
-				'data'		=> json_decode($row['data'], true),
-				'id'		=> $row['id'],
-				'topic'		=> $row['topic'],
-				'priority'	=> $row['priority'],
-			];
+			$this->db->delete('xdb.queue', ['id' => $row['id']]);
 
-			error_log('delete: ' . $row['id'] . ' : ' . 
-				$this->db->delete('xdb.queue', ['id' => $row['id']]));
+			error_log('delete from queue id: ' . $row['id'] . ', topic: ' . 
+				$row['topic'] . ', priority: ' . $row['priority'] . ', data: ' . 
+				$row['data']);
 
-			return $return;
+			return json_decode($row['data'], true);
 		}
 
 		return [];

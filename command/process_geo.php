@@ -48,14 +48,14 @@ class process_geo extends Command
 
             $loop_count++;
 
-            $record = $app['queue']->get(['geo']);
+            $record = $app['queue']->get('geo');
 
             if (!count($record))
             {
                 continue;
             }
 
-            $app['mail_send']->send($record['data']);
+ //           $app['mail_send']->send($record); to do: process geo
         }
     }
 }

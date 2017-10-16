@@ -48,14 +48,14 @@ class process_mail extends Command
 
             $loop_count++;
 
-            $record = $app['queue']->get(['mail']);
+            $record = $app['queue']->get('mail');
 
             if (!count($record))
             {
                 continue;
             }
 
-            $app['mail_send']->send($record['data']);
+            $app['mail_send']->send($record);
         }
     }
 }

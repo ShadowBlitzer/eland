@@ -7,7 +7,7 @@
     "require": {
 		"php": "^7",
 		"aws/aws-sdk-php": "^3",
-		"swiftmailer/swiftmailer": "~6",
+		"swiftmailer/swiftmailer": "^6.0",
 		"monolog/monolog": "^1",
 		"bramus/monolog-colored-line-formatter": "2.0.*",
 		"fabpot/goutte": "^3",

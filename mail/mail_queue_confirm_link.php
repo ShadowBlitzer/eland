@@ -7,7 +7,7 @@ use service\token_url;
 use mail\mail_queue;
 use exception\missing_parameter_exception;
 
-class mail_confirm_link
+class mail_queue_confirm_link
 {
 	private $request;
 	private $token_url;	
@@ -28,19 +28,19 @@ class mail_confirm_link
 		$this->mail_queue = $mail_queue;
 	}
 
-	public function set_data(array $data):mail_confirm_link
+	public function set_data(array $data):mail_queue_confirm_link
 	{
 		$this->data = $data;
 		return $this;
 	}
 
-	public function set_template(string $template):mail_confirm_link
+	public function set_template(string $template):mail_queue_confirm_link
 	{
 		$this->template = $template;
 		return $this;
 	}
 
-	public function set_route(string $route):mail_confirm_link
+	public function set_route(string $route):mail_queue_confirm_link
 	{
 		$this->route = $route;
 		return $this;
@@ -67,30 +67,22 @@ class mail_confirm_link
 		$vars = array_merge($data, [
 			'confirm_link'		=> $confirm_link,
 		]);
-
-		$mail_data = [
-			'to'		=> $data['email'],
-			'template'	=> $template,
-			'vars'		=> $vars,
-		];
-
+	
 		$schema = $this->request->attributes->get('schema');
 
 		if (isset($schema))
 		{
 			$mail_data['schema'] = $schema;
-		}
-		else
-		{
-			$mail_data['no_schema'] = true;
+
+			$this->mail_queue->set_schema($schema);
 		}
 
-		$this->mail_queue->put($mail_data, 1000000);
+		$this->mail_queue->set_template($template)
+			->set_vars($vars)
+			->set_to($data['email']);
+			->set_priority(1000000)
+			->put();
+	
 		return;
-	}
-
-	public function get():array
-	{
-		return $this->token_url->get();
 	}
 }

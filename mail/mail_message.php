@@ -2,42 +2,32 @@
 
 namespace mail;
 
-use Monolog\Logger;
+use Swift_Mailer as mailer;
 use Twig_Environment as Twig;
-use service\config;
 
-class mail_send
+class mail_message
 {
 	private $mailer;
-	private $monolog;
 	private $twig;
-	private $config;
 
-	public function __construct(Logger $monolog,Twig $twig, config $config)
+	public function __construct(mailer $mailer,Twig $twig)
 	{
-		$this->monolog = $monolog;
+		$this->mailer = $mailer;
 		$this->twig = $twig;
-		$this->config = $config;
-
-		$enc = getenv('SMTP_ENC') ?: 'tls';
-		$transport = new \Swift_SmtpTransport(getenv('SMTP_HOST'), getenv('SMTP_PORT'), $enc);
-		$transport->setUsername(getenv('SMTP_USERNAME'))
-			->setPassword(getenv('SMTP_PASSWORD'));
-
-		$this->mailer = new \Swift_Mailer($transport);
-		$this->mailer->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(100, 30));
-		$this->mailer->getTransport()->stop();
 	}
 
-	/**
-	 *
-	 */
 	public function send(array $data)
 	{
 		$err = $monolog_vars = [];
 
-		if (isset($data['schema']))
+		if (!isset($data['no_schema']))
 		{
+			if (!isset($data['schema']))
+			{
+				$err[] = sprintf(
+					'no schema set for mail: %s', json_encode($data));
+			}
+
 			$schema = $data['vars']['schema'] = $data['schema'];
 			$monolog_vars = ['schema' => $schema];
 		

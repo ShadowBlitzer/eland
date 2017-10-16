@@ -33,6 +33,20 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     ],
 ]);
 
+$app->register(new Silex\Provider\SwiftmailerServiceProvider(), [
+	'swiftmailer.options'	=> [
+		'host' 			=> getenv('SMTP_HOST'),
+		'port' 			=> getenv('SMTP_POST'),
+		'username' 		=> getenv('SMTP_USERNAME'),
+		'password' 		=> getenv('SMTP_PASSWORD'),
+		'encryption' 	=> getenv('SMTP_ENC') ?: 'tls',
+		'auth_mode'		=> null,
+	],
+	'swiftmailer.plugins'	=> [
+		new \Swift_Plugins_AntiFloodPlugin(100, 30),
+	],
+]);
+
 $app->register(new Silex\Provider\TwigServiceProvider(), [
 	'twig.path' => __DIR__ . '/view',
 	'twig.options'	=> [
@@ -40,11 +54,9 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 		'debug'		=> getenv('DEBUG'),
 	],
 	'twig.form.templates'	=> [
-//		'bootstrap_3_layout.html.twig',
 		'form.html.twig',
 	],
 ]);
-
 
 $app->extend('twig', function($twig, $app) {
 
@@ -82,7 +94,6 @@ $app->extend('twig', function($twig, $app) {
 
 	return $twig;
 });
-
 
 $app->register(new Silex\Provider\AssetServiceProvider(), [
     'assets.version' => '15',
@@ -199,7 +210,6 @@ $app['transaction_filter_type'] = function ($app) {
 	return new form\transaction_filter_type();
 };
 
-
 $app->extend('monolog', function($monolog, $app) {
 
 	$monolog->setTimezone(new DateTimeZone('UTC'));
@@ -239,7 +249,6 @@ $app->extend('monolog', function($monolog, $app) {
 
 	return $monolog;
 });
-
 
 $app->register(new Silex\Provider\SessionServiceProvider(), [
 	'session.storage.handler'	=> new service\redis_session($app['predis']),
@@ -429,12 +438,28 @@ $app['mail'] = function ($app){
 		$app['email_validate']);
 };
 
-$app['mail_confirm_link'] = function ($app) {
-	return new mail\mail_confirm_link($app['request_stack'], $app['token_url'], $app['mail_queue']);
+$app['mail_noreply_address'] = function ($app) {
+	return new mail\mail_noreply_address(getenv('MAIL_NOREPLY_ADDRESS'));
+};
+
+$app['mail_hoster_address'] = function ($app) {
+	return new mail\mail_hoster_address(getenv('MAIL_HOSTER_ADDRESS'));
+};
+
+$app['mail_from_address'] = function ($app) {
+	return new mail\mail_from_address(getenv('MAIL_FROM_ADDRESS'));
+};
+
+$app['mail_queue_confirm_link'] = function ($app) {
+	return new mail\mail_queue_confirm_link($app['request_stack'], $app['token_url'], $app['mail_queue']);
+};
+
+$app['mail_validated_confirm_link'] = function ($app) {
+	return new mail\mail_validated_confirm_link($app['token_url'], $app['mail_validated']);
 };
 
 $app['mail_queue'] = function ($app) {
-	return new mail\mail_queue($app['queue'], $app['config']);
+	return new mail\mail_queue($app['monolog'], $app['queue'], $app['config']);
 };
 
 $app['mail_send'] = function ($app) {
@@ -547,8 +572,8 @@ $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
-    'profiler.cache_dir' => __DIR__.'/cache/profiler',
-    'profiler.mount_prefix' => '/_profiler',
+    'profiler.cache_dir' 		=> __DIR__.'/cache/profiler',
+    'profiler.mount_prefix' 	=> '/_profiler',
 ));
 
 $app['uuid'] = function($app){
