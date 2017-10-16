@@ -36,5 +36,6 @@ $console->add(new command\migrate_status());
 $console->add(new command\process_worker());
 $console->add(new command\process_mail());
 $console->add(new command\process_sync());
+$console->add(new command\process_geo());
 
 $console->run();

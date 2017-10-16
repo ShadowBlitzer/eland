@@ -18,7 +18,7 @@ class contact
 		{
 			$data = $form->getData();
 
-			$app['mail_confirmation_link']
+			$app['mail_confirm_link']
 				->set_data($data)
 				->set_template('confirm')
 				->set_route('contact_confirm')
@@ -40,7 +40,7 @@ class contact
 
 	public function confirm(Request $request, app $app, string $schema, string $token)
 	{
-		$data = $app['mail_confirmation_link']->get();
+		$data = $app['mail_confirm_link']->get();
 
 		error_log(json_encode($data));
 		

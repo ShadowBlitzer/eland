@@ -533,13 +533,32 @@ mail:
   no_reply: >
     Dit is een automatische mail. Niet beantwoorden a.u.b.
   footer: %systemname%
-  confirmation:
-    title: Bevestiging gevraagd
+  confirm:
+    subject: Bevestiging gevraagd
     explain: > 
-      Bevestig je email adres door op onderstaande
-      link te klikken
+      Bevestig je email adres door op de link hieronder
+      te klikken
     expiration: >
       Deze link blijft 4 uur geldig.
+  contact_confirm:
+    subject: Bevestiging van je bericht gevraagd
+    explain: >
+      Bevestig je bericht in het contactformulier door 
+      op de link hieronder te klikken. 
+    expiration: >
+      Deze link blijft 4 uur geldig. Gelieve deze mail te
+      negeren wanneer je niet zelf een bericht hebt verstuurd
+      via ons contactformulier.
+  register_confirm:
+    subject: Bevestiging van je registratie gevraagd
+    explain: >
+      Bevestig je registratie door op de link hieronder 
+      te klikken.
+    expiration: >
+      Deze link blijft 4 uur geldig. Gelieve deze mail te
+      negeren wanneer je niet zelf ons registratieformulier
+      hebt ingevuld.
+
   support: Support
   overview:
     offers_and_wants: >

@@ -7,7 +7,7 @@ use service\token_url;
 use mail\mail_queue;
 use exception\missing_parameter_exception;
 
-class mail_confirmation_link
+class mail_confirm_link
 {
 	private $request;
 	private $token_url;	
@@ -28,19 +28,19 @@ class mail_confirmation_link
 		$this->mail_queue = $mail_queue;
 	}
 
-	public function set_data(array $data):mail_confirmation_link
+	public function set_data(array $data):mail_confirm_link
 	{
 		$this->data = $data;
 		return $this;
 	}
 
-	public function set_template(string $template):mail_confirmation_link
+	public function set_template(string $template):mail_confirm_link
 	{
 		$this->template = $template;
 		return $this;
 	}
 
-	public function set_route(string $route):mail_confirmation_link
+	public function set_route(string $route):mail_confirm_link
 	{
 		$this->route = $route;
 		return $this;
@@ -62,10 +62,10 @@ class mail_confirmation_link
 			));
 		}
 
-		$confirmation_link = $this->token_url->gen($route, $data);
+		$confirm_link = $this->token_url->gen($route, $data);
 
 		$vars = array_merge($data, [
-			'confirmation_link'		=> $confirmation_link,
+			'confirm_link'		=> $confirm_link,
 		]);
 
 		$mail_data = [

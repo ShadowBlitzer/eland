@@ -429,8 +429,8 @@ $app['mail'] = function ($app){
 		$app['email_validate']);
 };
 
-$app['mail_confirmation_link'] = function ($app) {
-	return new mail\mail_confirmation_link($app['request_stack'], $app['token_url'], $app['mail_queue']);
+$app['mail_confirm_link'] = function ($app) {
+	return new mail\mail_confirm_link($app['request_stack'], $app['token_url'], $app['mail_queue']);
 };
 
 $app['mail_queue'] = function ($app) {

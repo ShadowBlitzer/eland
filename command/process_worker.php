@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Finder\Finder;
-use util\queue_container;
 use util\task_container;
 
 class process_worker extends Command
@@ -35,7 +34,6 @@ class process_worker extends Command
 
         echo 'worker started .. ' . $boot . "\n";
 
-        $queue = new queue_container($app, 'queue');
         $task = new task_container($app, 'task');
         $schema_task = new task_container($app, 'schema_task');
 
@@ -47,11 +45,7 @@ class process_worker extends Command
 
             sleep(5);
 
-            if ($queue->should_run())
-            {
-                $queue->run();
-            }
-            else if ($task->should_run())
+            if ($task->should_run())
             {
                 $task->run();
             }
