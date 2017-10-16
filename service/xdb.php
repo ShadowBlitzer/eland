@@ -178,7 +178,7 @@ class xdb
 
 		if (!$agg_version)
 		{
-			return 'Not found: ' . $agg_id . ', could not delete';
+			return; // 'Not found: ' . $agg_id . ', could not delete';
 		}
 
 		$insert = [
@@ -216,7 +216,7 @@ class xdb
 	 *
 	 */
 
-	public function get(string $agg_type, string $eland_id, string $agg_schema)
+	public function get(string $agg_type, string $eland_id, string $agg_schema):array
 	{
 		$agg_id = $agg_schema . '_' . $agg_type . '_' . $eland_id;
 
@@ -224,7 +224,7 @@ class xdb
 
 		if (!$row)
 		{
-			return false;
+			return [];
 		}
 
 		$row['data'] = json_decode($row['data'], true);
@@ -238,7 +238,7 @@ class xdb
 	 *
 	 */
 
-	public function get_many(array $filters = [], string $query_extra = '')
+	public function get_many(array $filters = [], string $query_extra = ''):array
 	{
 		$sql_where = [];
 		$sql_params = [];

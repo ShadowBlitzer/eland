@@ -441,6 +441,10 @@ $app['mail_send'] = function ($app) {
 	return new mail\mail_send($app['monolog'], $app['twig'], $app['config']);
 };
 
+$app['mail_validated'] = function ($app) {
+	return new mail\mail_validated($app['xdb']);
+};
+
 // elas
 
 $app['elas_ev'] = function($app){
