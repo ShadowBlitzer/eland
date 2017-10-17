@@ -108,6 +108,16 @@ class mail_queue
 
 	public function put_param(string $template, array $vars, array $to, array $data = [], int $priority = 0)
 	{
+		if (isset($data['schema']))
+		{
+			$vars['schema'] = $data['schema'];
+		}
+
+		if (!isset($data['reply_to']))
+		{
+			$vars['no_reply'] = true;
+		}
+	
 		$data = array_merge($data, [
 			'template'		=> $template,
 			'vars'			=> $vars,

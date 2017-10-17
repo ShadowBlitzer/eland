@@ -5,7 +5,6 @@ namespace mail;
 use Symfony\Component\HttpFoundation\RequestStack;
 use service\token_url;
 use mail\mail_queue;
-use exception\missing_parameter_exception;
 
 class mail_queue_confirm_link
 {
@@ -16,6 +15,7 @@ class mail_queue_confirm_link
 	private $data;
 	private $template;
 	private $route;
+	private $to;
 
 	public function __construct(	
 		RequestStack $requestStack,
@@ -26,6 +26,12 @@ class mail_queue_confirm_link
 		$this->request = $requestStack->getCurrentRequest();
 		$this->token_url = $token_url;
 		$this->mail_queue = $mail_queue;
+	}
+
+	public function set_to(array $to):mail_queue_confirm_link
+	{
+		$this->to = $to;
+		return $this;
 	}
 
 	public function set_data(array $data):mail_queue_confirm_link
@@ -48,20 +54,13 @@ class mail_queue_confirm_link
 
 	public function queue()
 	{
-		$this->queue_param($this->data, $this->template, $this->route);
-		unset($this->data, $this->template, $this->route);
+		$this->queue_param($this->to, $this->data, $this->template, $this->route);
+		unset($this->to, $this->data, $this->template, $this->route);
 		return;
 	}
 
-	public function queue_param(array $data, string $template, string $route)
+	public function queue_param(array $to, array $data, string $template, string $route)
 	{
-		if (!isset($data['email']))
-		{
-			throw new missing_parameter_exception(sprintf(
-				'No email set in %s in class %s', json_encode($data), __CLASS__
-			));
-		}
-
 		$confirm_link = $this->token_url->gen($route, $data);
 
 		$vars = array_merge($data, [
@@ -72,14 +71,12 @@ class mail_queue_confirm_link
 
 		if (isset($schema))
 		{
-			$mail_data['schema'] = $schema;
-
 			$this->mail_queue->set_schema($schema);
 		}
 
 		$this->mail_queue->set_template($template)
 			->set_vars($vars)
-			->set_to($data['email']);
+			->set_to($to)
 			->set_priority(1000000)
 			->put();
 	

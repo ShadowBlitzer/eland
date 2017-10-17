@@ -36,7 +36,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), [
 	'swiftmailer.options'	=> [
 		'host' 			=> getenv('SMTP_HOST'),
-		'port' 			=> getenv('SMTP_POST'),
+		'port' 			=> getenv('SMTP_PORT'),
 		'username' 		=> getenv('SMTP_USERNAME'),
 		'password' 		=> getenv('SMTP_PASSWORD'),
 		'encryption' 	=> getenv('SMTP_ENC') ?: 'tls',
@@ -45,8 +45,9 @@ $app->register(new Silex\Provider\SwiftmailerServiceProvider(), [
 	'swiftmailer.plugins'	=> [
 		new \Swift_Plugins_AntiFloodPlugin(100, 30),
 	],
+	'swiftmailer.use_spool'	=> false,
 ]);
-
+ 
 $app->register(new Silex\Provider\TwigServiceProvider(), [
 	'twig.path' => __DIR__ . '/view',
 	'twig.options'	=> [
@@ -438,16 +439,28 @@ $app['mail'] = function ($app){
 		$app['email_validate']);
 };
 
-$app['mail_noreply_address'] = function ($app) {
-	return new mail\mail_noreply_address(getenv('MAIL_NOREPLY_ADDRESS'));
-};
-
-$app['mail_hoster_address'] = function ($app) {
+$app['mail_hoster_address'] = function () {
 	return new mail\mail_hoster_address(getenv('MAIL_HOSTER_ADDRESS'));
 };
 
-$app['mail_from_address'] = function ($app) {
+$app['mail_from_address'] = function () {
 	return new mail\mail_from_address(getenv('MAIL_FROM_ADDRESS'));
+};
+
+$app['mail_noreply_address'] = function () {
+	return new mail\mail_noreply_address(getenv('MAIL_NOREPLY_ADDRESS'));
+};
+
+$app['mail_from'] = function ($app){
+	return new mail\mail_from($app['config'], $app['mail_from_address'], $app['mail_noreply_address']);
+};
+
+$app['mail_template'] = function ($app){
+	return new mail\mail_template($app['twig']);
+};
+
+$app['mail_message'] = function ($app){
+	return new mail\mail_message($app['mailer'], $app['monolog']);
 };
 
 $app['mail_queue_confirm_link'] = function ($app) {
@@ -460,10 +473,6 @@ $app['mail_validated_confirm_link'] = function ($app) {
 
 $app['mail_queue'] = function ($app) {
 	return new mail\mail_queue($app['monolog'], $app['queue'], $app['config']);
-};
-
-$app['mail_send'] = function ($app) {
-	return new mail\mail_send($app['monolog'], $app['twig'], $app['config']);
 };
 
 $app['mail_validated'] = function ($app) {

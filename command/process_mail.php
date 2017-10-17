@@ -55,7 +55,56 @@ class process_mail extends Command
                 continue;
             }
 
-            $app['mail_send']->send($record);
+            if (isset($record['schema']))
+            {
+                if (!$app['config']->get('mailenabled', $record['schema']))
+                {
+                    $app['monolog']->info(sprintf(
+                        'mail functionality not enabled in 
+                        configuration, mail from queue not send: %s', json_encode($data)), [
+                            'schema'	=> $record['schema'],
+                        ]
+                    );
+    
+                    continue;
+                }
+
+                $app['mail_message']->init()
+                    ->set_schema($record['schema']);
+
+                $app['mail_from']->set_schema($record['schema']);
+            }
+            else
+            {
+                $app['mail_message']->init();
+            }
+
+            $app['mail_template']
+                ->set_template($record['template'])
+                ->set_vars($record['vars']);
+
+            if (isset($record['reply_to']))
+            {
+                $app['mail_from']->set_reply_possible(true);
+                $app['mail_message']->set_reply_to($record['reply_to']);
+            }
+
+            if (isset($record['cc']))
+            {
+                $app['mail_message']->set_cc($record['cc']);
+            }
+
+            echo json_encode($app['mail_from']->get());
+
+            $app['mail_message']->set_to($record['to'])
+                ->set_from($app['mail_from']->get())
+                ->set_text($app['mail_template']->get_text())
+                ->set_html($app['mail_template']->get_html())
+                ->set_subject($app['mail_template']->get_subject())
+                ->send();
+
+            $app['mail_from']->clear();
+            $app['mail_template']->clear();
         }
     }
 }

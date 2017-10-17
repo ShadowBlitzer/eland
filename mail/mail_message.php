@@ -3,147 +3,94 @@
 namespace mail;
 
 use Swift_Mailer as mailer;
-use Twig_Environment as Twig;
+use Monolog\Logger;
 
 class mail_message
 {
 	private $mailer;
-	private $twig;
+	private $monolog;
 
-	public function __construct(mailer $mailer,Twig $twig)
+	private $message;
+	private $schema;
+
+	public function __construct(mailer $mailer, Logger $monolog)
 	{
 		$this->mailer = $mailer;
-		$this->twig = $twig;
+		$this->monolog = $monolog;
 	}
 
-	public function send(array $data)
+	public function init():mail_message
 	{
-		$err = $monolog_vars = [];
+		$this->message = new \Swift_Message();
+		return $this;
+	}
 
-		if (!isset($data['no_schema']))
-		{
-			if (!isset($data['schema']))
-			{
-				$err[] = sprintf(
-					'no schema set for mail: %s', json_encode($data));
-			}
+	public function set_schema(string $schema):mail_message 
+	{
+		$this->schema = $schema;
+		return $this;
+	}
 
-			$schema = $data['vars']['schema'] = $data['schema'];
-			$monolog_vars = ['schema' => $schema];
-		
-			if (!$this->config->get('mailenabled', $schema))
-			{
-				$err[] = sprintf('mail functionality not enabled in 
-					configuration for mail %s', json_encode($data));
-			}
-		}
+	public function set_subject(string $subject):mail_message 
+	{
+		$this->message->setSubject($subject);
+		return $this;
+	}
 
-		if (!isset($data['template']))
-		{
-			$err[] = sprintf('no template set for mail %s', json_encode($data));
-		}
+	public function set_from(array $from):mail_message 
+	{
+		$this->message->setFrom($from);
+		return $this;
+	}
 
-		if (!isset($data['vars']) || !is_array($data['vars']))
-		{
-			$err[] = sprintf('no vars set for mail %s', json_encode($data));
-		}
+	public function set_to(array $to):mail_message
+	{
+		$this->message->setTo($to);
+		return $this;
+	}
 
-		if (!isset($data['to']))
-		{
-			$err[] = sprintf('no "to" set for mail %s', json_encode($data));
-		}
+	public function set_reply_to(array $reply_to):mail_message
+	{
+		$this->message->setReplyTo($reply_to);
+		return $this;
+	}
 
-		if (count($err))
-		{
-			foreach ($err as $msg)
-			{
-				$this->monolog->error($msg, $monolog_vars);
-			}
-		
-			return;
-		}
+	public function set_cc(array $cc):mail_message
+	{
+		$this->message->setCc($cc);
+		return $this;
+	}
 
-		if (!isset($data['reply_to']))
-		{
-			$data['vars']['no_reply'] = true;
-		}
+	public function set_text(string $text):mail_message
+	{
+		$this->message->setBody($text);
+		return $this;
+	}
 
-		$template = $this->twig->load('mail/' . $data['template'] . '.twig');
-	
-		$text = $template->renderBlock('text_body', $data['vars']);
-		$html = $template->renderBlock('html_body', $data['vars']);
-		$subject = $template->renderBlock('subject', $data['vars']);
+	public function set_html(string $html):mail_message
+	{
+		$this->message->addPart($html, 'text/html');
+		return $this;	
+	}
 
-		$message = new \Swift_Message();
-		$message->setSubject($subject)
-			->setBody($text)
-			->addPart($html, 'text/html')
-			->setTo($data['to']);
-
-		if (isset($data['reply_to']))
-		{
-			$message->setReplyTo($data['reply_to']);
-
-			$from = getenv('MAIL_FROM_ADDRESS');
-	
-			if (!$from)
-			{
-				$this->monolog->error(sprintf(
-					'no MAIL_FROM_ADDRESS env set, please notify web master, mail: %s',
-					json_encode($data)), $monolog_vars);
-				return;
-			}
-
-			if (!filter_var($from, FILTER_VALIDATE_EMAIL))
-			{
-				$this->monolog->error(sprintf(
-					'no valid MAIL_FROM_ADDRESS env set, please notify web master, mail: %s',
-					json_encode($data)), $monolog_vars);
-				return;
-			}
-		}
-		else
-		{
-			$from = getenv('MAIL_NOREPLY_ADDRESS');
-			
-			if (!$from)
-			{
-				$this->monolog->error(sprintf(
-					'no MAIL_NOREPLY_ADDRESS env set, please notify web master, mail: %s',
-					json_encode($data)), $monolog_vars);
-				return;
-			}
-
-			if (!filter_var($from, FILTER_VALIDATE_EMAIL))
-			{
-				$this->monolog->error(sprintf(
-					'no valid MAIL_NOREPLY_ADDRESS env set, please notify web master, mail: %s',
-					json_encode($data)), $monolog_vars);
-				return;
-			}
-		}
-
-		$from = isset($schema) ? [$from => $this->config->get('systemname', $schema)] : $from;
-
-		$message->setFrom($from);
-
-		if (isset($data['cc']))
-		{
-			$message->setCc($data['cc']);
-		}
-
+	public function send()
+	{
 		$failed_recipients = [];
-
-		if ($this->mailer->send($message, $failed_recipients))
+		$monolog_vars = isset($this->schema) ? ['schema' => $this->schema] : [];
+		
+		if ($this->mailer->send($this->message, $failed_recipients))
 		{
-			$this->monolog->info(sprintf('mail send: %s', json_encode($data)), $monolog_vars);
+			$this->monolog->info(sprintf('mail send: %s, to %s', 
+				$this->message->getSubject(), json_encode($this->message->getTo())), $monolog_vars);
 		}
 		else
 		{
 			$this->monolog->error(sprintf('failed sending mail %s, failed recipients: %s', 
-				json_encode($data), json_encode($failed_recipients)),$monolog_vars);
+				$this->message->getSubject(), json_encode($failed_recipients)), $monolog_vars);
 		}
 
 		$this->mailer->getTransport()->stop();
+	
+		unset($this->message, $this->schema);
 	}
 }

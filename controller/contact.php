@@ -19,6 +19,7 @@ class contact
 			$data = $form->getData();
 
 			$app['mail_queue_confirm_link']
+				->set_to([$data['email']])
 				->set_data($data)
 				->set_template('confirm')
 				->set_route('contact_confirm')
