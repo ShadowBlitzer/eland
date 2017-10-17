@@ -439,20 +439,16 @@ $app['mail'] = function ($app){
 		$app['email_validate']);
 };
 
-$app['mail_hoster_address'] = function () {
-	return new mail\mail_hoster_address(getenv('MAIL_HOSTER_ADDRESS'));
+$app['mail_env'] = function (){
+	return new mail\mail_env(getenv('MAIL_NOREPLY_ADDRESS'),  
+		getenv('MAIL_FROM_ADDRESS'),
+		getenv('MAIL_HOSTER_ADDRESS'));
 };
 
-$app['mail_from_address'] = function () {
-	return new mail\mail_from_address(getenv('MAIL_FROM_ADDRESS'));
-};
-
-$app['mail_noreply_address'] = function () {
-	return new mail\mail_noreply_address(getenv('MAIL_NOREPLY_ADDRESS'));
-};
+$app['site_name'] = getenv('SITE_NAME');
 
 $app['mail_from'] = function ($app){
-	return new mail\mail_from($app['config'], $app['mail_from_address'], $app['mail_noreply_address']);
+	return new mail\mail_from($app['config'], $app['mail_env'], $app['site_name']);
 };
 
 $app['mail_template'] = function ($app){

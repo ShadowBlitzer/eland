@@ -52,14 +52,14 @@ class mail_queue_confirm_link
 		return $this;
 	}
 
-	public function queue()
+	public function put()
 	{
-		$this->queue_param($this->to, $this->data, $this->template, $this->route);
+		$this->put_param($this->to, $this->data, $this->template, $this->route);
 		unset($this->to, $this->data, $this->template, $this->route);
 		return;
 	}
 
-	public function queue_param(array $to, array $data, string $template, string $route)
+	public function put_param(array $to, array $data, string $template, string $route)
 	{
 		$confirm_link = $this->token_url->gen($route, $data);
 

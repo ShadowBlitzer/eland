@@ -3,29 +3,28 @@
 namespace mail;
 
 use service\config;
-use mail\mail_from_address;
-use mail\mail_noreply_address;
+use mail\mail_env;
 
 use exception\method_call_order_exception;
 
 class mail_from
 {
 	private $config;
-	private $mail_from_address;
-	private $mail_noreply_address;
+	private $mail_env;
+	private $site_name;
 
 	private $schema;
 	private $reply_possible;
 
 	public function __construct(
 		config $config, 
-		mail_from_address $mail_from_address, 
-		mail_noreply_address $mail_noreply_address
+		mail_env $mail_env, 
+		string $site_name
 	)
 	{
 		$this->config = $config;
-		$this->mail_from_address = $mail_from_address;
-		$this->mail_noreply_address = $mail_noreply_address;
+		$this->mail_env = $mail_env;
+		$this->site_name = $site_name;
 	}
 
 	public function set_schema(string $schema):mail_from
@@ -56,11 +55,11 @@ class mail_from
 	{
 		if (isset($this->reply_possible) && $this->reply_possible)
 		{
-			$from = $this->mail_from_address->get();
+			$from = $this->mail_env->get_from();
 		}
 		else
 		{
-			$from = $this->mail_noreply_address->get();
+			$from = $this->mail_env->get_noreply();
 		}
 
 		if (isset($this->schema))
@@ -69,7 +68,7 @@ class mail_from
 		}
 		else
 		{
-			$from = [$from];
+			$from = [$from => $this->site_name];
 		}
 
 		return $from;

@@ -558,6 +558,14 @@ mail:
       Deze link blijft 4 uur geldig. Gelieve deze mail te
       negeren wanneer je niet zelf ons registratieformulier
       hebt ingevuld.
+  contact_admin:
+    subject: Bericht van contactformulier
+  sender_info:
+    ip: "ip: %ip%"
+    agent: "agent: %agent%"
+  hosting_request:
+    subject: Aanvraag hosting voor %group_name%
+
 
   support: Support
   overview:

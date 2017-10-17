@@ -10,83 +10,77 @@ class hosting_request
 {
 	public function form(Request $request, app $app)
 	{
-
-		if ($request->getMethod() === 'GET')
-		{
-			$token = $app['token']->gen();
-
-			$redis_key = 'hosting_request_' . $token;
-
-			$app['predis']->set($redis_key, '1');
-			$app['predis']->expire($redis_key, 14400);
-
-			$data = [
-				'token' => $token,
-			];
-		}
-		else
-		{
-			$data = [];
-		}
-
-		$form = $app->build_form(hosting_request_type::class, $data)
-		->handleRequest($request);
-
-		$form->handleRequest($request);
+		$form = $app->build_form(hosting_request_type::class)
+			->handleRequest($request);
 
 		if ($form->isValid())
 		{
 			$data = $form->getData();
+			
+			$app['mail_queue_confirm_link']
+				->set_to([$data['email']])
+				->set_data($data)
+				->set_template('confirm')
+				->set_route('hosting_request_confirm')
+				->put();
 
-			$errors = [];
+			$app->success('hosting_request.success');
 
-			if (!$app['predis']->get('hosting_request_' . $data['token']))
-			{
-				$errors[] = 'error.form_token_expired';
-			}
-
-			$to = getenv('MAIL_HOSTER_ADDRESS');
-			$from = getenv('MAIL_FROM_ADDRESS');
-
-			if (!$to || !$from)
-			{
-				$errors[] = 'error.internal_configuration';
-			}
-
-			if (!count($errors))
-			{
-				$text = $data['message'] . "\r\n\r\n\r\n" . 'User Agent: ';
-				$text .= $request->headers->get('User-Agent');
-				$text .= "\n" . 'token: ' . $data['token'];
-
-				$enc = getenv('SMTP_ENC') ?: 'tls';
-				$transport = \Swift_SmtpTransport::newInstance(getenv('SMTP_HOST'), getenv('SMTP_PORT'), $enc)
-					->setUsername(getenv('SMTP_USERNAME'))
-					->setPassword(getenv('SMTP_PASSWORD'));
-
-				$mailer = \Swift_Mailer::newInstance($transport);
-
-				$mailer->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(100, 30));
-
-				$msg = \Swift_Message::newInstance()
-					->setSubject($app->trans('hosting_request.mail.subject', ['%group_name%' => $data['group_name']]))
-					->setBody($text)
-					->setTo($to)
-					->setFrom($from)
-					->setReplyTo($data['email']);
-
-				$mailer->send($msg);
-
-				$app->success('hosting_request.success');
-
-				return $app->redirect($app->path('main_index'));
-			}
-
-			$app->err($errors);
+			return $app->redirect($app->path('main_index'));
 		}
 
 		return $app->render('hosting_request/form.html.twig', [
 			'form' => $form->createView(),
 		]);
 	}
+
+	public function confirm(Request $request, app $app, string $token)
+	{
+		$data = $app['mail_validated_confirm_link']->get();
+
+		error_log(json_encode($data));
+		
+		if (!count($data))
+		{
+			$app->err($app->trans('hosting_request.confirm_not_found'));
+			return $app->redirect($app->path('hosting_request'));
+		}
+
+		$app['mail_queue']->set_template('hosting_request')
+			->set_vars($data)
+			->set_to([$app['mail_hoster_address']->get()])
+			->set_reply_to([$data['email']])
+			->put();
+
+/*		
+		$app['mail']->queue([
+			'to'		=> getenv('MAIL_ADDRESS_CONTACT'),
+			'template'	=> 'contact',
+			'subject'	=> $app->trans('contact.mail_subject'),
+			'message'	=> $data['message'],
+			'browser'	=> $_SERVER['HTTP_USER_AGENT'],
+			'ip'		=> $_SERVER['REMOTE_ADDR'],
+			'reply_to'	=> $email,
+		]);
+*/
+/*
+		$app[]->set_fail_message()
+			->set_fail_route()
+			->set_success_message()
+			->set_success_route()
+			->set_success_mail_template()
+			->set_success_mail_template();
+*/
+
+
+		$app->success($app->trans('contact.success'));
+
+		return $app->redirect($app->path('main_index'));
+	}
+
+
+
+
+
+
 }

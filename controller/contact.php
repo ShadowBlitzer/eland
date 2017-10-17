@@ -23,7 +23,7 @@ class contact
 				->set_data($data)
 				->set_template('confirm')
 				->set_route('contact_confirm')
-				->queue();
+				->put();
 
 			$app->info($app->trans('contact.confirm_email.info'));
 
@@ -34,10 +34,6 @@ class contact
 			'form' => $form->createView(),
 		]);
 	}
-
-	/**
-	 *
-	 */
 
 	public function confirm(Request $request, app $app, string $schema, string $token)
 	{
