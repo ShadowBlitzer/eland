@@ -14,6 +14,8 @@ $app['protocol'] = 'https://';
 
 $app['debug'] = getenv('DEBUG') ? true : false;
 
+$app['site_name'] = getenv('SITE_NAME');
+
 if (php_sapi_name() !== 'cli')
 {
 	\Symfony\Component\Debug\ErrorHandler::register();
@@ -118,12 +120,12 @@ $app->register(new Silex\Provider\AssetServiceProvider(), [
  */
 
 setlocale(LC_TIME, 'nl_NL.UTF-8');
-date_default_timezone_set((getenv('TIMEZONE')) ?: 'Europe/Brussels');
+date_default_timezone_set(getenv('TIMEZONE') ?: 'Europe/Brussels');
 
 $app->register(new Silex\Provider\LocaleServiceProvider());
 
 $app->register(new Silex\Provider\TranslationServiceProvider(), [
-    'locale_fallbacks' => ['nl', 'en'],
+    'locale_fallbacks' 	=> ['nl', 'en'],
     'locale'			=> 'nl',
 ]);
 
@@ -445,10 +447,22 @@ $app['mail_env'] = function (){
 		getenv('MAIL_HOSTER_ADDRESS'));
 };
 
-$app['site_name'] = getenv('SITE_NAME');
+// mail
 
 $app['mail_from'] = function ($app){
 	return new mail\mail_from($app['config'], $app['mail_env'], $app['site_name']);
+};
+
+$app['mail_admin'] = function ($app){
+	return new mail\mail_admin($app['config']);
+};
+
+$app['mail_support'] = function ($app){
+	return new mail\mail_support($app['config']);
+};
+
+$app['mail_newsadmin'] = function ($app){
+	return new mail\mail_newsadmin($app['config']);
 };
 
 $app['mail_template'] = function ($app){

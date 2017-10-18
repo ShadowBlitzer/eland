@@ -40,10 +40,18 @@ class token_url
 			'secure'	=> $this->request->isSecure(),
 			'host'		=> $this->request->getHost(),
 			'agent'		=> $this->request->headers->get('User-Agent'),
-			'locale'	=> $this->locale,
-			'schema'	=> $this->schema,
 			'route'		=> $route,
 		]);
+
+		if (isset($this->schema))
+		{
+			$data['schema'] = $this->schema;
+		}
+
+		if (isset($this->locale))
+		{
+			$data['locale'] = $this->locale;
+		}
 
 		$token = $this->token_cache->gen($data);
 

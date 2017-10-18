@@ -1,7 +1,5 @@
 {%- block subject -%}
-    {%- if schema is defined -%}
-    [{{- config('systemtag', schema) -}}]
-    {%- endif -%}
+    {%- if schema is defined -%}[{{- config('systemtag', schema) }}] {% endif -%}
     {%- block subject_line -%}{%- endblock -%}
 {%- endblock subject -%}
 

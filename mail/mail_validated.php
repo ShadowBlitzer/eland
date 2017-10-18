@@ -13,9 +13,9 @@ class mail_validated
 		$this->xdb = $xdb;
 	}
 
-	public function set(string $email, string $schema)
+	public function set(string $email, string $schema, array $data = [])
 	{
-		$this->xdb->set('email_validated', $email, [], $schema);
+		$this->xdb->set('email_validated', $email, $data, $schema);
 		return;
 	}
 

@@ -26,7 +26,7 @@ class mail_validated_confirm_link
 		if (count($data) && isset($data['email']))
 		{
 			$schema = $data['schema'] ?? 'no_schema';
-			$this->mail_validated->set($data['email'], $schema);
+			$this->mail_validated->set($data['email'], $schema, $data);
 		}
 
 		return $data;

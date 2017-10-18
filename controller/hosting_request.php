@@ -48,8 +48,9 @@ class hosting_request
 
 		$app['mail_queue']->set_template('hosting_request')
 			->set_vars($data)
-			->set_to([$app['mail_hoster_address']->get()])
-			->set_reply_to([$data['email']])
+			->set_to([$app['mail_env']->get_hoster()])
+			->set_reply_to([$data['email'] => $data['group_name']])
+			->set_priority(900000)
 			->put();
 
 /*		

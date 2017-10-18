@@ -47,26 +47,13 @@ class contact
 			return $app->redirect($app->path('confirm', ['schema' => $schema]));
 		}
 
-/*		
-		$app['mail']->queue([
-			'to'		=> getenv('MAIL_ADDRESS_CONTACT'),
-			'template'	=> 'contact',
-			'subject'	=> $app->trans('contact.mail_subject'),
-			'message'	=> $data['message'],
-			'browser'	=> $_SERVER['HTTP_USER_AGENT'],
-			'ip'		=> $_SERVER['REMOTE_ADDR'],
-			'reply_to'	=> $email,
-		]);
-*/
-/*
-		$app[]->set_fail_message()
-			->set_fail_route()
-			->set_success_message()
-			->set_success_route()
-			->set_success_mail_template()
-			->set_success_mail_template();
-*/
-
+		$app['mail_queue']->set_template('contact_admin')
+			->set_vars($data)
+			->set_schema($schema)
+			->set_to($app['mail_admin']->get($schema))
+			->set_reply_to([$data['email']])
+			->set_priority(900000)
+			->put();
 
 		$app->success($app->trans('contact.success'));
 

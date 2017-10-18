@@ -1,7 +1,6 @@
 {%- extends 'mail/base.twig' -%}
 
-{%- block subject_line -%}{{- 'mail.contact_admin.subject'|trans(
-    {'%group_name%': group_name}) -}}{%- endblock -%}
+{%- block subject_line -%}{{- 'mail.contact_admin.subject'|trans -}}{%- endblock -%}
 
 {%- block text_content -%}{{- message -}}{%- endblock -%}
 
