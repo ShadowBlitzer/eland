@@ -96,6 +96,9 @@ label:
   content: Inhoud
   password: Paswoord
   currency_or_group_name: Naam van de munt of groep
+  email_letscode_username: Je email adres, LETScode of gebruikersnaam
+  email_code_username: Je email adres, code of gebruikersnaam
+  generate: Genereer
 
 email: Email
 password: Paswoord
@@ -288,6 +291,12 @@ password_reset:
       Deze link blijft 4 uur geldig. Gelieve deze 
       mail te negeren indien je niet zelf
       een paswoord reset hebt aangevraagd.
+new_password:
+  title: Nieuw paswoord instellen
+  explain: >
+    Geef hier een nieuw paswoord in voor je account. 
+    
+
 
 register:
   title: Inschrijven

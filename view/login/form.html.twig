@@ -5,7 +5,7 @@
 
 {% block inner -%}
 
-{%- set label_login = config('template_lets', schema) ? 'login.login_lets' : 'login.login' -%}
+{%- set label_login = config('template_lets', schema) ? 'label.email_letscode_username' : 'label.email_code_username' -%}
 
 {{- p.form_start(form) -}}
 

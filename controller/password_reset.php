@@ -13,12 +13,13 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints as Assert;
 use form\email_addon_type;
+use form\password_reset_type;
 
 class password_reset
 {
 	public function form(Request $request, app $app, string $schema)
 	{
-		$form = $app->form([])
+		$form = $app->form()
 			->add('email', email_addon_type::class, [
 				'constraints' => new Assert\Email(),
 			])
@@ -43,38 +44,20 @@ class password_reset
 					and c.id_user = u.id
 					and u.status in (1, 2)', [$email]);
 
-			if (count($user) < 2)
+			if (count($user) === 1)
 			{
 				$user = $user[0];
 
-				if ($user['id'])
-				{
-					$token = $app['token']->gen();
-					$key = $schema . '_token_' . $token;
+				$app['mail_queue_confirm_link']
+					->set_to([$email])
+					->set_data($user)
+					->set_template('confirm')
+					->set_route('password_reset_new_password')
+					->put();
 
-					$app['predis']->set($key, json_encode(['uid' => $user['id'], 'email' => $email]));
-					$app['predis']->expire($key, 3600);
+				$app->success($app->trans('password_reset.link_send_success', ['%email%' => $email]));
 
-					$data['subject'] = 'password_reset.mail.subject';
-					$data['vars'] = [
-						'top'		=> 'password_reset.mail.top',
-						'bottom'	=> 'password_reset.mail.bottom',
-						'url'		=> $app->url('password_reset_new_password', [
-							'token' 	=> $token,
-							'schema' 	=> $schema,
-						]),
-					];
-					$data['template'] = 'link';
-					$data['schema'] = $schema;
-					$data['to'] = $data['email'];
-					$data['priority'] = 10000;
-
-					$app['mail']->queue($data);
-
-					$app->success($app->trans('password_reset.link_send_success', ['%email%' => $email]));
-
-					return $app->redirect($app->path('login', ['schema' => $schema]));
-				}
+				return $app->redirect($app->path('login', ['schema' => $schema]));
 			}
 
 			$app->err($app->trans('password_reset.unknown_email_address'));
@@ -83,44 +66,25 @@ class password_reset
 		return $app['twig']->render('password_reset/form.html.twig', ['form' => $form->createView()]);
 	}
 
-	/**
-	 *
-	 */
-
 	public function new_password(Request $request, app $app, string $schema, string $token)
 	{
-		$redis_key = 'password_reset_' . $token;
-		$data = $app['predis']->get($redis_key);
-
-		if (!$data)
+		if ($request->getMethod() === 'GET')
 		{
-			return $app['twig']->render('page/panel_danger.html.twig', [
-				'subject'	=> 'new_password.not_found.subject',
-				'text'		=> 'new_password.not_found.text',
-			]);
+			$data = $app['mail_validated_confirm_link']->get();
+			
+			error_log(json_encode($data));
+			
+			if (!count($data))
+			{
+				$app->err($app->trans('password_reset.confirm_not_found'));
+				return $app->redirect($app->path('password_reset', ['schema' => $schema]));
+			}
 		}
 
-		$data = json_decode($data, true);
+		// note: unwanted access is protected by _etoken 
 
-		$email = strtolower($data['email']);
-
-		$user = $app['xdb']->get('user_auth_' . $email);
-
-		if ($user === '{}')
-		{
-			return $app['twig']->render('page/panel_danger.html.twig', [
-				'subject'	=> 'register_confirm.not_found.subject',
-				'text'		=> 'register_confirm.not_found.text',
-			]);
-
-		}
-
-		$data = [
-			'password'	=> '',
-		];
-
-		$form = $app->form($data)
-			->add('password', PasswordType::class)
+		$form = $app->form()
+			->add('password', password_reset_type::class)
 			->add('submit', SubmitType::class)
 			->getForm();
 
@@ -130,7 +94,9 @@ class password_reset
 		{
 			$data = $form->getData();
 
-			return $app->redirect('/edit');
+
+			$app->success($app->trans('password_reset.new_password_success'));
+			return $app->redirect($app->path('login', ['schema' => $schema]));
 		}
 
 		return $app['twig']->render('password_reset/new_password.html.twig', ['form' => $form->createView()]);

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class periodic_charge
 {
-	public function form(Request $request, app $app, string $schema)
+	public function form(Request $request, app $app, string $schema, string $access)
 	{
 		return $app['twig']->render('periodic_charge/a_form.html.twig', []);
 	}

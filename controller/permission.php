@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class permission
 {
-	public function index(Request $request, app $app, string $schema)
+	public function index(Request $request, app $app, string $schema, string $access)
 	{
 		return $app['twig']->render('permission/a_index.html.twig', []);
 	}
