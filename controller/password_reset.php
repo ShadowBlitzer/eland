@@ -68,6 +68,8 @@ class password_reset
 
 	public function new_password(Request $request, app $app, string $schema, string $token)
 	{
+
+/*		
 		if ($request->getMethod() === 'GET')
 		{
 			$data = $app['mail_validated_confirm_link']->get();
@@ -80,7 +82,7 @@ class password_reset
 				return $app->redirect($app->path('password_reset', ['schema' => $schema]));
 			}
 		}
-
+*/
 		// note: unwanted access is protected by _etoken 
 
 		$form = $app->form()

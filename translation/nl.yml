@@ -95,6 +95,7 @@ label:
   access: Toegang
   content: Inhoud
   password: Paswoord
+  save_password: Bewaar paswoord
   currency_or_group_name: Naam van de munt of groep
   email_letscode_username: Je email adres, LETScode of gebruikersnaam
   email_code_username: Je email adres, code of gebruikersnaam

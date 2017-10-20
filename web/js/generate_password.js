@@ -3,75 +3,183 @@ $(document).ready(function(){
 	var $btn = $('#generate');
 	var $input = $btn.parent().prev('input');
 
-	var min_length = 6;
-	var extra_length = 2;
-	var max_possible_nums = 2;
-	var num_probability = 150;
-	var hyphen_probability = 15;
+	var rnd = {
+		'a': function(max){
+			return Math.floor(Math.random() * max);
+		},
+		'if': function (max){
+			return this.a(max) === 0;
+		},
+		'sym': function(arr){
+			return arr[this.a(arr.length)];
+		}
+	};
 
-	var vow = 'a.e.i.o.u.';
-	vow += vow + vow;
-	vow += 'y.oo.aa.ei.oe.ee.uu';
-	var con = 'b.b.c.d.d.f.g.h.j.k.k.l.l.m.m.n.n.p.q.r.s.s.t.t.v.w.x.z.';
-	con += con + con + con + con;
-	con += 'tr.sc.bl.vl.cr.br.fr.th.dr.ch.ph.wr.vr.st.sp.sw.pr.sl.cl.';
-	con += 'sch.nn.bb.ll.tt.ss.rr.nn.rt.ts.gl.ng.mn.zn.xn.sn';
+	var contains_il = function (str){
+		return str.indexOf('l') === -1 && str.indexOf('i') === -1 ? false : true;	
+	};
 
-	vow = vow.split('.');
-	con = con.split('.');
+	var len = {
+		'min': 6,
+		'extra': 1,
+		'max_num': 2
+	};
+
+	var prob = {
+		'num': 300,
+		'sym': {
+			'begin': 25,
+			'mid': 15,
+			'end': 20,
+			'inter_con': 5 
+		},
+		'uppercase': 15,
+		'case_switch': 70,
+		'acc': {
+			'full': 20,
+			'mid': 30,
+			'mid_end': 3
+		}
+	};
+
+	var sym = {
+		'vow': {
+			'a': 'a.e.i.o.u',
+			'b': 'y.oo.aa.ei.oe.ee.uu'
+		},
+		'con': {
+			'a': 'b.b.c.d.d.f.g.h.j.k.k.l.l.m.m.n.n.p.q.r.s.s.t.t.v.w.x.z',
+			'b': 'tr.sc.bl.vl.cr.br.fr.th.dr.ch.ph.wr.vr.st.sp.sw.pr.sl.cl',
+			'c': 'sch.nn.bb.ll.tt.ss.rr.nn.rt.ts.gl.ng.mn.zn.sn'
+		},
+		'begin': '%+$*#@',
+		'end': '!!??$%*+=',
+		'mid': '--------      ....::++=_*@',
+		'inter_con': '------    ..:+=_,',
+		'acc': {
+			'full': '[].{}.().<>',
+			'mid': '[].{}.()'
+		}
+	};
+
+	sym.vow = [sym.vow.a, sym.vow.a, sym.vow.a, sym.vow.b].join('.').split('.');
+	sym.con = [sym.con.a, sym.con.a, sym.con.a, sym.con.a, sym.con.b, sym.con.c].join('.').split('.');
+	sym.begin = sym.begin.split('');
+	sym.end = sym.end.split('');
+	sym.mid = sym.mid.split('');
+	sym.acc.full = sym.acc.full.split('.');
+	sym.acc.mid = sym.acc.mid.split('.');
 
 	$btn.click(function(e){
 
-		var length = min_length + Math.floor(Math.random() * extra_length);
-		var vc = Math.floor(Math.random() * 2);
-		var pw = '';
-		var ran = 0;
-		var num = 0;
-		var i = 0;		
-		var possible_nums = Math.floor(Math.random() * max_possible_nums);
-		var hyphen_possible = false;
+		var pw = '',  sym_end = '', acc = [], ran = 0, num = 0, i = 0;
+		var sym_next = false;
+		var acc_next = true;
+		var acc_mid = false;				
+		var pw_len = len.min + rnd.a(len.extra);
+		var vc = rnd.a(2);
+		var max_num = rnd.a(len.max_num);
+		var n_case = rnd.a(prob.uppercase);
 
-		for (i = 0; i < length; i++)
+		if (rnd.if(prob.acc.full))
 		{
-			if (hyphen_possible)
-			{
-				ran = Math.floor(Math.random() * hyphen_probability);
+			acc = rnd.sym(sym.acc.full).split('');
+			pw = acc[0];
+		}
 
-				if (ran === 0)
-				{
-					pw += '-';
-					hyphen_possible = false;
-					continue;
-				}
+		for (i = 0; i < pw_len; i++)
+		{
+			if (sym_next && rnd.if(prob.sym.mid))
+			{
+				pw += rnd.sym(sym.mid);
+				sym_next = false;
+				continue;
 			}
 
-			hyphen_possible = i < length - 2 ? true : false;
-
-			if (possible_nums)
+			if (acc_next && acc.length === 0 && i < pw_len - 1 && rnd.if(prob.acc.mid))
 			{
-				num = Math.floor(Math.random() * num_probability);
+				acc = rnd.sym(sym.acc.mid).split('');
+				pw += acc[0];
+				acc_mid = true;
+				acc_next = false;
+				continue;
+			}
+
+			if (acc_next && acc_mid && acc.length !== 0 && rnd.if(prob.acc.mid_end))
+			{
+				pw += acc[1];
+				acc_next = false;
+				acc = [];
+				acc_mid = false;
+				continue;
+			}
+
+			acc_next = true;
+			sym_next = i < pw_len - 2 ? true : false;
+
+			if (i === 0 && rnd.if(prob.sym.begin))
+			{
+				pw += rnd.sym(sym.begin);
+				continue;
+			}
+
+			if (i === pw_len - 1 && rnd.if(prob.sym.end))
+			{
+				pw += rnd.sym(sym.end);
+				break;
+			}
+
+			if (max_num)
+			{
+				num = rnd.a(prob.num);
 				
 				if (num < 10)
 				{
 					pw += num;
-					possible_nums--;
+					max_num--;
 					continue;
 				}
 			}
 
+			n_switch = rnd.a(prob.case_switch);
+				
 			if (vc)
 			{
-				ran = Math.floor(Math.random() * con.length);
-				pw += con[ran];
+				add = rnd.sym(sym.con);
+
+				n_switch = contains_il(add) ? 1 : n_switch;
+
+				if ((n_case || n_switch) 
+				&& !(n_case && n_switch))
+				{
+					add = add.toUpperCase();
+				}
+
+				if (add.length > 1 && rnd.if(prob.sym.inter_con))
+				{
+					add = add.charAt(0) + rnd.sym(sym.inter_con) + add.substring(1);
+				}
 			}
 			else
 			{
-				ran = Math.floor(Math.random() * vow.length);
-				pw += vow[ran];
+				add = rnd.sym(sym.vow);
+
+				n_switch = contains_il(add)	? 1 : n_switch;			
+
+				if (!n_case && n_switch)
+				{
+					add = add.toUpperCase();
+				}
 			}
 
+			pw += add;
 			vc++;
 			vc = vc > 1 ? 0 : 1;
+		}
+
+		if (acc.length)
+		{
+			pw += acc[1];
 		}
 
 		$input.val(pw);
