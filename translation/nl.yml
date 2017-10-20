@@ -100,6 +100,31 @@ label:
   email_letscode_username: Je email adres, LETScode of gebruikersnaam
   email_code_username: Je email adres, code of gebruikersnaam
   generate: Genereer
+  register: Inschrijven
+  login: Login
+
+btn:
+  login: Login
+  register: Inschrijven
+  generate: Genereer
+  password_reset: Reset paswoord
+  send: Verzenden
+  cancel: Annuleren
+  add: Toevoegen
+  edit: Aanpassen
+  delete: Verwijderen
+  filter: Filter
+  show: Toon
+
+tag:
+  filtered: Gefilterd
+
+
+
+link:
+  password_reset: Ik ben mijn paswoord vergeten.
+  csv: csv
+
 
 email: Email
 password: Paswoord
@@ -125,16 +150,7 @@ and: en
 or: of
 nor: noch
 
-send: Verzenden
-cancel: Annuleren
-add: Toevoegen
-edit: Aanpassen
-delete: Verwijderen
-filter: Filter
-show: Toon
-filtered: Gefilterd
-csv: csv
-generate: Genereer
+
 
 error:
   internal_configuration: >
@@ -236,26 +252,13 @@ support:
 
 contact:
   title: Contact
-  email: Je emailadres
-  email_explain: >
-    Er wordt een bevestigingslink naar je 
-    gestuurd die je moet aanklikken.
-  message: Je bericht
-  confirm_email:
-    info: >
-      Gelieve de link ter bevestiging aan te 
-      klikken in de email die we naar u verzonden hebben.
+  confirm_email_info: >
+      Gelieve de bevestigingslink aan te 
+      klikken in de email die we naar je adres 
+      "%email%" verzonden hebben.
       Deze link blijft vier uur geldig.
-    subject: >
-      Bevestig uw bericht in het contactformulier
-    top: >
-      Klik deze link aan om uw bericht in 
-      het contactformulier te bevestigen.
-    bottom: >
-      Deze link blijft vier uur geldig. Gelieve 
-      deze mail te negeren indien u niet
-      zelf een bericht hebt ingegeven in het 
-      contactformulier van %systemname%
+  success: >
+    Je bericht werd met succes verstuurd.
 
 notification_index:
   title: Notificaties
@@ -278,40 +281,23 @@ password_reset:
   explain: >
     Stuur een link naar je mailbox waarmee 
     je je paswoord opnieuw kan instellen.
-  submit_btn: Reset paswoord
   link_send_success: >
     Een link om je paswoord te resetten
     werd gestuurd naar %email%. Deze link 
     blijft 4 uur geldig.
-  mail:
-    subject: Reset paswoord
-    top: >
-      Gebruik deze link om een nieuw 
-      paswoord in te stellen voor je account.
-    bottom: >
-      Deze link blijft 4 uur geldig. Gelieve deze 
-      mail te negeren indien je niet zelf
-      een paswoord reset hebt aangevraagd.
+
 new_password:
   title: Nieuw paswoord instellen
   explain: >
     Geef hier een nieuw paswoord in voor je account. 
-    
-
 
 register:
   title: Inschrijven
-  first_name: Voornaam
-  last_name: Achternaam
-  postcode: Postcode
-  email: Email
-  email_explain: >
-    Er wordt een bevestigingslink naar je 
-    gestuurd die je moet aanklikken
-  mobile: GSM
-  telephone: telefoon
   accept: Ik heb de privacy en aanvaard deze.
-  submit_btn: Inschrijven
+  confirm_email_info: >
+    Klik om je registratie te bevestigen 
+    op de link die naar je adres %email%
+    werd gestuurd.
 
 status:
   title: Status
@@ -550,7 +536,7 @@ mail:
       te klikken
     expiration: >
       Deze link blijft 4 uur geldig.
-  contact_confirm:
+  confirm_contact:
     subject: Bevestiging van je bericht gevraagd
     explain: >
       Bevestig je bericht in het contactformulier door 
@@ -559,7 +545,7 @@ mail:
       Deze link blijft 4 uur geldig. Gelieve deze mail te
       negeren wanneer je niet zelf een bericht hebt verstuurd
       via ons contactformulier.
-  register_confirm:
+  confirm_register:
     subject: Bevestiging van je registratie gevraagd
     explain: >
       Bevestig je registratie door op de link hieronder 

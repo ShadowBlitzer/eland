@@ -21,11 +21,11 @@ class contact
 			$app['mail_queue_confirm_link']
 				->set_to([$data['email']])
 				->set_data($data)
-				->set_template('confirm')
+				->set_template('confirm_contact')
 				->set_route('contact_confirm')
 				->put();
 
-			$app->info($app->trans('contact.confirm_email.info'));
+			$app->info($app->trans('contact.confirm_email_info', ['%email%' => $data['email']]));
 
 			return $app->redirect($app->path('login', ['schema' => $schema]));
 		}

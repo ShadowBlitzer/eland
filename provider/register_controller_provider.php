@@ -16,7 +16,7 @@ class register_controller_provider implements ControllerProviderInterface
         $register->get('/{token}', 'controller\\register::confirm')
             ->bind('register_confirm');
         
-        $register->assert('token', '[a-z0-9][a-z0-9-]{14}[a-z0-9]');
+        $register->assert('token', '[a-z0-9-]{16}');
         
         return $register;
     }

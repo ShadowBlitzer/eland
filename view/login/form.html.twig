@@ -14,11 +14,11 @@
 {{- form_row(form.password, {'label': 'label.password',
   'addon_class': 'addon-info'}) -}}
 
-{{- b.default(form.submit, 'login.submit_btn') -}}
+{{- b.default(form.submit, 'label.login') -}}
 
 {{- p.form_end(form) -}}
 
-<a href="{{- path('password_reset', {'schema': schema}) -}}">{{- 'login.password_reset_link'|trans -}}</a>
+<a href="{{- path('password_reset', {'schema': schema}) -}}">{{- 'link.password_reset'|trans -}}</a>
 
 {%- endblock inner %}
 

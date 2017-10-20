@@ -7,8 +7,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ad
 {
-	public function index(Request $request, app $app, string $schema, string $access)
+	public function index(Request $request, app $app, string $schema, string $access, string $view = null)
 	{
+
+
+
 
 		return $app['twig']->render('ad/' . $access . '_index.html.twig', []);
 	}

@@ -16,7 +16,7 @@ class password_reset_controller_provider implements ControllerProviderInterface
         $pwr->match('/{token}', 'controller\\password_reset::new_password')
             ->bind('password_reset_new_password');
         
-        $pwr->assert('token', '[a-z0-9][a-z0-9-]{14}[a-z0-9]');
+        $pwr->assert('token', '[a-z0-9-]{16}');
         
         return $pwr;
     }

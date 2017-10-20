@@ -49,38 +49,16 @@ class register
 		{
 			$data = $form->getData();
 
+			$app['mail_queue_confirm_link']
+				->set_to([$data['email']])
+				->set_data($data)
+				->set_template('confirm_register')
+				->set_route('register_confirm')
+				->put();
 
-			$user_email = $app['xdb']->get('user_email_' . $data['email']);
+			$app->info($app->trans('register.confirm_email_info', ['%email%' => $data['email']]));
 
-			if ($user_username !== '{}')
-			{
-				$app->err($app->trans('register.username_already_registered'));
-			}
-			else if ($user_email !== '{}')
-			{
-				$app->err($app->trans('register.email_already_registered'));
-			}
-			else
-			{
-				$data['subject'] = 'register_confirm.subject';
-				$data['top'] = 'register_confirm.top';
-				$data['bottom'] = 'mail_register_confirm.bottom';
-				$data['template'] = 'link';
-				$data['to'] = $data['email'] = strtolower($data['email']);
-
-				$token = $app['token']->set_length(20)->gen();
-
-				$data['url'] = $app->url('register_confirm', ['token' => $token]);
-				$data['token'] = $token;
-
-				$redis_key = 'register_confirm_' . $token;
-				$app['predis']->set($redis_key, json_encode($data));
-				$app['predis']->expire($redis_key, 14400);
-
-				$app['mail']->queue($data);
-
-				return $app->redirect($app->path('register_sent'));
-			}
+			return $app->redirect($app->path('login', ['schema' => $schema]));
 		}
 
 		return $app['twig']->render('register/form.html.twig', ['form' => $form->createView()]);

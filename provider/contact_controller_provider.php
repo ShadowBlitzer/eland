@@ -16,7 +16,7 @@ class contact_controller_provider implements ControllerProviderInterface
         $contact->get('/{token}', 'controller\\contact::confirm')
             ->bind('contact_confirm');
 
-        $contact->assert('token', '[a-z0-9][a-z0-9-]{14}[a-z0-9]');
+        $contact->assert('token', '[a-z0-9-]{16}');
         
         return $contact;
     }

@@ -73,7 +73,7 @@
 <i class="fa fa-{% block fa %}{{ menu_el['fa'] }}{% endblock %}"></i>
 {% endblock heading_fa_container %}
 {% block heading %}{{ menu_el['title']|trans }}{% endblock heading %}
-{% if filtered is defined and filtered %} <span class="small">{{- 'filtered'|trans -}}</span>{% endif %}
+{% if filtered is defined and filtered %} <span class="small">{{- 'tag.filtered'|trans -}}</span>{% endif %}
 {% block heading_post %}{% endblock %}
 </h1>
 {%- endblock heading_container %}
