@@ -4,49 +4,51 @@ namespace transformer;
 use AppBundle\Entity\Issue;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use twig\web_date;
 
 class datepicker_transformer implements DataTransformerInterface
 {
-    private $schema;
+    private $web_date;
 
-    public function __construct(string $schema)
+    public function __construct(web_date $web_date)
     {
-        $this->schema = $schema;
+        $this->web_date = $web_date;
     }
 
-    public function transform($issue)
+    public function transform($date)
     {
-        if (null === $issue) 
+        if (null === $date) 
         {
             return '';
         }
 
-        return $issue;
+        return $this->web_date->get($date, 'day');
     }
 
-    public function reverseTransform($issueNumber)
+    public function reverseTransform($input_date)
     {
-        // no issue number? It's optional, so that's ok
-        if (!$issueNumber) {
+        if (!$input_date) 
+        {
             return;
         }
 
-        $issue = $this->em
-            ->getRepository(Issue::class)
-            // query for the issue with this id
-            ->find($issueNumber)
-        ;
+        $parsed = strptime($input_date, $this->web_date->get_format('day'));
 
-        if (null === $issue) {
-            // causes a validation error
-            // this message is not shown to the user
-            // see the invalid_message option
+        if ($parsed === false)
+        {
             throw new TransformationFailedException(sprintf(
-                'An issue with number "%s" does not exist!',
-                $issueNumber
-            ));
+                'User input "%s" could not be parsed to a date',
+                $input_date
+            ));            
         }
 
-        return $issue;
+        $year = $parsed['tm_year'] + 1900;
+        $month = $parsed['tm_mon'] + 1;
+        $day = $parsed['tm_mday'];
+        $hour = $parsed['tm_hour'];
+        $min = $parsed['tm_min'];
+        $sec = $parsed['tm_sec'];
+
+        return sprintf('%04d-%02d-%02d %02d:%02d:%02d', $year, $month, $day, $hour, $min, $sec);
     }
 }

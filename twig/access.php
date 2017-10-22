@@ -5,7 +5,7 @@ namespace twig;
 use service\date_format_cache;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class web_date
+class access
 {
 	private $date_format_cache;
 	private $schema;
@@ -35,16 +35,5 @@ class web_date
 		}
 
 		return strftime($this->format[$precision], $time);
-	}
-
-	public function get_format(string $precision):string 
-	{
-		if (!isset($this->format[$precision]))
-		{
-			$this->format[$precision] = $this->date_format_cache
-				->get($precision, $this->locale, $this->schema);
-		}
-
-		return $this->format[$precision];
 	}
 }

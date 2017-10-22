@@ -11,6 +11,7 @@ class extension extends \Twig_Extension
 			new \Twig_Filter('date_format', 'twig\\date_format::get'),
 			new \Twig_Filter('web_date', 'twig\\web_date::get'),
 			new \Twig_Filter('web_user', 'twig\\web_user::get'),
+			new \Twig_Filter('access', 'twig\\access::get'),
 		];
 	}
 

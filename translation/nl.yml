@@ -64,62 +64,72 @@ datepicker:
 toggle_navigation: Navigatie
 admin_modus: Admin modus
 
-admin: Admin
-members: Leden
-interlets: InterLETS
-public: Publiek
+access:
+  admin: Admin
+  users: Leden
+  interlets: InterLETS
+  public: Publiek
+
+bool:
+  no: Nee
+  yes: Ja
 
 label:
-  your_email: Je email adres
-  your_message: Je bericht
-  first_name: Voornaam
-  last_name: Achternaam
+  accept: Akkoord
+  access: Toegang
+  amount: Bedrag
+  approved: Goedgekeurd
+  content: Inhoud
+  currency_or_group_name: Naam van de munt of groep
+  description: Omschrijving
+  date: Datum  
   email: Email
   email_confirmation_explain: >
     We sturen je een bevestigings-link om je
-    email adres te valideren.
-  postcode: Postcode
-  mobile: GSM
-  telephone: Telefoon
-  accept: Akkoord
-  from: Van
-  to: Naar
-  amount: Bedrag
-  description: Omschrijving
+    email adres te valideren.  
+  email_letscode_username: Je email adres, LETScode of gebruikersnaam  
+  email_code_username: Je email adres, code of gebruikersnaam
+  event_date: Agendadatum
+  event_date_explain: Wanneer gaat dit door?
+  first_name: Voornaam
+  from: Van   
+  keep_after_date: Behoud na datum 
+  last_name: Achternaam
+  location: Plaats
+  location_explain: Waar?
   menu: Menu
+  message: Bericht
+  mobile: GSM
+  password: Paswoord
+  postcode: Postcode
+  save_password: Bewaar paswoord
   slug: Slak
   slug_explain: >
     De "Slak" is het laatste gedeelte van de URL. 
     Deze kan uit kleine letters, cijfers en ingesloten koppeltekens bestaan. 
     Gebruik minstens 4 tekens en "index" voor de thuispagina.
-  access: Toegang
-  content: Inhoud
-  password: Paswoord
-  save_password: Bewaar paswoord
-  currency_or_group_name: Naam van de munt of groep
-  email_letscode_username: Je email adres, LETScode of gebruikersnaam
-  email_code_username: Je email adres, code of gebruikersnaam
-  generate: Genereer
-  register: Inschrijven
-  login: Login
+  subject: Onderwerp
+  telephone: Telefoon
+  title: Titel
+  to: Naar
+  your_email: Je email adres
+  your_message: Je bericht
 
 btn:
-  login: Login
-  register: Inschrijven
-  generate: Genereer
-  password_reset: Reset paswoord
-  send: Verzenden
-  cancel: Annuleren
   add: Toevoegen
+  cancel: Annuleren
+  delete: Verwijderen  
   edit: Aanpassen
-  delete: Verwijderen
-  filter: Filter
+  filter: Filter  
+  generate: Genereer
+  login: Login
+  password_reset: Reset paswoord
+  register: Inschrijven
+  send: Verzenden
   show: Toon
 
 tag:
   filtered: Gefilterd
-
-
 
 link:
   password_reset: Ik ben mijn paswoord vergeten.
@@ -148,8 +158,6 @@ time: Tijdstip
 and: en
 or: of
 nor: noch
-
-
 
 error:
   internal_configuration: >
@@ -228,8 +236,26 @@ forum_index:
 doc_index:
   title: Documenten
 
+news:
+  title_top_btn:
+    add: Nieuwsbericht toevoegen
+    edit: Nieuwsbericht aanpassen
+    del: Nieuwsbericht verwijderen
+
 news_index:
   title: Nieuws
+
+news_add:
+  title: Nieuwsbericht toevoegen
+  success: Nieuwsbericht "%name%" is succesvol gecreëerd.
+
+news_edit:
+  title: Nieuwsbericht "%name%" aanpassen
+  success: Nieuwsbericht "%name%" is aangepast.
+
+news_del:
+  title: Nieuwsbericht "%name%" verwijderen?
+  success: Nieuwsbericht "%name%" is verwijderd.
 
 support:
   title: Support
@@ -255,6 +281,8 @@ password_reset:
   explain: >
     Stuur een link naar je mailbox waarmee 
     je je paswoord opnieuw kan instellen.
+  unknown_email_address: >
+    Dit email adres is niet gekend.
   link_send_success: >
     Een link om je paswoord te resetten
     werd gestuurd naar %email%. Deze link 

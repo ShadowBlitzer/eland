@@ -1,3 +1,9 @@
+{% macro label(acc) -%}
+	{%- set ary = {'public': 'success', 'interlets': 'warning', 'users': 'default', 'admin': 'info'} -%}
+	<span class="label label-{{- ary[acc] -}}">{{- ('access.'~acc)|trans -}}</span>
+{%- endmacro label %}
+
+
 {% macro group_start(label, id) %}
 <div class="form-group">
 <label for="{{ id }}" class="col-sm-2 control-label">{{ label|trans }}</label>
@@ -9,7 +15,7 @@
 </div>
 {% endmacro group_end %}
 
-
+{#
 <div class="form-group">
 <label for="{{ name }}" class="col-sm-2 control-label">{{ label }}</label>
 <div class="col-sm-10" {% if access_cache_id %} data-access-cache-id="{{ schema ~ access_cache_id }}"
@@ -29,3 +35,4 @@ foreach ($acc_ary as $key => $ary)
 
 </div>
 </div>
+#}

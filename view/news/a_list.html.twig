@@ -1,0 +1,49 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/table.html.twig' as t %}
+{% import 'macro/pagination.html.twig' as pg %}
+{% import 'macro/top_button.html.twig' as tb %}
+
+{% block top_buttons -%}
+{{- tb.add(path('news_add', acc_sch), 'news.title_top_btn.add') -}}
+{%- endblock top_buttons -%}
+
+{% block inner -%}
+
+{%- set cols = {
+	'headline': {
+		'lbl': 'label.description',
+		'route': 'news_show',
+		'route_key': 'news',
+		'route_col_id': 'id'
+	},
+	'itemdate': {
+		'lbl': 'label.date',
+        'render': 'date',
+        'date_precision': 'day'
+	},
+	'approved': {
+		'lbl': 'label.approved',
+		'hide': 'phone',
+		'render': 'yes_no'
+	},
+	'access': {
+		'lbl': 'label.access', 
+		'hide':'phone',
+        'render': 'access'
+	}
+}
+-%}
+
+{{- pg.pagination(route, all_params, pagination) -}}
+{{- t.start() -}}
+{{- t.head(cols, route, all_params, sort) -}}
+{{- t.body(news, cols, acc_sch) -}}
+{{- t.end() -}}
+{{- pg.pagination(route, all_params, pagination) -}}
+
+{%- endblock inner %}
+
+
+

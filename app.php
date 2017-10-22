@@ -171,8 +171,12 @@ $app->extend('form.types', function ($types) use ($app) {
     return $types;
 });
 
+$app['web_date'] = function ($app){
+	return new twig\web_date($app['date_format_cache'], $app['request_stack']);
+};
+
 $app['datepicker_transformer'] = function ($app){
-	return new transformer\datepicker_transformer($app['schema']);
+	return new transformer\datepicker_transformer($app['web_date']);
 };
 
 $app['datepicker_type'] = function ($app) {

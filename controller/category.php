@@ -23,7 +23,6 @@ class category
 	public function add(Request $request, app $app, string $schema, string $access, int $parent_category)
 	{
 		$data = [
-			'name'		=> '',
 			'id_parent'	=> $parent_category,
 		];
 
