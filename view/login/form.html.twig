@@ -9,10 +9,8 @@
 
 {{- p.form_start(form) -}}
 
-{{- form_row(form.login, {'label': label_login, 
-  'addon_fa': 'user', 'addon_class': 'addon-info'}) -}}
-{{- form_row(form.password, {'label': 'label.password',
-  'addon_class': 'addon-info'}) -}}
+{{- form_row(form.login, {'label': label_login, 'addon_fa': 'user'}) -}}
+{{- form_row(form.password, {'label': 'label.password'}) -}}
 
 {{- b.default(form.submit, 'label.login') -}}
 

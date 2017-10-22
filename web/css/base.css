@@ -139,7 +139,6 @@ p.extern.tt-suggestion, .bg-extern
   padding: 2px 5px 2px 10px;
 }
 
-
 /******************************************************/
 
 body,html,.row-offcanvas
@@ -728,10 +727,32 @@ span.num {
 	font-weight: bold;
 }
 
-/** **/
+/** addons **/
 
+/*
 .addon-info {
   background-color: #5bc0de;
   border-color: #46b8da;
   color: #fff;
 }
+
+div.panel-post form div.form-group span.input-group-addon{
+
+}
+
+div.panel-filter form div.form-group span.input-group-addon{
+
+}
+
+div.panel-help form div.form-group span.input-group-addon{
+
+}
+*/
+
+div.panel-info form div.form-group span.input-group-addon,
+div.panel-info form div.form-group span.input-group-btn button.btn{
+  background-color: #5bc0de;
+  border-color: #46b8da;
+  color: #fff;
+}
+

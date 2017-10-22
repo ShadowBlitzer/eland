@@ -11,9 +11,9 @@
 {{- p.form_start(form) -}}
 {{- form_row(form.group_name, {'label': 'label.currency_or_group_name', 'addon_fa': 'share-alt'}) -}}
 {{- form_row(form.email, {'label': 'label.email', 'sub_label': 'label.email_confirmation_explain'}) -}}
-{{- form_row(form.message, {'label': 'message', 'attr': {'rows': 6}}) -}}
+{{- form_row(form.message, {'label': 'label.your_message', 'attr': {'rows': 6}}) -}}
 {{- b.cancel(path('main_index')) -}}
-{{- b.info(form.submit, 'send') -}}
+{{- b.info(form.submit, 'btn.send') -}}
 {{- p.form_end(form) -}}
 
 <br>

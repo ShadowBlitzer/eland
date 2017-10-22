@@ -13,37 +13,14 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints as Assert;
 use form\email_addon_type;
 use form\addon_type;
+use form\register_type;
 
 class register
 {
 	public function form(Request $request, app $app, string $schema)
 	{
-		$data = [
-			'accept'		=> false,
-		];
-
-		$form = $app->form($data)
-
-			->add('first_name')
-			->add('last_name')
-			->add('email', email_addon_type::class, [
-				'constraints' => new Assert\Email(),
-			])
-
-			->add('postcode')
-			->add('mobile', addon_type::class, [
-				'required'	=> false,
-			])
-			->add('telephone', addon_type::class, [
-				'required'	=> false,
-			])
-			->add('accept', CheckboxType::class, [
-				'constraints' => new Assert\IsTrue(),
-			])
-			->add('submit', SubmitType::class)
-			->getForm();
-
-		$form->handleRequest($request);
+		$form = $app->build_form(register_type::class)
+			->handleRequest($request);
 
 		if ($form->isValid())
 		{
@@ -70,18 +47,17 @@ class register
 
 	public function confirm(Request $request, app $app, string $schema, string $token)
 	{
-		$redis_key = 'register_confirm_' . $token;
-		$data = $app['predis']->get($redis_key);
-
-		if (!$data)
+		$data = $app['mail_validated_confirm_link']->get();
+	
+		error_log(json_encode($data));
+		
+		if (!count($data))
 		{
-			return $app['twig']->render('page/panel_danger.html.twig', [
-				'subject'	=> 'register_confirm.not_found.subject',
-				'text'		=> 'register_confirm.not_found.text',
-			]);
+			$app->err($app->trans('register.confirm_not_found'));
+			return $app->redirect($app->path('register', ['schema' => $schema]));
 		}
 
-		$data = json_decode($data, true);
+		// TO DO: process data
 
 		$email = strtolower($data['email']);
 

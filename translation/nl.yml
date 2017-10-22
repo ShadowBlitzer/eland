@@ -125,7 +125,6 @@ link:
   password_reset: Ik ben mijn paswoord vergeten.
   csv: csv
 
-
 email: Email
 password: Paswoord
 message: Bericht
@@ -157,21 +156,6 @@ error:
     Interne configuratie fout van de web app.
   404_page_not_found: >
     Pagina niet gevonden.
-
-hosting_request:
-  title: Aanvraag hosting eLAND
-  explain: >
-    Vraag met dit formulier vrijblijvend gratis 
-    hosting van eLAND voor je munt of groep aan. 
-  privacy: >
-    Privacy: uw email adres wordt voor 
-      geen enkel ander doel
-      gebruikt dan u terug te kunnen contacteren.
-  success: >
-    <h3>Uw aanvraag voor eLAND hosting is verstuurd.</h3>
-    <p>We nemen zo spoedig mogelijk contact met u op.</p>
-  mail:
-    subject: 'Aanvraag hosting: %group_name%'
 
 page_a_index:
   title: Pagina's
@@ -250,16 +234,6 @@ news_index:
 support:
   title: Support
 
-contact:
-  title: Contact
-  confirm_email_info: >
-      Gelieve de bevestigingslink aan te 
-      klikken in de email die we naar je adres 
-      "%email%" verzonden hebben.
-      Deze link blijft vier uur geldig.
-  success: >
-    Je bericht werd met succes verstuurd.
-
 notification_index:
   title: Notificaties
 
@@ -285,11 +259,28 @@ password_reset:
     Een link om je paswoord te resetten
     werd gestuurd naar %email%. Deze link 
     blijft 4 uur geldig.
+  confirm_not_found: >
+    De link om je paswoord opnieuw in te 
+    stellen is verlopen. Gelieve opnieuw te 
+    proberen. 
 
 new_password:
   title: Nieuw paswoord instellen
   explain: >
     Geef hier een nieuw paswoord in voor je account. 
+
+contact:
+  title: Contact
+  confirm_email_info: >
+      Gelieve de bevestigingslink aan te 
+      klikken in de email die we naar je adres 
+      "%email%" verzonden hebben.
+      Deze link blijft vier uur geldig.
+  success: >
+    Je bericht werd met succes verstuurd.
+  confirm_not_found: >
+    De link om je contactbericht te bevestigen
+    is verlopen. Gelieve opnieuw te proberen.
 
 register:
   title: Inschrijven
@@ -298,6 +289,31 @@ register:
     Klik om je registratie te bevestigen 
     op de link die naar je adres %email%
     werd gestuurd.
+  confirm_not_found: >
+    De bevestigingslink voor je registratie 
+    is verlopen. Gelieve opnieuw te proberen.
+
+hosting_request:
+  title: Aanvraag hosting eLAND
+  explain: >
+    Vraag met dit formulier vrijblijvend gratis 
+    hosting van eLAND voor je munt of groep aan. 
+  privacy: >
+    Privacy: uw email adres wordt voor 
+    geen enkel ander doel
+    gebruikt dan u terug te kunnen contacteren.
+  confirm_email_info: >
+    Klik om je hostingaavraag te bevestigen op 
+    de link die naar je adres %email% werd
+    verstuurd.
+  success: >
+    <h3>Uw aanvraag voor eLAND hosting is verstuurd.</h3>
+    <p>We nemen zo spoedig mogelijk contact met u op.</p>
+  mail:
+    subject: 'Aanvraag hosting: %group_name%'
+  confirm_not_found:
+    De bevestigingslink voor uw aanvraag is verlopen.
+    Gelieve opnieuw te proberen.
 
 status:
   title: Status
@@ -536,6 +552,15 @@ mail:
       te klikken
     expiration: >
       Deze link blijft 4 uur geldig.
+  confirm_hosting_request:
+    subject: Bevestig je aanvraag voor hosting
+    explain: >
+      Bevestig je aanvraag voor eLAND-hosting door
+      op de link hieronder te klikken.
+    expiration: >
+      Deze link blijft 4 uur geldig. Gelieve deze
+      mail te negeren wanneer je niet zelf een aanvraag
+      tot hosting hebt gedaan via onze website.
   confirm_contact:
     subject: Bevestiging van je bericht gevraagd
     explain: >
@@ -554,6 +579,15 @@ mail:
       Deze link blijft 4 uur geldig. Gelieve deze mail te
       negeren wanneer je niet zelf ons registratieformulier
       hebt ingevuld.
+  confirm_password_reset:
+    subject: Paswoord reset link
+    explain: >
+      Met deze link kan je opnieuw je paswoord instellen.
+    expiration: >
+      Deze link blijft 4 uur geldig. Gelieve deze mail te
+      negeren wanneer je niet zelf hebt een paswoord reset
+      hebt aangevraagd op onze website.
+
   contact_admin:
     subject: Bericht van contactformulier
   sender_info:

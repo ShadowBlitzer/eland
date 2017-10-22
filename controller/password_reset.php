@@ -51,7 +51,7 @@ class password_reset
 				$app['mail_queue_confirm_link']
 					->set_to([$email])
 					->set_data($user)
-					->set_template('confirm')
+					->set_template('confirm_password_reset')
 					->set_route('password_reset_new_password')
 					->put();
 

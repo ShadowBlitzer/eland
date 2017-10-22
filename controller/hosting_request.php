@@ -20,11 +20,11 @@ class hosting_request
 			$app['mail_queue_confirm_link']
 				->set_to([$data['email']])
 				->set_data($data)
-				->set_template('confirm')
+				->set_template('confirm_hosting_request')
 				->set_route('hosting_request_confirm')
 				->put();
 
-			$app->success('hosting_request.success');
+			$app->info($app->trans('hosting_request.confirm_email_info', ['%email%' => $data['email']]));
 
 			return $app->redirect($app->path('main_index'));
 		}
@@ -74,7 +74,7 @@ class hosting_request
 */
 
 
-		$app->success($app->trans('contact.success'));
+		$app->success($app->trans('hosting_request.success'));
 
 		return $app->redirect($app->path('main_index'));
 	}
