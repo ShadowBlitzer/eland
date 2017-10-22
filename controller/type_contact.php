@@ -59,14 +59,12 @@ class type_contact
 
 			$app['db']->insert($schema . '.type_contact', $data);
 
-			$app->success($app->trans('type_contact_add.success', [
-				'%name%'  => $data['name'],
-			]));
+			$app->success('type_contact_add.success', ['%name%'  => $data['name']]);
 
-			return $app->redirect($app->path('typecontact_index', [
+			return $app->reroute('typecontact_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]));				
+			]);				
 		}
 
 		return $app['twig']->render('type_contact/a_add.html.twig', [
@@ -100,14 +98,12 @@ class type_contact
 
 			$app['db']->update($schema . '.type_contact', $data, ['id' => $id]);
 
-			$app->success($app->trans('type_contact_edit.success', [
-				'%name%'  => $data['name'],
-			]));
+			$app->success('type_contact_edit.success', ['%name%'  => $data['name']]);
 
-			return $app->redirect($app->path('typecontact_index', [
+			return $app->reroute('typecontact_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]));				
+			]);				
 		}
 
 		return $app['twig']->render('type_contact/a_edit.html.twig', [
@@ -147,14 +143,12 @@ class type_contact
 		{
 			$app['db']->delete($schema . '.type_contact', ['id' => $id]);
 
-			$app->success($app->trans('type_contact_del.success', [
-				'%name%'  => $type_contact['name'],
-			]));
+			$app->success('type_contact_del.success', ['%name%'  => $type_contact['name']]);
 
-			return $app->redirect($app->path('typecontact_index', [
+			return $app->reroute('typecontact_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]));				
+			]);				
 		}
 
 		return $app['twig']->render('type_contact/a_del.html.twig', [

@@ -33,9 +33,9 @@ class register
 				->set_route('register_confirm')
 				->put();
 
-			$app->info($app->trans('register.confirm_email_info', ['%email%' => $data['email']]));
+			$app->info('register.confirm_email_info', ['%email%' => $data['email']]);
 
-			return $app->redirect($app->path('login', ['schema' => $schema]));
+			return $app->reroute('login', ['schema' => $schema]);
 		}
 
 		return $app['twig']->render('register/form.html.twig', ['form' => $form->createView()]);
@@ -53,8 +53,8 @@ class register
 		
 		if (!count($data))
 		{
-			$app->err($app->trans('register.confirm_not_found'));
-			return $app->redirect($app->path('register', ['schema' => $schema]));
+			$app->err('register.confirm_not_found');
+			return $app->reroute('register', ['schema' => $schema]);
 		}
 
 		// TO DO: process data

@@ -64,9 +64,7 @@ class page
 
 			$app['xdb']->set();
 
-			$app->success($app->trans('page_add.success', [
-				'%name%'  => $data['name'],
-			]));
+			$app->success('page_add.success', ['%name%'  => $data['name']]);
 
 			return $app->redirect($app->path('page_index', [
 				'schema' 	=> $schema,

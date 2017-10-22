@@ -19,28 +19,8 @@ class login
 
 	public function form(Request $request, app $app, string $schema)
 	{
-		$data = [
-			'login'		=> '',
-			'password'	=> '',
-		];
-
-		$form = $app->build_form(login_type::class, $data)
+		$form = $app->build_form(login_type::class)
 			->handleRequest($request);
-
-/*
-		$form = $app->form($data)
-
-			->add('login')
-			->add('password', PasswordType::class, [
-				'constraints' => [new Assert\Length(['min' => 4])],
-			])
-
-			->add('submit', SubmitType::class)
-
-			->getForm();
-
-		$form->handleRequest($request);
-*/
 
 		if ($form->isValid())
 		{

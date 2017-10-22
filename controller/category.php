@@ -51,14 +51,12 @@ class category
 
 			$app['db']->insert($schema . '.categories', $data);
 
-			$app->success($app->trans('category_add.success', [
-				'%name%'  => $data['name'],
-			]));
+			$app->success('category_add.success', ['%name%'  => $data['name']]);
 
-			return $app->redirect($app->path('category_index', [
+			return $app->reroute('category_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]));				
+			]);				
 		}
 
 		return $app['twig']->render('category/a_add.html.twig', [
@@ -106,14 +104,12 @@ class category
 
 			$app['db']->update($schema . '.categories', $data, ['id' => $id]);
 
-			$app->success($app->trans('category_edit.success', [
-				'%name%'  => $data['name'],
-			]));
+			$app->success('category_edit.success', ['%name%'  => $data['name']]);
 
-			return $app->redirect($app->path('category_index', [
+			return $app->reroute('category_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]));				
+			]);				
 		}
 
 		return $app['twig']->render('category/a_edit.html.twig', [
@@ -157,14 +153,12 @@ class category
 		{
 			$app['db']->delete($schema . '.categories', ['id' => $id]);
 
-			$app->success($app->trans('category_del.success', [
-				'%name%'  => $category['name'],
-			]));
+			$app->success('category_del.success', ['%name%'  => $category['name']]);
 
-			return $app->redirect($app->path('category_index', [
+			return $app->reroute('category_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]));
+			]);
 		}
 
 		return $app['twig']->render('category/a_del.html.twig', [

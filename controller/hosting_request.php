@@ -24,9 +24,9 @@ class hosting_request
 				->set_route('hosting_request_confirm')
 				->put();
 
-			$app->info($app->trans('hosting_request.confirm_email_info', ['%email%' => $data['email']]));
+			$app->info('hosting_request.confirm_email_info', ['%email%' => $data['email']]);
 
-			return $app->redirect($app->path('main_index'));
+			return $app->reroute('main_index');
 		}
 
 		return $app->render('hosting_request/form.html.twig', [
@@ -42,8 +42,8 @@ class hosting_request
 		
 		if (!count($data))
 		{
-			$app->err($app->trans('hosting_request.confirm_not_found'));
-			return $app->redirect($app->path('hosting_request'));
+			$app->err('hosting_request.confirm_not_found');
+			return $app->reroute('hosting_request');
 		}
 
 		$app['mail_queue']->set_template('hosting_request')
@@ -74,9 +74,9 @@ class hosting_request
 */
 
 
-		$app->success($app->trans('hosting_request.success'));
+		$app->success('hosting_request.success');
 
-		return $app->redirect($app->path('main_index'));
+		return $app->reroute('main_index');
 	}
 
 

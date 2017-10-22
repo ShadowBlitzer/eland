@@ -25,9 +25,9 @@ class contact
 				->set_route('contact_confirm')
 				->put();
 
-			$app->info($app->trans('contact.confirm_email_info', ['%email%' => $data['email']]));
+			$app->info('contact.confirm_email_info', ['%email%' => $data['email']]);
 
-			return $app->redirect($app->path('login', ['schema' => $schema]));
+			return $app->reroute('login', ['schema' => $schema]);
 		}
 
 		return $app['twig']->render('contact/form.html.twig', [
@@ -43,8 +43,8 @@ class contact
 		
 		if (!count($data))
 		{
-			$app->err($app->trans('contact.confirm_not_found'));
-			return $app->redirect($app->path('confirm', ['schema' => $schema]));
+			$app->err('contact.confirm_not_found');
+			return $app->reroute('confirm', ['schema' => $schema]);
 		}
 
 		$app['mail_queue']->set_template('contact_admin')
@@ -55,9 +55,9 @@ class contact
 			->set_priority(900000)
 			->put();
 
-		$app->success($app->trans('contact.success'));
+		$app->success('contact.success');
 
-		return $app->redirect($app->path('login', ['schema' => $schema]));
+		return $app->reroute('login', ['schema' => $schema]);
 	}
 }
 

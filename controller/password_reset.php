@@ -55,15 +55,17 @@ class password_reset
 					->set_route('password_reset_new_password')
 					->put();
 
-				$app->success($app->trans('password_reset.link_send_success', ['%email%' => $email]));
+				$app->success('password_reset.link_send_success', ['%email%' => $email]);
 
-				return $app->redirect($app->path('login', ['schema' => $schema]));
+				return $app->reroute('login', ['schema' => $schema]);
 			}
 
-			$app->err($app->trans('password_reset.unknown_email_address'));
+			$app->err('password_reset.unknown_email_address');
 		}
 
-		return $app['twig']->render('password_reset/form.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('password_reset/form.html.twig', [
+			'form' => $form->createView(),
+		]);
 	}
 
 	public function new_password(Request $request, app $app, string $schema, string $token)
@@ -76,8 +78,8 @@ class password_reset
 			
 			if (!count($data))
 			{
-				$app->err($app->trans('password_reset.confirm_not_found'));
-				return $app->redirect($app->path('password_reset', ['schema' => $schema]));
+				$app->err('password_reset.confirm_not_found');
+				return $app->reroute('password_reset', ['schema' => $schema]);
 			}
 		}
 
@@ -95,8 +97,8 @@ class password_reset
 			$data = $form->getData();
 
 
-			$app->success($app->trans('password_reset.new_password_success'));
-			return $app->redirect($app->path('login', ['schema' => $schema]));
+			$app->success('password_reset.new_password_success');
+			return $app->reroute('login', ['schema' => $schema]);
 		}
 
 		return $app['twig']->render('password_reset/new_password.html.twig', ['form' => $form->createView()]);

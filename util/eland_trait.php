@@ -4,29 +4,35 @@ namespace util;
 
 trait eland_trait
 {
-    public function flash(string $type, $msg)
+    public function flash(string $type, string $msg, array $param = [])
     {
-        return $this['session']->getFlashBag()->add($type, $msg);
+		$msg = $this['translator']->trans($msg, $param);
+        $this['session']->getFlashBag()->add($type, $msg);
     }
 
-	public function err($msg)
+	public function err(string $msg, array $param = [])
 	{
-		return $this['session']->getFlashBag()->add('error', $msg);
+		$this->flash('error', $msg, $param);
 	}
 
-	public function info($msg)
+	public function info(string $msg, array $param = [])
 	{
-		return $this['session']->getFlashBag()->add('info', $msg);
+		$this->flash('info', $msg, $param);
 	}
 
-	public function success($msg)
+	public function success(string $msg, array $param = [])
 	{
-		return $this['session']->getFlashBag()->add('success', $msg);
+		$this->flash('success', $msg, $param);
 	}
 
-	public function warning($msg)
+	public function warning(string $msg, array $param = [])
 	{
-		return $this['session']->getFlashBag()->add('warning', $msg);
+		$this->flash('warning', $msg, $param);
+	}
+
+	public function reroute(string $route, array $param = [])
+	{
+		return $this->redirect($this->path($route, $param));
 	}
 
 	public function build_form($class, $data = [], $options = [])
