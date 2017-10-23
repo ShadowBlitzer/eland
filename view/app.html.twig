@@ -66,15 +66,16 @@
 </div>
 {%- endblock top_right_container %}
 
-{% block heading_container -%}
+{%- block heading_container -%}
 <h1>
-{% block heading_pre %}{% endblock %}
-{% block heading_fa_container %}
-<i class="fa fa-{% block fa %}{{ menu_el['fa'] }}{% endblock %}"></i>
-{% endblock heading_fa_container %}
-{% block heading %}{{ menu_el['title']|trans }}{% endblock heading %}
-{% if filtered is defined and filtered %} <span class="small">{{- 'tag.filtered'|trans -}}</span>{% endif %}
-{% block heading_post %}{% endblock %}
+{%- block heading_pre -%}{%- endblock -%}
+{%- block heading_fa_container -%}
+<i class="fa fa-{%- block fa -%}{{- menu_el['fa'] -}}{%- endblock -%}"></i>
+{% endblock heading_fa_container -%}
+{%- block heading -%}{{- menu_el['title']|trans -}}{%- endblock heading -%}
+{%- if filtered is defined and filtered %} <span class="small">{{- 'tag.filtered'|trans -}}</span>{%- endif -%}
+{%- block heading_post -%}{%- endblock -%}
+{%- block heading_right -%}{%- endblock -%}
 </h1>
 {%- endblock heading_container %}
 

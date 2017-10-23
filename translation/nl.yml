@@ -128,6 +128,13 @@ btn:
   send: Verzenden
   show: Toon
 
+view:
+  extended: Omschrijvingen
+  list: Lijst
+  map: Kaart
+  tiles: Tegels
+
+
 tag:
   filtered: Gefilterd
 
@@ -241,6 +248,10 @@ news:
     add: Nieuwsbericht toevoegen
     edit: Nieuwsbericht aanpassen
     del: Nieuwsbericht verwijderen
+  no_items: >
+    Er zijn momenteel geen nieuwsberichten.
+  is_kept_after_date: >
+    Nieuwsbericht blijft behouden na datum
 
 news_index:
   title: Nieuws

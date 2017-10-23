@@ -1,0 +1,8 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/top_button.html.twig' as tb %}
+
+{%- block top_buttons -%}
+{{- tb.add(path('news_add', acc_sch), 'news.title_top_btn.add') -}}
+{%- endblock top_buttons -%}
+

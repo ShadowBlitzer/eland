@@ -10,11 +10,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 use util\sort;
 use util\pagination;
 use form\news_type;
+use exception\invalid_parameter_value_exception;
 
 class news
 {
-	public function index(Request $request, app $app, string $schema, string $access, string $view = null)
+	public function index(Request $request, app $app, string $schema, string $access)
 	{
+		$view = $request->query->get('view') ?? 'extended';
+
+		if (!in_array($view, ['list', 'extended']))
+		{
+			throw new invalid_parameter_value_exception(sprintf('View %s is not allowed', $view));
+		}
+
 		$where = [];
 		$params = [];
 
@@ -71,7 +79,7 @@ class news
 */
 		}
 
-		return $app['twig']->render('news/' . $access . '_list.html.twig', [
+		return $app['twig']->render('news/' . $access . '_' . $view . '.html.twig', [
 			'news'			=> $news,
 //			'filter'		=> $filter->createView(),
 			'filtered'		=> $filtered,
@@ -83,10 +91,6 @@ class news
 	public function show(Request $request, app $app, string $schema, string $access, array $news)
 	{
 
-
-
-
-		
 		return $app['twig']->render('news/' . $access . '_show.html.twig', [
 			'news'	=> $news,
 		]);
@@ -100,13 +104,12 @@ class news
 		if ($form->isValid())
 		{
 			$data = $form->getData();
-/*
+
 			$data['cdate'] = gmdate('Y-m-d H:i:s');
-			$data['id_creator'] = 14;//($s_master) ? 0 : $s_id;
-			$data['fullname'] = '';
-			$data['leafnote'] = 0;
-*/
-			$data['approved'] = $access === 'a' ? true : false;
+			$data['id_user'] = 1;//($s_master) ? 0 : $s_id;
+			$data['approved'] = $access === 'a' ? 't' : 'f';
+			$data['sticky'] = $data['sticky'] ? 't' : 'f';
+			$data['published'] = 't';
 
 			$app['db']->insert($schema . '.news', $data);
 

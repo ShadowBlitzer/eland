@@ -1,0 +1,104 @@
+{% extends 'news/a_index.html.twig' %}
+
+{% import 'macro/access.html.twig' as acc %}
+{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/table.html.twig' as t %}
+{% import 'macro/panel.html.twig' as p %}
+{% import 'macro/pagination.html.twig' as pg %}
+{% import 'macro/button_group.html.twig' as bg %}
+
+{%- block heading_right -%}
+{{- bg.view(route, all_params, {'list': 'view.list', 'extended': 'view.extended'}, 'extended') -}}
+{%- endblock heading_right -%}
+
+{%- block inner -%}
+
+{%- set cols = {
+	'headline': {
+		'lbl': 'label.description',
+		'route': 'news_show',
+		'route_key': 'news',
+		'route_col_id': 'id'
+	},
+	'itemdate': {
+		'lbl': 'label.date',
+        'render': 'date',
+        'date_precision': 'day'
+	},
+	'approved': {
+		'lbl': 'label.approved',
+		'hide': 'phone',
+		'render': 'yes_no'
+	},
+	'access': {
+		'lbl': 'label.access', 
+		'hide':'phone',
+        'render': 'access'
+	}
+}
+-%}
+
+{{- pg.pagination(route, all_params, pagination) -}}
+{%- for n in news -%}
+<div class="panel panel-info printview">
+<div class="panel-body{%- if n.approved %} bg-warning{%- endif -%}">
+
+<div class="media">
+<div class="media-body">
+<h3 class="media-heading">
+<a href="{{ path('news_show', acc_sch|merge({'news': n.id})) -}}">
+{{- n.headline -}}
+</a>
+</h3>
+<p>
+{{- n.newsitem -}}
+</p>
+<dl>
+{% if n.location -%}
+	<dt>{{- 'label.location'|trans -}}</dt>
+	<dd>{{- n.location -}}</dd>
+{%- endif %}
+{% if n.itemdate -%}
+	<dt>{{- 'label.event_date'|trans -}}</dt>
+	<dd>{{- n.itemdate|web_date('day') -}}
+	{%- if n.sticky %} <i>({{- 'news.is_kept_after_date'|trans -}}</i>){%- endif -%}
+	</dd>
+{%- endif %}
+<dt>{{- 'label.access'|trans -}}</dt>
+<dd>{{- acc.label(n.access) -}}</dd>
+</div>
+</div>
+</div>
+
+<div class="panel-footer">
+<p><i class="fa fa-user"></i>&nbsp;{{ n.id_user|web_user|raw -}}  
+
+{#
+<span class="inline-buttons pull-right hidden-xs">
+{%- if not n.approved -%}
+
+<a href="{{- path('news_approve', acc_sch|merge({'news'}))}}
+				echo aphp('news', ['approve' => $n['id']], 'Goedkeuren en publiceren', 'btn btn-warning btn-xs', false, 'check');
+			}
+			echo aphp('news', ['edit' => $n['id']], 'Aanpassen', 'btn btn-primary btn-xs', false, 'pencil');
+			echo aphp('news', ['del' => $n['id']], 'Verwijderen', 'btn btn-danger btn-xs', false, 'times');
+			echo '</span>';
+		}
+#}
+</p>
+</div>
+</div>
+
+
+{%- else -%}
+{{- p.warning() -}}
+<p>{{- 'news.no_items'|trans -}}</p>
+{{- p.end -}}
+</div></div>
+{%- endfor -%}
+{{- pg.pagination(route, all_params, pagination) -}}
+
+{%- endblock inner -%}
+
+
+

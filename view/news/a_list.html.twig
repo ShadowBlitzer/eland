@@ -4,12 +4,17 @@
 {% import 'macro/table.html.twig' as t %}
 {% import 'macro/pagination.html.twig' as pg %}
 {% import 'macro/top_button.html.twig' as tb %}
+{% import 'macro/button_group.html.twig' as bg %}
 
-{% block top_buttons -%}
+{%- block top_buttons -%}
 {{- tb.add(path('news_add', acc_sch), 'news.title_top_btn.add') -}}
 {%- endblock top_buttons -%}
 
-{% block inner -%}
+{%- block heading_right -%}
+{{- bg.view(route, all_params, {'list': 'view.list', 'extended': 'view.extended'}, 'list') -}}
+{%- endblock heading_right -%}
+
+{%- block inner -%}
 
 {%- set cols = {
 	'headline': {
@@ -43,7 +48,7 @@
 {{- t.end() -}}
 {{- pg.pagination(route, all_params, pagination) -}}
 
-{%- endblock inner %}
+{%- endblock inner -%}
 
 
 
