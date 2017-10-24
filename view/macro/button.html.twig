@@ -39,7 +39,7 @@
 {%- endmacro send %}
 
 {% macro default(form_submit, label) -%}
-{{- form_widget(form_submit, {'label': label, 'attr': {'class': 'btn-default btn-lg'}}) -}}
+{{- form_widget(form_submit, {'label': label, 'attr': {'class': 'btn-default btn-lg'}}) -}}&nbsp;
 {%- endmacro default %}
 
 {% macro approve_md(form_submit) -%}

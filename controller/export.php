@@ -101,114 +101,59 @@ class export
 	{
 		set_time_limit(60);
 
-		$elas_db_form = $app->namedForm('elas_db', [], [
-			'etoken_enabled'	=> false,	
-		])
-			->add('submit', SubmitType::class, [
-				'label'	=> 'export.elas.db.btn_label',
-			])
-			->getForm()
-			->handleRequest($request);
+		$csv_ary = array_keys($this->elas_csv_ary);
 
-		if ($elas_db_form->isValid())
+		$form = $app->form([], [
+			'etoken_enabled'	=> false,
+		]);
+
+		$form->add('elas_db', SubmitType::class);
+
+		foreach($csv_ary as $table)
 		{
-			if (!function_exists('exec'))
-			{
-				throw new missing_function_exception(
-					sprintf('function "exec" does not exist 
-						in class %s', __CLASS__));
-			}
-			
-			$filename = $schema . '-elas-db-' . gmdate('Y-m-d-H-i-s') . '-' . substr(sha1(microtime()), 0, 8) . '.sql';
-			
-			exec('pg_dump --dbname=' . getenv('DATABASE_URL') . 
-				' --schema=' . $schema . 
-				' --no-owner --no-acl > ' . $filename);
-			
-			$out = '';
-			
-			$handle = fopen($filename, 'rb');
-				
-			if (!$handle)
-			{
-				exit;
-			}
-	
-			while (!feof($handle))
-			{
-				$out .= fread($handle, 8192);
-			}
-				
-			fclose($handle);
-	
-			unlink($filename);	
-			
-			return New Response($out, Response::HTTP_OK, [
-				'Content-Type' 					=> 'application/force-download',
-				'Content-disposition'			=> 'attachment; filename=' . $filename,
-				'Content-Transfer-Encoding'		=> 'binary',
-				'Pragma'						=> 'no-cache',
-				'Expires'						=> '0',
-			]);
+			$form->add($table, SubmitType::class);
 		}
 
-		$elas_csv_form_views = [];
-
-		$gmdate = gmdate('Y-m-d H:i:s');
-
-		foreach ($this->elas_csv_ary as $table => $table_data)
+		$form = $form->getForm();
+		$form->handleRequest($request);
+		
+		if ($form->isSubmitted() && $form->isValid())
 		{
-			$form = $app->namedForm('elas_csv_' . $table, [], [
-				'etoken_enabled'	=> false,	
-			])
-				->add('submit', SubmitType::class, [
-					'label'		=> 'export.elas.csv.' . $table . '.btn_label',
-				])
-				->getForm()
-				->handleRequest($request);
-				
-			if ($form->isValid())
+			if ($form->get('elas_db')->isClicked())
 			{
-				$query = str_replace('%schema%', $schema, $table_data['sql']);
-
-				$sql_bind = $table_data['sql_bind'] ?? [];
-
-				if (count($sql_bind))
+				if (!function_exists('exec'))
 				{
-					foreach ($sql_bind as &$val)
-					{
-						$val = str_replace('%gmdate', $gmdate, $val);
-					}
+					throw new missing_function_exception(
+						sprintf('function "exec" does not exist 
+							in class %s', __CLASS__));
 				}
-
-				$data = $app['db']->fetchAll($query, $sql_bind);
-			
-				$fields = $columns = [];
-
-				foreach($table_data['columns'] as $column)
+				
+				$filename = $schema . '-elas-db-' . gmdate('Y-m-d-H-i-s') . '-';
+				$filename .= substr(sha1(microtime()), 0, 8) . '.sql';
+				
+				exec('pg_dump --dbname=' . getenv('DATABASE_URL') . 
+					' --schema=' . $schema . 
+					' --no-owner --no-acl > ' . $filename);
+				
+				$out = '';
+				
+				$handle = fopen($filename, 'rb');
+					
+				if (!$handle)
 				{
-					$translated = $app->trans('export.elas.csv.' . $table . '.column.' . $column);
-					$fields[] = strpos($translated, 'export.elas.csv.') === 0 ? $column : $translated;	
-					$columns[] = $column;
+					exit;
 				}
-			
-				$out = '"' . implode('","', $fields) . '"' . $this->r;
 		
-				foreach($data as $row)
+				while (!feof($handle))
 				{
-					$fields = [];
-		
-					foreach($columns as $c)
-					{
-						$fields[] = $row[$c] ?? '';
-					}
-		
-					$out .= '"' . implode('","', $fields) . '"' . $this->r;
+					$out .= fread($handle, 8192);
 				}
-
-				$filename = 'elas-' . $table . '-' . gmdate('Y-m-d-H-i-S').'.csv';
-
-				return new Response($out, Response::HTTP_OK, [
+					
+				fclose($handle);
+		
+				unlink($filename);	
+				
+				return New Response($out, Response::HTTP_OK, [
 					'Content-Type' 					=> 'application/force-download',
 					'Content-disposition'			=> 'attachment; filename=' . $filename,
 					'Content-Transfer-Encoding'		=> 'binary',
@@ -216,15 +161,67 @@ class export
 					'Expires'						=> '0',
 				]);
 			}
+		
+			foreach ($csv_ary as $table)
+			{
+				if ($form->get($table)->isClicked())
+				{
+					$table_data = $this->elas_csv_ary[$table];
+						
+					$query = str_replace('%schema%', $schema, $table_data['sql']);
+		
+					$sql_bind = $table_data['sql_bind'] ?? [];
 
-			$elas_csv_form_views[] = $form->createView();
+					$gmdate = gmdate('Y-m-d H:i:s');
+	
+					if (count($sql_bind))
+					{
+						foreach ($sql_bind as &$val)
+						{
+							$val = str_replace('%gmdate', $gmdate, $val);
+						}
+					}
+	
+					$data = $app['db']->fetchAll($query, $sql_bind);
+				
+					$fields = $columns = [];
+	
+					foreach($table_data['columns'] as $column)
+					{
+						$translated = $app->trans('export.elas.csv.' . $table . '.column.' . $column);
+						$fields[] = strpos($translated, 'export.elas.csv.') === 0 ? $column : $translated;	
+						$columns[] = $column;
+					}
+				
+					$out = '"' . implode('","', $fields) . '"' . $this->r;
+			
+					foreach($data as $row)
+					{
+						$fields = [];
+			
+						foreach($columns as $c)
+						{
+							$fields[] = $row[$c] ?? '';
+						}
+			
+						$out .= '"' . implode('","', $fields) . '"' . $this->r;
+					}
+	
+					$filename = 'elas-' . $table . '-' . gmdate('Y-m-d-H-i-S').'.csv';
+
+					return new Response($out, Response::HTTP_OK, [
+						'Content-Type' 					=> 'application/force-download',
+						'Content-disposition'			=> 'attachment; filename=' . $filename,
+						'Content-Transfer-Encoding'		=> 'binary',
+						'Pragma'						=> 'no-cache',
+						'Expires'						=> '0',
+					]);
+				}
+			}
 		}
 
-		$elas_csv_forms = [];
-
 		return $app['twig']->render('export/a_index.html.twig',[
-			'elas_db_form'			=> $elas_db_form->createView(),
-			'elas_csv_form_views'	=> $elas_csv_form_views,
+			'form'		=> $form->createView(),
 		]);
 	}
 }

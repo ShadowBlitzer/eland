@@ -498,22 +498,22 @@ export:
         dient te worden, verwijder dan de 
         schema gerelateerde gegevens op regels ~16 - 24 
         (de "CREATE SCHEMA" & "SET search_path" instructies)
-      btn_label: Download
+      btn: Download
     csv:
       title: eLAS Csv download
       explain: Csv files zoals in eLAS
       users:
-        btn_label: Gebruikers
+        btn: Gebruikers
         column:
           adate: Activeringsdatum
       contacts:
-        btn_label: Contactgegevens
+        btn: Contactgegevens
       categories:
-        btn_label: Categorieën
+        btn: Categorieën
       messages:
-        btn_label: Vraag en aanbod
+        btn: Vraag en aanbod
       transactions:
-        btn_label: Transacties
+        btn: Transacties
         column:
           cdate: Datum
           from_user: Van
