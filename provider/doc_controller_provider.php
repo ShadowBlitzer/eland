@@ -21,6 +21,9 @@ class doc_controller_provider implements ControllerProviderInterface
         $doc->match('/{doc}/edit', 'controller\\doc::edit')
             ->convert('doc', 'doc_converter:get')
             ->bind('doc_edit');
+        $doc->match('/{doc}/del', 'controller\\doc::del')
+            ->convert('doc', 'doc_converter:get')
+            ->bind('doc_del');
         $doc->get('/typeahead', 'controller\\doc::typeahead')
             ->bind('doc_typeahead');
         

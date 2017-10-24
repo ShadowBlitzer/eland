@@ -11,7 +11,7 @@ class news_controller_provider implements ControllerProviderInterface
     {
         $news = $app['controllers_factory'];
         
-        $news->get('/', 'controller\\news::index')
+        $news->match('/', 'controller\\news::index')
             ->bind('news_index');
         $news->get('/{news}', 'controller\\news::show')
             ->convert('news', 'news_converter:get')
@@ -21,9 +21,9 @@ class news_controller_provider implements ControllerProviderInterface
         $news->match('/{news}/edit', 'controller\\news::edit')
             ->convert('news', 'news_converter:get')
             ->bind('news_edit');
-        $news->post('/{news}/approve', 'controller\\news::approve')
+        $news->match('/{news}/del', 'controller\\news::del')
             ->convert('news', 'news_converter:get')
-            ->bind('news_approve');
+            ->bind('news_del');
         
         $news->assert('news', '\d+');
         

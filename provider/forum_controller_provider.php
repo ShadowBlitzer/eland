@@ -21,7 +21,10 @@ class forum_controller_provider implements ControllerProviderInterface
         $forum->match('/{forum}/edit', 'controller\\forum::edit')
             ->convert('forum', 'forum_converter:get')
             ->bind('forum_edit');
-        
+        $forum->match('/{forum}/del', 'controller\\forum::del')
+            ->convert('forum', 'forum_converter:get')
+            ->bind('forum_del');     
+          
         $forum->assert('forum', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 
         return $forum;

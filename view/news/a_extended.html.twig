@@ -6,6 +6,7 @@
 {% import 'macro/panel.html.twig' as p %}
 {% import 'macro/pagination.html.twig' as pg %}
 {% import 'macro/button_group.html.twig' as bg %}
+{% import 'macro/button.html.twig' as b %}
 
 {%- block heading_right -%}
 {{- bg.view(route, all_params, {'list': 'view.list', 'extended': 'view.extended'}, 'extended') -}}
@@ -39,6 +40,11 @@
 -%}
 
 {{- pg.pagination(route, all_params, pagination) -}}
+
+{%- if approve_form is defined -%}
+	{{- form_start(approve_form) -}}
+{%- endif -%}
+
 {%- for n in news -%}
 <div class="panel panel-info printview">
 <div class="panel-body{%- if n.approved %} bg-warning{%- endif -%}">
@@ -69,33 +75,31 @@
 </div>
 </div>
 </div>
+	<div class="panel-footer">
+	
+	<p><i class="fa fa-user"></i>&nbsp;{{ n.id_user|web_user|raw -}}  
 
-<div class="panel-footer">
-<p><i class="fa fa-user"></i>&nbsp;{{ n.id_user|web_user|raw -}}  
-
-{#
-<span class="inline-buttons pull-right hidden-xs">
-{%- if not n.approved -%}
-
-<a href="{{- path('news_approve', acc_sch|merge({'news'}))}}
-				echo aphp('news', ['approve' => $n['id']], 'Goedkeuren en publiceren', 'btn btn-warning btn-xs', false, 'check');
-			}
-			echo aphp('news', ['edit' => $n['id']], 'Aanpassen', 'btn btn-primary btn-xs', false, 'pencil');
-			echo aphp('news', ['del' => $n['id']], 'Verwijderen', 'btn btn-danger btn-xs', false, 'times');
-			echo '</span>';
-		}
-#}
-</p>
-</div>
-</div>
-
-
+	<span class="inline-buttons pull-right hidden-xs">
+	{%- if n.approve_button is defined -%}
+		{{- b.approve_md(approve_form[n.approve_button]) -}}
+	{%- endif -%}
+	{{- b.edit_link(path('news_edit', acc_sch|merge({'news': n.id}))) -}}
+	{{- b.del_link(path('news_del', acc_sch|merge({'news': n.id}))) -}}
+	</span>
+	</p>
+	</div>
+	</div>
 {%- else -%}
 {{- p.warning() -}}
 <p>{{- 'news.no_items'|trans -}}</p>
 {{- p.end -}}
 </div></div>
 {%- endfor -%}
+
+{%- if approve_form is defined -%}
+	{{- form_end(approve_form) -}}
+{%- endif -%}
+
 {{- pg.pagination(route, all_params, pagination) -}}
 
 {%- endblock inner -%}

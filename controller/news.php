@@ -10,12 +10,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 use util\sort;
 use util\pagination;
 use form\news_type;
+use form\buttonform_type;
 use exception\invalid_parameter_value_exception;
 
 class news
 {
 	public function index(Request $request, app $app, string $schema, string $access)
 	{
+		$s_admin = $access === 'a';
+	
 		$view = $request->query->get('view') ?? 'extended';
 
 		if (!in_array($view, ['list', 'extended']))
@@ -23,8 +26,7 @@ class news
 			throw new invalid_parameter_value_exception(sprintf('View %s is not allowed', $view));
 		}
 
-		$where = [];
-		$params = [];
+		$where = $params = [];
 
 		$filtered = count($where) ? true : false;
 		$where = $filtered ? ' where ' . implode(' and ', $where) . ' ' : '';
@@ -49,7 +51,7 @@ class news
 
 		$news = $app['db']->fetchAll($query, $params);
 		
-		$news_access_ary = [];
+		$news_access_ary = $to_approve_ary = $approve_headline_ary = [];
 		
 		$rows = $app['xdb']->get_many(['agg_schema' => $schema, 'agg_type' => 'news_access']);
 		
@@ -71,6 +73,15 @@ class news
 			}
 		
 			$news[$k]['access'] = $news_access_ary[$news_id];
+
+			if (!$n['approved'] && $s_admin)
+			{
+				$approve_button = 'approve_' . $n['id'];
+				$news[$k]['approve_button'] = $approve_button;
+				$to_approve_ary[] = $approve_button;
+				$approve_headline_ary[$n['id']] = $n['headline'];
+			}
+
 /*		
 			if (!$app['access_control']->is_visible($news[$k]['access']))
 			{
@@ -79,13 +90,55 @@ class news
 */
 		}
 
-		return $app['twig']->render('news/' . $access . '_' . $view . '.html.twig', [
+		$vars = [
 			'news'			=> $news,
 //			'filter'		=> $filter->createView(),
 			'filtered'		=> $filtered,
 			'pagination'	=> $pagination->get($row_count),		
 			'sort'			=> $sort->get(),
-		]);
+		];
+
+		if ($s_admin && count($to_approve_ary))
+		{
+			$approve_form = $app->form();
+
+			foreach($to_approve_ary as $key)
+			{
+				$approve_form->add($key, SubmitType::class);
+			}
+
+			$approve_form = $approve_form->getForm();
+			$approve_form->handleRequest($request);
+
+			if ($approve_form->isSubmitted() && $approve_form->isValid())
+			{
+				foreach ($to_approve_ary as $key)
+				{
+					if ($approve_form->get($key)->isClicked())
+					{
+						list($approve_str, $id) = explode('_', $key);
+						$name = $approve_headline_ary[$id];				
+
+						$app['db']->update($schema . '.news', ['approved' => 't'], ['id' => $id]);
+						$app->success('news.approve.success', ['%name%' => $name]);
+						break;
+					}
+				}
+
+				if (!isset($approve_str))
+				{
+					$app->err('news.approve.error');					
+				}
+
+				$params = $request->attributes->all();
+				unset($params['_route_params'], $params['_route']);
+				return $app->reroute('news_index', $params);
+			}
+
+			$vars['approve_form'] = $approve_form->createView();
+		}
+
+		return $app['twig']->render('news/' . $access . '_' . $view . '.html.twig', $vars);
 	}
 
 	public function show(Request $request, app $app, string $schema, string $access, array $news)
@@ -101,7 +154,7 @@ class news
 		$form = $app->build_form(news_type::class)
 			->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 
@@ -132,16 +185,6 @@ class news
 			'form' => $form->createView(),
 		]);
 	}
-
-	public function approve(Request $request, app $app, string $schema, string $access, array $news)
-	{
-		return $app['twig']->render('news/' . $access . '_approve.html.twig', [
-			'form' => $form->createView(),
-		]);
-	}
-
-
-
 }
 
 /*

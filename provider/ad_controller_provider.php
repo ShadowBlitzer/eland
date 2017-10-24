@@ -23,6 +23,9 @@ class ad_controller_provider implements ControllerProviderInterface
         $ad->match('/{ad}/edit', 'controller\\ad::edit')
             ->convert('ad', 'ad_converter:get')
             ->bind('ad_edit');
+        $ad->match('/{ad}/del', 'controller\\ad::del')
+            ->convert('ad', 'ad_converter:get')
+            ->bind('ad_del');
         
         $ad->assert('ad', '\d+');
         

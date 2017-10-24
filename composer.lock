@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.36.31",
+            "version": "3.36.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "e3135c1f6bc797ca0e0fbba7b2a27faae4e09d5e"
+                "reference": "7ba49dbd24366647a41cd4a13eab972b2264b8db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e3135c1f6bc797ca0e0fbba7b2a27faae4e09d5e",
-                "reference": "e3135c1f6bc797ca0e0fbba7b2a27faae4e09d5e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7ba49dbd24366647a41cd4a13eab972b2264b8db",
+                "reference": "7ba49dbd24366647a41cd4a13eab972b2264b8db",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-10-20T16:43:56+00:00"
+            "time": "2017-10-23T20:40:28+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -1426,16 +1426,16 @@
         },
         {
             "name": "league/html-to-markdown",
-            "version": "4.5.0",
+            "version": "4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/html-to-markdown.git",
-                "reference": "1b66954493dea7cd116fd1bb2921757c9f296169"
+                "reference": "9022e648bc40e44cb3b18438d97ed8715ecbc49b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/1b66954493dea7cd116fd1bb2921757c9f296169",
-                "reference": "1b66954493dea7cd116fd1bb2921757c9f296169",
+                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/9022e648bc40e44cb3b18438d97ed8715ecbc49b",
+                "reference": "9022e648bc40e44cb3b18438d97ed8715ecbc49b",
                 "shasum": ""
             },
             "require": {
@@ -1454,7 +1454,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.6-dev"
+                    "dev-master": "4.7-dev"
                 }
             },
             "autoload": {
@@ -1486,7 +1486,7 @@
                 "html",
                 "markdown"
             ],
-            "time": "2017-10-09T17:23:12+00:00"
+            "time": "2017-10-24T02:45:05+00:00"
         },
         {
             "name": "lusitanian/oauth",

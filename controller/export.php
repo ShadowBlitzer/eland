@@ -144,11 +144,11 @@ class export
 			unlink($filename);	
 			
 			return New Response($out, Response::HTTP_OK, [
-				'Content-Type' 			=> 'application/force-download',
-				'Content-disposition'	=> 'attachment; filename=' . $filename,
+				'Content-Type' 					=> 'application/force-download',
+				'Content-disposition'			=> 'attachment; filename=' . $filename,
 				'Content-Transfer-Encoding'		=> 'binary',
-				'Pragma'				=> 'no-cache',
-				'Expires'				=> '0',
+				'Pragma'						=> 'no-cache',
+				'Expires'						=> '0',
 			]);
 		}
 
@@ -209,11 +209,11 @@ class export
 				$filename = 'elas-' . $table . '-' . gmdate('Y-m-d-H-i-S').'.csv';
 
 				return new Response($out, Response::HTTP_OK, [
-					'Content-Type' 			=> 'application/force-download',
-					'Content-disposition'	=> 'attachment; filename=' . $filename,
+					'Content-Type' 					=> 'application/force-download',
+					'Content-disposition'			=> 'attachment; filename=' . $filename,
 					'Content-Transfer-Encoding'		=> 'binary',
-					'Pragma'				=> 'no-cache',
-					'Expires'				=> '0',
+					'Pragma'						=> 'no-cache',
+					'Expires'						=> '0',
 				]);
 			}
 

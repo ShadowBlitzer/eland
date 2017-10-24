@@ -77,6 +77,7 @@ bool:
 label:
   accept: Akkoord
   access: Toegang
+  access_explain: Wie kan dit zien?
   amount: Bedrag
   approved: Goedgekeurd
   content: Inhoud
@@ -117,6 +118,7 @@ label:
 
 btn:
   add: Toevoegen
+  approve: Goedkeuren
   cancel: Annuleren
   delete: Verwijderen  
   edit: Aanpassen
@@ -133,7 +135,6 @@ view:
   list: Lijst
   map: Kaart
   tiles: Tegels
-
 
 tag:
   filtered: Gefilterd
@@ -252,6 +253,10 @@ news:
     Er zijn momenteel geen nieuwsberichten.
   is_kept_after_date: >
     Nieuwsbericht blijft behouden na datum
+  approve:
+    success: Nieuwsbericht "%name%" is goedgekeurd.
+    error: Fout bij het goedkeuren van nieuwsbericht "%name%"
+
 
 news_index:
   title: Nieuws

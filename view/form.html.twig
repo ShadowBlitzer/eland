@@ -14,12 +14,30 @@
     </div>
 {%- endblock form_row %}
 
-{% block form_widget_simple -%}
+{%- block form_widget_simple -%}
     {% if type is not defined or type not in ['file', 'hidden'] %}
         {%- set attr = attr|merge({class: (attr.class|default('') ~ ' input-lg')|trim}) -%}
     {% endif %}
     {{- parent() -}}
-{%- endblock form_widget_simple %}
+{%- endblock form_widget_simple -%}
+
+{%- block button_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('btn-default') ~ ' btn')|trim}) -%}
+    {%- if label is not same as(false) and label is empty -%}
+        {%- if label_format is not empty -%}
+            {%- set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) -%}
+        {%- else -%}
+            {%- set label = name|humanize -%}
+        {%- endif -%}
+    {%- endif -%}
+    <button type="{{- type|default('button') -}}" {{ block('button_attributes') -}}>
+    {%- if fa is defined -%}<i class="fa fa-{{- fa -}}"></i> {% endif -%}
+    {{- translation_domain is same as(false) ? label : label|trans({}, translation_domain) -}}
+    </button>
+{%- endblock button_widget -%}
 
 {% block choice_widget_collapsed -%}
     {%- set attr = attr|merge({class: (attr.class|default('') ~ ' input-lg')|trim}) -%}

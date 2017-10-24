@@ -33,6 +33,10 @@ class user_controller_provider implements ControllerProviderInterface
         $user->match('/{user}/edit', 'controller\\user::edit')
             ->convert('user', 'user_converter:get')
             ->bind('user_edit');
+        $user->match('/{user}/del', 'controller\\user::del')
+            ->convert('user', 'user_converter:get')
+            ->bind('user_del');
+            
         $user->get('/typeahead/{user_type}', 'controller\\user_typeahead::get')
             ->bind('user_typeahead');
         $user->get('/typeahead-interlets/{user}', 

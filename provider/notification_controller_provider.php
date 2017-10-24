@@ -23,6 +23,9 @@ class notification_controller_provider implements ControllerProviderInterface
         $notification->match('/{notification}/edit', 'controller\\notification::edit')
             ->convert('notification', 'notification_converter:get')
             ->bind('notification_edit');
+        $notification->match('/{notification}/del', 'controller\\notification::del')
+            ->convert('notification', 'notification_converter:get')
+            ->bind('notification_del');
         
         $notification->assert('notification', '[a-z0-9][a-z0-9-]{10}[a-z0-9]');
 

@@ -1,9 +1,21 @@
-{% macro cancel(location) -%}
+{%- macro cancel(location) -%}
 <a href="{{- location -}}" class="btn btn-default btn-lg">{{- 'btn.cancel'|trans -}}</a>&nbsp;
-{%- endmacro cancel %}
+{%- endmacro cancel -%}
+
+{%- macro edit_link(location) -%}
+    <a href="{{- location -}}" class="btn btn-info">
+    <i class="fa fa-pencil"></i> {{ 'btn.edit'|trans -}}
+    </a>&nbsp;
+{%- endmacro edit_link -%}
+
+{%- macro del_link(location) -%}
+    <a href="{{- location -}}" class="btn btn-danger">
+    <i class="fa fa-times"></i> {{ 'btn.delete'|trans -}}
+    </a>&nbsp;
+{%- endmacro del_link -%}
 
 {% macro add(form_submit) -%}
-{{- form_widget(form_submit, {'label': 'btn.add', 'attr': {'class': 'btn-success btn-lg'}}) -}}&nbsp;
+{{- form_widget(form_submit, {'label': 'btn.add',  'fa': 'plus', 'attr': {'class': 'btn-success btn-lg'}}) -}}&nbsp;
 {%- endmacro add %}
 
 {% macro info(form_submit, label) -%}
@@ -11,11 +23,11 @@
 {%- endmacro info %}
 
 {% macro edit(form_submit) -%}
-{{- form_widget(form_submit, {'label': 'btn.edit', 'attr': {'class': 'btn-info btn-lg'}}) -}}&nbsp;
+{{- form_widget(form_submit, {'label': 'btn.edit', 'fa': 'pencil', 'attr': {'class': 'btn-info btn-lg'}}) -}}&nbsp;
 {%- endmacro edit %}
 
 {% macro del(form_submit) -%}
-{{- form_widget(form_submit, {'label': 'btn.delete', 'attr': {'class': 'btn-danger btn-lg'}}) -}}&nbsp;
+{{- form_widget(form_submit, {'label': 'btn.delete', 'fa': 'times', 'attr': {'class': 'btn-danger btn-lg'}}) -}}&nbsp;
 {%- endmacro del %}
 
 {% macro show(form_submit) -%}
@@ -30,8 +42,18 @@
 {{- form_widget(form_submit, {'label': label, 'attr': {'class': 'btn-default btn-lg'}}) -}}
 {%- endmacro default %}
 
-{% macro buttonform(form) -%} {# used in "export" #}
+{% macro approve_md(form_submit) -%}
+{{- form_widget(form_submit, {'label': 'btn.approve', 'fa': 'thumbs-o-up', 'attr': {'class': 'btn-warning'}}) -}}&nbsp;
+{%- endmacro approve_md %}
+
+{% macro buttonform_export(form) -%}
 {{- form_start(form) -}}
 {{- form_widget(form.submit, {'attr': {'class': 'btn-default btn-lg'}}) -}}&nbsp;
 {{- form_end(form) -}}
-{%- endmacro %}
+{%- endmacro buttonform_export %}
+
+{% macro buttonform(form, label, class) -%}
+    {{- form_start(form, {'attr': {'style' : 'display: inline;'}}) -}}
+    {{- form_widget(form.submit, {'label': label, 'attr': {'class': class, 'style': 'display: inline;'}}) -}}&nbsp;
+    {{- form_end(form) -}}
+{%- endmacro buttonform %}
