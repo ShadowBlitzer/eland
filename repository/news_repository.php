@@ -33,8 +33,18 @@ class news_repository
 			throw new NotFoundHttpException(sprintf(
 				'News %d does not exist in %s', 
 				$id, __CLASS__));
-        }
+		}
 		
+		$row = $this->xdb->get('news_access', $id, $schema);
+
+		if (!count($row))	
+		{
+			$row['data']['access'] = 'interlets';
+			$this->xdb->set('news_access', $id, ['access' => 'interlets'], $schema);
+		}
+
+		$data['access'] = $row['data']['access'];	
+			
 		return $data;
 	}
 

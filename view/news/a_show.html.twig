@@ -1,11 +1,17 @@
 {% extends 'admin.html.twig' %}
 
-{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/top_button.html.twig' as tb %}
 
-{% block inner %}
+{%- block top_buttons -%}
+{{- tb.edit(path('news_edit', acc_sch|merge({'news': news.id})), 'news.title_top_btn.edit') -}}
+{{- tb.del(path('news_del', acc_sch|merge({'news': news.id})), 'news.title_top_btn.del') -}}
+{%- endblock top_buttons -%}
 
-<p>ADMIN NEWS SHOW </p>
+{% block inner -%}
 
-{% endblock inner %}
+{% embed 'news/item.html.twig' with {'n': news} %}
+{% endembed %}
+
+{%- endblock inner %}
 
 

@@ -1,16 +1,10 @@
-{% extends 'admin.html.twig' %}
+{% extends 'news/a_index.html.twig' %}
 
-{% import 'macro/asset.html.twig' as a %}
 {% import 'macro/table.html.twig' as t %}
-{% import 'macro/pagination.html.twig' as pg %}
-{% import 'macro/top_button.html.twig' as tb %}
-{% import 'macro/button_group.html.twig' as bg %}
 
-{%- block heading_right -%}
-{{- bg.view(route, all_params, {'list': 'view.list', 'extended': 'view.extended'}, 'list') -}}
-{%- endblock heading_right -%}
+{% set view = 'list' %}
 
-{%- block inner -%}
+{%- block in_pagination -%}
 
 {%- set cols = {
 	'headline': {
@@ -37,14 +31,12 @@
 }
 -%}
 
-{{- pg.pagination(route, all_params, pagination) -}}
 {{- t.start() -}}
 {{- t.head(cols, route, all_params, sort) -}}
 {{- t.body(news, cols, acc_sch) -}}
 {{- t.end() -}}
-{{- pg.pagination(route, all_params, pagination) -}}
 
-{%- endblock inner -%}
+{%- endblock in_pagination -%}
 
 
 

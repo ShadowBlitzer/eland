@@ -1,8 +1,20 @@
 {% extends 'admin.html.twig' %}
 
 {% import 'macro/top_button.html.twig' as tb %}
+{% import 'macro/pagination.html.twig' as pg %}
+{% import 'macro/button_group.html.twig' as bg %}
 
 {%- block top_buttons -%}
-{{- tb.add(path('news_add', acc_sch), 'news.title_top_btn.add') -}}
+	{{- tb.add(path('news_add', acc_sch), 'news.title_top_btn.add') -}}
 {%- endblock top_buttons -%}
+
+{%- block heading_right -%}
+{{- bg.view(route, all_params, {'list': 'view.list', 'extended': 'view.extended'}, view) -}}
+{%- endblock heading_right -%}
+
+{%- block inner -%}
+	{{- pg.pagination(route, all_params, pagination) -}}
+	{% block in_pagination -%}{% endblock -%}
+	{{- pg.pagination(route, all_params, pagination) -}}
+{%- endblock inner -%}
 

@@ -5,13 +5,17 @@
 
 {% macro edit(href, title) -%}
     {% import _self as b %}
-    {{- b.button(href, title, 'btn.edit', '', 'pencil') -}}
+    {{- b.button(href, title, 'btn.edit', 'info', 'pencil') -}}
 {%- endmacro edit %}
 
-{% macro delete(href, title) -%}
+{% macro del(href, title) -%}
     {% import _self as b %}
     {{- b.button(href, title, 'btn.delete', 'danger', 'times') -}}
-{%- endmacro delete %}
+{%- endmacro del %}
+
+{% macro approve(form_submit) -%}
+{{- form_widget(form_submit, {'label': 'btn.approve', 'fa': 'thumbs-o-up', 'attr': {'class': 'btn-warning'}}) -}}&nbsp;
+{%- endmacro approve %}
 
 {% macro list(href, title, fa) -%}
     {% import _self as b %}

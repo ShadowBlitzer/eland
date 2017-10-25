@@ -44,21 +44,21 @@
 
 {% block flash %}{{ f.flash() }}{% endblock flash %}
 
-{% block top_buttons_container -%}
+{%- block top_buttons_container -%}
+	{%- block top_buttons_pre -%}{%- endblock -%}
+	<div class="row">
+	<div class="col-md-12 top-buttons">
+	<div class="visible-xs pull-left button-offcanvas">
+	<button type="button" class="btn btn-primary btn-md " data-toggle="offcanvas"
+	title="Menu"><i class="fa fa-chevron-left"></i></button>
+	</div>
 
-<div class="row">
-<div class="col-md-12 top-buttons">
-<div class="visible-xs pull-left button-offcanvas">
-<button type="button" class="btn btn-primary btn-md " data-toggle="offcanvas"
- title="Menu"><i class="fa fa-chevron-left"></i></button>
-</div>
+	{%- block top_buttons -%}{%- endblock -%}
 
-{% block top_buttons %}{% endblock %}
-
-</div>
-</div>
-
-{%- endblock top_buttons_container %}
+	</div>
+	</div>
+	{%- block top_buttons_post -%}{%- endblock -%}
+{%- endblock top_buttons_container -%}
 
 {% block top_right_container -%}
 <div class="pull-right">
