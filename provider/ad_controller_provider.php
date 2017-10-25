@@ -11,9 +11,13 @@ class ad_controller_provider implements ControllerProviderInterface
     {
         $ad = $app['controllers_factory'];
         
-        $ad->get('/', 'controller\\ad::index')
+        $ad->get('/', 'controller\\ad::no_view')
+            ->bind('no_view');
+        $ad->get('/{view}', 'controller\\ad::index')
             ->bind('ad_index');
-        $ad->get('/self', 'controller\\ad::show_self')
+        $ad->get('/self', 'controller\\ad::show_self_no_view')
+            ->bind('ad_show_self_no_view');
+        $ad->get('/self/{view}', 'controller\\ad::show_self')
             ->bind('ad_self');
         $ad->get('/{ad}', 'controller\\ad::show')
             ->convert('ad', 'ad_converter:get')
@@ -27,7 +31,8 @@ class ad_controller_provider implements ControllerProviderInterface
             ->convert('ad', 'ad_converter:get')
             ->bind('ad_del');
         
-        $ad->assert('ad', '\d+');
+        $ad->assert('ad', '\d+')
+            ->assert('view', 'list|extended');
         
         return $ad;
     }

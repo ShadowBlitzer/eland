@@ -60,11 +60,11 @@
 	{%- block top_buttons_post -%}{%- endblock -%}
 {%- endblock top_buttons_container -%}
 
-{% block top_right_container -%}
+{%- block top_right_container -%}
 <div class="pull-right">
-{% block top_right %}{% endblock %}
+{%- block top_right -%}{%- endblock -%}
 </div>
-{%- endblock top_right_container %}
+{%- endblock top_right_container -%}
 
 {%- block heading_container -%}
 <h1>
@@ -79,19 +79,19 @@
 </h1>
 {%- endblock heading_container %}
 
-{% block pre_inner %}{% endblock %}
+{%- block pre_inner -%}{%- endblock -%}
 
-{% block inner %}{% endblock %}
+{%- block inner -%}{%- endblock -%}
 
-{% block post_inner %}{% endblock %}
+{%- block post_inner -%}{%- endblock -%}
 
 </div>
-{%- endblock content %}
+{%- endblock content -%}
 
-{% block footer_extra -%}
-<p>{{ 'eland.github'|trans({
+{%- block footer_extra -%}
+<p>{{- 'eland.github'|trans({
 	'%link_issues_open%': '<a href="https://github.com/eeemarv/eland/issues">',
 	'%link_github_open%': '<a href="https://github.com">',
 	'%link_close%': '</a>'
-})|raw }}</p>
-{%- endblock footer_extra %}
+})|raw -}}</p>
+{%- endblock footer_extra -%}

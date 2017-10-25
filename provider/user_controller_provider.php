@@ -13,14 +13,20 @@ class user_controller_provider implements ControllerProviderInterface
 
         $user->get('/{user_type}', 'controller\\user::index')
             ->value('user_type', 'active')
+            ->bind('user_no_view');
+
+        $user->get('/{user_type}/{view}', 'controller\\user::index')
+            ->value('user_type', 'active')
             ->bind('user_index');
 
-        $user->get('/self', 'controller\\user::show_self')
+        $user->get('/self/{view}', 'controller\\user::show_self')
             ->bind('user_self');
+        
         $user->get('/{user_type}/{user}', 'controller\\user::show')
             ->convert('user', 'user_converter:get')
             ->bind('user_show');
 
+ /*           
         $user->get('/{user_type}/map', 'controller\\user::map')
             ->value('user_type', 'active')
             ->bind('user_map');
@@ -28,6 +34,7 @@ class user_controller_provider implements ControllerProviderInterface
         $user->get('/{user_type}/tile', 'controller\\user::tile')
             ->value('user_type', 'active')
             ->bind('user_tile');
+*/        
         $user->match('/add', 'controller\\user::add')
             ->bind('user_add');
         $user->match('/{user}/edit', 'controller\\user::edit')
@@ -36,7 +43,7 @@ class user_controller_provider implements ControllerProviderInterface
         $user->match('/{user}/del', 'controller\\user::del')
             ->convert('user', 'user_converter:get')
             ->bind('user_del');
-            
+
         $user->get('/typeahead/{user_type}', 'controller\\user_typeahead::get')
             ->bind('user_typeahead');
         $user->get('/typeahead-interlets/{user}', 
@@ -50,6 +57,7 @@ class user_controller_provider implements ControllerProviderInterface
             ->bind('user_weighted_balance');
 
         $user->assert('user_type', 'active|new|leaving|direct|interlets|pre-active|post-active|all')
+            ->assert('view', 'list|map|tiles')
             ->assert('user', '\d+');
 
         return $user;

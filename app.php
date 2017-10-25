@@ -86,6 +86,9 @@ $app->extend('twig', function($twig, $app) {
 			return new twig\web_user($app['user_simple_cache'], $app['request_stack'],
 				$app['url_generator']);
 		},
+		twig\view_param::class => function () use ($app){
+			return new twig\view_param();
+		},
 /*
 		twig\pagination::class => function() use ($app){
 			return new twig\pagination();

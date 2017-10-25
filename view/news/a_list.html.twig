@@ -1,8 +1,18 @@
 {% extends 'news/a_index.html.twig' %}
 
+{% import 'macro/asset.html.twig' as a %}
 {% import 'macro/table.html.twig' as t %}
+{% import 'macro/panel.html.twig' as p %}
 
 {% set view = 'list' %}
+
+{%- block top_right -%}
+{{- p.csv() -}}
+{%- endblock -%}
+
+{%- block js -%}
+	{{- a.js('csv.js') -}}
+{%- endblock js -%}
 
 {%- block in_pagination -%}
 

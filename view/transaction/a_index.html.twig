@@ -21,13 +21,13 @@
 {{- tb.add(path('transaction_add', acc_sch), 'transaction.title_top_btn.add') -}}
 {%- endblock top_buttons -%}
 
-{% block top_right -%}
+{%- block top_right -%}
 {{- p.csv() -}}
-{%- endblock %}
+{%- endblock -%}
 
 {% block inner -%}
 
-{% set placeholder_code = config('template_lets', schema) ? 'letscode' : 'code' %}
+{%- set placeholder_code = config('template_lets', schema) ? 'letscode' : 'code' -%}
 
 {{- p.form_filter_start(filter) -}}
 

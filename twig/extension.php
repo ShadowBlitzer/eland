@@ -12,6 +12,7 @@ class extension extends \Twig_Extension
 			new \Twig_Filter('web_date', 'twig\\web_date::get'),
 			new \Twig_Filter('web_user', 'twig\\web_user::get'),
 			new \Twig_Filter('access', 'twig\\access::get'),
+			new \Twig_Filter('view_param', 'twig\\view_param::get'),
 		];
 	}
 
