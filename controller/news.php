@@ -20,7 +20,7 @@ class news
 		return $app->reroute('news_index', [
 			'schema'	=> $schema,
 			'access'	=> $access,
-			'view'		=> 'extended',
+			'view'		=> $app['view']->get('news'),
 		]);
 	}
 
@@ -146,7 +146,6 @@ class news
 
 	public function show(Request $request, app $app, string $schema, string $access, array $news)
 	{
-
 		return $app['twig']->render('news/' . $access . '_show.html.twig', [
 			'news'	=> $news,
 		]);
@@ -174,6 +173,7 @@ class news
 			return $app->reroute('news_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
+				'view'		=> $app['view']->get('news'),
 			]);				
 		}
 
@@ -184,10 +184,54 @@ class news
 
 	public function edit(Request $request, app $app, string $schema, string $access, array $news)
 	{
+		$form = $app->build_form(news_type::class, $news)
+			->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid())
+		{
+			$data = $form->getData();
+
+			$data['mdate'] = gmdate('Y-m-d H:i:s');
+			$data['sticky'] = $data['sticky'] ? 't' : 'f';
+
+			$app['db']->insert($schema . '.news', $data);
+
+			$app->success('news_add.success', ['%name%'  => $data['headline']]);
+
+			return $app->reroute('news_index', [
+				'schema' 	=> $schema,
+				'access'	=> $access,
+				'view'		=> $app['view']->get('news'),
+			]);				
+		}
+	
 		return $app['twig']->render('news/' . $access . '_edit.html.twig', [
 			'form' => $form->createView(),
 		]);
 	}
+
+
+	public function del(Request $request, app $app, string $schema, string $access, array $news)
+	{
+		$form = $app->form()
+			->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid())
+		{
+
+
+			return $app->reroute('news_index', [
+				'schema' 	=> $schema,
+				'access'	=> $access,
+				'view'		=> $app['view']->get('news'),
+			]);				
+		}
+
+
+		return $app['twig']->render('news/' . $access . '_del.html.twig', [
+			'form' => $form->createView(),
+		]);
+	}	
 }
 
 /*

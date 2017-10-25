@@ -2,7 +2,7 @@
 
 namespace twig;
 
-class view_param
+class view
 {
 	public function get(array $param, string $entity = null):array
 	{

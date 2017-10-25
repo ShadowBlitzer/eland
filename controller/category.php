@@ -113,7 +113,6 @@ class category
 
 		return $app['twig']->render('category/a_edit.html.twig', [
 			'form'	=> $form->createView(),
-			'name'	=> $category['name'],
 		]);
 	}
 

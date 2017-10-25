@@ -108,7 +108,6 @@ class type_contact
 
 		return $app['twig']->render('type_contact/a_edit.html.twig', [
 			'form'	=> $form->createView(),
-			'name'	=> $type_contact['name'],
 		]);
 	}
 

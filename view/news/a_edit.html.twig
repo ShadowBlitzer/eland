@@ -3,12 +3,10 @@
 {% import 'macro/button.html.twig' as b %}
 
 {%- block heading -%}
-    {{- 'news_add.title'|trans -}}
+    {{- 'news_edit.title'|trans({'%name%': form.vars.value.headline}) -}}
 {%- endblock heading -%}
 
 {%- block submit -%}
-    {{-  b.add(form.submit) -}}
-{%- endblock submit -%}
-
-
+    {{-  b.edit(form.submit) -}}
+{%- endblock -%}
 
