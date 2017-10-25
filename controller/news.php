@@ -15,16 +15,18 @@ use exception\invalid_parameter_value_exception;
 
 class news
 {
-	public function index(Request $request, app $app, string $schema, string $access)
+	public function no_view(Request $request, app $app, string $schema, string $access)
+	{
+		return $app->reroute('news_index', [
+			'schema'	=> $schema,
+			'access'	=> $access,
+			'view'		=> 'extended',
+		]);
+	}
+
+	public function index(Request $request, app $app, string $schema, string $access, string $view)
 	{
 		$s_admin = $access === 'a';
-	
-		$view = $request->query->get('view') ?? 'extended';
-
-		if (!in_array($view, ['list', 'extended']))
-		{
-			throw new invalid_parameter_value_exception(sprintf('View %s is not allowed', $view));
-		}
 
 		$where = $params = [];
 
@@ -76,6 +78,7 @@ class news
 
 			if (!$n['approved'] && $s_admin)
 			{
+				$news[$k]['class'] = 'inactive';
 				$approve_button = 'approve_' . $n['id'];
 				$news[$k]['approve_button'] = $approve_button;
 				$to_approve_ary[] = $approve_button;

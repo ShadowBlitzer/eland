@@ -25,21 +25,28 @@
 
 {% macro pagination_limit_select(route, all_params, pagination) -%}
 
+	{%- set params = {'schema': all_params.schema, 'access': all_params.access} -%}
+	{%- if all_params.view is defined -%}
+		{%- set params = params|merge({'view': all_params.view}) -%}
+	{%- endif -%}
+
 	<div>
-	<form action="{{- path(route, {'schema': all_params.schema, 'access': all_params.access}) -}}">
+	<form action="{{- path(route, params) -}}">
 	{{- 'pagination.items_per_page'|trans -}}
 	
 	<select name="p[limit]" onchange="this.form.submit();">
-	{%- for o in pagination.limit_options -%}
-	<option value="{{- o -}}"{% if o == pagination.limit %} selected="selected"{% endif %}>{{- o -}}</option>
-	{%- endfor -%}
+		{%- for o in pagination.limit_options -%}
+			<option value="{{- o -}}"{%- if o == pagination.limit %} selected="selected"{%- endif -%}>
+			{{- o -}}
+			</option>
+		{%- endfor -%}
 	</select>
 
 	{%- for i1, ary in all_params -%}
 		{%- if ary is iterable and i1 != 'p' -%}
-		{%- for i2, value in ary -%}
-		<input name="{{- i1 -}}[{{- i2 -}}]" value="{{- value -}}" type="hidden">
-		{%- endfor -%}
+			{%- for i2, value in ary -%}
+			<input name="{{- i1 -}}[{{- i2 -}}]" value="{{- value -}}" type="hidden">
+			{%- endfor -%}
 		{%- endif -%}
 	{%- endfor -%}
 

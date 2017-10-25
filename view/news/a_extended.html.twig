@@ -47,7 +47,7 @@
 
 {%- for n in news -%}
 <div class="panel panel-info printview">
-<div class="panel-body{%- if n.approved %} bg-warning{%- endif -%}">
+<div class="panel-body{%- if not n.approved %} bg-inactive{%- endif -%}">
 
 <div class="media">
 <div class="media-body">

@@ -30,7 +30,7 @@
     {%- import 'macro/access.html.twig' as a -%}
     <tbody>
     {%- for row in rows -%}
-    <tr{%- if row.class is defined -%} class="{{- row.class -}}"{%- endif -%}>
+    <tr{%- if row.class is defined %} class="{{- row.class -}}"{%- endif -%}>
     {%- for c, cd in cols -%}
     <td>
     {%- if cd.route is defined -%}
