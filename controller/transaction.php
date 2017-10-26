@@ -32,7 +32,7 @@ class transaction
 		$filter = $app->build_named_form('f', 'transaction_filter_type', $data)
 			->handleRequest($request);
 
-		if ($filter->isValid())
+		if ($filter->isSubmitted() && $filter->isValid())
 		{
 			$data = $filter->getData();
 
@@ -193,7 +193,7 @@ class transaction
 
 		$form->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 
@@ -228,7 +228,7 @@ class transaction
 
 		$form->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 

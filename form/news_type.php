@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use form\addon_type;
 use form\email_addon_type;
+use form\inline_choice_type;
 
 class news_type extends AbstractType
 {
@@ -35,6 +36,9 @@ class news_type extends AbstractType
                 'constraints' => [
                     new Assert\Length(['max' => 4000]),
                 ],
+            ])
+            ->add('access', inline_choice_type::class,[
+                'choices'   => ['1', '2', '3'],
             ])
             ->add('submit', SubmitType::class);
     }

@@ -214,11 +214,15 @@ class news
 	public function del(Request $request, app $app, string $schema, string $access, array $news)
 	{
 		$form = $app->form()
+			->add('submit', SubmitType::class)
+			->getForm()
 			->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid())
 		{
+			$app['db']->delete($schema . '.news', ['id' => $news['id']]);
 
+			$app->success('news_del.success', ['%name%' => $news['headline']]);
 
 			return $app->reroute('news_index', [
 				'schema' 	=> $schema,
@@ -227,9 +231,9 @@ class news
 			]);				
 		}
 
-
 		return $app['twig']->render('news/' . $access . '_del.html.twig', [
 			'form' => $form->createView(),
+			'news'	=> $news,
 		]);
 	}	
 }

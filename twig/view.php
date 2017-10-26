@@ -2,26 +2,19 @@
 
 namespace twig;
 
+use service\view as service_view;
+
 class view
 {
+	private $view;
+
+	public function __construct(service_view $view)
+	{
+		$this->view = $view;
+	}
+
 	public function get(array $param, string $entity = null):array
 	{
-		if (!isset($entity) || $entity === '')
-		{
-			return $param;
-		}
-
-		$ary = [
-			'news'	=> 'extended',
-			'user'	=> 'list',
-			'ad'	=> 'extended',
-		];
-
-		if (!isset($ary[$entity]))
-		{
-			return $param;
-		}
-
-		return array_merge($param, ['view' => $ary[$entity]]);
+		return $this->view->merge($param, $entity);
 	}
 }

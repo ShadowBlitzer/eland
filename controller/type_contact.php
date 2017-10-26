@@ -53,7 +53,7 @@ class type_contact
 		$form = $app->build_form('type_contact_type', $data)
 			->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 
@@ -92,7 +92,7 @@ class type_contact
 			'ignore' => ['id' => $id],
 		])->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 
@@ -138,7 +138,7 @@ class type_contact
 			->getForm()
 			->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$app['db']->delete($schema . '.type_contact', ['id' => $id]);
 

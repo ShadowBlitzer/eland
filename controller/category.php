@@ -16,10 +16,6 @@ class category
 		]);
 	}
 
-	/*
-	*
-	*/
-
 	public function add(Request $request, app $app, string $schema, string $access, int $parent_category)
 	{
 		$data = [
@@ -29,7 +25,7 @@ class category
 		$form = $app->build_form('category_type', $data)
 			->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 
@@ -84,7 +80,7 @@ class category
 			'sub_selectable'	=> $count_subcategories ? false : true,
 		])->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 
@@ -147,7 +143,7 @@ class category
 			->getForm()
 			->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$app['db']->delete($schema . '.categories', ['id' => $id]);
 

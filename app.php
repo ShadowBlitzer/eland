@@ -87,7 +87,7 @@ $app->extend('twig', function($twig, $app) {
 				$app['url_generator']);
 		},
 		twig\view::class => function () use ($app){
-			return new twig\view();
+			return new twig\view($app['view']);
 		},
 /*
 		twig\pagination::class => function() use ($app){
@@ -267,6 +267,10 @@ $app->register(new Silex\Provider\SessionServiceProvider(), [
 		'cookie_lifetime'			=> 172800,
 	],
 ]);
+
+$app['view'] = function ($app) {
+	return new service\view();
+};
 
 $app['thumbprint'] = function ($app){
 	$version = getenv('THUMBPRINT_VERSION') ?: '';
