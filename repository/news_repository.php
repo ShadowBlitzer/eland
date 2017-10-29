@@ -48,6 +48,41 @@ class news_repository
 		return $data;
 	}
 
+	public function insert(array $data, string $schema):int
+	{
+		$data['cdate'] = gmdate('Y-m-d H:i:s');
+		$data['id_user'] = 1;//($s_master) ? 0 : $s_id;
+		$data['approved'] = $data['approved'] ? 't' : 'f';
+		$data['sticky'] = $data['sticky'] ? 't' : 'f';
+		$data['published'] = 't';
+
+		$access = $data['access'];
+		unset($data['access']);
+		
+		$this->db->insert($schema . '.news', $data);
+		$id = $this->db->lastInsertId($schema . '.news_id_seq');
+
+		$this->xdb->set('news_access', $id, ['access' => $access], $schema);
+
+		return $id;
+	}
+
+	public function update(int $id, array $data, string $schema)
+	{
+		$data['sticky'] = $data['sticky'] ? 't' : 'f';
+		$access = $data['access'];
+		unset($data['access']);
+		
+		$this->db->update($schema . '.news', $data, ['id' => $id]);
+		$this->xdb->set('news_access', $id, ['access' => $access], $schema);
+	}
+
+	public function delete(int $id, string $schema)
+	{
+		$this->db->delete($schema . '.news', ['id' => $id]);
+		$this->xdb->del('news_access', $id, $schema);
+	}
+
 	public function next(int $id, string $schema, array $access_ary)
 	{
 		$rows = $this->xdb->get_many(['agg_schema' => $schema,

@@ -16,7 +16,8 @@
     {%- block text_footer -%}
         {%- if schema is defined %}
 
-        {{ 'mail.footer'|trans({'%systemname%': config('systemname', schema)}) -}}
+
+{{ 'mail.footer'|trans({'%systemname%': config('systemname', schema)}) -}}
         {%- endif -%}
     {%- endblock text_footer -%}
 {%- endblock text_body -%}

@@ -267,13 +267,15 @@ news:
     success: Nieuwsbericht "%name%" is goedgekeurd.
     error: Fout bij het goedkeuren van nieuwsbericht "%name%"
 
-
 news_index:
   title: Nieuws
 
 news_add:
   title: Nieuwsbericht toevoegen
   success: Nieuwsbericht "%name%" is succesvol gecreëerd.
+  approve_info: >
+    Je nieuwsbericht "%name%" wordt nagekeken door een
+    beheerder alvorens het gepubliceerd wordt.
 
 news_edit:
   title: Nieuwsbericht "%name%" aanpassen
@@ -641,7 +643,6 @@ mail:
       Deze link blijft 4 uur geldig. Gelieve deze mail te
       negeren wanneer je niet zelf hebt een paswoord reset
       hebt aangevraagd op onze website.
-
   contact_admin:
     subject: Bericht van contactformulier
   sender_info:
@@ -649,7 +650,12 @@ mail:
     agent: "agent: %agent%"
   hosting_request:
     subject: Aanvraag hosting voor %group_name%
-
+  news_review_admin:
+    subject: Beoordeling nieuwsbericht "%name%"
+    message: >
+      Een nieuw nieuwsbericht met titel "%name%"
+      werd ingegeven op de website. Ga naar het bericht
+      om het (al dan niet) goed te keuren voor publicatie.
 
   support: Support
   overview:

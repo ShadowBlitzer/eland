@@ -160,13 +160,21 @@ class news
 		{
 			$data = $form->getData();
 
-			$data['cdate'] = gmdate('Y-m-d H:i:s');
-			$data['id_user'] = 1;//($s_master) ? 0 : $s_id;
-			$data['approved'] = $access === 'a' ? 't' : 'f';
-			$data['sticky'] = $data['sticky'] ? 't' : 'f';
-			$data['published'] = 't';
+			$data['approved'] = $access === 'a';
 
-			$app['db']->insert($schema . '.news', $data);
+			$data['id'] = $app['news_repository']->insert($data, $schema);
+
+			if (!$data['approved'])
+			{
+				$app['mail_queue']->set_template('news_review_admin')
+					->set_vars(['news' => $data])
+					->set_schema($schema)
+					->set_to($app['mail_newsadmin']->get($schema))
+					->set_priority(900000)
+					->put();
+
+				$app->info('news_add.approve_info', ['%name%' => $data['headline']]);
+			}
 
 			$app->success('news_add.success', ['%name%'  => $data['headline']]);
 
@@ -191,12 +199,9 @@ class news
 		{
 			$data = $form->getData();
 
-			$data['mdate'] = gmdate('Y-m-d H:i:s');
-			$data['sticky'] = $data['sticky'] ? 't' : 'f';
+			$app['news_repository']->update($news['id'] ,$data, $schema);
 
-			$app['db']->insert($schema . '.news', $data);
-
-			$app->success('news_add.success', ['%name%'  => $data['headline']]);
+			$app->success('news_edit.success', ['%name%'  => $data['headline']]);
 
 			return $app->reroute('news_index', [
 				'schema' 	=> $schema,
@@ -210,7 +215,6 @@ class news
 		]);
 	}
 
-
 	public function del(Request $request, app $app, string $schema, string $access, array $news)
 	{
 		$form = $app->form()
@@ -220,7 +224,7 @@ class news
 
 		if ($form->isSubmitted() && $form->isValid())
 		{
-			$app['db']->delete($schema . '.news', ['id' => $news['id']]);
+			$app['news_repository']->delete($news['id'], $schema);
 
 			$app->success('news_del.success', ['%name%' => $news['headline']]);
 
