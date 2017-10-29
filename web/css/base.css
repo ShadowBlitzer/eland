@@ -756,3 +756,7 @@ div.panel-info form div.form-group span.input-group-btn button.btn{
   color: #fff;
 }
 
+span.badge-text {
+  font-size: 0.9em;
+}
+

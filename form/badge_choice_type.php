@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
-class inline_choice_type extends AbstractType
+class badge_choice_type extends AbstractType
 {
     public function __construct()
     {
@@ -25,7 +25,7 @@ class inline_choice_type extends AbstractType
     {
         $resolver->setDefaults([
             'expanded'          => true,
-            'multiple'          => false,     
+            'multiple'          => false,    
         ]);
     }
 
@@ -34,10 +34,8 @@ class inline_choice_type extends AbstractType
         return ChoiceType::class;
     }
 
-    /*
     public function getBlockPrefix()
     {
-        return 'radio_label';
+        return 'badge_choice';
     }
-    */
 }

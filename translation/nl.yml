@@ -70,6 +70,16 @@ access:
   interlets: InterLETS
   public: Publiek
 
+badge:
+  admin: Admin
+  users: Leden
+  interlets: InterLETS
+  public: Publiek
+  offer: Aanbod
+  want: Vraag
+  service: Dienst
+  good: Goed
+
 bool:
   no: Nee
   yes: Ja

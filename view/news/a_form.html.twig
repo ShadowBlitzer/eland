@@ -23,6 +23,7 @@
     'sub_label': 'label.location_explain', 'addon_fa': 'map-marker'}) -}}
 {{- form_row(form.headline, {'label': 'label.title', 'addon_fa': 'pencil'}) -}}
 {{- form_row(form.newsitem, {'label': 'label.message', 'attr': {'rows': 10}}) -}}
+{{- form_row(form.access, {'label': 'label.access', 'label_attr': {'class': 'radio-inline'}}) -}}
 {{- b.cancel(path('news_index', acc_sch|view('news'))) -}}
 {%- block submit -%}{%- endblock -%}
 

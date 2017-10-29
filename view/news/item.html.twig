@@ -1,4 +1,4 @@
-{%- import 'macro/access.html.twig' as acc -%}
+{%- import 'macro/badge.html.twig' as ba -%}
 {%- import 'macro/button.html.twig' as b -%}
 
 <div class="panel panel-info printview">
@@ -26,7 +26,7 @@
 	</dd>
 {%- endif %}
 <dt>{{- 'label.access'|trans -}}</dt>
-<dd>{{- acc.label(n.access) -}}</dd>
+<dd>{{- ba.badge(n.access) -}}</dd>
 </div>
 </div>
 </div>

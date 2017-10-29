@@ -108,3 +108,43 @@
     {%- set addon_fa = 'calendar' -%}
     {{- block('addon_widget') -}}
 {%- endblock datepicker_widget %}
+
+{% block checkbox_radio_label %}
+    {%- import 'macro/badge.html.twig' as ba -%}
+    {% if widget is defined %}
+        {% if required %}
+            {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) %}
+        {% endif %}
+        {% if parent_label_class is defined %}
+            {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ parent_label_class)|trim}) %}
+        {% endif %}
+        {% if label is not same as(false) and label is empty %}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {% endif %}
+       
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            {{- widget|raw -}} 
+            {%- if 'badge_choice' in form.parent.vars.block_prefixes %} {{ ba.badge(label) -}}
+            {%- else -%} {{ label is not same as(false) ? (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) -}}
+            {%- endif -%}
+        </label>
+    {% endif %}
+{% endblock checkbox_radio_label %}
+
+{% block choice_widget_expanded -%}
+    <div {{ block('widget_container_attributes') }}>
+        {%- for child in form %}
+            {{- form_widget(child, {
+                parent_label_class: label_attr.class|default(''),
+                translation_domain: choice_translation_domain,
+            }) -}}
+        {%- endfor -%}
+    </div>
+{%- endblock choice_widget_expanded %}
