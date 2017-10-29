@@ -6,7 +6,6 @@
 {% import 'macro/top_button.html.twig' as tb %}
 {% import 'macro/table.html.twig' as t %}
 {% import 'macro/pagination.html.twig' as pg %}
-{% import 'macro/filter.html.twig' as fi %}
 
 {% block css -%}
 {%- include 'asset/datepicker_css.html.twig' -%}
@@ -27,68 +26,7 @@
 
 {% block inner -%}
 
-{%- set placeholder_code = config('template_lets', schema) ? 'letscode' : 'code' -%}
-
-{{- p.form_filter_start(filter) -}}
-
-<div class="row"><div class="col-sm-12">
-    {{- form_row(filter.q, {
-        'label': false,
-        'addon_fa': 'search',
-        'attr': {
-            'placeholder': 'keyword', 
-        }  
-    }) -}}
-</div></div>
-
-<div class="row">
-<div class="col-sm-5">
-    {{- form_row(filter.from_user, {
-        'label': false,
-        'addon_label': 'from',
-        'addon_fa': 'user',
-        'attr': {
-            'placeholder': placeholder_code,
-        }
-    }) -}}
-</div>
-<div class="col-sm-2">
-    {{- form_row(filter.andor, {'label': false}) -}}
-</div>
-<div class="col-sm-5">
-    {{- form_row(filter.to_user, {
-        'label': false,
-        'addon_label': 'to',
-        'addon_fa': 'user',
-        'attr': {
-            'placeholder': placeholder_code,
-        }
-    }) -}}
-</div>
-</div>
-
-<div class="row">
-<div class="col-sm-5">
-    {{- form_row(filter.from_date, {
-        'label': false,
-        'addon_label': 'from_date',
-        'addon_fa': 'calendar'
-    }) -}}
-</div>
-<div class="col-sm-5">
-    {{- form_row(filter.to_date, {
-        'label': false,
-        'addon_label': 'to_date',
-        'addon_fa': 'calendar'
-    }) -}}
-</div>
-<div class="col-sm-2">
-    {{- b.show(filter.submit) -}}
-</div>
-</div>
-
-{{- fi.context(all_params) -}}
-{{- p.form_end(filter) -}}
+{%- include 'transaction/filter_form.html.twig' -%}
 
 {%- set cols = {
 	'description': {
@@ -126,5 +64,3 @@
 {{- pg.pagination(route, all_params, pagination) -}}
 
 {%- endblock inner %}
-
-

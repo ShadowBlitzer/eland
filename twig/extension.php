@@ -20,12 +20,8 @@ class extension extends \Twig_Extension
 	{
 		return [
 			new \Twig_Function('distance_p', 'twig\\distance::format_p'),
-			new \Twig_Function('datepicker_format', 'twig\\date_format::datepicker_format', [
-				'needs_context'		=> true,
-			]),
-			new \Twig_Function('datepicker_placeholder', 'twig\\date_format::datepicker_placeholder', [
-				'needs_context'		=> true,
-			]),
+			new \Twig_Function('datepicker_format', 'twig\\datepicker::get_format'),
+			new \Twig_Function('datepicker_placeholder', 'twig\\datepicker::get_placeholder'),
 			new \Twig_Function('config', 'twig\\config::get'),
 		];
 	}

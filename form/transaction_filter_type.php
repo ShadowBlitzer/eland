@@ -45,9 +45,16 @@ class transaction_filter_type extends AbstractType
 			])
 			->add('from_date', 'datepicker_type', [
                 'required' => false,
+                'attr'  => [
+                    'data-date-default-view-date'   => '-1y',
+                    'data-date-end-date'            => '0d',
+                ],
             ])
 			->add('to_date', 'datepicker_type', [
                 'required' => false,
+                'attr'  => [
+                    'data-date-end-date'            => '0d',
+                ],
             ])
 			->add('submit', SubmitType::class);
     }

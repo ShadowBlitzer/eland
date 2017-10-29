@@ -89,6 +89,9 @@ $app->extend('twig', function($twig, $app) {
 		twig\view::class => function () use ($app){
 			return new twig\view($app['view']);
 		},
+		twig\datepicker::class => function() use ($app){
+			return new twig\datepicker($app['web_date'], $app['translator']);
+		},
 /*
 		twig\pagination::class => function() use ($app){
 			return new twig\pagination();
@@ -176,6 +179,10 @@ $app->extend('form.types', function ($types) use ($app) {
 
 $app['web_date'] = function ($app){
 	return new twig\web_date($app['date_format_cache'], $app['request_stack']);
+};
+
+$app['datepicker'] = function ($app){
+	return new twig\datepicker($app['web_date'], $app['translator']);
 };
 
 $app['datepicker_transformer'] = function ($app){
