@@ -174,14 +174,20 @@ class news
 					->put();
 
 				$app->info('news_add.approve_info', ['%name%' => $data['headline']]);
+
+				return $app->reroute('news_index', [
+					'schema' 	=> $schema,
+					'access'	=> $access,
+					'view'		=> $app['view']->get('news'),
+				]);					
 			}
 
 			$app->success('news_add.success', ['%name%'  => $data['headline']]);
 
-			return $app->reroute('news_index', [
+			return $app->reroute('news_show', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-				'view'		=> $app['view']->get('news'),
+				'news'		=> $data['id'],
 			]);				
 		}
 
@@ -203,10 +209,10 @@ class news
 
 			$app->success('news_edit.success', ['%name%'  => $data['headline']]);
 
-			return $app->reroute('news_index', [
+			return $app->reroute('news_show', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-				'view'		=> $app['view']->get('news'),
+				'news'		=> $news['id'],
 			]);				
 		}
 	

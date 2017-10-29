@@ -26,6 +26,7 @@ class news_type extends AbstractType
                 'constraints' => [
                     new Assert\Length(['max' => 128]),
                 ],
+                'required'  => false,
             ])
             ->add('headline', addon_type::class, [
                 'constraints' => [
