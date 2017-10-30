@@ -15,7 +15,7 @@ class news_controller_provider implements ControllerProviderInterface
             ->bind('news_no_view');
         $news->match('/{view}', 'controller\\news::index')
             ->bind('news_index');
-        $news->get('/{news}', 'controller\\news::show')
+        $news->match('/{news}', 'controller\\news::show')
             ->convert('news', 'news_converter:get')
             ->bind('news_show');
         $news->match('/add', 'controller\\news::add')

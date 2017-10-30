@@ -1,20 +1,22 @@
 {% macro add(href, title) -%}
     {% import _self as b %}
-    {{- b.button(href, title, 'btn.add', 'success', 'plus') -}}
+    {{- b.button(href, title, 'btn.add', 'success', 'plus') -}}&nbsp;
 {%- endmacro add %}
 
 {% macro edit(href, title) -%}
     {% import _self as b %}
-    {{- b.button(href, title, 'btn.edit', 'info', 'pencil') -}}
+    {{- b.button(href, title, 'btn.edit', 'info', 'pencil') -}}&nbsp;
 {%- endmacro edit %}
 
 {% macro del(href, title) -%}
     {% import _self as b %}
-    {{- b.button(href, title, 'btn.delete', 'danger', 'times') -}}
+    {{- b.button(href, title, 'btn.delete', 'danger', 'times') -}}&nbsp;
 {%- endmacro del %}
 
-{% macro approve(form_submit) -%}
-{{- form_widget(form_submit, {'label': 'btn.approve', 'fa': 'thumbs-o-up', 'attr': {'class': 'btn-warning'}}) -}}&nbsp;
+{% macro approve(form_submit, title) -%}
+    {{- form_widget(form_submit, {'label': 'btn.approve',
+        'fa': 'thumbs-o-up', 'span_attr': {'class': 'hidden-xs hidden-sm'},
+        'attr': {'class': 'btn-warning', 'title': title}}) -}}&nbsp;
 {%- endmacro approve %}
 
 {% macro list(href, title, fa) -%}

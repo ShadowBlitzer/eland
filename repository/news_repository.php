@@ -77,6 +77,11 @@ class news_repository
 		$this->xdb->set('news_access', $id, ['access' => $access], $schema);
 	}
 
+	public function approve(int $id, string $schema)
+	{
+		$this->db->update($schema . '.news', ['approved' => 't'], ['id' => $id]);
+	}
+
 	public function delete(int $id, string $schema)
 	{
 		$this->db->delete($schema . '.news', ['id' => $id]);

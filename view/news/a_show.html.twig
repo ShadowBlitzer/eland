@@ -3,8 +3,17 @@
 {% import 'macro/top_button.html.twig' as tb %}
 
 {%- block top_buttons -%}
-{{- tb.edit(path('news_edit', acc_sch|merge({'news': news.id})), 'news.title_top_btn.edit') -}}
-{{- tb.del(path('news_del', acc_sch|merge({'news': news.id})), 'news.title_top_btn.del') -}}
+    {%- if approve_form is defined -%}
+        {{- form_start(approve_form) -}}
+        {{- tb.approve(approve_form.approve, 'news.title_top_btn.approve') -}}        
+    {%- endif -%}
+
+    {{- tb.edit(path('news_edit', acc_sch|merge({'news': news.id})), 'news.title_top_btn.edit') -}}
+    {{- tb.del(path('news_del', acc_sch|merge({'news': news.id})), 'news.title_top_btn.del') -}}
+    
+    {%- if approve_form is defined -%}
+        {{- form_end(approve_form) -}}
+    {%- endif -%}  
 {%- endblock top_buttons -%}
 
 {% block inner -%}

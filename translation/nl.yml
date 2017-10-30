@@ -259,6 +259,7 @@ news:
     add: Nieuwsbericht toevoegen
     edit: Nieuwsbericht aanpassen
     del: Nieuwsbericht verwijderen
+    approve: Nieuwsbericht goedkeuren
   no_items: >
     Er zijn momenteel geen nieuwsberichten.
   is_kept_after_date: >

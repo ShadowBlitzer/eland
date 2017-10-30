@@ -122,7 +122,8 @@ class news
 						list($approve_str, $id) = explode('_', $key);
 						$name = $approve_headline_ary[$id];				
 
-						$app['db']->update($schema . '.news', ['approved' => 't'], ['id' => $id]);
+						$app['news_repository']->approve($id, $schema);
+
 						$app->success('news.approve.success', ['%name%' => $name]);
 						break;
 					}
@@ -146,9 +147,34 @@ class news
 
 	public function show(Request $request, app $app, string $schema, string $access, array $news)
 	{
-		return $app['twig']->render('news/' . $access . '_show.html.twig', [
-			'news'	=> $news,
-		]);
+		$vars = ['news'	=> $news];
+
+		if ($access === 'a' && !$news['approved'])
+		{
+			$approve_form = $app->form()
+				->add('approve', SubmitType::class)
+				->getForm();
+			
+			$approve_form->handleRequest($request);
+
+			if ($approve_form->isSubmitted() 
+				&& $approve_form->isValid() 
+				&& $approve_form->get('approve')->isClicked())
+			{
+				$app['news_repository']->approve($news['id'], $schema);
+				$app->success('news.approve.success', ['%name%' => $news['headline']]);
+
+				return $app->reroute('news_show', [
+					'schema'	=> $schema,
+					'access'	=> $access,
+					'news'		=> $news['id'],
+				]);
+			}
+
+			$vars['approve_form'] = $approve_form->createView();
+		}
+
+		return $app['twig']->render('news/' . $access . '_show.html.twig', $vars);
 	}
 
 	public function add(Request $request, app $app, string $schema, string $access)
