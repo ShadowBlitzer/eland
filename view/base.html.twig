@@ -8,14 +8,14 @@
 
 <title>{%- block title -%}eLAND{%- endblock title -%}</title>
 
-{%- block common_css -%}
+{# {%- block common_css -%} #}
 {{- a.css('bootstrap/3.3.7/css/bootstrap.min.css', 'maxcdn') -}}
 {{- a.css('font-awesome/4.7.0/css/font-awesome.min.css', 'maxcdn') -}}
 {{- a.css('jquery-footable/2.0.3/css/footable.core.min.css', 'cdnjs') -}}
-{{- a.css('Swiper/3.4.2/css/swiper.min.css', 'cdnjs') -}}
+{# {{- a.css('Swiper/4.0.3/css/swiper.min.css', 'cdnjs') -}} #}
 {{- a.css('base.css') -}}
 {{- a.css('print.css', 'css', 'print') -}}
-{%- endblock common_css -%}
+{# {%- endblock common_css -%} #}
 
 {%- block css -%}
 {#
@@ -49,6 +49,7 @@
 
 <div class="navbar-header">
 
+{%- block navbar_toggle_left -%}{%- endblock -%}
 {%- block navbar_toggle_menu -%}{%- endblock -%}
 
 <a href="{%- block url_index -%}#{%- endblock -%}" class="pull-left hidden-xs">
@@ -67,29 +68,29 @@
 
 {%- block footer -%}
 
-<footer class="footer">
-
-<p>{{- 'eland.explain'|trans({'%link_eland_open%': '<a href="http://letsa.net">', '%link_close%': '</a>'})|raw -}}</p>
-
-{%- block footer_extra -%}{%- endblock -%}
-
-</footer>
+    <footer class="footer">
+    <p>{{- 'eland.explain'|trans({'%link_eland_open%': '<a href="http://letsa.net">', '%link_close%': '</a>'})|raw -}}</p>
+    {%- block footer_extra -%}{%- endblock -%}
+    </footer>
 
 {%- endblock footer -%}
 
+
 </div>
 
-{%- block js_common -%}
+{# {%- block js_common -%} #}
 {{- a.js('jquery-3.2.1.min.js', 'jquery') -}}
 {{- a.js('bootstrap/3.3.7/js/bootstrap.min.js', 'maxcdn') -}}
 {{- a.js('jquery-footable/2.0.3/js/footable.min.js', 'cdnjs') -}}
 {{- a.js('jquery-footable/2.0.3/js/footable.sort.min.js', 'cdnjs') -}}
 {{- a.js('jquery-footable/2.0.3/js/footable.filter.min.js', 'cdnjs') -}}
-{{- a.js('Swiper/3.4.2/js/swiper.jquery.min.js', 'cdnjs') -}}
+{# {{- a.js('jquery.touchswipe/1.6.18/jquery.touchSwipe.min.js', 'cdnjs') -}} #}
+{# {{- a.js('slideout/1.0.1/slideout.min.js', 'cdnjs') -}} #}
+{# {{- a.js('Swiper/4.0.3/js/swiper.min.js', 'cdnjs') -}} #}
 {{- a.js('typeahead.js/0.11.1/typeahead.bundle.min.js', 'cdnjs') -}}
 {{- a.js('typeahead.js') -}}
 {{- a.js('base.js') -}}
-{%- endblock js_common -%}
+{# {%- endblock js_common -%} #}
 
 {%- block js -%}
 {#

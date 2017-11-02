@@ -36,31 +36,33 @@
 
 %}
 
-{% block navbar_container_class %} bg-info{% endblock %}
-{% block navbar_groups %}{% endblock %}
-{% block navbar_admin_disabled %}{% endblock %}
+{%- block navbar_container_class %} bg-info{%- endblock -%}
+{%- block navbar_groups -%}{%- endblock -%}
+{%- block navbar_admin_disabled -%}{%- endblock -%}
 
-{% block navbar_admin -%}
+{%- block navbar_admin -%}
 
-  {{ m.nav_dropdown('admin_modus', 'cog') }}
+  {{- m.nav_dropdown('admin_modus', 'cog') -}}
 
-  {% for key in admin_menu_en %}
-    {% if admin_menu_ary[key] is defined %}
-    {{ m.li(key, admin_menu_ary[key], active_menu, acc_sch) }}
-    {% endif %}
-  {% endfor %}
+  {%- for key in admin_menu_en -%}
+    {%- if admin_menu_ary[key] is defined -%}
+    	{{- m.li(key, admin_menu_ary[key], active_menu, acc_sch) -}}
+    {%- endif -%}
+  {%- endfor -%}
 
-  {{ m.divider() }}
-  {{ m.li_302_no_param({'route': 'logout', 'fa': 'sign-out', 'title': 'logout.title'}) }}
-  {{ m.nav_dropdown_end() }}
+  {{- m.divider() -}}
+  {{- m.li_302_no_param({'route': 'logout', 'fa': 'sign-out', 'title': 'logout.title'}) -}}
+  {{- m.nav_dropdown_end() -}}
 
-{%- endblock navbar_admin %}
+{%- endblock navbar_admin -%}
 
-{% block top_buttons %}{% endblock top_buttons %}
+{%- block top_buttons -%}{%- endblock top_buttons -%}
 
-{% block heading_pre %}
-<small><span class="label label-info">{{ 'access.admin'|trans }}</span></small>&nbsp;
-{% endblock heading_pre %}
+{#
+{%- block heading_pre -%}
+<small><span class="label label-info">{{- 'access.admin'|trans -}}</span></small>&nbsp;
+{%- endblock heading_pre -%}
+#}
 
 {#
 

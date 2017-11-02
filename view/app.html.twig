@@ -22,76 +22,84 @@
 	'undefined'
 %}
 
-{% block title -%}{{- config('systemname', schema) -}}{%- endblock title %}
+{%- block title -%}{{- config('systemname', schema) -}}{%- endblock title -%}
 
-{% block url_index %}{% endblock url_index %}
+{%- block url_index -%}{%- endblock url_index -%}
 
-{% block content -%}
+{%- block content -%}
 
-<div class="row-offcanvas row-offcanvas-left">
-<div id="sidebar" class="sidebar-offcanvas">
+	<div class="row-offcanvas row-offcanvas-left">
+	<div id="sidebar" class="sidebar-offcanvas">
 
-<br>
-<ul class="nav nav-pills nav-stacked">
+	{# <div id="menu"> #}
 
-{% block menu_left %}{% endblock %}
+	<br>
+	<ul class="nav nav-pills nav-stacked">
 
-</ul>
-</div>
+	{%- block menu_left -%}{%- endblock -%}
 
-<div id="wrap">
-<div id="main" class="container-fluid clear-top{% block div_main_class %}{% endblock %}">
-
-{% block flash %}{{ f.flash() }}{% endblock flash %}
-
-{%- block top_buttons_container -%}
-	{%- block top_buttons_pre -%}{%- endblock -%}
-	<div class="row">
-	<div class="col-md-12 top-buttons">
-	<div class="visible-xs pull-left button-offcanvas">
-	<button type="button" class="btn btn-primary btn-md " data-toggle="offcanvas"
-	title="{{- 'label.menu'|trans -}}"><i class="fa fa-chevron-left"></i></button>&nbsp;
+	</ul>
 	</div>
 
-	{%- block top_buttons -%}{%- endblock -%}
+	<div id="wrap">
+	{# <div id="panel"> #}
+	<div id="main" class="container-fluid clear-top{%- block div_main_class -%}{%- endblock -%}">
+
+	{%- block flash -%}{{- f.flash() -}}{%- endblock flash -%}
+
+{#
+	{%- block top_buttons_container -%}
+
+		{%- block top_buttons_pre -%}{%- endblock -%}
+	#}
+		<div class="row">
+		<div class="col-md-12 top-buttons">
+		<div class="visible-xs pull-left button-offcanvas">
+		<button type="button" class="btn btn-default btn-md " data-toggle="offcanvas"
+		title="{{- 'label.menu'|trans -}}"><i class="fa fa-bars"></i></button>&nbsp;
+		</div>
+
+		{%- block top_buttons -%}{%- endblock -%}
+		{%- block top_buttons_right -%}{%- endblock -%}
+		</div>
+		</div>
+{#		{%- block top_buttons_post -%}{%- endblock -%}
+	{%- endblock top_buttons_container -%}
+#}
+
+	{%- block top_right_container -%}
+		<div class="pull-right">
+		{%- block top_right -%}{%- endblock -%}
+		</div>
+	{%- endblock top_right_container -%}
+
+	{%- block heading_container -%}
+		<h1>
+		{%- block heading_pre -%}{%- endblock -%}
+		{%- block heading_fa_container -%}
+		<i class="fa fa-{%- block fa -%}{{- menu_el['fa'] -}}{%- endblock -%}"></i>
+		{% endblock heading_fa_container -%}
+		{%- block heading -%}{{- menu_el['title']|trans -}}{%- endblock heading -%}
+		{%- if filtered is defined and filtered %} <span class="small">{{- 'tag.filtered'|trans -}}
+			</span>{%- endif -%}
+		{%- block heading_post -%}{%- endblock -%}
+		{%- block heading_right -%}{%- endblock -%}
+		</h1>
+	{%- endblock heading_container %}
+
+	{%- block pre_inner -%}{%- endblock -%}
+
+	{%- block inner -%}{%- endblock -%}
+
+	{%- block post_inner -%}{%- endblock -%}
 
 	</div>
-	</div>
-	{%- block top_buttons_post -%}{%- endblock -%}
-{%- endblock top_buttons_container -%}
-
-{%- block top_right_container -%}
-<div class="pull-right">
-{%- block top_right -%}{%- endblock -%}
-</div>
-{%- endblock top_right_container -%}
-
-{%- block heading_container -%}
-<h1>
-{%- block heading_pre -%}{%- endblock -%}
-{%- block heading_fa_container -%}
-<i class="fa fa-{%- block fa -%}{{- menu_el['fa'] -}}{%- endblock -%}"></i>
-{% endblock heading_fa_container -%}
-{%- block heading -%}{{- menu_el['title']|trans -}}{%- endblock heading -%}
-{%- if filtered is defined and filtered %} <span class="small">{{- 'tag.filtered'|trans -}}</span>{%- endif -%}
-{%- block heading_post -%}{%- endblock -%}
-{%- block heading_right -%}{%- endblock -%}
-</h1>
-{%- endblock heading_container %}
-
-{%- block pre_inner -%}{%- endblock -%}
-
-{%- block inner -%}{%- endblock -%}
-
-{%- block post_inner -%}{%- endblock -%}
-
-</div>
 {%- endblock content -%}
 
 {%- block footer_extra -%}
-<p>{{- 'eland.github'|trans({
-	'%link_issues_open%': '<a href="https://github.com/eeemarv/eland/issues">',
-	'%link_github_open%': '<a href="https://github.com">',
-	'%link_close%': '</a>'
-})|raw -}}</p>
+	<p>{{- 'eland.github'|trans({
+		'%link_issues_open%': '<a href="https://github.com/eeemarv/eland/issues">',
+		'%link_github_open%': '<a href="https://github.com">',
+		'%link_close%': '</a>'
+	})|raw -}}</p>
 {%- endblock footer_extra -%}

@@ -4,6 +4,23 @@ $(document).ready(function() {
 		$('.row-offcanvas').toggleClass('active');
 	});
 
+/*
+	var slideout = new Slideout({
+        'panel': $('#panel'),
+        'menu': $('#menu'),
+        'padding': 256,
+        'tolerance': 70
+	  });
+
+	$('[data-toggle=offcanvas]').click(function() {
+		slideout.toggle();
+	});	  
+
+      // Toggle button
+      document.querySelector('.toggle-button').addEventListener('click', function() {
+        slideout.toggle();
+    });
+*/
 	$('.footable').footable();
 
 	$('a[data-elas-group-id]').click(function() {
@@ -30,6 +47,5 @@ $(document).ready(function() {
 				alert('De pagina kon niet geopend worden.');
 			}
 		});
-
 	});
 });

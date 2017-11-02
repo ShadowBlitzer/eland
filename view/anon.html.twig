@@ -2,29 +2,29 @@
 
 {% import 'macro/menu.html.twig' as m %}
 
-{% set menu_ary = {
+{%- set menu_ary = {
   'login': {'title': 'login.title', 'fa': 'sign-in', 'route': 'login'},
   'contact': {'title': 'contact.title', 'fa': 'comment-o', 'route': 'contact'},
   'register': {'title': 'register.title', 'fa': 'check-square-o', 'route': 'register'}
 }
 
-%}
+-%}
 
-{% set menu_left_en = [
+{%- set menu_left_en = [
   'login', 'contact', 'register'
 ] 
 
-%}
+-%}
 
-{% block menu_left %}
+{%- block menu_left -%}
 
-  {% for key in menu_left_en %}
-    {% if menu_ary[key] is defined %}
-		{{ m.li_anon(key, menu_ary[key], active_menu, schema) }}
-    {% endif %}
-  {% endfor %}
+  {%- for key in menu_left_en -%}
+    {%- if menu_ary[key] is defined -%}
+		{{- m.li_anon(key, menu_ary[key], active_menu, schema) -}}
+    {%- endif -%}
+  {%- endfor -%}
   
-{% endblock menu_left %}
+{%- endblock menu_left -%}
 
 {#
 {% block fa %}{{ anon_routes[active_route].fa }}{% endblock fa %}

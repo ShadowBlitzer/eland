@@ -34,12 +34,16 @@
         {%- endif -%}
     {%- endif -%}
     <button type="{{- type|default('button') -}}" {{ block('button_attributes') -}}>
-    {%- if fa is defined -%}<i class="fa fa-{{- fa -}}"></i>&nbsp;{%- endif -%}
     {%- if span_attr is defined -%}
-        <span{%- for key, val in span_attr %} {{ key -}}="{{- val -}}"{%- endfor -%}> 
+        {%- if fa is defined -%}<i class="fa fa-{{- fa -}}"></i>   
+            <span{%- for key, val in span_attr %} {{ key -}}="{{- val -}}"{%- endfor -%}>&nbsp;
+        {%- else -%}
+            <span{%- for key, val in span_attr %} {{ key -}}="{{- val -}}"{%- endfor -%}>
+        {%- endif -%}
         {{- translation_domain is same as(false) ? label : label|trans({}, translation_domain) -}}
         </span>
     {%- else -%}
+        {%- if fa is defined -%}<i class="fa fa-{{- fa -}}"></i>&nbsp;{%- endif -%}   
         {{- translation_domain is same as(false) ? label : label|trans({}, translation_domain) -}}
     {%- endif -%}
     </button>

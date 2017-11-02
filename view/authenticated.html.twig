@@ -20,67 +20,66 @@
 
 -%}
 
-{% set menu_en = [
+{%- set menu_en = [
   'ad', 'account', 'user', 'transaction', 
   'news', 'doc', 'forum', 'support'
 ] 
 
-%}
+-%}
 
-{% block navbar_toggle_menu -%}
+{#
+{%- block navbar_toggle_left -%}
+<div class="navbar-left">
+  <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-bars"></i></button>
+</div>
+{%- endblock navbar_toggle_left -%}
+#}
 
-  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-   expanded="false">
-    <span class="sr-only">{{ 'toggle_navigation'|trans }}</span>
+{%- block navbar_toggle_menu -%}
+
+  <button type="button" class="navbar-toggle collapsed btn btn-default navbar-btn" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+    <span class="sr-only">{{- 'toggle_navigation'|trans -}}</span> 
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>
+{#    <span class="sr-only">Toggle navigation</span>
+    <i class="fa fa-bars"></i> #}
   </button>
 
-{%- endblock navbar_toggle_menu %}
+{%- endblock navbar_toggle_menu -%}
 
 {% block navbar_menu -%}
 
   <div class="collapse navbar-collapse" id="navbar-collapse-1">
   <ul class="nav navbar-nav navbar-right">
 
-  {% block navbar_groups %}{% endblock %}
+  {%- block navbar_groups -%}{%- endblock -%}
 
-  {% block navbar_user -%}
+  {%- block navbar_user -%}
 
-    {{ m.nav_dropdown('who is this', 'user') }}
+    {{- m.nav_dropdown('who is this', 'user') -}}
 
-    {% block navbar_user_items %}{% endblock %}
+    {%- block navbar_user_items -%}{%- endblock -%}
 
-{#
-		{{ menu.li(user_self_url|default('#'), 'Mijn gegevens', 'user') }} 
-		{{ menu.li(messages_self_url|default('#'), 'Mijn vraag en aanbod', 'newspaper-o') }} 
-		{{ menu.li(transactions_self_url|default('#'), 'Mijn transacties', 'exchange') }}
-#}
+    {{- m.li_302_no_param({'route': 'logout', 'fa': 'sign-out', 'title': 'logout.title'}) -}}
+    {{- m.nav_dropdown_end() -}}
 
-    {{ m.li_302_no_param({'route': 'logout', 'fa': 'sign-out', 'title': 'logout.title'}) }}
-    {{ m.nav_dropdown_end() }}
-
-  {%- endblock navbar_user %}
-
-  {% block navbar_admin_disabled -%}
-
-    {# if admin then 'admin modus' link #}
-
-  {%- endblock navbar_admin_disabled %}
-
-  {% block navbar_admin %}{% endblock %}
+  {%- endblock navbar_user -%}
+  {%- block navbar_admin_disabled -%}{%- endblock -%}
+  {%- block navbar_admin -%}{%- endblock -%}
+  {%- block lang_select -%}{%- endblock -%}
 
   </ul>
   </div>
 
-{%- endblock navbar_menu %}
+{%- endblock navbar_menu -%}
 
-{% block menu_left -%}
+{%- block menu_left -%}
 
-  {% for key in menu_en %}
-    {% if menu_ary[key] is defined %}
-		{{ m.li(key, menu_ary[key], active_menu, acc_sch|view(key)) }}
-    {% endif %}
-  {% endfor %}
+  {%- for key in menu_en -%}
+    {%- if menu_ary[key] is defined -%}
+		{{- m.li(key, menu_ary[key], active_menu, acc_sch|view(key)) -}}
+    {%- endif -%}
+  {%- endfor -%}
   
-{%- endblock menu_left %}
+{%- endblock menu_left -%}
