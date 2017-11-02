@@ -7,16 +7,16 @@
 {% import 'macro/table.html.twig' as t %}
 {% import 'macro/pagination.html.twig' as pg %}
 
-{% block css -%}
+{%- block css -%}
 {%- include 'asset/datepicker_css.html.twig' -%}
-{%- endblock css %}
+{%- endblock css -%}
 
-{% block js -%}
+{%- block js -%}
 {%- include 'asset/datepicker_js.html.twig' -%}
 {{- a.js('csv.js') -}}
-{%- endblock js %}
+{%- endblock js -%}
 
-{% block top_buttons -%}
+{%- block top_buttons -%}
 {{- tb.add(path('transaction_add', acc_sch), 'transaction.title_top_btn.add') -}}
 {%- endblock top_buttons -%}
 
@@ -24,7 +24,7 @@
 {{- p.csv() -}}
 {%- endblock -%}
 
-{% block inner -%}
+{%- block inner -%}
 
 {%- include 'transaction/filter_form.html.twig' -%}
 
@@ -63,4 +63,4 @@
 {{- t.end() -}}
 {{- pg.pagination(route, all_params, pagination) -}}
 
-{%- endblock inner %}
+{%- endblock inner -%}

@@ -1,30 +1,28 @@
-{% macro form_start(form) -%}
+{%- macro form_start(form) -%}
 	{%- import _self as p -%}
 	{{- p.post() -}}
 	{{- form_start(form) -}}
 	{{- form_errors(form) -}}
-{%- endmacro form_start %}
+{%- endmacro form_start -%}
 
-{% macro form_filter_start(form) -%}
+{%- macro form_filter_start(form) -%}
 	{%- import _self as p -%}
 	{{- p.filter() -}}
 	{{- form_start(form) -}}
 	{{- form_errors(form) -}}
-{%- endmacro form_filter_start %}
+{%- endmacro form_filter_start -%}
 
-{% macro form_end(form) -%}
+{%- macro form_end(form) -%}
 	{%- import _self as p -%}
 	{{- form_end(form) -}}
 	{{- p.end() -}}
-{%- endmacro form_end %}
+{%- endmacro form_end -%}
 
-{% macro csv() -%}
-	<a href="#" class="csv">
-	<i class="fa fa-file"></i>
-	&nbsp;{{- 'link.csv'|trans -}}</a>
-{%- endmacro csv %}
+{%- macro csv() -%}
+	<a href="#" class="csv"><i class="fa fa-file"></i>&nbsp;{{- 'link.csv'|trans -}}</a>
+{%- endmacro csv -%}
 
-{% macro filter_toggle_btn() -%}
+{%- macro filter_toggle_btn() -%}
 	<div class="pull-right">
 	&nbsp;
 	<button class="btn btn-default hidden-xs" 
@@ -35,87 +33,63 @@
 	<span class="hidden-xs hidden-sm">&nbsp;{{- 'filter'|trans -}}
 	</span></button>
 	</div>
-{%- endmacro filter_toggle_btn %}
+{%- endmacro filter_toggle_btn -%}
 
-{% macro filter_indicator() -%}
+{%- macro filter_indicator() -%}
 	&nbsp;<small>{{- 'filtered'|trans -}}</small>
-{%- endmacro filter_indicator %}
+{%- endmacro filter_indicator -%}
 
-{% macro filter() -%}
+{%- macro filter() -%}
 	<div class="panel panel-info" id="filter">
 	<div class="panel-heading">
-{%- endmacro filter %}
+{%- endmacro filter -%}
 
 {% macro post() -%}
 	<div class="panel panel-info">
 	<div class="panel-heading">
 {%- endmacro post %}
 
-{% macro edit() -%}
+{%- macro edit() -%}
 	<div class="panel panel-info">
 	<div class="panel-heading">
-{%- endmacro edit %}
+{%- endmacro edit -%}
 
 {% macro add() -%}
 	<div class="panel panel-success">
 	<div class="panel-heading">
 {%- endmacro add %}
 
-{% macro del() -%}
+{%- macro del() -%}
 	<div class="panel panel-danger">
 	<div class="panel-heading">
-{%- endmacro del %}
+{%- endmacro del -%}
 
-{% macro mail() -%}
+{%- macro mail() -%}
 	<div class="panel panel-success">
 	<div class="panel-heading">
-{%- endmacro mail %}
+{%- endmacro mail -%}
 
-{% macro help() -%}
+{%- macro help() -%}
 	<div class="panel panel-warning">
 	<div class="panel-heading">
-{%- endmacro help %}
+{%- endmacro help -%}
 
-{% macro default() -%}
+{%- macro default() -%}
 	<div class="panel panel-default">
 	<div class="panel-heading">
-{%- endmacro default %}
+{%- endmacro default -%}
 
-{% macro warning() -%}
+{%- macro warning() -%}
 	<div class="panel panel-default">
 	<div class="panel-heading">
-{%- endmacro warning %}
+{%- endmacro warning -%}
 
-{% macro body() -%}
+{%- macro body() -%}
 	</div>
 	<div class="panel-body">
-{%- endmacro body %}
+{%- endmacro body -%}
 
-{% macro end() -%}
+{%- macro end() -%}
 	</div>
 	</div>
-{%- endmacro %}
-
-{% macro filter_datepicker(form_item) -%}
-	<div class="col-sm-5">
-	<div class="input-group margin-bottom">
-	<span class="input-group-addon" id="{{ form_item.vars.id }}_addon">{{ 'from_date'|trans }}
-	<span class="fa fa-calendar"></span></span>
-	{{ form_errors(form_item) }}
-	{{ form_widget(form_item, {'attr':{
-			'aria-describedby': form_item.vars.id ~ '_addon',
-			'data-provide': 'datepicker',
-			'data-date-format': datepicker_format(),
-			'data-date-default-view-date': '-1y',
-			'data-date-end-date': '0d',
-			'data-date-language': global.request.locale,
-			'data-date-today-highlight': 'true',
-			'data-date-autoclose': 'true',
-			'data-date-immediate-updates': 'true',
-			'data-date-orientation': 'bottom',
-			'placeholder': datepicker_placeholder()
-		}
-	}) }}
-	</div>
-	</div>
-{%- endmacro filter_datepicker %}
+{%- endmacro -%}

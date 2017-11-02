@@ -4,10 +4,10 @@ language: Nederlands
 var: %var%
 
 eland:
-  explain: >
+  explain: >-
     %link_eland_open%eLAND%link_close% web app 
     voor gemeenschapsmunten
-  github: >
+  github: >-
     Rapporteer bugs in de 
     %link_issues_open%Github issue tracker%link_close%
     (Maak eerst een 
@@ -16,13 +16,12 @@ eland:
   title: eLAND
 
 validation:
-  unique_in_column: >
+  unique_in_column: >-
     De waarde moet uniek zijn. "%value%" bestaat al.
 
 pagination:
   items_per_page: 'Per pagina:'
-  count_items_and_pages: >
-    Totaal %total%, Pagina %page% van %pages_total%
+  count_items_and_pages: Totaal %total%, Pagina %page% van %pages_total%
 
 # see the PHP strftime function
 # http://php.net/manual/en/function.strftime.php 
@@ -95,7 +94,7 @@ label:
   description: Omschrijving
   date: Datum  
   email: Email
-  email_confirmation_explain: >
+  email_confirmation_explain: >-
     We sturen je een bevestigings-link om je
     email adres te valideren.  
   email_letscode_username: Je email adres, LETScode of gebruikersnaam  
@@ -115,7 +114,7 @@ label:
   postcode: Postcode
   save_password: Bewaar paswoord
   slug: Slak
-  slug_explain: >
+  slug_explain: >-
     De "Slak" is het laatste gedeelte van de URL. 
     Deze kan uit kleine letters, cijfers en ingesloten koppeltekens bestaan. 
     Gebruik minstens 4 tekens en "index" voor de thuispagina.
@@ -178,9 +177,9 @@ or: of
 nor: noch
 
 error:
-  internal_configuration: >
+  internal_configuration: >-
     Interne configuratie fout van de web app.
-  404_page_not_found: >
+  404_page_not_found: >-
     Pagina niet gevonden.
 
 page_a_index:
@@ -238,7 +237,7 @@ transaction_show:
 
 transaction_edit:
   title: Transactie aanpassen
-  explain: >
+  explain: >-
     Enkel admins kunnen de omschrijving van 
     een transactie aanpassen.
     Dit kan nuttig zijn wanneer transacties 
@@ -274,7 +273,7 @@ news_index:
 news_add:
   title: Nieuwsbericht toevoegen
   success: Nieuwsbericht "%name%" is succesvol gecreëerd.
-  approve_info: >
+  approve_info: >-
     Je nieuwsbericht "%name%" wordt nagekeken door een
     beheerder alvorens het gepubliceerd wordt.
 
@@ -307,68 +306,68 @@ logout:
 
 password_reset:
   title: Paswoord reset
-  explain: >
+  explain: >-
     Stuur een link naar je mailbox waarmee 
     je je paswoord opnieuw kan instellen.
-  unknown_email_address: >
+  unknown_email_address: >-
     Dit email adres is niet gekend.
-  link_send_success: >
+  link_send_success: >-
     Een link om je paswoord te resetten
     werd gestuurd naar %email%. Deze link 
     blijft 4 uur geldig.
-  confirm_not_found: >
+  confirm_not_found: >-
     De link om je paswoord opnieuw in te 
     stellen is verlopen. Gelieve opnieuw te 
     proberen. 
 
 new_password:
   title: Nieuw paswoord instellen
-  explain: >
+  explain: >-
     Geef hier een nieuw paswoord in voor je account. 
 
 contact:
   title: Contact
-  confirm_email_info: >
+  confirm_email_info: >-
       Gelieve de bevestigingslink aan te 
       klikken in de email die we naar je adres 
       "%email%" verzonden hebben.
       Deze link blijft vier uur geldig.
-  success: >
+  success: >-
     Je bericht werd met succes verstuurd.
-  confirm_not_found: >
+  confirm_not_found: >-
     De link om je contactbericht te bevestigen
     is verlopen. Gelieve opnieuw te proberen.
 
 register:
   title: Inschrijven
   accept: Ik heb de privacy en aanvaard deze.
-  confirm_email_info: >
+  confirm_email_info: >-
     Klik om je registratie te bevestigen 
     op de link die naar je adres %email%
     werd gestuurd.
-  confirm_not_found: >
+  confirm_not_found: >-
     De bevestigingslink voor je registratie 
     is verlopen. Gelieve opnieuw te proberen.
 
 hosting_request:
   title: Aanvraag hosting eLAND
-  explain: >
+  explain: >-
     Vraag met dit formulier vrijblijvend gratis 
     hosting van eLAND voor je munt of groep aan. 
-  privacy: >
+  privacy: >-
     Privacy: uw email adres wordt voor 
     geen enkel ander doel
     gebruikt dan u terug te kunnen contacteren.
-  confirm_email_info: >
+  confirm_email_info: >-
     Klik om je hostingaavraag te bevestigen op 
     de link die naar je adres %email% werd
     verstuurd.
-  success: >
+  success: >-
     <h3>Uw aanvraag voor eLAND hosting is verstuurd.</h3>
     <p>We nemen zo spoedig mogelijk contact met u op.</p>
   mail:
     subject: 'Aanvraag hosting: %group_name%'
-  confirm_not_found:
+  confirm_not_found: >-
     De bevestigingslink voor uw aanvraag is verlopen.
     Gelieve opnieuw te proberen.
 
@@ -390,10 +389,10 @@ category_index:
   name: Naam
   count_wants: Vraag
   count_offers: Aanbod
-  explain_delete: >
+  explain_delete: >-
     Categorieën met berichten of hoofdcategorieën 
     met subcategorieën kan je niet verwijderen.
-  explain_subcategory: >
+  explain_subcategory: >-
     Enkel subcategorieën kunnen berichten bevatten.
 
 category_add:
@@ -402,25 +401,25 @@ category_add:
 
 category_edit:
   title: 'Categorie aanpassen: "%name%"'
-  explain_sub: >
+  explain_sub: >-
     Een subcategorie met één of meerdere
     vraag en aanbod berichten 
     kan geen hoofdcategorie worden.
-  explain_root: >
+  explain_root: >-
     Een hoofdcategorie met één of meerdere 
     subcategorieën kan geen subcategorie 
     worden.
-  success: >
+  success: >-
     De wijzigingen aan categorie "%name%" werden 
     met succes opgeslagen.
 
 category_del:
   title: 'Categorie verwijderen: "%name%"'
   btn: Categorie verwijderen
-  warning: >
+  warning: >-
     Ben je zeker dat categorie "%name%" 
     verwijderd moet worden?
-  success: >
+  success: >-
     Categorie "%name%" is met succes verwijderd.
 
 type_contact:
@@ -430,7 +429,7 @@ type_contact:
 type_contact_index:
   title: Contact types
   contact_count: Contacten
-  explain_protected: >
+  explain_protected: >-
     Beschermde contact types (*)
     en contact types waarvan 
     contacten bestaan kunnen niet 
@@ -438,12 +437,12 @@ type_contact_index:
 
 type_contact_add:
   title: Contact type toevoegen
-  success: >
+  success: >-
     Het contact type "%name%" is toegevoegd.
 
 type_contact_edit:
   title: 'Contact type aanpassen: "%name%"'
-  success: >
+  success: >-
     De wijzigingen aan het contact type 
     "%name%" werden 
     met succes opgeslagen.
@@ -451,10 +450,10 @@ type_contact_edit:
 type_contact_del:
   title: 'Contact type verwijderen: "%name%"'
   btn: Contact type verwijderen
-  warning: >
+  warning: >-
     Ben je zeker dat contact type "%name%" 
     verwijderd moet worden?
-  success: >
+  success: >-
     Contact type "%name%" is met 
     succes verwijderd.
 
@@ -503,9 +502,9 @@ export:
   title: Export
   elas:
     db:
-      title: >
+      title: >-
         eLAS database download (SQL)
-      explain: > 
+      explain: >-
         Database in eLAS formaat. Wanneer
         deze file in eLAS geïmporteerd 
         dient te worden, verwijder dan de 
@@ -540,7 +539,7 @@ export:
 auto_min_limit:
   title: Automatische minimimum limiet
   menu: Auto min limiet
-  explain: >
+  explain: >-
     Met dit formulier kan een automatische minimum 
     limiet ingesteld worden. De individuele minimum 
     limiet van gebruikers zal zo automatisch lager 
@@ -555,18 +554,18 @@ auto_min_limit:
     dan blijft de individuele minimum limiet telkens 
     dalen bij elke transactie naar het account.
   enabled:
-    label: >
+    label: >-
       Schakel de automatische minimum limiet in.
   trans_percentage:
-    label: >
+    label: >-
       Percentage van ontvangen bedrag
-    sub_label: >
+    sub_label: >-
       Ontvangen transacties laten de 
       minimum limiet dalen volgens dit percentage.
   exclusive:
-    label: >
+    label: >-
       Exclusief de accounts
-    sub_label: >
+    sub_label: >-
       De automatische minimum limiet is enkel 
       van toepassing op actieve accounts die rol 
       van gewone gebruiker hebben (user) en die 
@@ -574,9 +573,9 @@ auto_min_limit:
       Hier kunnnen nog verder 
       individuele accounts uitgesloten worden.
   trans_exclusive:
-    label: >
+    label: >-
       Exclusief de accounts van tegenpartijen
-  success: >
+  success: >-
     De automatische minimum limiet 
     instellingen zijn aangepast.
 
@@ -591,56 +590,56 @@ log:
 
 form:
   etoken:
-    expired: > 
+    expired: >-
       De maximale duurtijd van het formulier 
       is overschreden.
       Gelieve het opnieuw te proberen. 
-    double: >
+    double: >-
       Een dubbele invoer van het formulier werd voorkomen.
 
 mail:
-  no_reply: >
+  no_reply: >-
     Dit is een automatische mail. Niet beantwoorden a.u.b.
   footer: %systemname%
   confirm:
     subject: Bevestiging gevraagd
-    explain: > 
+    explain: >-
       Bevestig je email adres door op de link hieronder
       te klikken
-    expiration: >
+    expiration: >-
       Deze link blijft 4 uur geldig.
   confirm_hosting_request:
     subject: Bevestig je aanvraag voor hosting
-    explain: >
+    explain: >-
       Bevestig je aanvraag voor eLAND-hosting door
       op de link hieronder te klikken.
-    expiration: >
+    expiration: >-
       Deze link blijft 4 uur geldig. Gelieve deze
       mail te negeren wanneer je niet zelf een aanvraag
       tot hosting hebt gedaan via onze website.
   confirm_contact:
     subject: Bevestiging van je bericht gevraagd
-    explain: >
+    explain: >-
       Bevestig je bericht in het contactformulier door 
       op de link hieronder te klikken. 
-    expiration: >
+    expiration: >-
       Deze link blijft 4 uur geldig. Gelieve deze mail te
       negeren wanneer je niet zelf een bericht hebt verstuurd
       via ons contactformulier.
   confirm_register:
     subject: Bevestiging van je registratie gevraagd
-    explain: >
+    explain: >-
       Bevestig je registratie door op de link hieronder 
       te klikken.
-    expiration: >
+    expiration: >-
       Deze link blijft 4 uur geldig. Gelieve deze mail te
       negeren wanneer je niet zelf ons registratieformulier
       hebt ingevuld.
   confirm_password_reset:
     subject: Paswoord reset link
-    explain: >
+    explain: >-
       Met deze link kan je opnieuw je paswoord instellen.
-    expiration: >
+    expiration: >-
       Deze link blijft 4 uur geldig. Gelieve deze mail te
       negeren wanneer je niet zelf hebt een paswoord reset
       hebt aangevraagd op onze website.
@@ -653,46 +652,43 @@ mail:
     subject: Aanvraag hosting voor %group_name%
   news_review_admin:
     subject: Beoordeling nieuwsbericht "%name%"
-    message: >
+    message: >-
       Een nieuw nieuwsbericht met titel "%name%"
       werd ingegeven op de website. Ga naar het bericht
       om het (al dan niet) goed te keuren voor publicatie.
 
   support: Support
   overview:
-    offers_and_wants: >
+    offers_and_wants: >-
       Vraag en aanbod
-    offers_and_wants_explain: >
+    offers_and_wants_explain: >-
       Deze lijst bevat vraag en aanbod dat de afgelopen %saldofreqdays%
       dagen online is geplaatst.
-    offers_and_wants_none: >
+    offers_and_wants_none: >-
       Er werd geen nieuw vraag of aanbod online geplaatst.
-    interlets_offers_and_wants: >
+    interlets_offers_and_wants: >-
       Recent interLETS vraag en aanbod
     docs: >
       Nieuwe documenten
-    docs_none: >
+    docs_none: >-
       Er zijn geen nieuwe documenten.
     new_users: Nieuwe leden
-    new_users_none: >
+    new_users_none: >-
       Momenteel zijn er geen nieuwe leden.
-    new_users_no_recent: >
+    new_users_no_recent: >-
       Er zijn geen nieuwe leden bijgekomen.
     leaving_users: Uitstappers
-    leaving_users_none: >
+    leaving_users_none: >-
       Momenteel zijn er geen uitstappende leden.
-    leaving_users_no_recent: >
+    leaving_users_no_recent: >-
       Er zijn geen extra uitstappende leden.
     transactions: Recente transacties
-    transactions_explain: >
+    transactions_explain: >-
       Deze lijst toont de transacties van de laatste %saldofreqdays% dagen.
-    transactions_none: >
+    transactions_none: >-
       Er zijn geen recente transacties.
 
 index:
   title: eLAND
-
-
-
 
 

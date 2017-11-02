@@ -1,12 +1,10 @@
 {%- macro view(route, all_params, view_ary, current_view) -%}
-{%- set fa = {'list': 'align-justify', 'map': 'map-marker', 'extended': 'th-list', 'tiles': 'th'} -%}
+    {%- set fa = {'list': 'align-justify', 'map': 'map-marker', 'extended': 'th-list', 'tiles': 'th'} -%}
     <span class="pull-right hidden-xs">
     <span class="btn-group" role="group">
     {%-for view, title in view_ary -%}
-    <a href="{{- path(route, all_params|merge({'view': view})) -}}" 
-    title="{{- title|trans -}}" 
-    class="btn btn-default{%- if current_view == view %} active{%- endif -%}">
-    <i class="fa fa-{{- fa[view] -}}"></i> 
+        <a href="{{- path(route, all_params|merge({'view': view})) -}}" title="{{- title|trans -}}" class="btn btn-default{%- if current_view == view %} active{%- endif -%}">
+        <i class="fa fa-{{- fa[view] -}}"></i> 
     {%- endfor -%}
     </span>
     </span>
