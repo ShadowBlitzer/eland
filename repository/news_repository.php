@@ -88,23 +88,27 @@ class news_repository
 		$this->xdb->del('news_access', $id, $schema);
 	}
 
-	public function next(int $id, string $schema, array $access_ary)
+	public function get_next(int $id, string $schema, array $access_ary)
 	{
-		$rows = $this->xdb->get_many(['agg_schema' => $schema,
-			'agg_type' => 'news_access',
-			'eland_id' => ['>' => $id],
-			'access' => $access_ary], 
-			'order by eland_id asc limit 1');
+		$rows = $this->xdb->get_many([
+			'agg_schema' 	=> $schema,
+			'agg_type' 		=> 'news_access',
+			'eland_id' 		=> ['>' => $id],
+			'access' 		=> $access_ary,
+		], 
+		'order by eland_id asc limit 1');
 
 		return count($rows) ? reset($rows)['eland_id'] : null;
 	}
 
-	public function prev(int $id, string $schema, array $access_ary)
+	public function get_prev(int $id, string $schema, array $access_ary)
 	{
-		$rows = $this->xdb->get_many(['agg_schema' => $schema,
+		$rows = $this->xdb->get_many([
+			'agg_schema' => $schema,
 			'agg_type' => 'news_access',
 			'eland_id' => ['<' => $id],
-			'access' => $access_ary], 'order by eland_id desc limit 1');
+			'access' => $access_ary,
+		], 'order by eland_id desc limit 1');
 
 		return count($rows) ? reset($rows)['eland_id'] : null;
 	}

@@ -8,9 +8,9 @@
 	{{- tb.add(path('news_add', acc_sch), 'news.title_top_btn.add') -}}
 {%- endblock top_buttons -%}
 
-{%- block heading_right -%}
-{{- bg.view(route, all_params, {'list': 'view.list', 'extended': 'view.extended'}, view) -}}
-{%- endblock heading_right -%}
+{%- block top_buttons_right -%}
+	{{- bg.view(route, all_params, {'list': 'view.list', 'extended': 'view.extended'}, view) -}}
+{%- endblock top_buttons_right -%}
 
 {%- block inner -%}
 	{{- pg.pagination(route, all_params, pagination) -}}

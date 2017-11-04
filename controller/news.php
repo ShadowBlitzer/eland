@@ -174,6 +174,11 @@ class news
 			$vars['approve_form'] = $approve_form->createView();
 		}
 
+		$access_ary = ['public', 'interlets', 'users', 'admin'];
+
+		$vars['prev'] = $app['news_repository']->get_prev($news['id'], $schema, $access_ary);
+		$vars['next'] = $app['news_repository']->get_next($news['id'], $schema, $access_ary);
+
 		return $app['twig']->render('news/' . $access . '_show.html.twig', $vars);
 	}
 

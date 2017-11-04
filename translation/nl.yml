@@ -145,6 +145,11 @@ view:
   map: Kaart
   tiles: Tegels
 
+nav:
+  next: Volgende
+  overview: Overzicht
+  previous: Vorige
+
 tag:
   filtered: Gefilterd
 

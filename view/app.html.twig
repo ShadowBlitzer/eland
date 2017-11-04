@@ -47,6 +47,8 @@
 
 	{%- block flash -%}{{- f.flash() -}}{%- endblock flash -%}
 
+	{%- block top_buttons_before -%}{%- endblock -%}
+
 	<div class="row">
 	<div class="col-md-12 top-buttons">
 	<div class="visible-xs pull-left button-offcanvas">
@@ -56,8 +58,11 @@
 
 	{%- block top_buttons -%}{%- endblock -%}
 	{%- block top_buttons_right -%}{%- endblock -%}
+
 	</div>
 	</div>
+
+	{%- block top_buttons_after -%}{%- endblock -%}
 
 	{%- block top_right_container -%}
 		<div class="pull-right">
