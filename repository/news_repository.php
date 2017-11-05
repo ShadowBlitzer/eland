@@ -70,6 +70,8 @@ class news_repository
 	public function update(int $id, array $data, string $schema)
 	{
 		$data['sticky'] = $data['sticky'] ? 't' : 'f';
+		$data['approved'] = $data['approved'] ? 't' : 'f';
+		$data['published'] = 't';
 		$access = $data['access'];
 		unset($data['access']);
 		
