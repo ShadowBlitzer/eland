@@ -22,7 +22,7 @@
 {% if n.itemdate -%}
 	<dt>{{- 'label.event_date'|trans -}}</dt>
 	<dd>{{- n.itemdate|web_date('day') -}}
-	{%- if n.sticky %} <i>({{- 'news.is_kept_after_date'|trans -}}</i>){%- endif -%}
+	{%- if n.sticky %} <i>({{- 'news.is_kept_after_date'|trans -}})</i>{%- endif -%}
 	</dd>
 {%- endif %}
 <dt>{{- 'label.access'|trans -}}</dt>

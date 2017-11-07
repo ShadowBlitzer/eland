@@ -264,9 +264,9 @@ news:
     edit: Nieuwsbericht aanpassen
     del: Nieuwsbericht verwijderen
     approve: Nieuwsbericht goedkeuren
-  no_items: >
+  no_items: >-
     Er zijn momenteel geen nieuwsberichten.
-  is_kept_after_date: >
+  is_kept_after_date: >-
     Nieuwsbericht blijft behouden na datum
   approve:
     success: Nieuwsbericht "%name%" is goedgekeurd.
