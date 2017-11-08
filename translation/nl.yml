@@ -275,6 +275,9 @@ news:
 news_index:
   title: Nieuws
 
+news_show:
+  title: "Nieuwsbericht: %name%"
+
 news_add:
   title: Nieuwsbericht toevoegen
   success: Nieuwsbericht "%name%" is succesvol gecreëerd.

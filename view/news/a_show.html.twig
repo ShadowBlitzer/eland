@@ -27,6 +27,10 @@
     {%- endif -%}  
 {%- endblock top_buttons_after -%}
 
+{%- block heading -%}
+    {{- 'news_show.title'|trans({'%name%': news.headline}) -}}
+{%- endblock heading -%}
+
 {% block inner -%}
 
 {% embed 'news/item.html.twig' with {'n': news} %}

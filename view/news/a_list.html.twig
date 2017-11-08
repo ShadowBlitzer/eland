@@ -6,9 +6,9 @@
 
 {% set view = 'list' %}
 
-{%- block top_right -%}
-{{- p.csv() -}}
-{%- endblock -%}
+{%- block csv -%}
+	{{- p.csv() -}}
+{%- endblock csv -%}
 
 {%- block js -%}
 	{{- a.js('csv.js') -}}
