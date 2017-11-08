@@ -8,59 +8,65 @@
 {% import 'macro/pagination.html.twig' as pg %}
 
 {%- block css -%}
-{%- include 'asset/datepicker_css.html.twig' -%}
+	{%- include 'asset/datepicker_css.html.twig' -%}
 {%- endblock css -%}
 
 {%- block js -%}
-{%- include 'asset/datepicker_js.html.twig' -%}
-{{- a.js('csv.js') -}}
+	{%- include 'asset/datepicker_js.html.twig' -%}
+	{{- a.js('csv.js') -}}
 {%- endblock js -%}
 
 {%- block top_buttons -%}
-{{- tb.add(path('transaction_add', acc_sch), 'transaction.title_top_btn.add') -}}
+	{{- tb.add(path('transaction_add', acc_sch), 'transaction.title_top_btn.add') -}}
 {%- endblock top_buttons -%}
 
-{%- block top_right -%}
-{{- p.csv() -}}
-{%- endblock -%}
+{%- block csv -%}
+	{{- p.csv() -}}
+{%- endblock csv -%}
+
+{%- block heading_right -%}
+	<span class="pull-right">
+	{{- p.filter_toggle_btn() -}}
+	</span>
+{%- endblock heading_right -%}
 
 {%- block inner -%}
 
-{%- include 'transaction/filter_form.html.twig' -%}
+	{%- include 'transaction/filter_form.html.twig' -%}
 
-{%- set cols = {
-	'description': {
-		'lbl': 'description',
-		'route': 'transaction_show',
-		'route_key': 'transaction',
-		'route_col_id': 'id'
-	},
-	'amount': {
-		'lbl': 'amount'	
-	},
-	'cdate': {
-		'lbl': 'time',
-		'hide': 'phone',
-		'render': 'date'
-	},
-	'id_from': {
-		'lbl': 'from', 
-		'hide':'phone',
-        'render': 'user'
-	},
-	'id_to': {
-		'lbl': 'to', 
-		'hide':'phone',
-        'render': 'user'
+	{%- set cols = {
+		'description': {
+			'lbl': 'description',
+			'route': 'transaction_show',
+			'route_key': 'transaction',
+			'route_col_id': 'id'
+		},
+		'amount': {
+			'lbl': 'amount'	
+		},
+		'cdate': {
+			'lbl': 'time',
+			'hide': 'phone',
+			'render': 'date'
+		},
+		'id_from': {
+			'lbl': 'from', 
+			'hide':'phone',
+			'render': 'user'
+		},
+		'id_to': {
+			'lbl': 'to', 
+			'hide':'phone',
+			'render': 'user'
+		}
 	}
-}
--%}
+	-%}
 
-{{- pg.pagination(route, all_params, pagination) -}}
-{{- t.start() -}}
-{{- t.head(cols, route, all_params, sort) -}}
-{{- t.body(transactions, cols, acc_sch) -}}
-{{- t.end() -}}
-{{- pg.pagination(route, all_params, pagination) -}}
+	{{- pg.pagination(route, all_params, pagination) -}}
+	{{- t.start() -}}
+	{{- t.head(cols, route, all_params, sort) -}}
+	{{- t.body(transactions, cols, acc_sch) -}}
+	{{- t.end() -}}
+	{{- pg.pagination(route, all_params, pagination) -}}
 
 {%- endblock inner -%}

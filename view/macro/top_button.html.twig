@@ -19,11 +19,6 @@
         'attr': {'class': 'btn-warning', 'title': title}}) -}}&nbsp;
 {%- endmacro approve -%}
 
-{%- macro list(href, title, fa) -%}
-    {%- import _self as b -%}
-    {{- b.button(href, title, 'btn.list', 'default', fa) -}}
-{%- endmacro list -%}
-
 {%- macro button(href, title, label, class, fa) -%}
     <a href="{{- href -}}" class="btn btn-{{- class -}}" title="{{- title|trans -}}">
     <i class="fa fa-{{- fa -}}"></i>
