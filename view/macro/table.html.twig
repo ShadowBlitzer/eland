@@ -13,7 +13,7 @@
             {%- set order = sort.col == column ? (sort.order == 'asc' ? 'desc' : 'asc') : sort.columns[column] -%} 
             <a href="{{- path(route, all_params|merge({'s':{'col': column, 'order': order}, 'p':{'start': null, 'limit': all_params.p.limit ?? null}})) -}}">
         {%- endif -%}
-        {{- data['lbl']|trans({'lbl_var': data.lbl_var|default('')}) -}}
+        {{- data['lbl']|trans({'%var%': data.lbl_var|default('')}) -}}
         {%- if sort.columns[column] is defined %} <i class="fa fa-sort{%- if column == sort.col -%}-{{- sort.order -}}{%- endif -%}">
         </a>    
         {%- endif -%}

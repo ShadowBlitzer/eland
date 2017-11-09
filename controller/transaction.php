@@ -149,6 +149,8 @@ class transaction
 	{
 		return $app['twig']->render('transaction/' . $access . '_show.html.twig', [
 			'transaction'	=> $transaction,
+			'prev'			=> $app['transaction_repository']->get_prev($transaction['id'], $schema),
+			'next'			=> $app['transaction_repository']->get_next($transaction['id'], $schema),
 		]);
 	}
 

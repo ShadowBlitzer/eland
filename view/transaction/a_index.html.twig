@@ -36,26 +36,27 @@
 
 	{%- set cols = {
 		'description': {
-			'lbl': 'description',
+			'lbl': 'label.description',
 			'route': 'transaction_show',
 			'route_key': 'transaction',
 			'route_col_id': 'id'
 		},
 		'amount': {
-			'lbl': 'amount'	
+			'lbl': 'var',
+			'lbl_var': config('currency', schema)	
 		},
 		'cdate': {
-			'lbl': 'time',
+			'lbl': 'label.time',
 			'hide': 'phone',
 			'render': 'date'
 		},
 		'id_from': {
-			'lbl': 'from', 
+			'lbl': 'label.from', 
 			'hide':'phone',
 			'render': 'user'
 		},
 		'id_to': {
-			'lbl': 'to', 
+			'lbl': 'label.to', 
 			'hide':'phone',
 			'render': 'user'
 		}

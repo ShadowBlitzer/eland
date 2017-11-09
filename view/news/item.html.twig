@@ -6,11 +6,13 @@
 
 <div class="media">
 <div class="media-body">
-<h3 class="media-heading">
-<a href="{{ path('news_show', acc_sch|merge({'news': n.id})) -}}">
-{{- n.headline -}}
-</a>
-</h3>
+{%- block media_heading -%}
+	<h3 class="media-heading">
+	<a href="{{- path('news_show', acc_sch|merge({'news': n.id})) -}}">
+	{{- n.headline -}}
+	</a>
+	</h3>
+{%- endblock media_heading -%}
 <p>
 {{- n.newsitem -}}
 </p>

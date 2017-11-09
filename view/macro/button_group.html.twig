@@ -16,7 +16,7 @@
     <span class="pull-right">
     <span class="btn-group" role="group">
     <a href="{{- path(entity~'_index', acc_sch|view(entity)) -}}" title="{{- 'nav.overview'|trans -}}" class="btn btn-default">
-    {{- bg.fa_view(({}|view(entity))['view']) -}}    
+    {{- bg.fa_view(({}|view(entity))['view']|default('list')) -}}    
     </a>
     {%- if prev -%}
         <a href="{{- path(entity~'_show', acc_sch|merge({(entity): prev})) -}}" title="{{- 'nav.previous'|trans -}}" class="btn btn-default">

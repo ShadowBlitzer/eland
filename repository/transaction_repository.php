@@ -34,4 +34,22 @@ class transaction_repository
 
 		return $data;
 	}
+
+	public function get_next(int $id, string $schema)
+	{
+		return $this->db->fetchColumn('select id 
+			from ' . $schema . '.transactions 
+			where id > ? 
+			order by id asc 
+			limit 1', [$id]) ?? null;
+	}
+
+	public function get_prev(int $id, string $schema)
+	{
+		return $this->db->fetchColumn('select id
+			from ' . $schema . '.transactions
+			where id < ?
+			order by id desc
+			limit 1', [$id]) ?? null;
+	}
 }

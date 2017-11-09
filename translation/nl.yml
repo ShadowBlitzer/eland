@@ -120,8 +120,10 @@ label:
     Gebruik minstens 4 tekens en "index" voor de thuispagina.
   subject: Onderwerp
   telephone: Telefoon
+  time: Tijdstip
   title: Titel
   to: Naar
+  transaction_id: Transactie id
   your_email: Je email adres
   your_message: Je bericht
 
