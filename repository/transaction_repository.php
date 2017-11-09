@@ -52,4 +52,9 @@ class transaction_repository
 			order by id desc
 			limit 1', [$id]) ?? null;
 	}
+
+	public function update_description(int $id, string $description, string $schema)
+	{
+		$this->db->update($schema . '.transactions', ['description'	=> $description], ['id' => $id]);
+	}
 }

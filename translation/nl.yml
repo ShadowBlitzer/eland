@@ -243,13 +243,14 @@ transaction_show:
   title: Transactie
 
 transaction_edit:
-  title: Transactie aanpassen
+  title: Transactie omschrijving aanpassen
   explain: >-
     Enkel admins kunnen de omschrijving van 
     een transactie aanpassen.
     Dit kan nuttig zijn wanneer transacties 
     zichtbaar zijn onder leden en 
     de omschrijving ongepast is.
+  success: De omschrijving van de transactie is aangepast.
 
 transaction_add:
   title: Transactie ingeven

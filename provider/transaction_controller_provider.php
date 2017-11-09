@@ -20,13 +20,11 @@ class transaction_controller_provider implements ControllerProviderInterface
             ->bind('transaction_show');
         $transaction->match('/add', 'controller\\transaction::add')
             ->bind('transaction_add');
-        $transaction->get('/{transaction}/edit', 'controller\\transacion::edit')
+        $transaction->match('/{transaction}/edit', 'controller\\transaction::edit')
             ->convert('transaction', 'transaction_converter:get')
             ->bind('transaction_edit');
         $transaction->match('/add-interlets', 'controller\\transaction::add_interlets')
             ->bind('transaction_add_interlets');
-        $transaction->match('/{transaction}/edit', 'controller\\transaction::edit')
-            ->bind('transaction_edit');
         $transaction->get('/plot-user/{user}/{days}', 'controller\\transaction::plot_user')
             ->assert('user', '\d+')
             ->assert('days', '\d+')

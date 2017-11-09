@@ -211,15 +211,17 @@ class transaction
 
 	public function edit(Request $request, app $app, string $schema, string $access, array $transaction)
 	{
-
-		$form = $app['form.factory']->createBuilder(FormType::class, $transaction)
-			->add('first_name')
-			->add('last_name')
-			->add('email', EmailType::class)
-			->add('postcode')
-			->add('gsm', TextType::class, ['required'	=> false])
-			->add('tel', TextType::class, ['required'	=> false])
-			->add('zend', SubmitType::class)
+		$form = $app->form($transaction)
+			->add('description', addon_type::class, [
+				'constraints' 	=> [
+					new Assert\NotBlank(),
+					new Assert\Length(['max' => 60, 'min' => 1]),
+				],
+				'attr'	=> [
+					'maxlength'	=> 60,
+				],
+			])
+			->add('submit', SubmitType::class)
 			->getForm();
 
 		$form->handleRequest($request);
@@ -228,15 +230,20 @@ class transaction
 		{
 			$data = $form->getData();
 
-			// do something with the data
+			$app['transaction_repository']->update_description(
+				$transaction['id'], $data['description'], $schema);
 
-			// redirect somewhere
-			return $app->redirect('...');
+			$app->success('transaction_edit.success');
+			
+			return $app->reroute('transaction_show', [
+				'schema'		=> $schema,
+				'access'		=> $access,
+				'transaction'	=> $transaction['id'],
+			]);
 		}
 
-		return $app['twig']->render('transaction/' . $access . '_register.html.twig', [
+		return $app['twig']->render('transaction/a_edit.html.twig', [
 			'form' 		=> $form->createView(),
-			'filtered'	=> $filtered,
 		]);
 	}
 

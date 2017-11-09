@@ -1,11 +1,19 @@
 {% extends 'admin.html.twig' %}
 
-{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
 
-{% block inner %}
+{%- block heading -%}
+    {{- 'transaction_edit.title'|trans -}}
+{%- endblock heading -%}
 
-<p>ADMIN ACCOUNT INDEX</p>
-
-{% endblock inner %}
-
-
+{%- block inner -%}
+    <p>{{- 'transaction_edit.explain'|trans -}}</p>
+     {{- p.form_start(form) -}}
+    {%- embed 'transaction/item.html.twig' with {'t': form.vars.value} -%}
+    {%- endembed -%}
+    {{- form_row(form.description, {'label': 'label.description', 'addon_fa': 'pencil'}) -}}
+    {{- b.cancel(path('transaction_show', acc_sch|merge({'transaction': form.vars.value.id }))) -}}
+    {{- b.edit(form.submit) -}}
+    {{- p.form_end(form) -}}
+{%- endblock inner -%}

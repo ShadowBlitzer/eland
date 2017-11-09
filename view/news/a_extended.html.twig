@@ -13,7 +13,7 @@
 {%- for n in news -%}
 
 	{%- embed 'news/item.html.twig' -%}
-		{% import 'macro/button.html.twig' as b %}
+		{%- import 'macro/button.html.twig' as b -%}
 		{%- block admin_buttons -%}
 			<span class="inline-buttons pull-right">
 			{%- if n.approve_button is defined -%}
