@@ -1,6 +1,6 @@
 <?php
 
-namespace form;
+namespace form\input;
 
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use form\addon_type;
+use form\input\addon_type;
 
 class number_addon_type extends addon_type
 {

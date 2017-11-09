@@ -7,10 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints as Assert;
+
 use util\sort;
 use util\pagination;
-use form\news_type;
-use form\buttonform_type;
+use form\post\news_type;
 use exception\invalid_parameter_value_exception;
 
 class news

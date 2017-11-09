@@ -1,6 +1,6 @@
 <?php
 
-namespace form;
+namespace form\post;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

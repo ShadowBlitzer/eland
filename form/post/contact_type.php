@@ -1,6 +1,6 @@
 <?php
 
-namespace form;
+namespace form\post;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -8,7 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use form\email_addon_type;
+
+use form\input\email_addon_type;
 
 class contact_type extends AbstractType
 {	

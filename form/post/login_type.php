@@ -1,6 +1,6 @@
 <?php
 
-namespace form;
+namespace form\post;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -9,8 +9,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Connection as db;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use form\addon_type;
-use form\password_addon_type;
+
+use form\input\addon_type;
+use form\input\password_addon_type;
 
 class login_type extends AbstractType
 {	

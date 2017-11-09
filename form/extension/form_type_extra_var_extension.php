@@ -1,6 +1,6 @@
 <?php
 
-namespace form;
+namespace form\extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;

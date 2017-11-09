@@ -1,27 +1,30 @@
 <?php
 
-namespace form;
+namespace form\input;
 
-use Doctrine\DBAL\Connection as db;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use validator\unique_in_column;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
+use form\input\addon_type;
+use transformer\datepicker_transformer;
 
-class type_contact_type extends AbstractType
+class datepicker_type extends AbstractType
 {
-    private $db;
-    private $schema;
-
-    public function __construct(db $db, string $schema)
+    private $transformer;
+    
+    public function __construct(datepicker_transformer $transformer)
     {
-        $this->db = $db;
-        $this->schema = $schema;
+        $this->transformer = $transformer;
     }
 
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->addModelTransformer($this->transformer);
+    }
+/*
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('abbrev', TextType::class, [			
@@ -29,8 +32,8 @@ class type_contact_type extends AbstractType
                 new Assert\NotBlank(),
                 new Assert\Length(['max' => 10, 'min' => 1]),
                 new unique_in_column([
-                    'db'        => $this->db,
-                    'schema'    => $this->schema,
+                    'db'        => $options['db'],
+                    'schema'    => $options['schema'],
                     'table'     => 'type_contact',
                     'column'    => 'abbrev',
                     'ignore'    => $options['ignore'],
@@ -53,12 +56,37 @@ class type_contact_type extends AbstractType
 
             ->add('submit', SubmitType::class);
     }
+    */
+
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        /*
+        if (isset($options['fa'])) 
+        {
+            $view->vars['fa'] = $options['fa'];
+        }
+
+        if (isset($options['addon_label'])) 
+        {
+            $view->vars['addon_label'] = $options['addon_label'];
+        }
+        */
+    }    
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'blocked_ary'   => [],
-            'ignore'        => null,
+            'schema'        => null,
         ]);
+    }
+
+    public function getParent()
+    {
+        return addon_type::class;
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'datepicker';
     }
 }

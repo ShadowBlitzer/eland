@@ -145,7 +145,7 @@ $app->extend('translator', function($translator, $app) {
 });
 
 $app['etoken_manager'] = function ($app){
-	return new form\etoken_manager($app['predis']);
+	return new form\extension\etoken_manager($app['predis']);
 };
 
 $app->register(new Silex\Provider\FormServiceProvider());
@@ -156,11 +156,11 @@ $app->register(new Silex\Provider\MonologServiceProvider(), []);
 
 $app->extend('form.type.extensions', function($extensions) use ($app) {
 
-    $extensions[] = new form\form_type_etoken_extension(
+    $extensions[] = new form\extension\form_type_etoken_extension(
 		$app['etoken_manager'], $app['translator']
 	);
 
-	$extensions[] = new form\form_type_extra_var_extension();
+	$extensions[] = new form\extension\form_type_extra_var_extension();
 
     return $extensions;
 });
@@ -190,29 +190,29 @@ $app['datepicker_transformer'] = function ($app){
 };
 
 $app['datepicker_type'] = function ($app) {
-    return new form\datepicker_type($app['datepicker_transformer']);
+    return new form\input\datepicker_type($app['datepicker_transformer']);
 };
 
 $app['page_type'] = function ($app){
-	return new form\page_type();
+	return new form\post\page_type();
 };
 
 $app['category_type'] = function ($app) {
-	return new form\category_type($app['db'], 
+	return new form\post\category_type($app['db'], 
 		$app['translator'], $app['schema']);
 };
 
 $app['type_contact_type'] = function ($app) {
-	return new form\type_contact_type($app['db'], $app['schema']);
+	return new form\post\type_contact_type($app['db'], $app['schema']);
 };
 
 $app['typeahead_type_attr'] = function ($app) {
-	return new form\typeahead_type_attr($app['thumbprint'],
+	return new form\typeahead\typeahead_type_attr($app['thumbprint'],
 		$app['request_stack'], $app['url_generator']);
 };
 
 $app['typeahead_type'] = function ($app) {
-	return new form\typeahead_type($app['typeahead_type_attr']);
+	return new form\typeahead\typeahead_type($app['typeahead_type_attr']);
 };
 
 $app['typeahead_user_transformer'] = function ($app) {
@@ -220,11 +220,11 @@ $app['typeahead_user_transformer'] = function ($app) {
 };
 
 $app['typeahead_user_type'] = function ($app) {
-	return new form\typeahead_user_type($app['typeahead_user_transformer']);
+	return new form\typeahead\typeahead_user_type($app['typeahead_user_transformer']);
 };
 
 $app['transaction_filter_type'] = function ($app) {
-	return new form\transaction_filter_type();
+	return new form\filter\transaction_filter_type();
 };
 
 $app->extend('monolog', function($monolog, $app) {

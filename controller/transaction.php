@@ -15,8 +15,9 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints as Assert;
-use form\number_addon_type;
-use form\addon_type;
+
+use form\input\number_addon_type;
+use form\input\addon_type;
 
 class transaction
 {
@@ -163,8 +164,6 @@ class transaction
 	{
 
 		$data = [
-			'name' => 'Your name',
-			'email' => 'Your email',
 		];
 
 		$form = $app['form.factory']->createBuilder(FormType::class, $data)
@@ -210,15 +209,10 @@ class transaction
 		]);
 	}
 
-	public function edit(Request $request, app $app, string $schema, string $access)
+	public function edit(Request $request, app $app, string $schema, string $access, array $transaction)
 	{
 
-		$data = [
-			'name' => 'Your name',
-			'email' => 'Your email',
-		];
-
-		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+		$form = $app['form.factory']->createBuilder(FormType::class, $transaction)
 			->add('first_name')
 			->add('last_name')
 			->add('email', EmailType::class)

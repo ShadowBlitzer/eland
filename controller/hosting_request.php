@@ -4,7 +4,8 @@ namespace controller;
 
 use util\app;
 use Symfony\Component\HttpFoundation\Request;
-use form\hosting_request_type;
+
+use form\post\hosting_request_type;
 
 class hosting_request
 {

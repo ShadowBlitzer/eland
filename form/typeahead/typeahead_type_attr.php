@@ -1,10 +1,11 @@
 <?php
 
-namespace form;
+namespace form\typeahead;
 
 use service\thumbprint;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+
 use exception\conflicting_options_exception;
 use exception\invalid_format_exception;
 use exception\missing_options_exception;

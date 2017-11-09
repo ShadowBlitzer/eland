@@ -1,6 +1,6 @@
 <?php
 
-namespace form;
+namespace form\extension;
 
 interface etoken_manager_interface
 {

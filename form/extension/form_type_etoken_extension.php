@@ -1,6 +1,6 @@
 <?php
 
-namespace form;
+namespace form\extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormEvents;
@@ -13,6 +13,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Util\ServerParams;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatorInterface;
+
+use form\extension\etoken_manager_interface;
 
 class form_type_etoken_extension extends AbstractTypeExtension
 {

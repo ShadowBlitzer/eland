@@ -1,31 +1,36 @@
 <?php
 
-namespace form;
+namespace form\input;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
-class badge_choice_type extends AbstractType
+use form\input\addon_type;
+use form\typeahead\typeahead_type_attr;
+
+class access_type extends AbstractType
 {
-    public function __construct()
+    private $typeahead_type_attr;
+
+    public function __construct(typeahead_type_attr $typeahead_type_attr)
     {
+        $this->typeahead_type_attr = $typeahead_type_attr;
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
- //       $view->vars['typeahead_attr'] = $this->typeahead_type_attr->get($options);
+        $view->vars['typeahead_attr'] = $this->typeahead_type_attr->get($options);
     }    
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'expanded'          => true,
-            'multiple'          => false,    
+            'multiple'          => false,
         ]);
     }
 
@@ -36,6 +41,6 @@ class badge_choice_type extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'badge_choice';
+        return 'access';
     }
 }

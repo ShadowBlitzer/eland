@@ -1,6 +1,6 @@
 <?php
 
-namespace form;
+namespace form\filter;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,6 +10,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use form\input\addon_type;
+use form\typeahead\typeahead_user_type;
+use form\input\datepicker_type;
 
 class transaction_filter_type extends AbstractType
 {

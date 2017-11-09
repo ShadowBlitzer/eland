@@ -1,6 +1,8 @@
 <?php
 
-namespace form;
+namespace form\extension;
+
+use form\extension\etoken_manager_interface;
 
 use Predis\Client as redis;
 

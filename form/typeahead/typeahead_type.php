@@ -1,6 +1,6 @@
 <?php
 
-namespace form;
+namespace form\typeahead;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -8,8 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use form\addon_type;
-use form\typeahead_type_attr;
+
+use form\input\addon_type;
+use form\typeahead\typeahead_type_attr;
 
 class typeahead_type extends AbstractType
 {

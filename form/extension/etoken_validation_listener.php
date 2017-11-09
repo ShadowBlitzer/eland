@@ -1,12 +1,13 @@
 <?php
 
-namespace form;
+namespace form\extension;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Translation\TranslatorInterface;
+use form\extension\etoken_manager_interface;
 
 class etoken_validation_listener implements EventSubscriberInterface
 {
