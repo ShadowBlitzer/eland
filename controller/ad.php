@@ -7,6 +7,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ad
 {
+	public function no_view(Request $request, app $app, string $schema, string $access)
+	{
+		return $app->reroute('ad_index', [
+			'schema'	=> $schema,
+			'access'	=> $access,
+			'view'		=> $app['view']->get('ad'),
+		]);
+	}
+
 	public function index(Request $request, app $app, string $schema, string $access, string $view = null)
 	{
 

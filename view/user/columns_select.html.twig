@@ -1,10 +1,33 @@
+{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/panel.html.twig' as p %}
+
+{%- set cols = {
+	'letscode': {
+		'lbl': 'label.code',
+		'route': 'user_show',
+		'route_key': 'user',
+		'route_col_id': 'id'
+	},
+	'name': {
+		'lbl': 'label.name',
+		'route': 'user_show',
+		'route_key': 'user',
+		'route_col_id': 'id'
+	},
+	'postcode': {
+		'lbl': 'label.postcode',
+		'hide': 'phone'
+	}
+}
+-%}
+
 {% import 'macro/panel.html.twig' as p %}
 {% import 'macro/button.html.twig' as b %}
 {% import 'macro/filter.html.twig' as fi %}
 
 {%- set placeholder_code = config('template_lets', schema) ? 'letscode' : 'code' -%}
 
-{{- p.form_filter_start(filter, not filtered) -}}
+{{- p.form_filter_start(filter, filtered) -}}
 
 <div class="row"><div class="col-sm-12">
     {{- form_row(filter.q, {
@@ -64,3 +87,9 @@
 
 {{- fi.context(all_params) -}}
 {{- p.form_end(filter) -}}
+
+
+
+
+
+

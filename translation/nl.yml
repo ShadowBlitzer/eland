@@ -89,6 +89,8 @@ label:
   access_explain: Wie kan dit zien?
   amount: Bedrag
   approved: Goedgekeurd
+  balance: Saldo
+  code: Code
   content: Inhoud
   currency_or_group_name: Naam van de munt of groep
   description: Omschrijving
@@ -105,11 +107,13 @@ label:
   from: Van   
   keep_after_date: Behoud na datum 
   last_name: Achternaam
+  letscode: LETScode
   location: Plaats
   location_explain: Waar?
   menu: Menu
   message: Bericht
   mobile: GSM
+  name: Naam
   password: Paswoord
   postcode: Postcode
   save_password: Bewaar paswoord
@@ -140,6 +144,7 @@ btn:
   register: Inschrijven
   send: Verzenden
   show: Toon
+  show_columns: Toon kolommen
 
 view:
   extended: Omschrijvingen

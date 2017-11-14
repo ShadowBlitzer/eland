@@ -1,0 +1,62 @@
+{% extends 'user/a_index.html.twig' %}
+
+{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/table.html.twig' as t %}
+{% import 'macro/panel.html.twig' as p %}
+{% import 'macro/top_button.html.twig' as tb %}
+
+{% set view = 'list' %}
+
+{%- block csv -%}
+	{{- p.csv() -}}
+{%- endblock csv -%}
+
+{%- block js -%}
+	{{- a.js('csv.js') -}}
+{%- endblock js -%}
+
+{%- block heading_right -%}
+	{{- tb.show_columns() -}}
+{%- endblock heading_right -%}
+
+{%- block pre_inner -%}
+{#
+	{%- embed 'user/columns_select.html.twig' -%}
+	{%- endembed -%}
+#}
+
+	{%- embed 'user/filter_form.html.twig' -%}
+	{%- endembed -%}
+{%- endblock pre_inner -%}
+
+{%- block in_pagination -%}
+
+{%- set cols = {
+	'letscode': {
+		'lbl': 'label.code',
+		'route': 'user_show',
+		'route_key': 'user',
+		'route_col_id': 'id'
+	},
+	'name': {
+		'lbl': 'label.name',
+		'route': 'user_show',
+		'route_key': 'user',
+		'route_col_id': 'id'
+	},
+	'postcode': {
+		'lbl': 'label.postcode',
+		'hide': 'phone'
+	}
+}
+-%}
+
+{{- t.start() -}}
+{{- t.head(cols, route, all_params, sort) -}}
+{{- t.body(users, cols, acc_sch|merge({'user_type': user_type})) -}}
+{{- t.end() -}}
+
+{%- endblock in_pagination -%}
+
+
+

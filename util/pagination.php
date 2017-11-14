@@ -45,6 +45,7 @@ class pagination
 
 		$page = floor($this->start / $this->limit) + 1;
 		$page_count = ceil($this->row_count / $this->limit);
+		$page_count = $page_count < 1 ? 1 : $page_count;
 	
 		$min = $page - $this->adjacent_num;
 		$max = $page + $this->adjacent_num;

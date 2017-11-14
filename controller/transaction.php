@@ -23,8 +23,7 @@ class transaction
 {
 	public function index(Request $request, app $app, string $schema, string $access)
 	{
-		$where = [];
-		$params = [];
+		$where = $params = [];
 
 		$data = [
 			'andor' => 'and',

@@ -170,10 +170,10 @@ body {
   position: relative;
   z-index: 1;
   will-change: transform;
-  background-color: #FFF; /* A background-color is required */
+  background-color: #FFF; 
   min-height: 100vh;
 }
-/*
+
 .slideout-open,
 .slideout-open body,
 .slideout-open .slideout-panel {
@@ -460,11 +460,12 @@ li.active-group a:visited, li.active-group a:hover
 }
 
 /***for inputs of horizontal form******/
-
+/*
 .margin-bottom
 {
   margin-bottom: 10px;
 }
+*/
 
 /********************/
 

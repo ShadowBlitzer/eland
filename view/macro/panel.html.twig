@@ -5,9 +5,9 @@
 	{{- form_errors(form) -}}
 {%- endmacro form_start -%}
 
-{%- macro form_filter_start(form, filtered) -%}
+{%- macro form_filter_start(form, collapse) -%}
 	{%- import _self as p -%}
-	{{- p.filter(filtered) -}}
+	{{- p.filter(collapse|default(false)) -}}
 	{{- form_start(form) -}}
 	{{- form_errors(form) -}}
 {%- endmacro form_filter_start -%}
@@ -37,8 +37,8 @@
 	&nbsp;<small>{{- 'filtered'|trans -}}</small>
 {%- endmacro filter_indicator -%}
 
-{%- macro filter(filtered) -%}
-	<div class="panel panel-info{%- if not filtered %} collapse{%- endif -%}" id="filter">
+{%- macro filter(collapse) -%}
+	<div class="panel panel-info{%- if collapse|default(false) %} collapse{%- endif -%}" id="filter">
 	<div class="panel-heading">
 {%- endmacro filter -%}
 
