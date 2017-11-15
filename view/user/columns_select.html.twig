@@ -25,11 +25,10 @@
 {% import 'macro/button.html.twig' as b %}
 {% import 'macro/filter.html.twig' as fi %}
 
-{%- set placeholder_code = config('template_lets', schema) ? 'letscode' : 'code' -%}
-
 {{- p.form_filter_start(filter, filtered) -}}
 
-<div class="row"><div class="col-sm-12">
+<div class="row">
+<div class="col-sm-4">
     {{- form_row(filter.q, {
         'label': false,
         'addon_fa': 'search',
@@ -37,7 +36,8 @@
             'placeholder': 'keyword', 
         }  
     }) -}}
-</div></div>
+</div>
+</div>
 
 <div class="row">
 <div class="col-sm-5">

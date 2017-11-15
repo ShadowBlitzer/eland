@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use form\input\number_addon_type;
 use form\input\addon_type;
+use form\filter\transaction_filter_type;
 
 class transaction
 {
@@ -29,7 +30,7 @@ class transaction
 			'andor' => 'and',
 		];
 
-		$filter = $app->build_named_form('f', 'transaction_filter_type', $data)
+		$filter = $app->build_named_form('f', transaction_filter_type::class, $data)
 			->handleRequest($request);
 
 		if ($filter->isSubmitted() && $filter->isValid())

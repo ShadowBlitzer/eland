@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use util\sort;
 use util\pagination;
+use form\filter\user_filter_type;
 
 class user
 {
@@ -27,7 +28,7 @@ class user
 
 		$where = $params = [];
 
-		$filter = $app->build_named_form('f', 'user_filter_type')
+		$filter = $app->build_named_form('f', user_filter_type::class)
 			->handleRequest($request);
 
 		if ($filter->isSubmitted() && $filter->isValid())

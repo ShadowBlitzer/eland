@@ -172,8 +172,6 @@ $app->extend('form.types', function ($types) use ($app) {
 	$types[] = 'type_contact_type';
 	$types[] = 'typeahead_type';
 	$types[] = 'typeahead_user_type';
-	$types[] = 'transaction_filter_type';
-	$types[] = 'user_filter_type';
 
     return $types;
 });
@@ -222,14 +220,6 @@ $app['typeahead_user_transformer'] = function ($app) {
 
 $app['typeahead_user_type'] = function ($app) {
 	return new form\typeahead\typeahead_user_type($app['typeahead_user_transformer']);
-};
-
-$app['transaction_filter_type'] = function ($app) {
-	return new form\filter\transaction_filter_type();
-};
-
-$app['user_filter_type'] = function ($app) {
-	return new form\filter\user_filter_type();
 };
 
 $app->extend('monolog', function($monolog, $app) {
