@@ -1,0 +1,37 @@
+
+{% import 'macro/panel.html.twig' as p %}
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/filter.html.twig' as fi %}
+
+{{- p.form_column_select_start(column_select) -}}
+
+<div class="row">
+<div class="col-sm-4">
+    {{- form_row(column_select.letscode, {'label': 'label.code'}) -}}
+    {{- form_row(column_select.name, {'label': 'label.username'}) -}}
+    {{- form_row(column_select.fullname, {'label': 'label.full_name'}) -}}
+    {{- form_row(column_select.postcode, {'label': 'label.postcode'}) -}}
+    {{- form_row(column_select.saldo, {'label': 'label.balance'}) -}}
+</div>
+
+<div class="col-sm-4">
+</div>
+
+<div class="col-sm-4">
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-12">
+    {{- form_row(column_select.submit, {'label': 'btn.show_columns'}) -}}
+</div>
+</div>
+
+{{- fi.context(all_params) -}}
+{{- p.form_end(column_select) -}}
+
+
+
+
+
+

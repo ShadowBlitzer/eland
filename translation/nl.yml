@@ -104,7 +104,8 @@ label:
   event_date: Agendadatum
   event_date_explain: Wanneer gaat dit door?
   first_name: Voornaam
-  from: Van   
+  from: Van
+  full_name: Volledige naam   
   keep_after_date: Behoud na datum 
   last_name: Achternaam
   letscode: LETScode
@@ -128,6 +129,7 @@ label:
   title: Titel
   to: Naar
   transaction_id: Transactie id
+  username: Gebruikersnaam
   your_email: Je email adres
   your_message: Je bericht
 

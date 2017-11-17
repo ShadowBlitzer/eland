@@ -6,7 +6,8 @@
 
 {{- p.form_filter_start(filter, not filtered) -}}
 
-<div class="row"><div class="col-sm-12">
+<div class="row">
+<div class="col-sm-12">
     {{- form_row(filter.q, {
         'label': false,
         'addon_fa': 'search',
@@ -14,7 +15,8 @@
             'placeholder': 'keyword', 
         }  
     }) -}}
-</div></div>
+</div>
+</div>
 
 <div class="row">
 <div class="col-sm-5">
@@ -27,9 +29,11 @@
         }
     }) -}}
 </div>
+
 <div class="col-sm-2">
     {{- form_row(filter.andor, {'label': false}) -}}
 </div>
+
 <div class="col-sm-5">
     {{- form_row(filter.to_user, {
         'label': false,
@@ -50,6 +54,7 @@
         'addon_fa': 'calendar'
     }) -}}
 </div>
+
 <div class="col-sm-5">
     {{- form_row(filter.to_date, {
         'label': false,
@@ -57,9 +62,11 @@
         'addon_fa': 'calendar'
     }) -}}
 </div>
+
 <div class="col-sm-2">
     {{- b.show(filter.submit) -}}
 </div>
+
 </div>
 
 {{- fi.context(all_params) -}}

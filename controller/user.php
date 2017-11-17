@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use util\sort;
 use util\pagination;
 use form\filter\user_filter_type;
+use form\column_select\user_column_select_type;
 
 class user
 {
@@ -25,6 +26,26 @@ class user
 		string $schema, string $access, string $view, string $user_type)
 	{		
 		$s_admin = $access === 'a';
+
+		$columns = [
+			'letscode'		=> true,
+			'name'			=> true,
+			'fullname'		=> false,
+			'postcode'		=> true,
+			'saldo'			=> true,
+		];
+
+		$column_select = $app->build_named_form('col', user_column_select_type::class, $columns)
+			->handleRequest($request);
+
+		if ($column_select->isSubmitted() && $column_select->isValid())
+		{
+			$new_columns = $column_select->getData();
+
+
+
+		}
+
 
 		$where = $params = [];
 
@@ -77,6 +98,7 @@ class user
 			'pagination'	=> $pagination->get($row_count),		
 			'sort'			=> $sort->get(),
 			'columns'		=> [],
+			'column_select'	=> $column_select->createView(),
 		];
 
 		return $app['twig']->render('user/' . $access . '_' . $view . '.html.twig', $vars);

@@ -12,6 +12,13 @@
 	{{- form_errors(form) -}}
 {%- endmacro form_filter_start -%}
 
+{%- macro form_column_select_start(form) -%}
+	<div class="panel panel-info collapse" id="show_columns">
+	<div class="panel-heading">
+	{{- form_start(form) -}}
+	{{- form_errors(form) -}}	
+{%- endmacro form_column_select_start -%}
+
 {%- macro form_end(form) -%}
 	{%- import _self as p -%}
 	{{- form_end(form) -}}

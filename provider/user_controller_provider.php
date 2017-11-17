@@ -15,14 +15,14 @@ class user_controller_provider implements ControllerProviderInterface
             ->value('user_type', 'active')
             ->bind('user_no_view');
 
-        $user->get('/{user_type}/{view}', 'controller\\user::index')
+        $user->match('/{user_type}/{view}', 'controller\\user::index')
             ->value('user_type', 'active')
             ->bind('user_index');
 
         $user->get('/self/{view}', 'controller\\user::show_self')
             ->bind('user_self');
         
-        $user->get('/{user_type}/{user}', 'controller\\user::show')
+        $user->match('/{user_type}/{user}', 'controller\\user::show')
             ->convert('user', 'user_converter:get')
             ->bind('user_show');
 
@@ -37,19 +37,23 @@ class user_controller_provider implements ControllerProviderInterface
 */        
         $user->match('/add', 'controller\\user::add')
             ->bind('user_add');
+
         $user->match('/{user}/edit', 'controller\\user::edit')
             ->convert('user', 'user_converter:get')
             ->bind('user_edit');
+
         $user->match('/{user}/del', 'controller\\user::del')
             ->convert('user', 'user_converter:get')
             ->bind('user_del');
 
         $user->get('/typeahead/{user_type}', 'controller\\user_typeahead::get')
             ->bind('user_typeahead');
+    
         $user->get('/typeahead-interlets/{user}', 
             'controller\\user_typeahead::get_interlets')
         //	->convert('user', 'user_converter:get')
             ->bind('user_interlets_typeahead');
+
         $user->get('/weighted-balance/{user}/{days}', 
             'controller\\user::weighted_balance')
             ->assert('days', '\d+')
