@@ -4,6 +4,15 @@ $(document).ready(function() {
 		$('.row-offcanvas').toggleClass('active');
 	});
 
+	$('form[method="get"]').submit(function(){
+		$(this).find(':input').each(function() {
+			var inp = $(this);
+			if (!inp.val()) {
+				inp.remove();
+			}
+		});
+	});
+
 /*
 	var slideout = new Slideout({
         'panel': $('#panel'),

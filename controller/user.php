@@ -28,12 +28,47 @@ class user
 		$s_admin = $access === 'a';
 
 		$columns = [
-			'letscode'		=> true,
-			'name'			=> true,
-			'fullname'		=> false,
-			'postcode'		=> true,
-			'saldo'			=> true,
+			'u'	=> [
+				'letscode'		=> true,
+				'name'			=> true,
+				'fullname'		=> false,
+				'postcode'		=> true,
+				'accountrole'	=> false,
+				'saldo'			=> true,
+				'saldo_date'	=> false,
+				'minlimit'		=> false,
+				'maxlimit'		=> false,
+				'comments'		=> false,
+				'admincomment'	=> false,
+				'hobbies'		=> false,
+				'cron_saldo'	=> false,
+				'cdate'			=> false,
+				'mdate'			=> false,
+				'adate'			=> false,
+				'lastlogin'		=> false,
+			],
+			'c'	=> [
+
+			], 
+			'm'	=> [
+				'wants'			=> false,
+				'offers'		=> false,
+				'total'			=> false,
+			],
+			'a'	=> [
+				'transactions'	=> [
+					'in'	=> false,
+					'out'	=> false,
+					'total'	=> false,
+				],
+				'amount'	=> [
+					'in'	=> false,
+					'out'	=> false,
+					'total'	=> false,
+				],
+			],
 		];
+
 
 		$column_select = $app->build_named_form('col', user_column_select_type::class, $columns)
 			->handleRequest($request);

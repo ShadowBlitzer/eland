@@ -35,7 +35,7 @@
 	{%- for i1, ary in all_params -%}
 		{%- if ary is iterable and i1 != 'p' -%}
 			{%- for i2, value in ary -%}
-			<input name="{{- i1 -}}[{{- i2 -}}]" value="{{- value -}}" type="hidden">
+				<input name="{{- i1 -}}[{{- i2 -}}]" value="{{- value -}}" type="hidden">
 			{%- endfor -%}
 		{%- endif -%}
 	{%- endfor -%}
@@ -52,28 +52,30 @@
 	<ul class="pagination">
 
 	{%- if pagination.page > 1 -%}
-	<li>
-	<a href="{{- path(route, all_params|merge(
-		{'p': {'start': (pagination.page - 2) * pagination.limit, 
-		'limit': pagination.limit}}) ) -}}">&#9668;</a>
-	</li>
+		<li>
+		<a href="{{- path(route, all_params|merge(
+			{'p': {'start': ((pagination.page - 2) * pagination.limit)|replace_when_zero, 
+			'limit': pagination.limit}}) ) -}}">&#9668;</a>
+		</li>
 	{%- endif -%}
 
 	{%- if pagination.min > 1 -%}
-	<li>
-	<a href="{{- path(route, all_params|merge(
-		{'p': {'start': null, 'limit': pagination.limit}})) -}}">1</a>
-	</li>
+		<li>
+		<a href="{{- path(route, all_params|merge(
+			{'p': {'start': null, 'limit': pagination.limit}})) -}}">1</a>
+		</li>
 	{%- endif -%}
 
 	{%- for pa in pagination.min..pagination.max -%}
 
 		<li{%- if pa == pagination.page %} class="active"{%- endif -%}>
 		<a href="{{- path(route, all_params|merge(
-			{'p':{'start': (pa - 1) * pagination.limit, 'limit': pagination.limit}}) ) -}}">
+			{'p':{'start': ((pa - 1) * pagination.limit)|replace_when_zero, 
+			'limit': pagination.limit}}) ) -}}">
 		{{- pa -}}
 		</a>
 		</li>
+
 	{%- endfor -%}
 
 	{%- if pagination.max < pagination.page_count -%}

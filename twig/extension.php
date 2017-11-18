@@ -8,6 +8,7 @@ class extension extends \Twig_Extension
 	{
 		return [
 			new \Twig_Filter('underline', [$this, 'underline']),
+			new \Twig_Filter('replace_when_zero', [$this, 'replace_when_zero']),
 			new \Twig_Filter('date_format', 'twig\\date_format::get'),
 			new \Twig_Filter('web_date', 'twig\\web_date::get'),
 			new \Twig_Filter('web_user', 'twig\\web_user::get'),
@@ -30,5 +31,10 @@ class extension extends \Twig_Extension
 	{
 		$len = strlen($input);
 		return $input . "\r\n" . str_repeat($char, $len);
+	}
+
+	public function replace_when_zero(int $input, $replace = null)
+	{
+		return $input === 0 ? $replace : $input; 
 	}
 }
