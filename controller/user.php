@@ -28,7 +28,7 @@ class user
 		$s_admin = $access === 'a';
 
 		$columns = [
-			'u'	=> [
+			'base'	=> [
 				'letscode'		=> true,
 				'name'			=> true,
 				'fullname'		=> false,

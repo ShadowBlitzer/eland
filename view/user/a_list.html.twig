@@ -7,13 +7,18 @@
 
 {% set view = 'list' %}
 
+{%- block css -%}
+	{%- include 'asset/datepicker_css.html.twig' -%}
+{%- endblock css -%}
+
+{%- block js -%}
+	{%- include 'asset/datepicker_js.html.twig' -%}
+	{{- a.js('csv.js') -}}
+{%- endblock js -%}
+
 {%- block csv -%}
 	{{- p.csv() -}}
 {%- endblock csv -%}
-
-{%- block js -%}
-	{{- a.js('csv.js') -}}
-{%- endblock js -%}
 
 {%- block heading_right -%}
 	{{- tb.show_columns() -}}

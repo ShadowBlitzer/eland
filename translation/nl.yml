@@ -87,10 +87,12 @@ label:
   accept: Akkoord
   access: Toegang
   access_explain: Wie kan dit zien?
+  activity: Activiteit
   amount: Bedrag
   approved: Goedgekeurd
   balance: Saldo
   code: Code
+  contact_details: Contacten
   content: Inhoud
   currency_or_group_name: Naam van de munt of groep
   description: Omschrijving
@@ -103,9 +105,12 @@ label:
   email_code_username: Je email adres, code of gebruikersnaam
   event_date: Agendadatum
   event_date_explain: Wanneer gaat dit door?
+  exclude_counterparties: Exclusief tegenpartijen
   first_name: Voornaam
   from: Van
-  full_name: Volledige naam   
+  from_date: Vanaf
+  full_name: Volledige naam 
+  in: In  
   keep_after_date: Behoud na datum 
   last_name: Achternaam
   letscode: LETScode
@@ -115,7 +120,11 @@ label:
   message: Bericht
   mobile: GSM
   name: Naam
+  offers: Aanbod
+  offers_and_wants: Vraag en Aanbod
+  out: Uit
   password: Paswoord
+  period: Periode
   postcode: Postcode
   save_password: Bewaar paswoord
   slug: Slak
@@ -128,8 +137,12 @@ label:
   time: Tijdstip
   title: Titel
   to: Naar
+  total: Totaal
+  to_date: Tot en met
+  transactions: Transacties
   transaction_id: Transactie id
   username: Gebruikersnaam
+  wants: Vraag
   your_email: Je email adres
   your_message: Je bericht
 

@@ -1,25 +1,31 @@
 <?php
+
 namespace form\column_select;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class total_column_select_type extends AbstractType
+class base_user_column_select_type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('in', CheckboxType::class, [
-                'required'  => false,
-            ])
-            ->add('out', CheckboxType::class, [
-                'required'  => false,
-            ])
-            ->add('total', CheckboxType::class, [
+        $ary = [
+            'letscode',
+            'name',
+            'fullname',
+            'postcode',
+            'saldo',
+        ];
+        
+        foreach ($ary as $field)
+        {
+            $builder->add($field, CheckboxType::class, [
                 'required'  => false,
             ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -5,21 +5,18 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use form\column_select\total_column_select_type;
 use form\input\datepicker_type;
 
-class transaction_column_select_type extends AbstractType
+class period_column_select_type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('since_date', datepicker_type::class, [
+            ->add('from', 'datepicker_type', [
                 'required'  => false,
             ])
-            ->add('exclude_codes', CheckboxType::class, [
-
-            ])
-            ->add('total', total_column_select_type::class, [
+            ->add('to', 'datepicker_type', [
+                'required'  => false,
             ]);
     }
 

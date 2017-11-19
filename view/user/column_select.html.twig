@@ -7,24 +7,56 @@
 
 <div class="row">
 <div class="col-sm-4">
-    {{- form_row(column_select.letscode, {'label': 'label.code'}) -}}
-    {{- form_row(column_select.name, {'label': 'label.username'}) -}}
-    {{- form_row(column_select.fullname, {'label': 'label.full_name'}) -}}
-    {{- form_row(column_select.postcode, {'label': 'label.postcode'}) -}}
-    {{- form_row(column_select.saldo, {'label': 'label.balance'}) -}}
+    {{- form_row(column_select.base.letscode, {'label': 'label.code'}) -}}
+    {{- form_row(column_select.base.name, {'label': 'label.username'}) -}}
+    {{- form_row(column_select.base.fullname, {'label': 'label.full_name'}) -}}
+    {{- form_row(column_select.base.postcode, {'label': 'label.postcode'}) -}}
+    {{- form_row(column_select.base.saldo, {'label': 'label.balance'}) -}}
 </div>
 
 <div class="col-sm-4">
-    <h5>{{- 'label.contact_details'|trans -}}
+    <h3>{{- 'label.contact_details'|trans -}}</h3>
+
+    <h3>{{- 'label.offers_and_wants'|trans -}}</h3>
+    {{- form_row(column_select.ad.want, {'label': 'label.wants'}) -}}
+    {{- form_row(column_select.ad.offer, {'label': 'label.offers'}) -}}
+    {{- form_row(column_select.ad.total, {'label': 'label.offers_and_wants'}) -}}
 </div>
 
 <div class="col-sm-4">
+    <h3>{{- 'label.activity'|trans -}}</h3>
+    <h4>{{- 'label.period'|trans -}}</h4>
+    {{- form_row(column_select.activity.period.from, {
+        'label': false,
+        'addon_label': 'label.from_date'
+    }) -}}
+    {{- form_row(column_select.activity.period.to, {
+        'label': false,
+        'addon_label': 'label.to_date'
+    }) -}}
+    <h4>{{- 'label.exclude_counterparties'|trans -}}</h4>
+    {{- form_row(column_select.activity.exclude, {'label': false}) -}}
+
+    <div class="row">
+        <div class="col-xs-6">
+            <h4>{{- 'label.transactions'|trans -}}</h4>
+            {{- form_row(column_select.activity.transaction.in, {'label': 'label.in'}) -}}
+            {{- form_row(column_select.activity.transaction.out, {'label': 'label.out'}) -}}
+            {{- form_row(column_select.activity.transaction.total, {'label': 'label.total'}) -}}
+        </div>
+        <div class="col-xs-6">
+            <h4>{{- 'var'|trans({'%var%': config('currency', schema)}) -}}</h4>
+            {{- form_row(column_select.activity.amount.in, {'label': 'label.in'}) -}}
+            {{- form_row(column_select.activity.amount.out, {'label': 'label.out'}) -}}
+            {{- form_row(column_select.activity.amount.total, {'label': 'label.total'}) -}}
+        </div>
+    </div>
 </div>
 </div>
 
 <div class="row">
 <div class="col-sm-12">
-    {{- form_row(column_select.submit, {'label': 'btn.show_columns'}) -}}
+    {{- b.default(column_select.submit, 'btn.show_columns') -}}
 </div>
 </div>
 
