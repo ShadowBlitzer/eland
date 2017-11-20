@@ -6,6 +6,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use form\column_select\base_user_column_select_type;
+use form\column_select\user_balance_on_date_column_select_type;
+use form\column_select\user_parsed_address_column_select_type;
 use form\column_select\user_ad_column_select_type;
 use form\column_select\user_activity_column_select_type;
 
@@ -15,7 +17,9 @@ class user_column_select_type extends AbstractType
     {
         $builder
             ->add('base', base_user_column_select_type::class)
- //           ->add('contact_detail', user_contact_detail_column_select_type::class)
+            ->add('balance_on_date', user_balance_on_date_column_select_type::class)
+            ->add('contact_detail', 'user_contact_detail_column_select_type')
+            ->add('parsed_address', user_parsed_address_column_select_type::class)
             ->add('ad', user_ad_column_select_type::class)
             ->add('activity', user_activity_column_select_type::class)
             ->add('submit', SubmitType::class);
@@ -24,6 +28,7 @@ class user_column_select_type extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'etoken_enabled'    => false,
         ]);
     }
 }

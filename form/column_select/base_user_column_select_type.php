@@ -17,7 +17,18 @@ class base_user_column_select_type extends AbstractType
             'name',
             'fullname',
             'postcode',
+            'accountrole',
             'saldo',
+            'minlimit',
+            'maxlimit',
+            'comments',
+            'admincomment',
+            'hobbies',
+            'cdate',
+            'mdate',            
+            'adate',
+            'lastlogin',
+            'saldomail',
         ];
         
         foreach ($ary as $field)

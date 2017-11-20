@@ -19,6 +19,22 @@ class type_contact_repository
 
 	}
 
+	public function get_all_abbrev(string $schema):array
+	{
+		$ary = [];
+	
+		$rs = $this->db->prepare('select id, abbrev from ' . $schema . '.type_contact');
+
+		$rs->execute();
+
+		while ($row = $rs->fetch())
+		{
+			$ary[$row['id']] = $row['abbrev'];
+		}
+
+		return $ary;
+	}
+
 	public function get(int $id, string $schema):array
 	{
 		$data = $this->db->fetchAssoc('select *

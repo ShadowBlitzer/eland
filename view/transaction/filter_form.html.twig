@@ -23,7 +23,6 @@
     {{- form_row(filter.from_user, {
         'label': false,
         'addon_label': 'label.from',
-        'addon_fa': 'user',
         'attr': {
             'placeholder': placeholder_code,
         }
@@ -38,7 +37,6 @@
     {{- form_row(filter.to_user, {
         'label': false,
         'addon_label': 'label.to',
-        'addon_fa': 'user',
         'attr': {
             'placeholder': placeholder_code,
         }
@@ -50,16 +48,14 @@
 <div class="col-sm-5">
     {{- form_row(filter.from_date, {
         'label': false,
-        'addon_label': 'label.from_date',
-        'addon_fa': 'calendar'
+        'addon_label': 'label.from_date'
     }) -}}
 </div>
 
 <div class="col-sm-5">
     {{- form_row(filter.to_date, {
         'label': false,
-        'addon_label': 'label.to_date',
-        'addon_fa': 'calendar'
+        'addon_label': 'label.to_date'
     }) -}}
 </div>
 

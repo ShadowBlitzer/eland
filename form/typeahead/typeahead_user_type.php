@@ -30,6 +30,7 @@ class typeahead_user_type extends AbstractType
     {
         $resolver->setDefaults([
             'process'           => 'user',
+            'addon_fa'          => 'user',
         ]);
     }
 

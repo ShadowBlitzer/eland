@@ -87,13 +87,19 @@ label:
   accept: Akkoord
   access: Toegang
   access_explain: Wie kan dit zien?
+  activated: Geactiveerd
   activity: Activiteit
+  admin_comment: Admin commentaar
   amount: Bedrag
   approved: Goedgekeurd
   balance: Saldo
+  balance_on_date: Saldo op datum
   code: Code
+  columns: Kolommen
+  comment: Commentaar
   contact_details: Contacten
   content: Inhoud
+  created: Gecreëerd
   currency_or_group_name: Naam van de munt of groep
   description: Omschrijving
   date: Datum  
@@ -109,29 +115,40 @@ label:
   first_name: Voornaam
   from: Van
   from_date: Vanaf
-  full_name: Volledige naam 
+  full_name: Volledige naam
+  hobbies_interests: Hobbies/interesses
   in: In  
-  keep_after_date: Behoud na datum 
+  keep_after_date: Behoud na datum
+  last_login: Laatste login
   last_name: Achternaam
   letscode: LETScode
   location: Plaats
   location_explain: Waar?
+  max: Max
+  maximum_limit: Maximum limiet
   menu: Menu
   message: Bericht
+  min: Min
+  minimum_limit: Minimum limiet
+  modified: Aangepast
   mobile: GSM
   name: Naam
   offers: Aanbod
   offers_and_wants: Vraag en Aanbod
   out: Uit
+  parsed_address: Ontleed adres
   password: Paswoord
   period: Periode
+  periodic_mail: Periodieke overzichtsmail
   postcode: Postcode
+  role: Rol
   save_password: Bewaar paswoord
   slug: Slak
   slug_explain: >-
     De "Slak" is het laatste gedeelte van de URL. 
     Deze kan uit kleine letters, cijfers en ingesloten koppeltekens bestaan. 
     Gebruik minstens 4 tekens en "index" voor de thuispagina.
+  split_by_char: split door teken
   subject: Onderwerp
   telephone: Telefoon
   time: Tijdstip

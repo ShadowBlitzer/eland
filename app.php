@@ -172,6 +172,7 @@ $app->extend('form.types', function ($types) use ($app) {
 	$types[] = 'type_contact_type';
 	$types[] = 'typeahead_type';
 	$types[] = 'typeahead_user_type';
+	$types[] = 'user_contact_detail_column_select_type';
 
     return $types;
 });
@@ -220,6 +221,11 @@ $app['typeahead_user_transformer'] = function ($app) {
 
 $app['typeahead_user_type'] = function ($app) {
 	return new form\typeahead\typeahead_user_type($app['typeahead_user_transformer']);
+};
+
+$app['user_contact_detail_column_select_type'] = function ($app) {
+	return new form\column_select\user_contact_detail_column_select_type(
+		$app['type_contact_repository'], $app['schema']);
 };
 
 $app->extend('monolog', function($monolog, $app) {
