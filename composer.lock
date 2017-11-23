@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.38.5",
+            "version": "3.39.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "13ffa481127c08e04244f116ae85a64b4172479c"
+                "reference": "da5872e6e5704fa5c2d138ed91fa87f80bb44d84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/13ffa481127c08e04244f116ae85a64b4172479c",
-                "reference": "13ffa481127c08e04244f116ae85a64b4172479c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/da5872e6e5704fa5c2d138ed91fa87f80bb44d84",
+                "reference": "da5872e6e5704fa5c2d138ed91fa87f80bb44d84",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-11-17T22:08:25+00:00"
+            "time": "2017-11-22T23:17:02+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -1635,16 +1635,16 @@
         },
         {
             "name": "minishlink/web-push",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-push-libs/web-push-php.git",
-                "reference": "c92de14d511e1ab7a316d8404678e4acf03c3262"
+                "reference": "6e1b88c46351ea3850cb1e9ae9565b8c61a58396"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-push-libs/web-push-php/zipball/c92de14d511e1ab7a316d8404678e4acf03c3262",
-                "reference": "c92de14d511e1ab7a316d8404678e4acf03c3262",
+                "url": "https://api.github.com/repos/web-push-libs/web-push-php/zipball/6e1b88c46351ea3850cb1e9ae9565b8c61a58396",
+                "reference": "6e1b88c46351ea3850cb1e9ae9565b8c61a58396",
                 "shasum": ""
             },
             "require": {
@@ -1685,7 +1685,7 @@
                 "push",
                 "web"
             ],
-            "time": "2017-10-12T20:30:49+00:00"
+            "time": "2017-11-22T20:04:25+00:00"
         },
         {
             "name": "monolog/monolog",

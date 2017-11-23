@@ -277,7 +277,7 @@ $app->register(new Silex\Provider\SessionServiceProvider(), [
 ]);
 
 $app['view'] = function ($app) {
-	return new service\view();
+	return new service\view($app['session'], $app['schema'], $app['access']);
 };
 
 $app['thumbprint'] = function ($app){
@@ -287,6 +287,10 @@ $app['thumbprint'] = function ($app){
 
 $app['schema'] = function ($app){
 	return $app['request_stack']->getCurrentRequest()->attributes->get('schema');
+};
+
+$app['access'] = function ($app){
+	return $app['request_stack']->getCurrentRequest()->attributes->get('access');
 };
 
 $app['schemas'] = function ($app){

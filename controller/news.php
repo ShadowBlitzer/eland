@@ -28,6 +28,8 @@ class news
 	{
 		$s_admin = $access === 'a';
 
+		$app['view']->set('news', $view);
+		
 		$where = $params = [];
 
 		$filtered = count($where) ? true : false;

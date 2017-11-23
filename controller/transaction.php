@@ -98,7 +98,21 @@ class transaction
 		$query .= $sort->query();
 		$query .= $pagination->query();
 
-		$transactions = $app['db']->fetchAll($query, $params);
+		$transactions = [];
+
+		$rs = $app['db']->prepare($query, $params);
+
+		$rs->execute();
+
+		while ($row = $rs->fetch())
+		{
+			if ($row['real_to'] || $row['real_from'])
+			{
+				$row['class'] = 'warning';			
+			}
+
+			$transactions[] = $row;
+		}
 
 	//
 		foreach ($transactions as $key => $t)
@@ -166,7 +180,7 @@ class transaction
 		$data = [
 		];
 
-		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+		$form = $app->form($data)
 			->add('id_from', 'typeahead_user_type', [
 				'source_id'	=> 'form_id_to',		
 			])

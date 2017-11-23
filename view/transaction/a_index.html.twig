@@ -35,7 +35,7 @@
 
 	{%- include 'transaction/filter_form.html.twig' -%}
 
-	{%- set cols = {
+	{%- set col_format = {
 		'description': {
 			'lbl': 'label.description',
 			'route': 'transaction_show',
@@ -66,8 +66,8 @@
 
 	{{- pg.pagination(route, all_params, pagination) -}}
 	{{- t.start() -}}
-	{{- t.head(cols, route, all_params, sort) -}}
-	{{- t.body(transactions, cols, acc_sch) -}}
+	{{- t.head(col_format|keys, col_format, route, all_params, sort) -}}
+	{{- t.body(transactions, col_format|keys, col_format, acc_sch) -}}
 	{{- t.end() -}}
 	{{- pg.pagination(route, all_params, pagination) -}}
 

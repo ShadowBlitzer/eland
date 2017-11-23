@@ -22,7 +22,7 @@
 
   {%- for key in personal_menu_en -%}
     {%- if personal_menu_ary[key] is defined -%}
-		{{- m.li(key, personal_menu_ary[key], active_menu, acc_sch|view(personal_menu_ary[key].view)) -}}
+		  {{- m.li(key, personal_menu_ary[key], active_menu, acc_sch|view(personal_menu_ary[key].view)) -}}
     {%- endif -%}
   {%- endfor -%}
 

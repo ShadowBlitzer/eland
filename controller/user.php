@@ -4,6 +4,7 @@ namespace controller;
 
 use util\app;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 use util\sort;
 use util\pagination;
@@ -26,6 +27,8 @@ class user
 		string $schema, string $access, string $view, string $user_type)
 	{		
 		$s_admin = $access === 'a';
+
+		$app['view']->set('user', $view);
 
 		$columns = [
 			'base'	=> [
@@ -77,10 +80,9 @@ class user
 		{
 			$new_columns = $column_select->getData();
 
-
+			$columns = $new_columns;
 
 		}
-
 
 		$where = $params = [];
 
@@ -113,8 +115,12 @@ class user
 		$sort->add_columns([
 			'letscode'		=> 'asc',
 			'name'			=> 'asc',
+			'fullname'		=> 'asc', 
 			'postcode'		=> 'asc',
 			'saldo'			=> 'asc',
+			'adate'			=> 'desc',
+			'mdate'			=> 'desc',
+			'cdate'			=> 'desc',
 		])
 		->set_default('letscode');
 
@@ -123,7 +129,56 @@ class user
 		$query .= $sort->query();
 		$query .= $pagination->query();
 
-		$users = $app['db']->fetchAll($query, $params);
+//		$users = $app['db']->fetchAll($query, $params);
+
+		$sel_form = $app->namedForm('sel');
+
+		$new_user_treshold = gmdate('Y-m-d H:i:s', time() - ($app['config']->get('newuserdays', $schema) * 84600));
+
+		$users = [];
+
+		$rs = $app['db']->prepare($query, $params);
+
+		$rs->execute();
+
+		while($row = $rs->fetch())
+		{
+			if (!in_array($row['status'], [1, 2, 7]))
+			{
+				$row['class'] = 'inactive';
+			}
+			else if ($row['accountrole'] === 'interlets')
+			{
+				$row['class'] = 'warning';
+			}
+			else if ($row['status'] === 2)
+			{
+				$row['class'] = 'danger';
+			}
+			else if ($row['adate'] > $new_user_treshold  && $row['status'] === 1)
+			{
+				$row['class'] = 'success';
+			}
+
+			$sel_form->add($row['id'], CheckboxType::class, [
+				'required'	=> false,
+			]);
+
+			$users[] = $row;
+		}
+
+		$sel_form = $sel_form->getForm();
+		$sel_form->handleRequest($request);
+
+		$cols = [];
+
+		foreach ($columns['base'] as $col => $bool)
+		{
+			if ($bool)
+			{
+				$cols[] = $col;
+			}
+		}
 
 		$vars = [
 			'users'			=> $users,
@@ -132,8 +187,9 @@ class user
 			'filtered'		=> $filtered,
 			'pagination'	=> $pagination->get($row_count),		
 			'sort'			=> $sort->get(),
-			'columns'		=> [],
+			'columns'		=> $cols,
 			'column_select'	=> $column_select->createView(),
+			'sel_form'		=> $sel_form->createView(),
 		];
 
 		return $app['twig']->render('user/' . $access . '_' . $view . '.html.twig', $vars);

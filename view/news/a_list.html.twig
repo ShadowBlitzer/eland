@@ -16,7 +16,7 @@
 
 {%- block in_pagination -%}
 
-{%- set cols = {
+{%- set col_format = {
 	'headline': {
 		'lbl': 'label.description',
 		'route': 'news_show',
@@ -42,8 +42,8 @@
 -%}
 
 {{- t.start() -}}
-{{- t.head(cols, route, all_params, sort) -}}
-{{- t.body(news, cols, acc_sch) -}}
+{{- t.head(col_format|keys, col_format, route, all_params, sort) -}}
+{{- t.body(news, col_format|keys, col_format, acc_sch) -}}
 {{- t.end() -}}
 
 {%- endblock in_pagination -%}
