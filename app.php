@@ -280,6 +280,10 @@ $app['view'] = function ($app) {
 	return new service\view($app['session'], $app['schema'], $app['access']);
 };
 
+$app['columns'] = function ($app) {
+	return new service\columns($app['session'], $app['schema'], $app['access']);
+};
+
 $app['thumbprint'] = function ($app){
 	$version = getenv('THUMBPRINT_VERSION') ?: '';
 	return new service\thumbprint($app['predis'], $version);

@@ -137,9 +137,7 @@ class user
 
 		$users = [];
 
-		$rs = $app['db']->prepare($query, $params);
-
-		$rs->execute();
+		$rs = $app['db']->executeQuery($query, $params);
 
 		while($row = $rs->fetch())
 		{

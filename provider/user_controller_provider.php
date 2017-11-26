@@ -25,16 +25,7 @@ class user_controller_provider implements ControllerProviderInterface
         $user->match('/{user_type}/{user}', 'controller\\user::show')
             ->convert('user', 'user_converter:get')
             ->bind('user_show');
-
- /*           
-        $user->get('/{user_type}/map', 'controller\\user::map')
-            ->value('user_type', 'active')
-            ->bind('user_map');
-
-        $user->get('/{user_type}/tile', 'controller\\user::tile')
-            ->value('user_type', 'active')
-            ->bind('user_tile');
-*/        
+      
         $user->match('/add', 'controller\\user::add')
             ->bind('user_add');
 

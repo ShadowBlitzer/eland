@@ -138,7 +138,7 @@ label:
   out: Uit
   parsed_address: Ontleed adres
   password: Paswoord
-  period: Periode
+  period_days: Periode in dagen
   periodic_mail: Periodieke overzichtsmail
   postcode: Postcode
   role: Rol
@@ -177,6 +177,15 @@ btn:
   send: Verzenden
   show: Toon
   show_columns: Toon kolommen
+
+user_type:
+  active: Actief
+  all: Alle
+  interlets: interLETS
+  leaving: Uitstappers
+  new: Instappers
+  post_active: Post-actief
+  pre_active: Pre-actief
 
 view:
   extended: Omschrijvingen

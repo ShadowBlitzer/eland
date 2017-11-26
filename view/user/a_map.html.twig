@@ -5,7 +5,7 @@
 {% import 'macro/panel.html.twig' as p %}
 {% import 'macro/top_button.html.twig' as tb %}
 
-{% set view = 'list' %}
+{% set view = 'map' %}
 
 {%- block css -%}
 	{%- include 'asset/datepicker_css.html.twig' -%}
@@ -30,48 +30,6 @@
 
 	{%- embed 'user/filter_form.html.twig' -%}
 	{%- endembed -%}
-
-	{%- set nav = {
-		'active': {
-			'label': 'user_type.active',
-			'class': '', 
-		},
-		'new': {
-			'label': 'user_type.new',
-			'class': 'bg-success',
-		},
-		'leaving': {
-			'label': 'user_type.leaving',
-			'class': 'bg-danger',
-		},
-		'interlets': {
-			'label': 'user_type.interlets',
-			'class': 'bg-warning',
-		},
-		'pre-active': {
-			'label': 'user_type.pre_active',
-			'class': 'bg-inactive',
-		},
-		'post-active': {
-			'label': 'user_type.post_active',
-			'class': 'bg-inactive',
-		},
-		'all': {
-			'label': 'user_type.all',
-			'class': '',
-		}
-	}
-	-%}
-
-    <ul class="nav nav-tabs">
-    {%- for key, rec in nav -%}
-        <li{%- if key == user_type %} class="active"{%- endif -%}>
-            <a href="{{- path('user_index', acc_sch|merge({'view': 'list', 'user_type': key})) -}}" class="{{- rec.class -}}">
-               {{- (rec.label)|trans -}} 
-            </a>
-        </li>
-    {%- endfor -%}
-    </ul>
 {%- endblock pre_inner -%}
 
 {%- block in_pagination -%}
@@ -147,6 +105,24 @@
 }
 -%}
 
+{#
+    {{- form_row(column_select.base.letscode, {'label': 'label.code'}) -}}
+    {{- form_row(column_select.base.name, {'label': 'label.username'}) -}}
+    {{- form_row(column_select.base.fullname, {'label': 'label.full_name'}) -}}
+    {{- form_row(column_select.base.postcode, {'label': 'label.postcode'}) -}}
+    {{- form_row(column_select.base.accountrole, {'label': 'label.role'}) -}}
+    {{- form_row(column_select.base.saldo, {'label': 'label.balance'}) -}}
+    {{- form_row(column_select.base.minlimit, {'label': 'label.minimum_limit'}) -}}
+    {{- form_row(column_select.base.maxlimit, {'label': 'label.maximum_limit'}) -}}
+    {{- form_row(column_select.base.comments, {'label': 'label.comment'}) -}}
+    {{- form_row(column_select.base.admincomment, {'label': 'label.admin_comment'}) -}}
+    {{- form_row(column_select.base.hobbies, {'label': 'label.hobbies_interests'}) -}}
+    {{- form_row(column_select.base.cdate, {'label': 'label.created'}) -}}
+    {{- form_row(column_select.base.mdate, {'label': 'label.modified'}) -}}
+    {{- form_row(column_select.base.adate, {'label': 'label.activated'}) -}}
+    {{- form_row(column_select.base.lastlogin, {'label': 'label.last_login'}) -}}
+    {{- form_row(column_select.base.saldomail, {'label': 'label.periodic_mail'}) -}}
+#}
 
 {%- set table_forms = {
 	'sel':	{

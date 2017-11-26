@@ -62,17 +62,3 @@
         'fa': 'thumbs-o-up', 'span_attr': {'class': 'hidden-xs'}, 
         'attr': {'class': 'btn-warning'}}) -}}&nbsp;
 {%- endmacro approve_md %}
-
-{#
-{% macro buttonform_export(form) -%}
-    {{- form_start(form) -}}
-    {{- form_widget(form.submit, {'attr': {'class': 'btn-default btn-lg'}}) -}}&nbsp;
-    {{- form_end(form) -}}
-{%- endmacro buttonform_export %}
-
-{% macro buttonform(form, label, class) -%}
-    {{- form_start(form, {'attr': {'style' : 'display: inline;'}}) -}}
-    {{- form_widget(form.submit, {'label': label, 'attr': {'class': class, 'style': 'display: inline;'}}) -}}&nbsp;
-    {{- form_end(form) -}}
-{%- endmacro buttonform %}
-#}

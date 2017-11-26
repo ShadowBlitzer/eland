@@ -54,14 +54,9 @@
 
 <div class="col-xs-4">
     <h3>{{- 'label.activity'|trans -}}</h3>
-    <h4>{{- 'label.period'|trans -}}</h4>
-    {{- form_row(column_select.activity.period.from, {
-        'label': false,
-        'addon_label': 'label.from_date'
-    }) -}}
-    {{- form_row(column_select.activity.period.to, {
-        'label': false,
-        'addon_label': 'label.to_date'
+    {{- form_row(column_select.activity.period_days, {
+        'label': 'label.period_days',
+        'addon_fa': 'calendar-check-o'
     }) -}}
     <h4>{{- 'label.exclude_counterparties'|trans -}}</h4>
     {{- form_row(column_select.activity.exclude, {'label': false}) -}}
