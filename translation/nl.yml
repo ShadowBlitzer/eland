@@ -94,6 +94,7 @@ label:
   approved: Goedgekeurd
   balance: Saldo
   balance_on_date: Saldo op datum
+  balance_sum: "Totaal saldo: %balance_sum%"
   code: Code
   columns: Kolommen
   comment: Commentaar

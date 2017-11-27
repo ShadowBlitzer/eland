@@ -50,7 +50,7 @@
 		},
 		'pre-active': {
 			'label': 'user_type.pre_active',
-			'class': 'bg-inactive',
+			'class': 'bg-info',
 		},
 		'post-active': {
 			'label': 'user_type.post_active',
@@ -76,92 +76,98 @@
 
 {%- block in_pagination -%}
 
-{%- set label_code = config('lets_enable', schema) ? 'label.letscode' : 'label.code' -%}
+	{%- set label_code = config('template_lets', schema) ? 'label.letscode' : 'label.code' -%}
 
-{%- set col_format = {
-	'letscode': {
-		'lbl': label_code,
-		'route': 'user_show',
-		'route_key': 'user',
-		'route_col_id': 'id'
-	},
-	'name': {
-		'lbl': 'label.name',
-		'route': 'user_show',
-		'route_key': 'user',
-		'route_col_id': 'id'
-	},
-	'fullname': {
-		'lbl': 'label.full_name',
-		'route': 'user_show',
-		'route_key': 'user',
-		'route_col_id': 'id'
-	},
-	'postcode': {
-		'lbl': 'label.postcode',
-		'hide': 'phone'
-	},
-	'accountrole': {
-		'lbl': 'label.role',
-		'hide': 'phone'
-	},
-	'saldo': {
-		'lbl': 'label.balance',
-	},
-	'minlimit': {
-		'lbl': 'label.minimum_limit',
-	},
-	'maxlimit': {
-		'lbl': 'label.maximum_limit',
-	},
-	'comment': {
-		'lbl': 'label.comment',
-	},
-	'admincomment': {
-		'lbl': 'label.admin_comment',
-	},
-	'hobbies': {
-		'lbl': 'label.hobbies',
-	},
-	'cdate': {
-		'lbl': 'label.created',
-		'render': 'date',
+	{%- set col_format = {
+		'letscode': {
+			'lbl': label_code,
+			'route': 'user_show',
+			'route_key': 'user',
+			'route_col_id': 'id'
+		},
+		'name': {
+			'lbl': 'label.name',
+			'route': 'user_show',
+			'route_key': 'user',
+			'route_col_id': 'id'
+		},
+		'fullname': {
+			'lbl': 'label.full_name',
+			'route': 'user_show',
+			'route_key': 'user',
+			'route_col_id': 'id'
+		},
+		'postcode': {
+			'lbl': 'label.postcode',
+			'hide': 'phone'
+		},
+		'accountrole': {
+			'lbl': 'label.role',
+			'hide': 'phone'
+		},
+		'saldo': {
+			'lbl': 'label.balance',
+		},
+		'minlimit': {
+			'lbl': 'label.minimum_limit',
+		},
+		'maxlimit': {
+			'lbl': 'label.maximum_limit',
+		},
+		'comment': {
+			'lbl': 'label.comment',
+		},
+		'admincomment': {
+			'lbl': 'label.admin_comment',
+		},
+		'hobbies': {
+			'lbl': 'label.hobbies',
+		},
+		'cdate': {
+			'lbl': 'label.created',
+			'render': 'date',
 
-	},
-	'mdate': {
-		'lbl': 'label.modified',
-		'render': 'date',
-	},
-	'adate': {
-		'lbl': 'label.activated',
-		'render': 'date',
-	},
-	'lastlogin': {
-		'lbl': 'label.last_login',
-		'render': 'date',
-	},
-	'saldomail': {
-		'lbl': 'label.periodic_mail',
-		'render': 'yes_no',
-	},
-}
--%}
-
-
-{%- set table_forms = {
-	'sel':	{
-		'form': sel_form,
-		'id': 'id'
+		},
+		'mdate': {
+			'lbl': 'label.modified',
+			'render': 'date',
+		},
+		'adate': {
+			'lbl': 'label.activated',
+			'render': 'date',
+		},
+		'lastlogin': {
+			'lbl': 'label.last_login',
+			'render': 'date',
+		},
+		'saldomail': {
+			'lbl': 'label.periodic_mail',
+			'render': 'yes_no',
+		},
 	}
-}
--%}
+	-%}
 
-{{- t.start() -}}
-{{- t.head(columns, col_format, route, all_params, sort) -}}
-{{- t.body(users, columns, col_format, acc_sch|merge({'user_type': user_type}), table_forms) -}}
-{{- t.end() -}}
+
+	{%- set table_forms = {
+		'sel':	{
+			'form': sel_form,
+			'id': 'id'
+		}
+	}
+	-%}
+
+	{{- t.start() -}}
+	{{- t.head(columns, col_format, route, all_params, sort) -}}
+	{{- t.body(users, columns, col_format, acc_sch|merge({'user_type': user_type}), table_forms) -}}
+	{{- t.end() -}}
 
 {%- endblock in_pagination -%}
+
+{%- block post_inner -%}
+	<div class="pull-right">
+		<span>{{- 'label.balance_sum'|trans({'%balance_sum%': balance_sum}) -}}</span>
+	</div>
+{%- endblock post_inner -%}
 
 
 

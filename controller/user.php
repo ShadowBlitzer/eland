@@ -30,6 +30,8 @@ class user
 
 		$app['view']->set('user', $view);
 
+		$new_user_treshold = gmdate('Y-m-d H:i:s', time() - ($app['config']->get('newuserdays', $schema) * 84600));
+		
 		$columns = [
 			'base'	=> [
 				'letscode'		=> true,
@@ -84,7 +86,7 @@ class user
 
 		}
 
-		$where = $params = [];
+		$where = $where_q = $params = [];
 
 		$filter = $app->build_named_form('f', user_filter_type::class)
 			->handleRequest($request);
@@ -95,19 +97,63 @@ class user
 
 			if (isset($data['q']))
 			{
-				$where[] = 'u.name ilike ?';
+				$where_q[] = 'u.name ilike ?';
 				$params[] = '%' . $data['q'] . '%';
 
-				$where[] = 'u.letscode ilike ?';
+				$where_q[] = 'u.letscode ilike ?';
 				$params[] = '%' . $data['q'] . '%';				
 			}
 		}
 
-		$filtered = count($where) ? true : false;
-		$where = $filtered ? ' where ' . implode(' or ', $where) . ' ' : '';
+		$filtered = count($where_q) ? true : false;
+		
+		if ($filtered)
+		{
+			$where[] = implode(' or ', $where_q);
+		}
+
+		switch ($user_type)
+		{
+			case 'active': 
+				$where[] = 'u.status in (1, 2, 7)';
+				break;
+			case 'new':
+				$where[] = 'u.status = 1';
+				$where[] = 'u.adate is not null';
+				$where[] = 'u.adate > ?';
+				$params[] = $new_user_treshold;
+				break;
+			case 'leaving':
+				$where[] = 'u.status = 2';
+				break;			
+			case 'interlets': 
+				$where[] = 'u.accountrole = \'interlets\'';
+				$where[] = 'u.status in (1, 2, 7)';
+				break;
+			case 'direct':
+				$where[] = 'u.status in (1, 2, 7)';
+				$where[] = 'u.accountrole != \'interlets\'';
+				break;
+			case 'pre-active':
+				$where[] = 'u.adate is null';
+				$where[] = 'u.status not in (1, 2, 7)';
+				break;
+			case 'post-active':
+				$where[] = 'u.adate is not null';
+				$where[] = 'u.status not in (1, 2, 7)';
+				break;
+			case 'all':
+				break;
+			default: 
+				$where[] = '1 = 2';
+				break;
+		}
+
+		$where = count($where) ? ' where ' . implode(' and ', $where) . ' ' : '';
 
 		$query = ' from ' . $schema . '.users u ' . $where;
 		$row_count = $app['db']->fetchColumn('select count(u.*)' . $query, $params);
+		$balance_sum = $app['db']->fetchColumn('select sum(u.saldo)' . $query, $params) ?? 0;
 		$query = 'select u.*' . $query;
 
 		$sort = new sort($request);
@@ -133,8 +179,6 @@ class user
 
 		$sel_form = $app->namedForm('sel');
 
-		$new_user_treshold = gmdate('Y-m-d H:i:s', time() - ($app['config']->get('newuserdays', $schema) * 84600));
-
 		$users = [];
 
 		$rs = $app['db']->executeQuery($query, $params);
@@ -143,7 +187,7 @@ class user
 		{
 			if (!in_array($row['status'], [1, 2, 7]))
 			{
-				$row['class'] = 'inactive';
+				$row['class'] = isset($row['adate']) ? 'inactive' : 'info';
 			}
 			else if ($row['accountrole'] === 'interlets')
 			{
@@ -188,6 +232,7 @@ class user
 			'columns'		=> $cols,
 			'column_select'	=> $column_select->createView(),
 			'sel_form'		=> $sel_form->createView(),
+			'balance_sum'	=> $balance_sum,
 		];
 
 		return $app['twig']->render('user/' . $access . '_' . $view . '.html.twig', $vars);
