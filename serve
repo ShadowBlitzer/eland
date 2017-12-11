@@ -9,4 +9,4 @@ else
   LOCAL=$1
 fi
 
-eval "$( cat .env | tr  '\n' ' ' )" php -d variables_order=EGPCS -S $LOCAL -t web/
+eval "$( cat .env | tr  '\n' ' ' )" php -d variables_order=EGPCS -S $LOCAL -t web/ -c php.ini

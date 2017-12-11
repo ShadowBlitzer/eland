@@ -4192,3 +4192,5 @@ function send_activation_mail($password, $user)
 	]);
 }
 
+*/
+
