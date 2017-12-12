@@ -269,7 +269,11 @@ $app->extend('monolog', function($monolog, $app) {
 });
 
 $app->register(new Silex\Provider\SessionServiceProvider(), [
-	'session.storage.handler'	=> new service\redis_session($app['predis']),
+	'session.storage.handler'	=> function ($app) {
+		return new Predis\Session\Handler(
+			$app['predis'], ['gc_maxlifetime' => 172800]
+		);	
+	},
 	'session.storage.options'	=> [
 		'name'						=> 'eland',
 		'cookie_lifetime'			=> 172800,
