@@ -1,0 +1,21 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
+
+{%- block heading -%}
+    {{- 'news_del.title'|trans({'%name%': news.headline}) -}}
+{%- endblock heading -%}
+
+{%- block inner -%}
+    {%- embed 'news/item.html.twig' with {'n': news} -%}
+    {%- endembed -%}
+
+    {{- p.form_start(form) -}}
+    {{- b.cancel(path('news_index', acc_sch|view('news'))) -}}
+    {{- b.del(form.submit) -}}
+    {{- p.form_end(form) -}}
+{%- endblock inner -%}
+
+
+

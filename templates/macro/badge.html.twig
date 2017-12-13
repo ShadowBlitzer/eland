@@ -1,0 +1,10 @@
+{% macro badge(key) -%}
+	{%- set ary = {
+		'public': 'success', 'interlets': 'warning', 
+		'users': 'default', 'admin': 'info',
+		'offer': 'default', 'want': 'primary',
+		'service': 'service', 'good': 'good'
+	} -%}
+	{%- set class = ary[key] ?? 'default' -%}
+	<span class="badge-text label label-{{- class -}}">{{- ('badge.'~key)|trans -}}</span>
+{%- endmacro badge %}

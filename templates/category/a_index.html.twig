@@ -1,0 +1,79 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/top_button.html.twig' as tb %}
+{% import 'macro/mini_button.html.twig' as mb %}
+
+{%- block top_buttons -%}
+    {{- tb.add(path('category_add', acc_sch), 'category_add.title') -}}
+{%- endblock top_buttons -%}
+
+{%- block inner -%}
+
+<div class="panel panel-default printview">
+<div class="table-responsive">
+<table class="table table-striped table-hover table-bordered footable" data-sort="false">
+<thead>
+<tr>
+<th>{{- 'category_index.name'|trans -}}</th>
+<th data-hide="phone">{{- 'category_index.count_wants'|trans -}}</th>
+<th data-hide="phone">{{- 'category_index.count_offers'|trans -}}</th>
+<th data-hide="phone">{{- 'btn.delete'|trans -}}</th>
+</tr>
+</thead>
+<tbody>
+
+{%- for c in categories -%}
+
+    {%- if c.id_parent -%}
+        <tr>    
+		<td>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{{- path('category_edit', acc_sch|merge({'category': c.id})) -}}">
+        {{- c.name -}}
+        </a>        
+    {%- else -%}
+        <tr class="info">
+        <td>
+        <strong>
+        <a href="{{- path('category_edit', acc_sch|merge({'category': c.id})) -}}">
+        {{- c.name -}}
+        </a> 
+        </strong> 
+    {%- endif -%}
+
+    </td>
+
+    <td>{{- c.stat_msgs_wanted ?: '' -}}</td>
+
+    <td>{{- c.stat_msgs_offers ?: '' -}}</td>
+
+    <td>
+    {%- if (c.stat_msgs_wanted|default(0) + c.stat_msgs_offers|default(0) + c.child_count|default(0)) == 0 -%}
+       {{- mb.del(path('category_del', acc_sch|merge({'category': c.id})), 'category_del.btn') -}} 
+    {%- else -%}
+        &nbsp;
+    {%- endif -%}
+    </td>
+
+    </tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+</div>
+
+{%- endblock inner -%}
+
+{%- block post_inner -%}
+
+<p>
+<ul>
+<li>{{- 'category_index.explain_delete'|trans -}}</li>
+<li>{{- 'category_index.explain_subcategory'|trans -}}</li>
+</ul>
+</p>
+
+{%- endblock post_inner -%}
+

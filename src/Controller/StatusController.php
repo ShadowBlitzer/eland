@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class StatusController extends Controller
 {
-	public function indexAction(Request $request, string $schema, string $access)
+	public function index(Request $request, string $schema, string $access)
 	{
 		return $this->render('status/a_index.html.twig', []);
 	}

@@ -7,12 +7,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ElasController extends Controller
 {
-	public function groupLoginAction(Request $request, string $schema, string $access, string $account)
+	public function groupLogin(Request $request, string $schema, string $access, string $account)
 	{
 		return $this->json([]);
 	}
 
-	public function soap_status(Request $request, string $schema, string $access, string $account)
+	public function soapStatus(Request $request, string $schema, string $access, string $account)
 	{
 		return $this->json([]);
 	}

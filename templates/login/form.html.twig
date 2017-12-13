@@ -1,0 +1,24 @@
+{% extends 'anon.html.twig' %}
+
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
+
+{% block inner -%}
+
+{%- set label_login = config('template_lets', schema) ? 'label.email_letscode_username' : 'label.email_code_username' -%}
+
+{{- p.form_start(form) -}}
+
+{{- form_row(form.login, {'label': label_login, 'addon_fa': 'user'}) -}}
+{{- form_row(form.password, {'label': 'label.password'}) -}}
+
+{{- b.default(form.submit, 'btn.login') -}}
+
+{{- p.form_end(form) -}}
+
+<a href="{{- path('password_reset', {'schema': schema}) -}}">{{- 'link.password_reset'|trans -}}</a>
+
+{%- endblock inner %}
+
+
+

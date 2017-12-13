@@ -1,0 +1,18 @@
+{% extends 'mail/base.text.twig' %}
+
+{% block pretext %}{% endblock pretext %}
+
+{% block body %}
+{% autoescape false %}
+Klik op deze link om je inschrijving te bevestigen :
+
+{{ confirm_url }}
+
+Deze link blijft 1 dag geldig.
+
+{% endautoescape %}
+{% endblock body %}
+
+{% block accountinfo %}{% endblock accountinfo %}
+{% block support %}{% endblock support %}
+{% block unsubscribe %}{% endblock unsubscribe %}

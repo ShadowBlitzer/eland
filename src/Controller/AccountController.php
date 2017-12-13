@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AccountController extends Controller
 {
-	public function indexAction(Request $request, string $schema, string $access, string $account_type)
+	public function index(Request $request, string $schema, string $access, string $account_type)
 	{
 		return $this->render('account/' . $access . '_index.html.twig', []);
 	}

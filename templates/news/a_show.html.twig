@@ -1,0 +1,42 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/top_button.html.twig' as tb %}
+{% import 'macro/button_group.html.twig' as bg %}
+
+{% block top_buttons_before -%}
+    {%- if approve_form is defined -%}
+        {{- form_start(approve_form) -}}      
+    {%- endif -%}
+{%- endblock top_buttons_before -%}
+
+{%- block top_buttons -%}
+    {%- if approve_form is defined -%}
+        {{- tb.approve(approve_form.approve, 'news.title_top_btn.approve') -}}        
+    {%- endif -%}
+    {{- tb.edit(path('news_edit', acc_sch|merge({'news': news.id})), 'news.title_top_btn.edit') -}}
+    {{- tb.del(path('news_del', acc_sch|merge({'news': news.id})), 'news.title_top_btn.del') -}}
+{%- endblock top_buttons -%}
+
+{%- block top_buttons_right -%}
+    {{- bg.item_nav('news', prev, next, acc_sch) -}}
+{%- endblock top_buttons_right -%}
+
+{%- block top_buttons_after -%}
+    {%- if approve_form is defined -%}
+        {{- form_end(approve_form) -}}
+    {%- endif -%}  
+{%- endblock top_buttons_after -%}
+
+{%- block heading -%}
+    {{- 'news_show.title'|trans({'%name%': news.headline}) -}}
+{%- endblock heading -%}
+
+{% block inner -%}
+
+{% embed 'news/item.html.twig' with {'n': news} %}
+    {%- block media_heading -%}{%- endblock -%}
+{% endembed %}
+
+{%- endblock inner %}
+
+

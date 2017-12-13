@@ -1,13 +1,13 @@
 <?php
 
-namespace controller;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class ConfigController extends Controller
 {
-	public function indexAction(Request $request, string $schema, string $access)
+	public function index(Request $request, string $schema, string $access)
 	{
 		return $this->render('config/a_index.html.twig', []);
 	}

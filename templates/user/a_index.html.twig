@@ -1,0 +1,22 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/top_button.html.twig' as tb %}
+{% import 'macro/pagination.html.twig' as pg %}
+{% import 'macro/button_group.html.twig' as bg %}
+
+{%- block top_buttons -%}
+	{{- tb.add(path('user_add', acc_sch), 'news.title_top_btn.add') -}}
+{%- endblock top_buttons -%}
+
+{%- block top_buttons_right -%}
+	{{- bg.view(route, all_params, {'list': 'view.list', 'tiles': 'view.tiles', 'map': 'view.map'}, view) -}}
+{%- endblock top_buttons_right -%}
+
+{%- block inner -%}
+	{{- pg.pagination(route, all_params, pagination) -}}
+	{% block in_pagination -%}{% endblock -%}
+	{{- pg.pagination(route, all_params, pagination) -}}
+{%- endblock inner -%}
+
+

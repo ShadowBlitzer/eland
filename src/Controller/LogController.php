@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class LogController extends Controller
 {
-	public function indexAction(Request $request, string $schema)
+	public function index(Request $request, string $schema)
 	{
 		return $this->render('log/a_index.html.twig', []);
 

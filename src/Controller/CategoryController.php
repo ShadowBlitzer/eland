@@ -10,14 +10,14 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class CategoryController extends Controller
 {
-	public function indexAction(Request $request, string $schema, string $access)
+	public function index(Request $request, string $schema, string $access)
 	{
 		return $this->render('category/a_index.html.twig', [
 			'categories'	=> $app['category_repository']->get_all($schema),
 		]);
 	}
 
-	public function addAction(Request $request, string $schema, string $access, int $parent_category)
+	public function add(Request $request, string $schema, string $access, int $parent_category)
 	{
 		$data = [
 			'id_parent'	=> $parent_category,
@@ -64,7 +64,7 @@ class CategoryController extends Controller
 	*
 	*/
 
-	public function editAction(Request $request, string $schema, string $access, array $category)
+	public function edit(Request $request, string $schema, string $access, array $category)
 	{
 		$id = $category['id'];
 
@@ -117,7 +117,7 @@ class CategoryController extends Controller
 	*
 	*/
 
-	public function delAction(Request $request, string $schema, string $access, array $category)
+	public function del(Request $request, string $schema, string $access, array $category)
 	{
 		$id = $category['id'];
 

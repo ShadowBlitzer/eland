@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CustomFieldController extends Controller
 {
-	public function indexAction(Request $request, string $schema)
+	public function index(Request $request, string $schema)
 	{
 		return $this->render('custom_field/a_index.html.twig', []);
 	}

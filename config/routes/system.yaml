@@ -1,0 +1,6 @@
+authenticated:
+    resource: authenticated.yaml
+    prefix: /{access}
+    requirements:
+        access: '[giua]'
+

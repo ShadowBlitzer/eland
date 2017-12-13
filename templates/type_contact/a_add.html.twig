@@ -1,0 +1,12 @@
+{% extends 'type_contact/a_form.html.twig' %}
+
+{% import 'macro/button.html.twig' as b %}
+
+{% block heading -%}
+    {{- 'type_contact_add.title'|trans -}}
+{%- endblock %}
+
+{% block submit -%}
+    {{- b.add(form.submit) -}}
+{% endblock %}
+

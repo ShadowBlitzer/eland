@@ -1,0 +1,22 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
+
+{% block inner -%}
+
+{{ p.form_start(form) }}
+
+{% block form_fields -%}
+    {{ form_row(form.abbrev, {'label': 'type_contact.abbreviation'}) }}
+    {{ form_row(form.name, {'label': 'type_contact.name'}) }}
+{%- endblock form_fields %}
+
+{{ b.cancel(path('typecontact_index', acc_sch)) }}
+
+{% block submit %}{% endblock %}
+
+{{ p.form_end(form) }}
+
+{%- endblock inner %}
+

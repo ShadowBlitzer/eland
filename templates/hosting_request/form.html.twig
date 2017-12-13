@@ -1,0 +1,26 @@
+{% extends 'eland.html.twig' %}
+
+{% import 'macro/panel.html.twig' as p %}
+{% import 'macro/button.html.twig' as b %}
+
+{% block inner_content -%}
+
+<h1>{{- 'hosting_request.title'|trans -}}</h1>
+<p>{{- 'hosting_request.explain'|trans -}}</p>
+
+{{- p.form_start(form) -}}
+{{- form_row(form.group_name, {'label': 'label.currency_or_group_name', 'addon_fa': 'share-alt'}) -}}
+{{- form_row(form.email, {'label': 'label.email', 'sub_label': 'label.email_confirmation_explain'}) -}}
+{{- form_row(form.message, {'label': 'label.your_message', 'attr': {'rows': 6}}) -}}
+{{- b.cancel(path('main_index')) -}}
+{{- b.info(form.submit, 'btn.send') -}}
+{{- p.form_end(form) -}}
+
+<br>
+<p>*{{ 'hosting_request.privacy'|trans }}</p>
+
+{%- endblock inner_content %}
+
+
+
+

@@ -17,7 +17,7 @@ use form\password_reset_type;
 
 class PasswordResetController extends Controller
 {
-	public function formAction(Request $request, string $schema)
+	public function form(Request $request, string $schema)
 	{
 		$form = $app->form()
 			->add('email', email_addon_type::class, [

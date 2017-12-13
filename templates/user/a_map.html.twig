@@ -1,0 +1,143 @@
+{% extends 'user/a_index.html.twig' %}
+
+{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/table.html.twig' as t %}
+{% import 'macro/panel.html.twig' as p %}
+{% import 'macro/top_button.html.twig' as tb %}
+
+{% set view = 'map' %}
+
+{%- block css -%}
+	{%- include 'asset/datepicker_css.html.twig' -%}
+{%- endblock css -%}
+
+{%- block js -%}
+	{%- include 'asset/datepicker_js.html.twig' -%}
+	{{- a.js('csv.js') -}}
+{%- endblock js -%}
+
+{%- block csv -%}
+	{{- p.csv() -}}
+{%- endblock csv -%}
+
+{%- block heading_right -%}
+	{{- tb.show_columns() -}}
+{%- endblock heading_right -%}
+
+{%- block pre_inner -%}
+	{%- embed 'user/column_select.html.twig' -%}
+	{%- endembed -%}
+
+	{%- embed 'user/filter_form.html.twig' -%}
+	{%- endembed -%}
+{%- endblock pre_inner -%}
+
+{%- block in_pagination -%}
+
+{%- set label_code = config('lets_enable', schema) ? 'label.letscode' : 'label.code' -%}
+
+{%- set col_format = {
+	'letscode': {
+		'lbl': label_code,
+		'route': 'user_show',
+		'route_key': 'user',
+		'route_col_id': 'id'
+	},
+	'name': {
+		'lbl': 'label.name',
+		'route': 'user_show',
+		'route_key': 'user',
+		'route_col_id': 'id'
+	},
+	'fullname': {
+		'lbl': 'label.full_name',
+		'route': 'user_show',
+		'route_key': 'user',
+		'route_col_id': 'id'
+	},
+	'postcode': {
+		'lbl': 'label.postcode',
+		'hide': 'phone'
+	},
+	'accountrole': {
+		'lbl': 'label.role',
+		'hide': 'phone'
+	},
+	'saldo': {
+		'lbl': 'label.balance',
+	},
+	'minlimit': {
+		'lbl': 'label.minimum_limit',
+	},
+	'maxlimit': {
+		'lbl': 'label.maximum_limit',
+	},
+	'comment': {
+		'lbl': 'label.comment',
+	},
+	'admincomment': {
+		'lbl': 'label.admin_comment',
+	},
+	'hobbies': {
+		'lbl': 'label.hobbies',
+	},
+	'cdate': {
+		'lbl': 'label.created',
+		'render': 'date',
+
+	},
+	'mdate': {
+		'lbl': 'label.modified',
+		'render': 'date',
+	},
+	'adate': {
+		'lbl': 'label.activated',
+		'render': 'date',
+	},
+	'lastlogin': {
+		'lbl': 'label.last_login',
+		'render': 'date',
+	},
+	'saldomail': {
+		'lbl': 'label.periodic_mail',
+		'render': 'yes_no',
+	},
+}
+-%}
+
+{#
+    {{- form_row(column_select.base.letscode, {'label': 'label.code'}) -}}
+    {{- form_row(column_select.base.name, {'label': 'label.username'}) -}}
+    {{- form_row(column_select.base.fullname, {'label': 'label.full_name'}) -}}
+    {{- form_row(column_select.base.postcode, {'label': 'label.postcode'}) -}}
+    {{- form_row(column_select.base.accountrole, {'label': 'label.role'}) -}}
+    {{- form_row(column_select.base.saldo, {'label': 'label.balance'}) -}}
+    {{- form_row(column_select.base.minlimit, {'label': 'label.minimum_limit'}) -}}
+    {{- form_row(column_select.base.maxlimit, {'label': 'label.maximum_limit'}) -}}
+    {{- form_row(column_select.base.comments, {'label': 'label.comment'}) -}}
+    {{- form_row(column_select.base.admincomment, {'label': 'label.admin_comment'}) -}}
+    {{- form_row(column_select.base.hobbies, {'label': 'label.hobbies_interests'}) -}}
+    {{- form_row(column_select.base.cdate, {'label': 'label.created'}) -}}
+    {{- form_row(column_select.base.mdate, {'label': 'label.modified'}) -}}
+    {{- form_row(column_select.base.adate, {'label': 'label.activated'}) -}}
+    {{- form_row(column_select.base.lastlogin, {'label': 'label.last_login'}) -}}
+    {{- form_row(column_select.base.saldomail, {'label': 'label.periodic_mail'}) -}}
+#}
+
+{%- set table_forms = {
+	'sel':	{
+		'form': sel_form,
+		'id': 'id'
+	}
+}
+-%}
+
+{{- t.start() -}}
+{{- t.head(columns, col_format, route, all_params, sort) -}}
+{{- t.body(users, columns, col_format, acc_sch|merge({'user_type': user_type}), table_forms) -}}
+{{- t.end() -}}
+
+{%- endblock in_pagination -%}
+
+
+

@@ -97,7 +97,7 @@ class ExportController extends Controller
 
 	private $r = "\r\n";
 
-	public function indexAction(Request $request, string $schema)
+	public function index(Request $request, string $schema)
 	{
 		set_time_limit(60);
 

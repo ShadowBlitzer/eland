@@ -22,7 +22,7 @@ use form\filter\transaction_filter_type;
 
 class TransactionController extends Controller
 {
-	public function indexAction(Request $request, string $schema, string $access)
+	public function index(Request $request, string $schema, string $access)
 	{
 		$where = $params = [];
 
@@ -158,7 +158,7 @@ class TransactionController extends Controller
 	}
 
 
-	public function showAction(Request $request, string $schema, string $access, array $transaction)
+	public function show(Request $request, string $schema, string $access, array $transaction)
 	{
 		return $this->render('transaction/' . $access . '_show.html.twig', [
 			'transaction'	=> $transaction,
@@ -167,12 +167,12 @@ class TransactionController extends Controller
 		]);
 	}
 
-	public function showSelfAction(Request $request, string $schema, string $access)
+	public function showSelf(Request $request, string $schema, string $access)
 	{
 		return $this->render('transaction/' . $access . '_show_self.html.twig', []);
 	}
 
-	public function addAction(Request $request, string $schema, string $access)
+	public function add(Request $request, string $schema, string $access)
 	{
 		$data = [];
 
@@ -219,7 +219,7 @@ class TransactionController extends Controller
 		]);
 	}
 
-	public function editAction(Request $request, string $schema, string $access, array $transaction)
+	public function edit(Request $request, string $schema, string $access, array $trans)
 	{
 		$form = $app->form($transaction)
 			->add('description', addon_type::class, [

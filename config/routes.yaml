@@ -1,15 +1,27 @@
 
 
-
-
-
-
-
-
-
-
-
-
 #index:
 #    path: /
 #    defaults: { _controller: 'App\Controller\DefaultController::index' }
+
+remove_trailing_slash:
+    path: /{url}
+    controller: App\Controller\RedirectingController::removeTrailingSlash
+    requirements:
+        url: .*/$
+    methods: [GET]
+
+localized:
+    resource: routes/localized.yaml
+    prefix: /{_locale}
+    requirements:
+        _locale: %app.locales%
+
+index_no_locale:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: /%app.default_locale%
+
+#       permanent: true
+    

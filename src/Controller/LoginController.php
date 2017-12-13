@@ -16,7 +16,7 @@ use form\login_type;
 
 class LoginController extends Controller
 {
-	public function formAction(Request $request, string $schema)
+	public function form(Request $request, string $schema)
 	{
 		$form = $app->build_form(login_type::class)
 			->handleRequest($request);

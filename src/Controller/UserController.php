@@ -13,7 +13,7 @@ use form\column_select\user_column_select_type;
 
 class UserController extends Controller
 {
-	public function noViewAction(Request $request, string $schema, string $access, string $user_type)
+	public function noView(Request $request, string $schema, string $access, string $user_type)
 	{
 		return $app->reroute('user_index', [
 			'schema'	=> $schema,
@@ -23,7 +23,7 @@ class UserController extends Controller
 		]);
 	}
 
-	public function indexAction(Request $request,
+	public function index(Request $request,
 		string $schema, string $access, string $view, string $user_type)
 	{		
 		$s_admin = $access === 'a';
@@ -238,12 +238,12 @@ class UserController extends Controller
 		return $this->render('user/' . $access . '_' . $view . '.html.twig', $vars);
 	}
 
-	public function showAction(Request $request, string $schema, string $access, array $user)
+	public function show(Request $request, string $schema, string $access, array $user)
 	{
 		return $this->render('user/' . $access . '_show.html.twig', []);
 	}
 
-	public function showSelfAction(Request $request, string $schema, string $access)
+	public function showSelf(Request $request, string $schema, string $access)
 	{
 		return $this->render('user/' . $access . '_show_self.html.twig', []);
 	}

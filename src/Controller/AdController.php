@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AdController extends Controller
 {
-	public function noViewAction(Request $request, string $schema, string $access)
+	public function noView(Request $request, string $schema, string $access)
 	{
 		return $app->reroute('ad_index', [
 			'schema'	=> $schema,
@@ -16,19 +16,19 @@ class AdController extends Controller
 		]);
 	}
 
-	public function indexAction(Request $request, string $schema, string $access, string $view = null)
+	public function index(Request $request, string $schema, string $access, string $view = null)
 	{
 		$app['view']->set('ad', $view);
 
 		return $this->render('ad/' . $access . '_index.html.twig', []);
 	}
 
-	public function showSelfAction(Request $request, string $schema, string $access)
+	public function showSelf(Request $request, string $schema, string $access)
 	{
 		return $this->render('ad/' . $access . '_show_self.html.twig', []);
 	}
 
-	public function showAction(Request $request, string $schema, string $access, array $ad)
+	public function show(Request $request, string $schema, string $access, array $ad)
 	{
 		return $this->render('ad/' . $access . '_show.html.twig', [
 			'ad'	=> $ad,

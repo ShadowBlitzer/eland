@@ -16,7 +16,7 @@ use form\register_type;
 
 class RegisterController extends Controller
 {
-	public function formAction(Request $request, string $schema)
+	public function form(Request $request, string $schema)
 	{
 		$form = $app->build_form(register_type::class)
 			->handleRequest($request);
@@ -44,7 +44,7 @@ class RegisterController extends Controller
 	 *
 	 */
 
-	public function confirmAction(Request $request, string $schema, string $token)
+	public function confirm(Request $request, string $schema, string $token)
 	{
 		$data = $app['mail_validated_confirm_link']->get();
 	

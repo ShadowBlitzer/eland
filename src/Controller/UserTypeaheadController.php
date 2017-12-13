@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserTypeaheadController extends Controller
 {
-	public function get(Request $request,
+	public function getLocal(Request $request,
 		string $schema, string $access, string $user_type)
 	{
 		if ($access !== 'a' && !in_array($user_type, ['active', 'direct']))
@@ -128,7 +128,7 @@ class UserTypeaheadController extends Controller
 		return $response;
 	}
 
-	public function get_interlets(Request $request, 
+	public function getInterlets(Request $request, 
 		string $schema, string $access, int $user)
 	{
 		if (!in_array($access, ['a', 'u']))
@@ -179,10 +179,6 @@ class UserTypeaheadController extends Controller
 			http_response_code(404);
 			exit;
 		}
-		
-
-
-
 
 		return $this->render('user/' . $access . '_show.html.twig', []);
 	}
@@ -345,3 +341,4 @@ function users_to_json($sch, $status_sql = 'in (1, 2)')
 	return json_encode($users);
 }
 
+*/

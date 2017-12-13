@@ -1,0 +1,24 @@
+{% extends 'admin.html.twig' %}
+
+{% import 'macro/button.html.twig' as b %}
+{% import 'macro/panel.html.twig' as p %}
+
+{% block inner -%}
+
+{{- p.form_start(form) -}}
+
+{% block form_fields -%}
+    {{- form_row(form.menu, {'label': 'label.menu', 'addon_fa': 'th-list'}) -}}
+    {{- form_row(form.slug, {'label': 'label.slug', 
+        'sub_label': 'label.slug_explain', 'addon_fa': 'paperclip'}) -}}
+    {{- form_row(form.access, {'label': 'label.access'}) -}}
+    {{- form_row(form.content, {'label': 'label.content'}) -}}
+{%- endblock form_fields %}
+
+{{- b.cancel(path('page_a_index', acc_sch)) -}}
+
+{% block submit %}{% endblock %}
+
+{{- p.form_end(form) -}}
+
+{%- endblock inner %}

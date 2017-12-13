@@ -1,0 +1,23 @@
+{% extends 'anon.html.twig' %}
+
+{% import 'macro/panel.html.twig' as p %}
+{% import 'macro/button.html.twig' as b %}
+
+{% block inner -%}
+
+{{- config('contact_form_top_text', schema) -}}
+
+{{- p.form_start(form) -}}
+{{- form_row(form.email, {'label': 'label.your_email',
+    'sub_label': 'label.email_confirmation_explain'}) -}}
+{{- form_row(form.message, {'label': 'label.your_message', 
+    'attr': {'rows': 8}}) -}}
+{{- b.send(form.submit) -}}
+
+{{- p.form_end(form) -}}
+
+{{- config('contact_form_bottom_text', schema) -}}
+
+{%- endblock inner %}
+
+

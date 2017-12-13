@@ -15,7 +15,7 @@ use exception\invalid_parameter_value_exception;
 
 class NewsController extends Controller 
 {
-	public function no_view(Request $request, string $schema, string $access)
+	public function noView(Request $request, string $schema, string $access)
 	{
 		return $app->reroute('news_index', [
 			'schema'	=> $schema,
@@ -1058,3 +1058,5 @@ function cancel($id = '')
 	header('Location: ' . generate_url('news', $params));
 	exit;
 }
+
+*/

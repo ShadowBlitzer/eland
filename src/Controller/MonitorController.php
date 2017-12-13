@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MonitorController extends Controller
 {
-	public function get(Request $request)
+	public function status(Request $request)
 	{
 		try
 		{

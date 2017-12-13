@@ -9,7 +9,7 @@ use form\post\hosting_request_type;
 
 class HostingRequestController extends Controller
 {
-	public function formAction(Request $request)
+	public function form(Request $request)
 	{
 		$form = $app->build_form(hosting_request_type::class)
 			->handleRequest($request);
@@ -35,7 +35,7 @@ class HostingRequestController extends Controller
 		]);
 	}
 
-	public function confirmAction(Request $request, string $token)
+	public function confirm(Request $request, string $token)
 	{
 		$data = $app['mail_validated_confirm_link']->get();
 

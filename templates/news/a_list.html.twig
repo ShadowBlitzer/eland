@@ -1,0 +1,52 @@
+{% extends 'news/a_index.html.twig' %}
+
+{% import 'macro/asset.html.twig' as a %}
+{% import 'macro/table.html.twig' as t %}
+{% import 'macro/panel.html.twig' as p %}
+
+{% set view = 'list' %}
+
+{%- block csv -%}
+	{{- p.csv() -}}
+{%- endblock csv -%}
+
+{%- block js -%}
+	{{- a.js('csv.js') -}}
+{%- endblock js -%}
+
+{%- block in_pagination -%}
+
+{%- set col_format = {
+	'headline': {
+		'lbl': 'label.description',
+		'route': 'news_show',
+		'route_key': 'news',
+		'route_col_id': 'id'
+	},
+	'itemdate': {
+		'lbl': 'label.date',
+        'render': 'date',
+        'date_precision': 'day'
+	},
+	'approved': {
+		'lbl': 'label.approved',
+		'hide': 'phone',
+		'render': 'yes_no'
+	},
+	'access': {
+		'lbl': 'label.access', 
+		'hide':'phone',
+        'render': 'badge'
+	}
+}
+-%}
+
+{{- t.start() -}}
+{{- t.head(col_format|keys, col_format, route, all_params, sort) -}}
+{{- t.body(news, col_format|keys, col_format, acc_sch) -}}
+{{- t.end() -}}
+
+{%- endblock in_pagination -%}
+
+
+

@@ -1,0 +1,13 @@
+{% extends 'page/a_form.html.twig' %}
+
+{% import 'macro/asset.html.twig' as b %}
+
+{% block heading -%}
+    {{- 'page_a_edit.title'|trans -}}
+{%- endblock %}
+
+{% block submit -%}
+    {{- b.edit(form.submit) -}}
+{%- endblock submit %}
+
+

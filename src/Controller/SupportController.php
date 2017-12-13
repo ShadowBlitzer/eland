@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class SupportController extends Controller
 {
-	public function formAction(Request $request, string $schema, string $access)
+	public function form(Request $request, string $schema, string $access)
 	{
 		$form = $app->form()
 			->add('message', TextareaType::class, [

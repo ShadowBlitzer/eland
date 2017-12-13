@@ -1,0 +1,38 @@
+{% extends 'news/a_index.html.twig' %}
+
+{% import 'macro/panel.html.twig' as p %}
+
+{% set view = 'extended' %}
+
+{%- block in_pagination -%}
+
+{%- if approve_form is defined -%}
+	{{- form_start(approve_form) -}}
+{%- endif -%}
+
+{%- for n in news -%}
+
+	{%- embed 'news/item.html.twig' -%}
+		{%- import 'macro/button.html.twig' as b -%}
+		{%- block admin_buttons -%}
+			<span class="inline-buttons pull-right">
+			{%- if n.approve_button is defined -%}
+				{{- b.approve_md(approve_form[n.approve_button]) -}}
+			{%- endif -%}
+			{{- b.edit_link(path('news_edit', acc_sch|merge({'news': n.id}))) -}}
+			{{- b.del_link(path('news_del', acc_sch|merge({'news': n.id}))) -}}
+			</span>
+		{%- endblock admin_buttons -%}
+	{%- endembed -%}
+
+{%- else -%}
+	{{- p.warning() -}}
+	<p>{{- 'news.no_items'|trans -}}</p>
+	{{- p.end -}}
+{%- endfor -%}
+
+{%- if approve_form is defined -%}
+	{{- form_end(approve_form) -}}
+{%- endif -%}
+
+{%- endblock in_pagination -%}

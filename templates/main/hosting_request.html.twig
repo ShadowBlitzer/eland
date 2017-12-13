@@ -1,0 +1,32 @@
+{% extends 'eland.html.twig' %}
+
+{% import 'macro/panel.html.twig' as p %}
+
+{% block inner_content %}
+
+<h1>{{ 'hosting_request.title'|trans }}</h1>
+
+{{ p.default }}
+
+{{ form_start(form) }}
+
+{{ form_row(form.group_name, {'label': 'group_name'}) }}
+
+{{ form_row(form.email, {'label': 'email'}) }}
+
+{{ form_row(form.message, {'label': 'message', 'attr': {'rows': 6}}) }}
+
+{{ form_widget(form.send, {'label': 'send'}) }}
+
+{{ form_end(form) }}
+
+{{ p.end }}
+
+<br>
+<p>*{{ 'hosting_request.privacy'|trans }}</p>
+
+{% endblock inner_content %}
+
+
+
+

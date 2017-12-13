@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 class PageController extends Controller
 {
 
-	public function terms(Request $request, app $app)
+	public function terms(Request $request)
 	{
 		return $this->render('page/terms.html.twig', []);
 	}
 
-    public function show(Request $request, app $app, string $schema, array $page)
+    public function show(Request $request, string $schema, array $page)
     {
 		$response = $app->render('page/show.html.twig', [
 			'content'	=> $page,
@@ -25,7 +25,7 @@ class PageController extends Controller
         return $response;
 	}
 	
-	public function a_index(Request $request, app $app, string $schema, string $access)
+	public function a_index(Request $request, string $schema, string $access)
 	{
 
 
@@ -36,7 +36,7 @@ class PageController extends Controller
 		]);
 	}
 
-	public function a_add(Request $request, app $app, string $schema, string $access)
+	public function a_add(Request $request, string $schema, string $access)
 	{
 		$data = [
 
@@ -77,7 +77,7 @@ class PageController extends Controller
 		]);
 	}
 
-	public function a_edit(Request $request, app $app, string $schema, string $access, $page)
+	public function a_edit(Request $request, string $schema, string $access, $page)
 	{
 		$data = [
 			
@@ -92,14 +92,14 @@ class PageController extends Controller
 		]);
 	}
 
-	public function a_del(Request $request, app $app, string $schema, string $access, array $page)
+	public function a_del(Request $request, string $schema, string $access, array $page)
 	{
 		return $app->render('page/a_del.html.twig', [
 			'page'	=> $page,
 		]);
 	}
 
-	public function a_show(Request $request, app $app, string $schema, string $access, array $page)
+	public function a_show(Request $request, string $schema, string $access, array $page)
 	{
 		return $app->render('page/a_show.html.twig', [
 			'page'	=> $page,

@@ -1,0 +1,44 @@
+{%- import 'macro/badge.html.twig' as ba -%}
+{%- import 'macro/button.html.twig' as b -%}
+
+<div class="panel panel-info printview">
+<div class="panel-body{%- if not n.approved %} bg-inactive{%- endif -%}">
+
+<div class="media">
+<div class="media-body">
+{%- block media_heading -%}
+	<h3 class="media-heading">
+	<a href="{{- path('news_show', acc_sch|merge({'news': n.id})) -}}">
+	{{- n.headline -}}
+	</a>
+	</h3>
+{%- endblock media_heading -%}
+<p>
+{{- n.newsitem -}}
+</p>
+<dl>
+{% if n.location -%}
+	<dt>{{- 'label.location'|trans -}}</dt>
+	<dd>{{- n.location -}}</dd>
+{%- endif %}
+{% if n.itemdate -%}
+	<dt>{{- 'label.event_date'|trans -}}</dt>
+	<dd>{{- n.itemdate|web_date('day') -}}
+	{%- if n.sticky %} <i>({{- 'news.is_kept_after_date'|trans -}})</i>{%- endif -%}
+	</dd>
+{%- endif %}
+<dt>{{- 'label.access'|trans -}}</dt>
+<dd>{{- ba.badge(n.access) -}}</dd>
+</div>
+</div>
+</div>
+
+<div class="panel-footer">
+
+<p><i class="fa fa-user"></i>&nbsp;{{ n.id_user|web_user|raw -}}  
+
+{%- block admin_buttons -%}{%- endblock -%}
+</p>
+</div>
+</div>
+
