@@ -1,0 +1,54 @@
+ad_no_view_index:
+    controller: App\Controller\AdController::noViewIndex
+    path: /ads
+
+ad:
+    resource: giua/giua_ad.yaml
+    prefix: /ads
+
+account:
+    resource: giua/giua_account.yaml
+    prefix: /accounts
+
+user:
+    resource: giua/giua_user.yaml
+    prefix: /users
+
+transaction_index:
+    controller: App\Controller\TransactionController::index
+    path: /transactions
+
+transaction:
+    resource: giua/giua_transaction.yaml
+    prefix: /transactions
+
+news_index:
+   controller: App\Controller\NewsController::index
+   path: /news
+
+news:
+    resource: giua/giua_news.yaml
+    prefix: /news
+
+forum_index:
+    controller: App\Controller\ForumController::index
+    path: /forum
+
+forum:
+    resource: giua/giua_forum.yaml
+    prefix: /forum
+
+doc_index:
+    controller: App\Controller\DocController::index
+    path: /docs
+
+doc:
+    resource: giua/giua_doc.yaml
+    prefix: /docs
+
+
+
+
+
+
+    

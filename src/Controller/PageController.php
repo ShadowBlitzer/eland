@@ -25,18 +25,18 @@ class PageController extends AbstractController
         return $response;
 	}
 	
-	public function a_index(Request $request, string $schema, string $access)
+	public function aIndex(Request $request, string $schema, string $access)
 	{
 
 
 
 
-		return $app->render('page/a_index.html.twig', [
+		return $this->render('page/a_index.html.twig', [
 
 		]);
 	}
 
-	public function a_add(Request $request, string $schema, string $access)
+	public function aAdd(Request $request, string $schema, string $access)
 	{
 		$data = [
 
@@ -45,7 +45,7 @@ class PageController extends AbstractController
 		$form = $app->build_form('page_type', $data)
 			->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 	
@@ -72,12 +72,12 @@ class PageController extends AbstractController
 			]));				
 		}
 
-		return $app->render('page/a_add.html.twig', [
+		return $this->render('page/a_add.html.twig', [
 			'form'	=> $form->createView(),
 		]);
 	}
 
-	public function a_edit(Request $request, string $schema, string $access, $page)
+	public function aEdit(Request $request, string $schema, string $access, $page)
 	{
 		$data = [
 			
@@ -87,19 +87,19 @@ class PageController extends AbstractController
 			->handleRequest($request);
 
 
-		return $app->render('page/a_edit.html.twig', [
+		return $this->render('page/a_edit.html.twig', [
 			'form'	=> $form->createView(),
 		]);
 	}
 
-	public function a_del(Request $request, string $schema, string $access, array $page)
+	public function aDel(Request $request, string $schema, string $access, array $page)
 	{
-		return $app->render('page/a_del.html.twig', [
+		return $this->render('page/a_del.html.twig', [
 			'page'	=> $page,
 		]);
 	}
 
-	public function a_show(Request $request, string $schema, string $access, array $page)
+	public function aShow(Request $request, string $schema, string $access, array $page)
 	{
 		return $app->render('page/a_show.html.twig', [
 			'page'	=> $page,

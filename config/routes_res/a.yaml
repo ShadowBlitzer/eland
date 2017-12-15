@@ -1,0 +1,211 @@
+user_add:
+    path: /users/add
+    controller: App\Controller\UserController::add
+
+user_edit:
+    path: /users/{user}/edit
+    controller: App\Controller\UserController::edit
+    requirements:
+        user: '%app.id%'
+
+user_del:
+    path: /users/{user}/del
+    controller: App\Controller\UserController::del
+    requirements:
+        user: '%app.id%'
+
+transaction_edit:
+    controller: App\Controller\TransactionController::edit
+    path: /transactions/{transaction}/edit
+    requirements:
+        transaction: '%app.id%'
+
+doc_add:
+    path: /docs/add
+    controller: App\Controller\DocController::add
+
+doc_edit:
+    path: /docs/edit/{doc}
+    controller: App\Controller\DocController::edit
+    requirements:
+        user: '%app.doc%'
+
+doc_del:
+    path: /docs/del/{doc}
+    controller: App\Controller\DocController::del
+    requirements:
+        user: '%app.doc%'
+
+status:
+    controller: App\Controller\StatusController::index
+    path: /status
+
+permission_index:
+    controller: App\Controller\PermissionController::index
+    path: /permissions
+
+category_index:
+    controller: App\Controller\CategoryController::index
+    path: /categories
+
+category_add:
+    path: /categories/add
+    controller: App\Controller\CategoryController::add
+
+category_edit:
+    path: /categories/edit/{category}
+    controller: App\Controller\CategoryController::edit
+    requirements:
+        category: '%app.id%'
+
+category_del:
+    path: /categories/del/{category}
+    controller: App\Controller\CategoryController::del
+    requirements:
+        category: '%app.id%'  
+
+config_index:
+    controller: App\Controller\ConfigController::index
+    path: /config
+
+config_balance_limits:
+    controller: App\Controller\ConfigController::balanceLimits
+    path: /config/balance-limits
+
+config_ads:
+    controller: App\Controller\ConfigController::ads
+    path: /config/ads
+
+config_naming:
+    controller: App\Controller\ConfigController::naming
+    path: /config/naming  
+
+config_mail_addresses:
+    controller: App\Controller\ConfigController::mailAddresses
+    path: /config/mail-addresses
+
+config_periodic_mail:
+    controller: App\Controller\ConfigController::periodicMail
+    path: /config/periodic-mail
+
+config_contact_form:
+    controller: App\Controller\ConfigController::contactForm
+    path: /config/contact-form
+
+config_registration_form:
+    controller: App\Controller\ConfigController::registrationForm
+    path: /config/registration-form
+
+config_form:
+    controller: App\Controller\ConfigController::forum
+    path: /config/forum
+
+config_members:
+    controller: App\Controller\ConfigController::members
+    path: /config/members
+
+config_system:
+    controller: App\Controller\ConfigController::system
+    path: /config/system
+
+export:
+    controller: App\Controller\ExportController::index
+    path: /export
+
+auto_min_limit:
+    controller: App\Controller\AutoMinLimitController::form
+    path: /auto-min-limit
+
+mass_transaction:
+    controller: App\Controller\MassTransactionController::form
+    path: /mass-transaction
+
+periodic_charge:
+    controller: App\Controller\PeriodicChargeController::form
+    path: /periodic-charge
+
+log:
+    controller: App\Controller\LogController::index
+    path: /log
+
+log_typeahead:
+    controller: App\Controller\LogController::tyeahead
+    path: /log/typeahead
+
+page_a_index: 
+    controller: App\Controller\PageController::aIndex
+    path: /pages
+
+page_a_show:
+    controller: App\Controller\PageController::aShow
+    path: /pages/{page}
+    requirements:
+        page: '%app.page%'
+
+page_a_add:
+    controller: App\Controller\PageController::aAdd
+    path: /pages/add
+
+page_a_edit:
+    controller: App\Controller\PageController::aEdit
+    path: /pages/edit/{page}
+    requirements: 
+        page: '%app.page%'
+
+page_a_del:
+    controller: App\Controller\PageController::aDel
+    path: /pages/del/{page}
+    requirements:
+        page: '%app.page%'
+
+custom_field_index:
+    controller: App\Controller\CustomFieldController::index
+    path: /custom-fields
+
+custom_field_add:
+    controller: App\Controller\CustomFieldController::add
+    path: /custom-fields/add
+
+custom_field_edit:
+    controller: App\Controller\CustomFieldController::edit
+    path: /custom-fields/edit/{custom_field}
+    requirements:
+        custom_field: '%app.uuid%'
+
+custom_field_del:
+    controller: App\Controller\CustomFieldController::del
+    path: /custom-fields/del/{custom_field}
+    requirements:
+        custom_field: '%app.uuid%'
+
+type_contact_index:
+    controller: App\Controller\TypeContactController::index
+    path: /contact-types
+
+type_contact_add:
+    controller: App\Controller\TypeContactController::add
+    path: /contact-types/add
+
+type_contact_edit:
+    controller: App\Controller\TypeContactController::edit
+    path: /contact-types/edit/{type_contact}
+    requirements:
+        type_contact: '%app.id%'
+
+type_contact_del:
+    controller: App\Controller\TypeContactController::del
+    path: /contact-types/del/{type_contact}
+    requirements:
+        type_contact: '%app.id%'
+
+
+#$app->mount('/{_locale}/{schema}/{access}/contact-details', new provider\contact_detail_controller_provider());
+
+
+
+
+
+
+
+
+

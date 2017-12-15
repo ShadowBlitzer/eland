@@ -1,3 +1,0 @@
-user:
-    resource: user.yaml
-    prefix: /users

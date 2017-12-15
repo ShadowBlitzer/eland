@@ -1,0 +1,11 @@
+ad_index:
+    controller: App\Controller\AdController::index
+    path: /{view}
+    requirements:
+        view: '%app.ad.views%'
+
+ad_show:
+    controller: App\Controller\AdController::show
+    path: /{ad}
+    requirements:
+        ad: '%app.id%'

@@ -30,7 +30,7 @@ class TransactionController extends AbstractController
 			'andor' => 'and',
 		];
 
-		$filter = $app->build_named_form('f', transaction_filter_type::class, $data)
+		$filter = $this->createNamedForm('f', transaction_filter_type::class, $data)
 			->handleRequest($request);
 
 		if ($filter->isSubmitted() && $filter->isValid())

@@ -1,14 +1,23 @@
-user_type:
-    prefix: /{user_type}
-    resource: user_type.yaml
-    requirements:
-        user_type: '%app.user.types%'
-
-user_self:
-    path: /self
-    controller: App\Controller\UserController::showSelf
+user_no_view:
+    path: /
+    controller: App\Controller\UserController::noView
     methods: [GET]
 
+user_index:
+    path: /{user_type}/{view}
+    controller: App\Controller\UserController::index
+    requirements:
+        view: '%app.user.views'
+        user_type: '%app.user.types%'
+    methods: [GET, POST]
+
+user_show:
+    path: /{user_type}/{user}
+    controller: App\Controller\UserController::show
+    requirements: 
+        user_type: '%app.user.types%'
+        user: '%app.id%'
+    methods: [GET]
 
 user_typeahead:
     path: /typeahead/{user_type}
@@ -21,13 +30,13 @@ user_interlets_typeahead:
     path: /typeahead-interlets/{user}
     controller: App\Controller\UserTypeaheadController::fetchInterlets
     requirements:
-        user: '\d+'
+        user: '%app.id%'
     methods: [GET]
 
 user_weighted_balance:
     path: /weighted-balance/{user}/{days}
     controller: App\Controller\UserController::weightedBalance
     requirements:
-        user: '\d+'
-        days: '\d+'
+        user: '%app.id%'
+        days: '%app.id%'
     methods: [GET]

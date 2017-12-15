@@ -1,82 +1,20 @@
-u_user:
-    resource: user/u.yaml
-    prefix: /u/users
-    defaults:
-        access: u
-
-a_user:
-    resource: user/a.yaml
-    prefix: /a/users
-    defaults:
-        access: a
-
-i_user:
-    resource: user/i.yaml
-    prefix: /i/users
-    defaults:
-        access: i
-
-g_user:
-    resource: user/g.yaml
-    prefix: /g/users
-    defaults:
-        access: g
-
-u_transaction:
-   resource: transaction/u.yaml
-   prefix: /u/transactions
-   defaults:
-       access: u
-
-a_transaction:
-    resource: transaction/a.yaml
-    prefix: /a/transactions
-    defaults:
-        access: a
-
-i_transaction:
-    resource: transaction/i.yaml
-    prefix: /i/transactions
-    defaults:
-        access: i
-
-g_transaction:
-    resource: transaction/g.yaml
-    prefix: /g/transactions
-    defaults:
-        access: g
-
-u_news:
-    resource: news/u.yaml
-    prefix: /u/news
-    defaults:
-        access: u
-
-a_news:
-    resource: news/a.yaml
-    prefix: /a/news
-    defaults:
-        access: a
-
-i_news:
-    resource: news/i.yaml
-    prefix: /i/news
-    defaults:
-        access: i
-
-g_news:
-    resource: news/g.yaml
-    prefix: /g/news
-    defaults:
-        access: g
-
-
-
-
-
-
-authenticated:
-    resource: authenticated.yaml
+giua_auth:
+    resource: giua.yaml
     prefix: /{access}
     requirements:
         access: '[giua]'
+    methods: [GET]
+
+ua_auth:
+    resource: ua.yaml
+    prefix: /{access}
+    requirements:
+        access: '[ua]'
+    methods: [GET, POST]
+
+a_auth:
+    resource: a.yaml
+    prefix: /{access}
+    requirements:
+        access: a
+    methods: [GET, POST]

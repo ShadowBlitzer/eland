@@ -1,0 +1,4 @@
+user_self:
+    path: /self
+    controller: App\Controller\UserController::showSelf
+    methods: [GET]
