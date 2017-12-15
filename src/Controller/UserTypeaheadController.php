@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserTypeaheadController extends Controller
+class UserTypeaheadController extends AbstractController
 {
 	public function getLocal(Request $request,
 		string $schema, string $access, string $user_type)

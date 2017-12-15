@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-class PeriodicChargeController extends Controller
+class PeriodicChargeController extends AbstractController
 {
 	public function form(Request $request, string $schema, string $access)
 	{

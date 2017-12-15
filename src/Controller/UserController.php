@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
@@ -11,7 +11,7 @@ use util\pagination;
 use form\filter\user_filter_type;
 use form\column_select\user_column_select_type;
 
-class UserController extends Controller
+class UserController extends AbstractController
 {
 	public function noView(Request $request, string $schema, string $access, string $user_type)
 	{

@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-class RedirectingController extends Controller
+class RedirectingController extends AbstractController
 {
     public function removeTrailingSlash(Request $request)
     {

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -13,7 +13,7 @@ use util\pagination;
 use form\post\news_type;
 use exception\invalid_parameter_value_exception;
 
-class NewsController extends Controller 
+class NewsController extends AbstractController 
 {
 	public function noView(Request $request, string $schema, string $access)
 	{

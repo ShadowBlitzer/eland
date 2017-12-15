@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use exception\not_empty_exception;
 use exception\protected_exception;
 
-class TypeContactController extends Controller
+class TypeContactController extends AbstractController
 {
 	private $protected_types = [
 		'mail', 'web', 'adr', 'gsm', 'tel',

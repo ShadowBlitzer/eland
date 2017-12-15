@@ -1,4 +1,0 @@
-system:
-    resource: system.yaml
-    prefix: /{system}
-    

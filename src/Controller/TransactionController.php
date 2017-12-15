@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use util\sort;
 use util\pagination;
@@ -20,7 +20,7 @@ use form\input\number_addon_type;
 use form\input\addon_type;
 use form\filter\transaction_filter_type;
 
-class TransactionController extends Controller
+class TransactionController extends AbstractController
 {
 	public function index(Request $request, string $schema, string $access)
 	{

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -14,7 +14,7 @@ use form\email_addon_type;
 use form\addon_type;
 use form\register_type;
 
-class RegisterController extends Controller
+class RegisterController extends AbstractController
 {
 	public function form(Request $request, string $schema)
 	{

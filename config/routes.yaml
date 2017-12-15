@@ -12,16 +12,16 @@ remove_trailing_slash:
     methods: [GET]
 
 localized:
-    resource: routes/localized.yaml
+    resource: routes_res/localized.yaml
     prefix: /{_locale}
     requirements:
-        _locale: %app.locales%
+        _locale: '%app.locales%'
 
 index_no_locale:
     path: /
     controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
     defaults:
-        path: /%app.default_locale%
-
+        path: '/%app.default_locale%'
 #       permanent: true
+    methods: [GET]
     

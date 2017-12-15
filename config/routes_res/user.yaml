@@ -1,0 +1,51 @@
+user_type:
+    prefix: /{user_type}
+    resource: user_type.yaml
+    requirements:
+        user_type: '%app.user.types%'
+
+user_self:
+    path: /self
+    controller: App\Controller\UserController::showSelf
+    methods: [GET]
+
+user_add:
+    path: /add
+    controller: App\Controller\UserController::add
+    methods: [GET, POST]
+
+user_edit:
+    path: /{user}/edit
+    controller: App\Controller\UserController::edit
+    requirements:
+        user: '\d+'
+    methods: [GET, POST]
+
+user_del:
+    path: /{user}/del
+    controller: App\Controller\UserController::del
+    requirements:
+        user: '\d+'
+    methods: [GET, POST]
+
+user_typeahead:
+    path: /typeahead/{user_type}
+    controller: App\Controller\UserTypeaheadController::fetch
+    requirements:
+        user_type: '%app.user.types%'
+    methods: [GET]
+
+user_interlets_typeahead:
+    path: /typeahead-interlets/{user}
+    controller: App\Controller\UserTypeaheadController::fetchInterlets
+    requirements:
+        user: '\d+'
+    methods: [GET]
+
+user_weighted_balance:
+    path: /weighted-balance/{user}/{days}
+    controller: App\Controller\UserController::weightedBalance
+    requirements:
+        user: '\d+'
+        days: '\d+'
+    methods: [GET]

@@ -1,9 +1,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    app:
-        default_locale: en
-        locales: [en, nl]
+    app.default_locale: nl
+    app.locales: en|nl
+    app.user.types: active|new|leaving|direct|interlets|pre-active|post-active|all
+    app.user.views: list|tiles|map
 
 services:
     # default configuration for services in *this* file

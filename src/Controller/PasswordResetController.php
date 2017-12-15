@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use util\user;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use form\email_addon_type;
 use form\password_reset_type;
 
-class PasswordResetController extends Controller
+class PasswordResetController extends AbstractController
 {
 	public function form(Request $request, string $schema)
 	{

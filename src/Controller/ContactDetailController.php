@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-class ContactDetailController extends Controller
+class ContactDetailController extends AbstractController
 {
 	public function index(Request $request, string $schema)
 	{

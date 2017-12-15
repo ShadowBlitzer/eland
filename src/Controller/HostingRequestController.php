@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 use form\post\hosting_request_type;
 
-class HostingRequestController extends Controller
+class HostingRequestController extends AbstractController
 {
 	public function form(Request $request)
 	{

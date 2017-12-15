@@ -3,7 +3,7 @@
 {% spaceless -%}
 {%- block all -%}
 <!DOCTYPE html{% block html %}{% endblock %}>
-<html lang="{{- global.request.locale -}}">
+<html lang="{{- app.request.locale -}}">
 <head>
 
 <title>{%- block title -%}eLAND{%- endblock title -%}</title>

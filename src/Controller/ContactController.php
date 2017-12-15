@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 use util\user;
 use form\contact_type;
 
-class ContactController extends Controller
+class ContactController extends AbstractController
 {
 	public function form(Request $request, string $schema)
 	{

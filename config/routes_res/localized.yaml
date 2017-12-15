@@ -1,0 +1,12 @@
+
+
+
+
+
+schema:
+    resource: schema.yaml
+    prefix: /{schema}
+    requirements:
+        schema: '[a-z][a-z0-9]+'
+
+    
