@@ -1,7 +1,7 @@
 language: Nederlands
 
 #placeholder for untranslated elements
-var: %var%
+var: '%var%'
 
 eland:
   explain: >-
@@ -29,36 +29,36 @@ pagination:
 
 date_format: 
   technical:
-    day: %Y-%m-%d
-    min: %Y-%m-%d %H:%M
-    sec: %Y-%m-%d %H:%M:%S
+    day: '%Y-%m-%d'
+    min: '%Y-%m-%d %H:%M'
+    sec: '%Y-%m-%d %H:%M:%S'
   numerical:
-    day: %d-%m-%Y
-    min: %d-%m-%Y %H:%M
-    sec: %d-%m-%Y %H:%M:%S
+    day: '%d-%m-%Y'
+    min: '%d-%m-%Y %H:%M'
+    sec: '%d-%m-%Y %H:%M:%S'
   month_abbrev:
-    day: %e %b %Y
-    min: %e %b %Y, %H:%M
-    sec: %e %b %Y, %H:%M:%S
+    day: '%e %b %Y'
+    min: '%e %b %Y, %H:%M'
+    sec: '%e %b %Y, %H:%M:%S'
   month_full:
-    day: %e %B %Y
-    min: %e %B %Y, %H:%M
-    sec: %e %B %Y, %H:%M:%S
+    day: '%e %B %Y'
+    min: '%e %B %Y, %H:%M'
+    sec: '%e %B %Y, %H:%M:%S'
   weekday_included:
-    day: %a %e %b %Y
-    min: %a %e %b %Y, %H:%M
-    sec: %a %e %b %Y, %H:%M:%S
+    day: '%a %e %b %Y'
+    min: '%a %e %b %Y, %H:%M'
+    sec: '%a %e %b %Y, %H:%M:%S'
 
 datepicker:
   placeholder:
-    %e: d
-    %d: dd
-    %m: mm
-    %Y: jjjj
-    %b: mnd
-    %B: maand
-    %a: (wd)
-    %A: (weekdag)
+    e: d
+    d: dd
+    m: mm
+    Y: jjjj
+    b: mnd
+    B: maand
+    a: (wd)
+    A: (weekdag)
 
 toggle_navigation: Navigatie
 admin_modus: Admin modus
@@ -658,7 +658,7 @@ form:
 mail:
   no_reply: >-
     Dit is een automatische mail. Niet beantwoorden a.u.b.
-  footer: %systemname%
+  footer: '%systemname%'
   confirm:
     subject: Bevestiging gevraagd
     explain: >-
