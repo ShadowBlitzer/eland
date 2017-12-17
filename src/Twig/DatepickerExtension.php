@@ -2,54 +2,52 @@
 
 namespace App\Twig;
 
-use service\date_format_cache;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
-use twig\web_date;
+use App\Twig\DateFormatExtension;
 
 class DatepickerExtension
 {
-	private $web_date;
+	private $dateFormatExtension;
 	private $translator;
 
-	private $format_search = ['%e', '%d', '%m', '%Y', '%b', '%B', '%a', '%A'];
-	private $format_replace = ['d', 'dd', 'mm', 'yyyy', 'M', 'MM', 'D', 'DD'];
-	private $placeholder_replace = [];
+	private $formatSearch = ['%e', '%d', '%m', '%Y', '%b', '%B', '%a', '%A'];
+	private $formatReplace = ['d', 'dd', 'mm', 'yyyy', 'M', 'MM', 'D', 'DD'];
+	private $placeholderReplace = [];
 	private $placeholder;
 
 	public function __construct(
-		web_date $web_date,
+		DateFormatExtension $dateFormatExtension,
 		TranslatorInterface $translator	
 	)
 	{
-		$this->web_date = $web_date;
+		$this->dateFormatExtension = $dateFormatExtension;
 		$this->translator = $translator;	
 	}
 
-	public function get_placeholder():string
+	public function getPlaceholder(array $context):string
 	{
-		$format = $this->web_date->get_format('day');
+		$format = $this->dateFormatExtension->getFormat($context, 'day');
 
-		if (!count($this->placeholder_replace))
+		if (!count($this->placeholderReplace))
 		{
-			foreach($this->format_search as $s)
+			foreach($this->formatSearch as $s)
 			{
-				$this->placeholder_replace[] = $this->translator->trans('datepicker.placeholder.' . $s);
+				$this->placeholderReplace[] = $this->translator->trans('datepicker.placeholder.' . ltrim($s, '%'));
 			}
 		}
 
 		if (!isset($this->placeholder))
 		{
-			$this->placeholder = str_replace($this->format_search, $this->placeholder_replace, $format);
+			$this->placeholder = str_replace($this->formatSearch, $this->placeholderReplace, $format);
 		}
 
 		return $this->placeholder;
 	}
 
-	public function get_format():string
+	public function getFormat(array $context):string
 	{
-		$format = $this->web_date->get_format('day');
+		$format = $this->DateFormatExtension->getFormat($context, 'day');
 
-		return str_replace($this->format_search, $this->format_replace, $format);
+		return str_replace($this->formatSearch, $this->formatReplace, $format);
 	}
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Twig;
+namespace App\Service;
 
-use Doctrine\DBAL\Connection as db;
-use service\cache;
+use Doctrine\DBAL\Connection as Db;
+use App\Service\Cache;
 
-class WebDistanceExtension
+class Distance
 {
 	private $db;
 	private $cache;
@@ -19,7 +19,7 @@ class WebDistanceExtension
 	private $to;
 	private $dist;
 
-	public function __construct(db $db, cache $cache)
+	public function __construct(Db $db, Cache $cache)
 	{
 		$this->db = $db;
 		$this->cache = $cache;

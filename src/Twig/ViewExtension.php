@@ -2,19 +2,19 @@
 
 namespace App\Twig;
 
-use service\view as service_view;
+use App\Service\SessionView;
 
 class ViewExtension
 {
 	private $view;
 
-	public function __construct(service_view $view)
+	public function __construct(SessionView $sessionView)
 	{
-		$this->view = $view;
+		$this->sessionView = $sessionView;
 	}
 
 	public function get(array $param, string $entity = null):array
 	{
-		return $this->view->merge($param, $entity);
+		return $this->sessionView->merge($param, $entity);
 	}
 }

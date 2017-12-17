@@ -6,7 +6,7 @@ use service\user_simple_cache;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-class WebUserExtension
+class UserFormatExtension
 {
 	private $user_simple_cache;
 	private $schema;
