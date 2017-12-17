@@ -49,6 +49,8 @@ date_format:
     min: '%a %e %b %Y, %H:%M'
     sec: '%a %e %b %Y, %H:%M:%S'
 
+# translate the PHP strftime formats for datepicker placeholder
+
 datepicker:
   placeholder:
     e: d
