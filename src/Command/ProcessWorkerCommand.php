@@ -1,8 +1,8 @@
 <?php
 
-namespace command;
+namespace App\Command;
 
-use Knp\Command\Command;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,14 +11,14 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Finder\Finder;
 use util\task_container;
 
-class process_worker extends Command
+class ProcessWorkerCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('process:worker')
-            ->setDescription('general eLAND background processes')
-            ->setHelp('general eLAND background processes (send notifications etc.)');
+            ->setName('app-process:worker')
+            ->setDescription('general background tasks')
+            ->setHelp('general background tasks (send notifications etc.)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

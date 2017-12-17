@@ -1,8 +1,8 @@
 <?php
 
-namespace command;
+namespace App\Command;
 
-use Knp\Command\Command;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,14 +12,14 @@ use Symfony\Component\Finder\Finder;
 use util\queue_container;
 use util\task_container;
 
-class process_geo extends Command
+class ProcessGeoCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('process:geo')
-            ->setDescription('Find  background process')
-            ->setHelp(' from queue background process');
+            ->setName('app-process:geo')
+            ->setDescription('Geocode background process')
+            ->setHelp('Find geo coordinates from address queue background process');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

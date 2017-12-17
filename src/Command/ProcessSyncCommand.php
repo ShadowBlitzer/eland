@@ -1,8 +1,8 @@
 <?php
 
-namespace command;
+namespace App\Command;
 
-use Knp\Command\Command;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,12 +12,12 @@ use Symfony\Component\Finder\Finder;
 use util\queue_container;
 use util\task_container;
 
-class process_sync extends Command
+class ProcessSyncCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('process:sync')
+            ->setName('app-process:sync-elas')
             ->setDescription('Sync to eLAS db background process')
             ->setHelp('Sync to eLAS db background process');
     }
