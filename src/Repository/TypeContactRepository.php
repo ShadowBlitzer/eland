@@ -1,25 +1,25 @@
 <?php
 
-namespace repository;
+namespace App\Repository;
 
-use Doctrine\DBAL\Connection as db;
+use Doctrine\DBAL\Connection as Db;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class type_contact_repository
+class TypeContactRepository
 {
 	private $db;
 
-	public function __construct(db $db)
+	public function __construct(Db $db)
 	{
 		$this->db = $db;
 	}
 
-	public function get_all(string $schema)
+	public function getAll(string $schema)
 	{
 
 	}
 
-	public function get_all_abbrev(string $schema):array
+	public function getAllAbbrev(string $schema):array
 	{
 		$ary = [];
 	

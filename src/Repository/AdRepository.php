@@ -1,20 +1,20 @@
 <?php
 
-namespace repository;
+namespace App\Repository;
 
-use Doctrine\DBAL\Connection as db;
+use Doctrine\DBAL\Connection as Db;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ad_repository
+class AdRepository
 {
 	private $db;
 
-	public function __construct(db $db)
+	public function __construct(Db $db)
 	{
 		$this->db = $db;
 	}
 
-	public function get_all(string $schema):array
+	public function getAll(string $schema):array
 	{
 
 	}

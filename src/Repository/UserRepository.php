@@ -1,13 +1,13 @@
 <?php
 
-namespace repository;
+namespace App\Repository;
 
-use service\xdb;
-use Doctrine\DBAL\Connection as db;
-use Predis\Client as redis;
+use App\Service\Xdb;
+use Doctrine\DBAL\Connection as Db;
+use Predis\Client as Redis;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class user_repository
+class UserRepository
 {
 	private $db;
 	private $xdb;
@@ -16,7 +16,7 @@ class user_repository
 	private $redis_prefix = 'user_cache_';
 	private $is_cli;
 
-	public function __construct(db $db, xdb $xdb, redis $redis)
+	public function __construct(Db $db, Xdb $xdb, Redis $redis)
 	{
 		$this->db = $db;
 		$this->xdb = $xdb;
@@ -55,7 +55,7 @@ class user_repository
 			return $user;
 		}
 
-		$user = $this->read_from_db($id, $schema);
+		$user = $this->readFromDb($id, $schema);
 
 		if (isset($user))
 		{
@@ -70,7 +70,7 @@ class user_repository
 		return $user;
 	}
 
-	private function read_from_db(int $id, string $schema)
+	private function readFromDb(int $id, string $schema)
 	{
 		$user = $this->db->fetchAssoc('select * from ' . $schema . '.users where id = ?', [$id]);
 

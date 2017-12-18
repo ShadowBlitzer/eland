@@ -1,23 +1,23 @@
 <?php
 
-namespace repository;
+namespace App\Repository;
 
-use Doctrine\DBAL\Connection as db;
-use service\xdb;
+use Doctrine\DBAL\Connection as Db;
+use App\Service\Xdb;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class news_repository
+class NewsRepository
 {
 	private $db;
 	private $xdb;
 
-	public function __construct(db $db, xdb $xdb)
+	public function __construct(Db $db, Xdb $xdb)
 	{
 		$this->db = $db;
 		$this->xdb = $xdb;
 	}
 
-	public function get_all(string $schema)
+	public function getAll(string $schema)
 	{
 
 	}
@@ -90,7 +90,7 @@ class news_repository
 		$this->xdb->del('news_access', $id, $schema);
 	}
 
-	public function get_next(int $id, string $schema, array $access_ary)
+	public function getNext(int $id, string $schema, array $access_ary)
 	{
 		$rows = $this->xdb->get_many([
 			'agg_schema' 	=> $schema,
@@ -103,7 +103,7 @@ class news_repository
 		return count($rows) ? reset($rows)['eland_id'] : null;
 	}
 
-	public function get_prev(int $id, string $schema, array $access_ary)
+	public function getPrev(int $id, string $schema, array $access_ary)
 	{
 		$rows = $this->xdb->get_many([
 			'agg_schema' => $schema,
@@ -114,6 +114,4 @@ class news_repository
 
 		return count($rows) ? reset($rows)['eland_id'] : null;
 	}
-
-
 }

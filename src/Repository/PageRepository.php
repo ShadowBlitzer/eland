@@ -1,15 +1,15 @@
 <?php
 
-namespace repository;
+namespace App\Repository;
 
-use service\xdb;
+use App\Service\Xdb;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class page_repository
+class PageRepository
 {
 	private $xdb;
 
-	public function __construct(xdb $xdb)
+	public function __construct(Xdb $xdb)
 	{
 		$this->xdb = $xdb;
 	}

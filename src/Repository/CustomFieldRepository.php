@@ -1,12 +1,12 @@
 <?php
 
-namespace entity;
+namespace App\Repository;
 
-use service\xdb;
-use service\cache;
-use Doctrine\DBAL\Connection as db;
+use App\Service\Xdb;
+use App\Service\Cache;
+use Doctrine\DBAL\Connection as Db;
 
-class custom_field
+class CustomFieldRepository
 {
 	private $db;
 	private $xdb;
@@ -25,19 +25,19 @@ class custom_field
 		'required'	=> false,
 	];
 
-	public function __construct(db $db, xdb $xdb, cache $cache)
+	public function __construct(Db $db, Xdb $xdb, Cache $cache)
 	{
 		$this->db = $db;
 		$this->xdb = $xdb;
 		$this->cache = $cache;
 	}
 
-	public function sync_to_elas()
+	public function syncToElas()
 	{
 
 	}
 
-	public function sync_to_eland()
+	public function syncToEland()
 	{
 
 	}

@@ -1,12 +1,12 @@
 <?php
 
-namespace repository;
+namespace App\Repository;
 
 use Doctrine\DBAL\Connection as db;
-use service\pagination;
+use App\Service\Pagination;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class transaction_repository
+class TransactionRepository
 {
 	private $db;
 
@@ -15,7 +15,7 @@ class transaction_repository
 		$this->db = $db;
 	}
 
-	public function get_all(pagination $pagination, string $schema):array
+	public function getAll(Pagination $pagination, string $schema):array
 	{
 
 	}
@@ -35,7 +35,7 @@ class transaction_repository
 		return $data;
 	}
 
-	public function get_next(int $id, string $schema)
+	public function getNext(int $id, string $schema)
 	{
 		return $this->db->fetchColumn('select id 
 			from ' . $schema . '.transactions 
@@ -44,7 +44,7 @@ class transaction_repository
 			limit 1', [$id]) ?? null;
 	}
 
-	public function get_prev(int $id, string $schema)
+	public function getPrev(int $id, string $schema)
 	{
 		return $this->db->fetchColumn('select id
 			from ' . $schema . '.transactions
@@ -53,7 +53,7 @@ class transaction_repository
 			limit 1', [$id]) ?? null;
 	}
 
-	public function update_description(int $id, string $description, string $schema)
+	public function updateDescription(int $id, string $description, string $schema)
 	{
 		$this->db->update($schema . '.transactions', ['description'	=> $description], ['id' => $id]);
 	}

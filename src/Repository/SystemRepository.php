@@ -1,10 +1,10 @@
 <?php
 
-namespace repository;
+namespace App\Repository;
 
-use service\ev;
+use Service\Ev;
 
-class currency
+class SystemRepository
 {
 	private $db;
 	private $ev;
@@ -31,7 +31,7 @@ class currency
 		],
 	];
 
-	public function __construct(ev $ev)
+	public function __construct(Ev $ev)
 	{
 		$this->ev = $ev;
 	}
@@ -43,6 +43,4 @@ class currency
 	
 		$config = $this->db->fetchAssoc('select * from ' . $this->schema . '.config');
 	}
-
-
 }

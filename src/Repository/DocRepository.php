@@ -1,21 +1,21 @@
 <?php
 
-namespace repository;
+namespace App\Repository;
 
-use service\xdb;
-use service\pagination;
+use App\Service\Xdb;
+use App\Service\Pagination;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class doc_repository
+class DocRepository
 {
 	private $xdb;
 
-	public function __construct(xdb $xdb)
+	public function __construct(Xdb $xdb)
 	{
 		$this->xdb = $xdb;
 	}
 
-	public function get_all(pagination $pagination, string $schema):array
+	public function getAll(Pagination $pagination, string $schema):array
 	{
 
 	}

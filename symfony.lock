@@ -98,6 +98,12 @@
     "psr/simple-cache": {
         "version": "1.0.0"
     },
+    "rollerworks/password-strength-bundle": {
+        "version": "v2.0.2"
+    },
+    "rollerworks/password-strength-validator": {
+        "version": "v1.0.5"
+    },
     "sensio/framework-extra-bundle": {
         "version": "4.0",
         "recipe": {

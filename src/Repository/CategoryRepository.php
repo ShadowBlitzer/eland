@@ -1,15 +1,15 @@
 <?php
 
-namespace repository;
+namespace App\Repository;
 
-use Doctrine\DBAL\Connection as db;
+use Doctrine\DBAL\Connection as Db;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class category_repository
+class CategoryRepository
 {
 	private $db;
 
-	public function __construct(db $db)
+	public function __construct(Db $db)
 	{
 		$this->db = $db;
 	}
