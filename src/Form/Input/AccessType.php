@@ -14,16 +14,16 @@ use App\Form\Typeahead\TypeaheadTypeAttr;
 
 class AccessType extends AbstractType
 {
-    private $typeahead_type_attr;
+    private $typeaheadTypeAttr;
 
-    public function __construct(typeahead_type_attr $typeahead_type_attr)
+    public function __construct(TypeaheadTypeAttr $typeaheadTypeAttr)
     {
-        $this->typeahead_type_attr = $typeahead_type_attr;
+        $this->typeaheadTypeAttr = $typeaheadTypeAttr;
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['typeahead_attr'] = $this->typeahead_type_attr->get($options);
+        $view->vars['typeahead_attr'] = $this->typeaheadTypeAttr->get($options);
     }    
 
     public function configureOptions(OptionsResolver $resolver)

@@ -10,13 +10,13 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
 use App\Form\Typeahead\TypeaheadType;
-use transformer\typeahead_user_transformer;
+use App\Form\DataTransformer\TypeaheadUserTransformer;
 
 class TypeaheadUserType extends AbstractType
 {
     private $transformer;
     
-    public function __construct(typeahead_user_transformer $transformer)
+    public function __construct(TypeaheadUserTransformer $transformer)
     {
         $this->transformer = $transformer;
     }

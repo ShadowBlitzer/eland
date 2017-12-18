@@ -1,19 +1,21 @@
 <?php
-namespace transformer;
+namespace App\Form\DataTransformer;
 
-use Doctrine\DBAL\Connection as db;
+use Doctrine\DBAL\Connection as Db;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\HttpFoundation\RequestStack;
 
-class typeahead_user_transformer implements DataTransformerInterface
+class TypeaheadUserTransformer implements DataTransformerInterface
 {
     private $db;
     private $schema;
 
-    public function __construct(db $db, string $schema)
+    public function __construct(Db $db, RequestStack $requestStack)
     {
         $this->db = $db;
-        $this->schema = $schema;
+        $request = $requestStack->getCurrentStack();
+        $this->schema = $request->attributes->get('schema');
     }
 
     /*

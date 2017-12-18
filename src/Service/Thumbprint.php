@@ -2,19 +2,18 @@
 
 namespace App\Service;
 
-use Predis\Client as Predis;
+use Predis\Client as Redis;
 
 class Thumbprint
 {
 	private $redis;
-	private $version;
+	private $version = '';
 	private $ttl = 604800; // 1 week
 	private $prefix = 'thumbprint_';
 
-	public function __construct(Predis $redis, string $version)
+	public function __construct(Redis $redis)
 	{
 		$this->redis = $redis;
-		$this->version = $version;
 	}
 
 	public function set_ttl(int $ttl)
@@ -36,16 +35,16 @@ class Thumbprint
 
 	public function set(string $key, string $content)
 	{
-		$redis_key = $this->prefix . $key;
+		$redisKey = $this->prefix . $key;
 		$thumbprint = (string) crc32($content);
 
-		$log = $thumbprint === $this->redis->get($redis_key) ? '' : '(new) ';
+		$log = $thumbprint === $this->redis->get($redisKey) ? '' : '(new) ';
 
 		error_log('set ' . $log .  'thumbprint for ' . 
 			$key .' : ' . $thumbprint);
 
-		$this->redis->set($redis_key, $thumbprint);	
-		$this->redis->expire($redis_key, $this->ttl);		
+		$this->redis->set($redisKey, $thumbprint);	
+		$this->redis->expire($redisKey, $this->ttl);		
 	}
 
 	public function del(string $key)

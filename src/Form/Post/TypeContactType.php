@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Symfony\Component\HttpFoundation\RequestStack;
 use validator\unique_in_column;
 
 class TypeContactType extends AbstractType
@@ -17,10 +17,11 @@ class TypeContactType extends AbstractType
     private $db;
     private $schema;
 
-    public function __construct(Db $db, string $schema)
+    public function __construct(Db $db, RequestStack $requestStack)
     {
         $this->db = $db;
-        $this->schema = $schema;
+        $request = $requestStack->getCurrentRequest();
+        $this->schema = $request->attributes->get('schema');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Connection as Db;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CategoryType extends AbstractType
 {	
@@ -20,12 +21,13 @@ class CategoryType extends AbstractType
 
     public function __construct(Db $db,
          TranslatorInterface $translator, 
-         string $schema
+         RequestStack $requestStack
     )
     {
         $this->db = $db;
         $this->translator = $translator;
-        $this->schema = $schema;
+        $request = $requestStack->getCurrentRequest();
+        $this->schema = $request->attributes->get('schema');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

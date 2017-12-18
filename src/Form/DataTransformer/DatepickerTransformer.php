@@ -1,18 +1,20 @@
 <?php
-namespace transformer;
+namespace App\Form\DataTransformer;
 
-use AppBundle\Entity\Issue;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use twig\web_date;
+use Symfony\Component\HttpFoundation\RequestStack;
+use App\Twig\DateFormatExtension;
 
-class datepicker_transformer implements DataTransformerInterface
+class DatepickerTransformer implements DataTransformerInterface
 {
-    private $web_date;
+    private $context;
 
-    public function __construct(web_date $web_date)
+    public function __construct(RequestStack $requestStack, DateFormatExtension $dateFormat)
     {
-        $this->web_date = $web_date;
+        $this->dateFormat = $dateFormat;
+        $request = $requestStack->getCurrentRequest();
+        $this->context = $request->attributes->all();
     }
 
     public function transform($date)
@@ -22,17 +24,17 @@ class datepicker_transformer implements DataTransformerInterface
             return '';
         }
 
-        return $this->web_date->get($date, 'day');
+        return $this->dateFormat->get($this->context, $date, 'day');
     }
 
-    public function reverseTransform($input_date)
+    public function reverseTransform($inputDate)
     {
-        if (!$input_date) 
+        if (!$inputDate) 
         {
             return;
         }
 
-        $parsed = strptime($input_date, $this->web_date->get_format('day'));
+        $parsed = strptime($inputDate, $this->dateFormat->getFormat($this->context, 'day'));
 
         if ($parsed === false)
         {

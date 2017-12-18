@@ -16,9 +16,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use form\input\number_addon_type;
-use form\input\addon_type;
-use form\filter\transaction_filter_type;
+use App\Form\Input\NumberAddonType;
+use App\Form\Input\TextAddonType;
+use App\Form\Filter\TransactionFilterType;
 
 class TransactionController extends AbstractController
 {
@@ -30,7 +30,7 @@ class TransactionController extends AbstractController
 			'andor' => 'and',
 		];
 
-		$filter = $this->createNamedForm('f', transaction_filter_type::class, $data)
+		$filter = $this->createNamedForm('f', TransactionFilterType::class, $data)
 			->handleRequest($request);
 
 		if ($filter->isSubmitted() && $filter->isValid())

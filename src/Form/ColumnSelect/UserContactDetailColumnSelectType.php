@@ -5,6 +5,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\HttpFoundation\RequestStack;
 use App\Repository\TypeContactRepository;
 
 class UserContactDetailColumnSelectType extends AbstractType
@@ -12,10 +13,11 @@ class UserContactDetailColumnSelectType extends AbstractType
     private $typeContactRepository;
     private $schema;
 
-    public function __construct(TypeContactRepository $typeContactRepository, string $schema)
+    public function __construct(TypeContactRepository $typeContactRepository, RequestStack $requestStack)
     {
         $this->typeContactRepository = $typeContactRepository;
-        $this->schema = $schema;
+        $request = $requestStack->getCurrentRequest();
+        $this->schema = $request->attributes->get('schema');
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

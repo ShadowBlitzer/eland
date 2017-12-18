@@ -8,14 +8,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use form\input\addon_type;
-use transformer\datepicker_transformer;
+
+use App\Form\Input\TextAddonType;
+use App\Form\DataTransformer\DatepickerTransformer;
 
 class DatepickerType extends AbstractType
 {
     private $transformer;
     
-    public function __construct(datepicker_transformer $transformer)
+    public function __construct(DatepickerTransformer $transformer)
     {
         $this->transformer = $transformer;
     }

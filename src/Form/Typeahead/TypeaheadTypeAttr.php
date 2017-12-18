@@ -4,7 +4,7 @@ namespace App\Form\Typeahead;
 
 use App\Service\Thumbprint;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use exception\conflicting_options_exception;
 use exception\invalid_format_exception;
@@ -20,7 +20,7 @@ class TypeaheadTypeAttr
     public function __construct(
         Thumbprint $thumbprint, 
         RequestStack $requestStack, 
-        UrlGenerator $urlGenerator
+        UrlGeneratorInterface $urlGenerator
     )
     {
         $this->thumbprint = $thumbprint;

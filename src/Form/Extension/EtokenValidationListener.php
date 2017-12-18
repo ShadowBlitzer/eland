@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Translation\TranslatorInterface;
-use App\form\Extension\EtokenManagerInterface;
+use App\Form\Extension\EtokenManagerInterface;
 
 class EtokenValidationListener implements EventSubscriberInterface
 {
