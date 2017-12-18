@@ -36,7 +36,7 @@ class TypeaheadUserType extends AbstractType
 
     public function getParent()
     {
-        return 'typeahead_type';
+        return TypeaheadType::class;
     }
 
     public function getBlockPrefix()

@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\FormFactoryInterface;
 
 use App\Form\Input\NumberAddonType;
 use App\Form\Input\TextAddonType;
@@ -22,7 +23,7 @@ use App\Form\Filter\TransactionFilterType;
 
 class TransactionController extends AbstractController
 {
-	public function index(Request $request, string $schema, string $access)
+	public function index(FormFactoryInterface $formFactory, Request $request, string $schema, string $access)
 	{
 		$where = $params = [];
 
@@ -30,7 +31,8 @@ class TransactionController extends AbstractController
 			'andor' => 'and',
 		];
 
-		$filter = $this->createNamedForm('f', TransactionFilterType::class, $data)
+		$filter = $formFactory->createNamedBuilder('f', TransactionFilterType::class, $data)
+			->getForm()
 			->handleRequest($request);
 
 		if ($filter->isSubmitted() && $filter->isValid())
@@ -186,11 +188,11 @@ class TransactionController extends AbstractController
                     'user_type'     => 'all',
                 ],
 			])
-			->add('amount', number_addon_type::class, [
+			->add('amount', NumberAddonType::class, [
 				'constraints'	=> [
 				],
 			])
-			->add('description', addon_type::class, [
+			->add('description', TextAddonType::class, [
 				'constraints' 	=> [
 					new Assert\NotBlank(),
 					new Assert\Length(['max' => 60, 'min' => 1]),
@@ -222,7 +224,7 @@ class TransactionController extends AbstractController
 	public function edit(Request $request, string $schema, string $access, array $trans)
 	{
 		$form = $app->form($transaction)
-			->add('description', addon_type::class, [
+			->add('description', TextAddonType::class, [
 				'constraints' 	=> [
 					new Assert\NotBlank(),
 					new Assert\Length(['max' => 60, 'min' => 1]),

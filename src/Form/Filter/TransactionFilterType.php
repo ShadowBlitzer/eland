@@ -11,9 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use App\Form\Input\addon_type;
-use App\Form\Typeahead\typeahead_user_type;
-use App\Form\Input\datepicker_type;
+use App\Form\Input\TextAddonType;
+use App\Form\Typeahead\TypeaheadUserType;
+use App\Form\Input\DatepickerType;
 
 class TransactionFilterType extends AbstractType
 {
@@ -24,15 +24,15 @@ class TransactionFilterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-			->setMethod('GET')
-			->add('q', addon_type::class, [
+            ->setMethod('GET')
+			->add('q', TextAddonType::class, [
                 'required' => false,
             ])
-			->add('from_user', 'typeahead_user_type', [
+			->add('from_user', TypeaheadUserType::class, [
 				'required' 		=> false,
 				'source_id'		=> 'f_to_user',
 			])
-			->add('to_user', 'typeahead_user_type', [
+			->add('to_user', TypeaheadUserType::class, [
 				'required' 		=> false,
                 'source_route'  => 'user_typeahead',
                 'source_params' => [
@@ -47,14 +47,14 @@ class TransactionFilterType extends AbstractType
 					'nor'	=> 'nor',
                 ],
 			])
-			->add('from_date', 'datepicker_type', [
+			->add('from_date', DatepickerType::class, [
                 'required' => false,
                 'attr'  => [
                     'data-date-default-view-date'   => '-1y',
                     'data-date-end-date'            => '0d',
                 ],
             ])
-			->add('to_date', 'datepicker_type', [
+			->add('to_date', DatepickerType::class, [
                 'required' => false,
                 'attr'  => [
                     'data-date-end-date'            => '0d',

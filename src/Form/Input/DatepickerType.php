@@ -83,7 +83,7 @@ class DatepickerType extends AbstractType
 
     public function getParent()
     {
-        return addon_type::class;
+        return TextAddonType::class;
     }
 
     public function getBlockPrefix()

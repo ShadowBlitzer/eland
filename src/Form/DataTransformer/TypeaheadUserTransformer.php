@@ -14,7 +14,7 @@ class TypeaheadUserTransformer implements DataTransformerInterface
     public function __construct(Db $db, RequestStack $requestStack)
     {
         $this->db = $db;
-        $request = $requestStack->getCurrentStack();
+        $request = $requestStack->getCurrentRequest();
         $this->schema = $request->attributes->get('schema');
     }
 
