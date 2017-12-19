@@ -26,7 +26,7 @@ class ContactController extends AbstractController
 				->set_route('contact_confirm')
 				->put();
 
-			$app->info('contact.confirm_email_info', ['%email%' => $data['email']]);
+			$this->addFlash('info', 'contact.confirm_email_info', ['%email%' => $data['email']]);
 
 			return $app->reroute('login', ['schema' => $schema]);
 		}
@@ -44,7 +44,7 @@ class ContactController extends AbstractController
 		
 		if (!count($data))
 		{
-			$app->err('contact.confirm_not_found');
+			$this->addFlash('error', 'contact.confirm_not_found');
 			return $app->reroute('confirm', ['schema' => $schema]);
 		}
 
@@ -56,7 +56,7 @@ class ContactController extends AbstractController
 			->set_priority(900000)
 			->put();
 
-		$app->success('contact.success');
+		$this->addFlash('success', 'contact.success');
 
 		return $app->reroute('login', ['schema' => $schema]);
 	}

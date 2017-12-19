@@ -32,7 +32,7 @@ class RegisterController extends AbstractController
 				->set_route('register_confirm')
 				->put();
 
-			$app->info('register.confirm_email_info', ['%email%' => $data['email']]);
+			$this->addFlash('info', 'register.confirm_email_info', ['%email%' => $data['email']]);
 
 			return $app->reroute('login', ['schema' => $schema]);
 		}
@@ -52,7 +52,7 @@ class RegisterController extends AbstractController
 		
 		if (!count($data))
 		{
-			$app->err('register.confirm_not_found');
+			$this->addFlash('error', 'register.confirm_not_found');
 			return $app->reroute('register', ['schema' => $schema]);
 		}
 

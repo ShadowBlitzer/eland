@@ -27,11 +27,7 @@ class TransactionController extends AbstractController
 	{
 		$where = $params = [];
 
-		$data = [
-			'andor' => 'and',
-		];
-
-		$filter = $formFactory->createNamedBuilder('f', TransactionFilterType::class, $data)
+		$filter = $formFactory->createNamedBuilder('f', TransactionFilterType::class, ['andor' => 'and'])
 			->getForm()
 			->handleRequest($request);
 
@@ -164,8 +160,8 @@ class TransactionController extends AbstractController
 	{
 		return $this->render('transaction/' . $access . '_show.html.twig', [
 			'transaction'	=> $transaction,
-			'prev'			=> $app['transaction_repository']->get_prev($transaction['id'], $schema),
-			'next'			=> $app['transaction_repository']->get_next($transaction['id'], $schema),
+			'prev'			=> $app['transaction_repository']->getPrev($transaction['id'], $schema),
+			'next'			=> $app['transaction_repository']->getNext($transaction['id'], $schema),
 		]);
 	}
 
@@ -176,13 +172,11 @@ class TransactionController extends AbstractController
 
 	public function add(Request $request, string $schema, string $access)
 	{
-		$data = [];
-
-		$form = $app->form($data)
-			->add('id_from', 'typeahead_user_type', [
+		$form = $app->form()
+			->add('id_from', TypeaheadUserType::class, [
 				'source_id'	=> 'form_id_to',		
 			])
-			->add('id_to', 'typeahead_user_type', [
+			->add('id_to', TypeaheadUserType::class, [
                 'source_route'  => 'user_typeahead',
                 'source_params' => [
                     'user_type'     => 'all',
@@ -242,10 +236,10 @@ class TransactionController extends AbstractController
 		{
 			$data = $form->getData();
 
-			$app['transaction_repository']->update_description(
+			$app['transaction_repository']->updateDescription(
 				$transaction['id'], $data['description'], $schema);
 
-			$app->success('transaction_edit.success');
+			$this->addFlash('success', 'transaction_edit.success');
 			
 			return $app->reroute('transaction_show', [
 				'schema'		=> $schema,

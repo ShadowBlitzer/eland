@@ -41,7 +41,7 @@ class SupportController extends AbstractController
 				->set_priority(900000)
 				->put();
 
-			$app->success($app->trans('support.success'));
+			$this->addFlash('success', $app->trans('support.success'));
 
 			return $app->redirect($app->path('support', ['schema' => $schema]));
 		}

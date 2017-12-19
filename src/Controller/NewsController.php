@@ -41,12 +41,12 @@ class NewsController extends AbstractController
 
 		$sort = new sort($request);
 
-		$sort->add_columns([
+		$sort->addColumns([
 			'headline'		=> 'asc',
 			'itemdate'		=> 'desc',
 			'cdate'			=> 'desc',
 		])
-		->set_default('itemdate');
+		->setDefault('itemdate');
 
 		$pagination = new pagination($request, $row_count);
 
@@ -55,35 +55,35 @@ class NewsController extends AbstractController
 
 		$news = $app['db']->fetchAll($query, $params);
 		
-		$news_access_ary = $to_approve_ary = $approve_headline_ary = [];
+		$newsAccessAry = $toApproveAry = $approve_headline_ary = [];
 		
-		$rows = $app['xdb']->get_many(['agg_schema' => $schema, 'agg_type' => 'news_access']);
+		$rows = $app['xdb']->getMany(['agg_schema' => $schema, 'agg_type' => 'news_access']);
 		
 		foreach ($rows as $row)
 		{
 			$acc = $row['data']['access'];
-			$news_access_ary[$row['eland_id']] = $acc;
+			$newsAccessAry[$row['eland_id']] = $acc;
 		}
 		
 		foreach ($news as $k => $n)
 		{
-			$news_id = $n['id'];
+			$newsId = $n['id'];
 		
-			if (!isset($news_access_ary[$news_id]))
+			if (!isset($newsAccessAry[$newsId]))
 			{
-				$app['xdb']->set('news_access', $news_id, ['access' => 'interlets'], $schema);
+				$app['xdb']->set('news_access', $newsId, ['access' => 'interlets'], $schema);
 				$news[$k]['access'] = 'interlets';
 				continue;
 			}
 		
-			$news[$k]['access'] = $news_access_ary[$news_id];
+			$news[$k]['access'] = $newsAccessAry[$newsId];
 
 			if (!$n['approved'] && $s_admin)
 			{
 				$news[$k]['class'] = 'inactive';
-				$approve_button = 'approve_' . $n['id'];
-				$news[$k]['approve_button'] = $approve_button;
-				$to_approve_ary[] = $approve_button;
+				$approveButton = 'approve_' . $n['id'];
+				$news[$k]['approve_button'] = $approveButton;
+				$toApproveAry[] = $approveButton;
 				$approve_headline_ary[$n['id']] = $n['headline'];
 			}
 
@@ -103,37 +103,37 @@ class NewsController extends AbstractController
 			'sort'			=> $sort->get(),
 		];
 
-		if ($s_admin && count($to_approve_ary))
+		if ($s_admin && count($toApproveAry))
 		{
-			$approve_form = $app->form();
+			$approveForm = $app->form();
 
-			foreach($to_approve_ary as $key)
+			foreach($toApproveAry as $key)
 			{
-				$approve_form->add($key, SubmitType::class);
+				$approveForm->add($key, SubmitType::class);
 			}
 
-			$approve_form = $approve_form->getForm();
-			$approve_form->handleRequest($request);
+			$approveForm = $approveForm->getForm();
+			$approveForm->handleRequest($request);
 
-			if ($approve_form->isSubmitted() && $approve_form->isValid())
+			if ($approveForm->isSubmitted() && $approveForm->isValid())
 			{
-				foreach ($to_approve_ary as $key)
+				foreach ($toApproveAry as $key)
 				{
-					if ($approve_form->get($key)->isClicked())
+					if ($approveForm->get($key)->isClicked())
 					{
 						list($approve_str, $id) = explode('_', $key);
 						$name = $approve_headline_ary[$id];				
 
 						$app['news_repository']->approve($id, $schema);
 
-						$app->success('news.approve.success', ['%name%' => $name]);
+						$this->addFlash('success', 'news.approve.success', ['%name%' => $name]);
 						break;
 					}
 				}
 
 				if (!isset($approve_str))
 				{
-					$app->err('news.approve.error');					
+					$this->addFlash('error', 'news.approve.error');					
 				}
 
 				$params = $request->attributes->all();
@@ -141,7 +141,7 @@ class NewsController extends AbstractController
 				return $app->reroute('news_index', $params);
 			}
 
-			$vars['approve_form'] = $approve_form->createView();
+			$vars['approve_form'] = $approveForm->createView();
 		}
 
 		return $this->render('news/' . $access . '_' . $view . '.html.twig', $vars);
@@ -153,18 +153,18 @@ class NewsController extends AbstractController
 
 		if ($access === 'a' && !$news['approved'])
 		{
-			$approve_form = $app->form()
+			$approveForm = $app->form()
 				->add('approve', SubmitType::class)
 				->getForm();
 			
-			$approve_form->handleRequest($request);
+			$approveForm->handleRequest($request);
 
-			if ($approve_form->isSubmitted() 
-				&& $approve_form->isValid() 
-				&& $approve_form->get('approve')->isClicked())
+			if ($approveForm->isSubmitted() 
+				&& $approveForm->isValid() 
+				&& $approveForm->get('approve')->isClicked())
 			{
 				$app['news_repository']->approve($news['id'], $schema);
-				$app->success('news.approve.success', ['%name%' => $news['headline']]);
+				$this->addFlash('success', 'news.approve.success', ['%name%' => $news['headline']]);
 
 				return $app->reroute('news_show', [
 					'schema'	=> $schema,
@@ -173,7 +173,7 @@ class NewsController extends AbstractController
 				]);
 			}
 
-			$vars['approve_form'] = $approve_form->createView();
+			$vars['approve_form'] = $approveForm->createView();
 		}
 
 		$access_ary = ['public', 'interlets', 'users', 'admin'];
@@ -206,7 +206,7 @@ class NewsController extends AbstractController
 					->set_priority(900000)
 					->put();
 
-				$app->info('news_add.approve_info', ['%name%' => $data['headline']]);
+				$this->addFlash('info', 'news_add.approve_info', ['%name%' => $data['headline']]);
 
 				return $app->reroute('news_index', [
 					'schema' 	=> $schema,
@@ -215,7 +215,7 @@ class NewsController extends AbstractController
 				]);					
 			}
 
-			$app->success('news_add.success', ['%name%'  => $data['headline']]);
+			$this->addFlash('success', 'news_add.success', ['%name%'  => $data['headline']]);
 
 			return $app->reroute('news_show', [
 				'schema' 	=> $schema,
@@ -240,7 +240,7 @@ class NewsController extends AbstractController
 
 			$app['news_repository']->update($news['id'] ,$data, $schema);
 
-			$app->success('news_edit.success', ['%name%'  => $data['headline']]);
+			$this->addFlash('success', 'news_edit.success', ['%name%'  => $data['headline']]);
 
 			return $app->reroute('news_show', [
 				'schema' 	=> $schema,
@@ -265,7 +265,7 @@ class NewsController extends AbstractController
 		{
 			$app['news_repository']->delete($news['id'], $schema);
 
-			$app->success('news_del.success', ['%name%' => $news['headline']]);
+			$this->addFlash('success', 'news_del.success', ['%name%' => $news['headline']]);
 
 			return $app->reroute('news_index', [
 				'schema' 	=> $schema,
@@ -831,28 +831,28 @@ $query .= ' order by itemdate desc';
 
 $news = $app['db']->fetchAll($query);
 
-$news_access_ary = [];
+$newsAccessAry = [];
 
 $rows = $app['xdb']->get_many(['agg_schema' => $app['this_group']->get_schema(), 'agg_type' => 'news_access']);
 
 foreach ($rows as $row)
 {
 	$access = $row['data']['access'];
-	$news_access_ary[$row['eland_id']] = $access;
+	$newsAccessAry[$row['eland_id']] = $access;
 }
 
 foreach ($news as $k => $n)
 {
 	$news_id = $n['id'];
 
-	if (!isset($news_access_ary[$news_id]))
+	if (!isset($newsAccessAry[$news_id]))
 	{
 		$app['xdb']->set('news_access', $news_id, ['access' => 'interlets']);
 		$news[$k]['access'] = 'interlets';
 		continue;
 	}
 
-	$news[$k]['access'] = $news_access_ary[$news_id];
+	$news[$k]['access'] = $newsAccessAry[$news_id];
 
 	if (!$app['access_control']->is_visible($news[$k]['access']))
 	{

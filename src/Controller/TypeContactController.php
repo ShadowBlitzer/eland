@@ -60,7 +60,7 @@ class TypeContactController extends AbstractController
 
 			$app['db']->insert($schema . '.type_contact', $data);
 
-			$app->success('type_contact_add.success', ['%name%'  => $data['name']]);
+			$this->addFlash('success', 'type_contact_add.success', ['%name%'  => $data['name']]);
 
 			return $app->reroute('typecontact_index', [
 				'schema' 	=> $schema,
@@ -99,7 +99,7 @@ class TypeContactController extends AbstractController
 
 			$app['db']->update($schema . '.type_contact', $data, ['id' => $id]);
 
-			$app->success('type_contact_edit.success', ['%name%'  => $data['name']]);
+			$this->addFlash('success', 'type_contact_edit.success', ['%name%'  => $data['name']]);
 
 			return $app->reroute('typecontact_index', [
 				'schema' 	=> $schema,
@@ -143,7 +143,7 @@ class TypeContactController extends AbstractController
 		{
 			$app['db']->delete($schema . '.type_contact', ['id' => $id]);
 
-			$app->success('type_contact_del.success', ['%name%'  => $type_contact['name']]);
+			$this->addFlash('success', 'type_contact_del.success', ['%name%'  => $type_contact['name']]);
 
 			return $app->reroute('typecontact_index', [
 				'schema' 	=> $schema,

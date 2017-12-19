@@ -79,7 +79,7 @@ class AutoMinLimitController extends AbstractController
 
 			$app['xdb']->set('setting', 'autominlimit', $data, $schema);
 
-			$app->success($app->trans('auto_min_limit.success'));
+			$this->addFlash('success', $app->trans('auto_min_limit.success'));
 
 			return $app->redirect($app->path('auto_min_limit', [
 				'schema' => $schema,

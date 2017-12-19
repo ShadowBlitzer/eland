@@ -5,13 +5,13 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-use form\post\hosting_request_type;
+use App\Form\Post\HostingRequestType;
 
 class HostingRequestController extends AbstractController
 {
 	public function form(Request $request)
 	{
-		$form = $app->build_form(hosting_request_type::class)
+		$form = $app->build_form(HostingRequestType::class)
 			->handleRequest($request);
 
 		if ($form->isValid())
@@ -19,13 +19,13 @@ class HostingRequestController extends AbstractController
 			$data = $form->getData();
 			
 			$app['mail_queue_confirm_link']
-				->set_to([$data['email']])
-				->set_data($data)
-				->set_template('confirm_hosting_request')
-				->set_route('hosting_request_confirm')
+				->setTo([$data['email']])
+				->setData($data)
+				->setTemplate('confirm_hosting_request')
+				->setRoute('hosting_request_confirm')
 				->put();
 
-			$app->info('hosting_request.confirm_email_info', ['%email%' => $data['email']]);
+			$this->addFlash('info', 'hosting_request.confirm_email_info', ['%email%' => $data['email']]);
 
 			return $app->reroute('main_index');
 		}
@@ -43,15 +43,15 @@ class HostingRequestController extends AbstractController
 		
 		if (!count($data))
 		{
-			$app->err('hosting_request.confirm_not_found');
+			$this->addFlash('error', 'hosting_request.confirm_not_found');
 			return $app->reroute('hosting_request');
 		}
 
-		$app['mail_queue']->set_template('hosting_request')
-			->set_vars($data)
-			->set_to([$app['mail_env']->get_hoster()])
-			->set_reply_to([$data['email'] => $data['group_name']])
-			->set_priority(900000)
+		$app['mail_queue']->setTemplate('hosting_request')
+			->setVars($data)
+			->setTo([$app['mail_env']->getHoster()])
+			->setReplyTo([$data['email'] => $data['group_name']])
+			->setPriority(900000)
 			->put();
 
 /*		
@@ -75,7 +75,7 @@ class HostingRequestController extends AbstractController
 */
 
 
-		$app->success('hosting_request.success');
+		$this->addFlash('success', 'hosting_request.success');
 
 		return $app->reroute('main_index');
 	}

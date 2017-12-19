@@ -47,7 +47,7 @@ class CategoryController extends AbstractController
 
 			$app['db']->insert($schema . '.categories', $data);
 
-			$app->success('category_add.success', ['%name%'  => $data['name']]);
+			$this->addFlash('success', 'category_add.success', ['%name%'  => $data['name']]);
 
 			return $app->reroute('category_index', [
 				'schema' 	=> $schema,
@@ -100,7 +100,7 @@ class CategoryController extends AbstractController
 
 			$app['db']->update($schema . '.categories', $data, ['id' => $id]);
 
-			$app->success('category_edit.success', ['%name%'  => $data['name']]);
+			$this->addFlash('success', 'category_edit.success', ['%name%'  => $data['name']]);
 
 			return $app->reroute('category_index', [
 				'schema' 	=> $schema,
@@ -148,7 +148,7 @@ class CategoryController extends AbstractController
 		{
 			$app['db']->delete($schema . '.categories', ['id' => $id]);
 
-			$app->success('category_del.success', ['%name%'  => $category['name']]);
+			$this->addFlash('success', 'category_del.success', ['%name%'  => $category['name']]);
 
 			return $app->reroute('category_index', [
 				'schema' 	=> $schema,

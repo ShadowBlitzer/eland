@@ -12,15 +12,16 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints as Assert;
-use form\email_addon_type;
-use form\password_reset_type;
+
+use App\Form\EmailAddonType;
+use App\Form\PasswordResetType;
 
 class PasswordResetController extends AbstractController
 {
 	public function form(Request $request, string $schema)
 	{
 		$form = $app->form()
-			->add('email', email_addon_type::class, [
+			->add('email', EmailAddonType::class, [
 				'constraints' => new Assert\Email(),
 			])
 			->add('submit', SubmitType::class)
@@ -49,18 +50,18 @@ class PasswordResetController extends AbstractController
 				$user = $user[0];
 
 				$app['mail_queue_confirm_link']
-					->set_to([$email])
-					->set_data($user)
-					->set_template('confirm_password_reset')
-					->set_route('password_reset_new_password')
+					->setTo([$email])
+					->setData($user)
+					->setTemplate('confirm_password_reset')
+					->setRoute('password_reset_new_password')
 					->put();
 
-				$app->success('password_reset.link_send_success', ['%email%' => $email]);
+				$this->addFlash('success', 'password_reset.link_send_success', ['%email%' => $email]);
 
 				return $app->reroute('login', ['schema' => $schema]);
 			}
 
-			$app->err('password_reset.unknown_email_address');
+			$this->addFlash('error', 'password_reset.unknown_email_address');
 		}
 
 		return $this->render('password_reset/form.html.twig', [
@@ -68,7 +69,7 @@ class PasswordResetController extends AbstractController
 		]);
 	}
 
-	public function new_password(Request $request, string $schema, string $token)
+	public function newPassword(Request $request, string $schema, string $token)
 	{
 		if ($request->getMethod() === 'GET')
 		{
@@ -78,7 +79,7 @@ class PasswordResetController extends AbstractController
 			
 			if (!count($data))
 			{
-				$app->err('password_reset.confirm_not_found');
+				$this->addFlash('error', 'password_reset.confirm_not_found');
 				return $app->reroute('password_reset', ['schema' => $schema]);
 			}
 		}
@@ -86,7 +87,7 @@ class PasswordResetController extends AbstractController
 		// note: unwanted access is protected by _etoken 
 
 		$form = $app->form()
-			->add('password', password_reset_type::class)
+			->add('password', PasswordResetType::class)
 			->add('submit', SubmitType::class)
 			->getForm();
 
@@ -97,7 +98,7 @@ class PasswordResetController extends AbstractController
 			$data = $form->getData();
 
 
-			$app->success('password_reset.new_password_success');
+			$this->addFlash('success', 'password_reset.new_password_success');
 			return $app->reroute('login', ['schema' => $schema]);
 		}
 

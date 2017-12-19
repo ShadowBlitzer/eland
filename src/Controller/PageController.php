@@ -64,7 +64,7 @@ class PageController extends AbstractController
 
 			$app['xdb']->set();
 
-			$app->success('page_add.success', ['%name%'  => $data['name']]);
+			$this->addFlash('success', 'page_add.success', ['%name%'  => $data['name']]);
 
 			return $app->redirect($app->path('page_index', [
 				'schema' 	=> $schema,
