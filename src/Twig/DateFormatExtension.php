@@ -3,8 +3,10 @@
 namespace App\Twig;
 
 use App\Service\DateFormatCache;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class DateFormatExtension
+class DateFormatExtension extends AbstractExtension;
 {
 	private $dateFormatCache;
 	private $format = [];
@@ -15,6 +17,15 @@ class DateFormatExtension
 	{
 		$this->dateFormatCache = $dateFormatCache;	
 	}
+
+    public function getFilters()
+    {
+        return [
+			new TwigFilter('date_format', [$this, 'get'], [
+				'needs_context'		=> true,
+			]),         
+        ];
+    }	
 
 	public function get(array $context, string $ts, string $precision):string
 	{

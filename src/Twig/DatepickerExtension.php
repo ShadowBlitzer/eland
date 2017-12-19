@@ -4,8 +4,10 @@ namespace App\Twig;
 
 use Symfony\Component\Translation\TranslatorInterface;
 use App\Twig\DateFormatExtension;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class DatepickerExtension
+class DatepickerExtension extends AbstractExtension
 {
 	private $dateFormatExtension;
 	private $translator;
@@ -23,6 +25,18 @@ class DatepickerExtension
 		$this->dateFormatExtension = $dateFormatExtension;
 		$this->translator = $translator;	
 	}
+
+	public function getFunctions()
+    {
+        return [
+			new TwigFunction('datepicker_format', [$this, 'getFormat'],[
+				'needs_context'		=> true,
+			]),
+            new TwigFunction('datepicker_placeholder', [$this, 'getPlaceholder'], [
+				'needs_context'		=> true,
+			]),
+        ];
+    }
 
 	public function getPlaceholder(array $context):string
 	{

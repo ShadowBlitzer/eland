@@ -11,8 +11,9 @@ Encore
     // .enableVersioning(Encore.isProduction())
 
     // uncomment to define the assets of the project
-    // .addEntry('js/app', './assets/js/app.js')
+    .addEntry('js/app', './assets/js/base.js')
     // .addStyleEntry('css/app', './assets/css/app.scss')
+    .addStyleEntry('css/app', './assets/css/base.css')    
 
     // uncomment if you use Sass/SCSS files
     // .enableSassLoader()

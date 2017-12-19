@@ -4,7 +4,6 @@ namespace App\Twig;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
@@ -12,30 +11,7 @@ class AppExtension extends AbstractExtension
     {
         return [
 			new TwigFilter('underline', [$this, 'underline']),
-			new TwigFilter('replace_when_zero', [$this, 'replaceWhenZero']),
-			new TwigFilter('date_format', ['App\Twig\DateFormatExtension', 'get'], [
-				'needs_context'		=> true,
-			]),
-			new TwigFilter('user_format', ['App\Twig\UserFormatExtension', 'get'], [
-				'needs_context'		=> true,
-			]),
-			new TwigFilter('view', ['App\Twig\ViewExtension', 'get'], [
-				'needs_context'		=> true,
-			]),           
-        ];
-    }
-
-    public function getFunctions()
-    {
-        return [
-//            new TwigFunction('distance_p', 'App\Twig\DistanceExtension::format_p'),
-			new TwigFunction('datepicker_format', ['App\Twig\DatepickerExtension', 'getFormat'],[
-				'needs_context'		=> true,
-			]),
-            new TwigFunction('datepicker_placeholder', ['App\Twig\DatepickerExtension', 'getPlaceholder'], [
-				'needs_context'		=> true,
-			]),
-  //          new TwigFunction('config', ['App\Twig\ConfigExtension', 'get']),
+			new TwigFilter('replace_when_zero', [$this, 'replaceWhenZero']),        
         ];
     }
 

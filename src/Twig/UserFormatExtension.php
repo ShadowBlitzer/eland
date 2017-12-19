@@ -2,36 +2,48 @@
 
 namespace App\Twig;
 
-use service\user_simple_cache;
+use App\Service\UserSimpleCache;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class UserFormatExtension
+class UserFormatExtension extends AbstractExtension
 {
-	private $user_simple_cache;
+	private $userSimpleCache;
 	private $schema;
+	private $access;
 	private $local;
 
 	private $format = [];
 
 	public function __construct(
-		user_simple_cache $user_simple_cache,
+		UserSimpleCache $userSimpleCache,
 		RequestStack $request_stack,
-		UrlGenerator $url_generator
+		UrlGenerator $urlGenerator
 	)
 	{
-		$this->user_simple_cache = $user_simple_cache;
+		$this->userSimpleCache = $userSimpleCache;
 		$request = $request_stack->getCurrentRequest();
 		$this->schema = $request->attributes->get('schema');
 		$this->access = $request->attributes->get('access');
-		$this->url_generator = $url_generator;	
+		$this->urlGenerator = $urlGenerator;	
 	}
+
+    public function getFilters()
+    {
+        return [
+			new TwigFilter('user_format', [$this, 'get'], [
+				'needs_context'		=> true,
+			]),        
+        ];
+    }
 
 	public function get(int $id):string
 	{
 		if (!isset($this->local[$this->schema]))
 		{
-			$this->local[$this->schema] = $this->user_simple_cache->get($this->schema);
+			$this->local[$this->schema] = $this->userSimpleCache->get($this->schema);
 		}
 
 		if (!isset($this->local[$this->schema][$id]))
@@ -40,7 +52,7 @@ class UserFormatExtension
 		}
 
 		$out = '<a href="';
-		$out .= $this->url_generator->generate('user_show', [
+		$out .= $this->urlGenerator->generate('user_show', [
 			'user'		=> $id,
 			'access'	=> $this->access,
 			'schema'	=> $this->schema,
