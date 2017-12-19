@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Service\Xdb;
 use Doctrine\DBAL\Connection as Db;
-use Predis\Client as Predis;
+use Predis\Client as Redis;
 
 class Config
 {
@@ -39,7 +39,7 @@ class Config
 		'interlets_en'						=> '1',
 	];
 
-	public function __construct(Db $db, Xdb $xdb, Predis $redis)
+	public function __construct(Db $db, Xdb $xdb, Redis $redis)
 	{
 		$this->redis = $redis;
 		$this->db = $db;

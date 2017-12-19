@@ -106,7 +106,7 @@
     {%- set attr = attr|merge({
         'data-provide': 'datepicker',
         'data-date-format': datepicker_format(),
-        'data-date-language': global.request.locale,
+        'data-date-language': app.request.locale,
         'data-date-today-highlight': 'true',
         'data-date-autoclose': 'true',
         'data-date-immediate-updates': 'true',

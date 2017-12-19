@@ -13,13 +13,13 @@ class AppExtension extends AbstractExtension
         return [
 			new TwigFilter('underline', [$this, 'underline']),
 			new TwigFilter('replace_when_zero', [$this, 'replaceWhenZero']),
-			new TwigFilter('date_format', 'App\Twig\DateFormatExtension::get', [
+			new TwigFilter('date_format', ['App\Twig\DateFormatExtension', 'get'], [
 				'needs_context'		=> true,
 			]),
-			new TwigFilter('user_format', 'App\Twig\UserFormatExtension::get', [
+			new TwigFilter('user_format', ['App\Twig\UserFormatExtension', 'get'], [
 				'needs_context'		=> true,
 			]),
-			new TwigFilter('view', 'App\Twig\ViewExtension::get', [
+			new TwigFilter('view', ['App\Twig\ViewExtension', 'get'], [
 				'needs_context'		=> true,
 			]),           
         ];
@@ -29,15 +29,13 @@ class AppExtension extends AbstractExtension
     {
         return [
 //            new TwigFunction('distance_p', 'App\Twig\DistanceExtension::format_p'),
-			new TwigFunction('datepicker_format', 'App\Twig\DatepickerExtension::getFormat',[
+			new TwigFunction('datepicker_format', ['App\Twig\DatepickerExtension', 'getFormat'],[
 				'needs_context'		=> true,
 			]),
-            new TwigFunction('datepicker_placeholder', 'App\Twig\DatepickerExtension::getPlaceholder', [
+            new TwigFunction('datepicker_placeholder', ['App\Twig\DatepickerExtension', 'getPlaceholder'], [
 				'needs_context'		=> true,
 			]),
-            new TwigFunction('config', 'App\Twig\ConfigExtension::get', [
-				'needs_context'		=> true,
-			]),
+  //          new TwigFunction('config', ['App\Twig\ConfigExtension', 'get']),
         ];
     }
 

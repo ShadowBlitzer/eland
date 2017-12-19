@@ -23,7 +23,7 @@
 {%- endif %}
 {% if n.itemdate -%}
 	<dt>{{- 'label.event_date'|trans -}}</dt>
-	<dd>{{- n.itemdate|web_date('day') -}}
+	<dd>{{- n.itemdate|date_format('day') -}}
 	{%- if n.sticky %} <i>({{- 'news.is_kept_after_date'|trans -}})</i>{%- endif -%}
 	</dd>
 {%- endif %}
@@ -35,7 +35,7 @@
 
 <div class="panel-footer">
 
-<p><i class="fa fa-user"></i>&nbsp;{{ n.id_user|web_user|raw -}}  
+<p><i class="fa fa-user"></i>&nbsp;{{ n.id_user|user_format|raw -}}  
 
 {%- block admin_buttons -%}{%- endblock -%}
 </p>

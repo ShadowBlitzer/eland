@@ -3,8 +3,10 @@
 namespace App\Twig;
 
 use App\Service\Config;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class ConfigExtension
+class ConfigExtension extends AbstractExtension
 {
 	private $config;
 
@@ -13,12 +15,22 @@ class ConfigExtension
 		$this->config = $config;
 	}
 
-	public function get(array $context, string $key, string $schema = null):string
+	public function getFunctions()
+    {
+        return [
+			new TwigFunction('config', [$this, 'get']),
+        ];
+    }
+
+	public function get(string $key, string $schema):string
 	{
+		/*
 		if (!isset($schema))
 		{
 			$schema = $context['schema'];
 		}
+
+		*/
 
 		return $this->config->get($key, $schema);
 	}

@@ -40,9 +40,9 @@
         </a>
         {%- elseif col_format[c].render is defined -%}
             {%- if col_format[c].render == 'date' -%}
-                {{- ((row[c]) ?? '')|web_date(col_format[c].date_precision ?? 'min') -}}
+                {{- ((row[c]) ?? '')|date_format(col_format[c].date_precision ?? 'min') -}}
             {%- elseif col_format[c].render == 'user' -%}
-                {{- (row[c])|web_user|raw -}}
+                {{- (row[c])|user_format|raw -}}
             {%- elseif col_format[c].render == 'badge' -%}
                 {{- ba.badge(row[c]) -}}
             {%- elseif col_format[c].render == 'yes_no' -%}

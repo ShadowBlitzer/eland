@@ -3,14 +3,14 @@
 {% import 'macro/flash.html.twig' as f %}
 {% import 'macro/menu.html.twig' as m %}
 
-{% set route_params = global.request.attributes.get('_route_params') %}
-{% set query_params = global.request.query.all %}
+{% set route_params = app.request.attributes.get('_route_params') %}
+{% set query_params = app.request.query.all %}
 {% set all_params = route_params|merge(query_params) %}
-{% set route = global.request.attributes.get('_route') %}
+{% set route = app.request.attributes.get('_route') %}
 {% set route_ary = route|split('_') %}
 {% set active_menu = route_ary[1] is defined and route_ary[1] == 'self' ? route : route_ary[0] %}
-{% set schema = global.request.attributes.get('schema') %}
-{# {% set access = global.request.attributes.get('access') %} #}
+{% set schema = app.request.attributes.get('schema') %}
+{# {% set access = app.request.attributes.get('access') %} #}
 {% if access is defined %}
 	{% set acc_sch = {'schema': schema, 'access': access} %}
 {% endif %}

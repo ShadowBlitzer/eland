@@ -4,8 +4,9 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use util\sort;
-use util\pagination;
+use App\Util\Sort;
+use App\Util\Pagination;
+use Doctrine\DBAL\Connection as Db;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,9 +22,11 @@ use App\Form\Input\NumberAddonType;
 use App\Form\Input\TextAddonType;
 use App\Form\Filter\TransactionFilterType;
 
+use App\Service\Config;
+
 class TransactionController extends AbstractController
 {
-	public function index(FormFactoryInterface $formFactory, Request $request, string $schema, string $access)
+	public function index(FormFactoryInterface $formFactory, Db $db, Request $request, string $schema, string $access)
 	{
 		$where = $params = [];
 
@@ -41,26 +44,26 @@ class TransactionController extends AbstractController
 				$params[] = '%' . $data['q'] . '%';
 			}
 
-			$where_code = [];
+			$whereCode = [];
 
 			if (isset($data['from_user']))
 			{
-				$where_code[] = $data['andor'] === 'nor' ? 't.id_from <> ?' : 't.id_from = ?';
+				$whereCode[] = $data['andor'] === 'nor' ? 't.id_from <> ?' : 't.id_from = ?';
 				$params[] = $data['from_user'];
 			}
 
 			if (isset($data['to_user']))
 			{
-				$where_code[] = $data['andor'] === 'nor' ? 't.id_to <> ?' : 't.id_to = ?';
+				$whereCode[] = $data['andor'] === 'nor' ? 't.id_to <> ?' : 't.id_to = ?';
 				$params[] = $data['to_user'];
 			}
 
-			if (count($where_code) > 1 && $data['andor'] === 'or')
+			if (count($whereCode) > 1 && $data['andor'] === 'or')
 			{
-				$where_code = ['(' . implode(' or ', $where_code) . ')'];
+				$whereCode = ['(' . implode(' or ', $whereCode) . ')'];
 			}
 
-			$where = array_merge($where, $where_code);
+			$where = array_merge($where, $whereCode);
 
 			if (isset($data['from_date']))
 			{
@@ -79,26 +82,26 @@ class TransactionController extends AbstractController
 		$where = $filtered ? ' where ' . implode(' and ', $where) . ' ' : '';
 
 		$query = ' from ' . $schema . '.transactions t' . $where;
-		$row_count = $app['db']->fetchColumn('select count(t.*)' . $query, $params);
+		$rowCount = $db->fetchColumn('select count(t.*)' . $query, $params);
 		$query = 'select t.*' . $query;
 
-		$sort = new sort($request);
+		$sort = new Sort($request);
 
-		$sort->add_columns([
+		$sort->addColumns([
 			'description'	=> 'asc',
 			'amount'		=> 'asc',
 			'cdate'			=> 'desc',
 		])
-			->set_default('cdate');
+			->setDefault('cdate');
 
-		$pagination = new pagination($request, $row_count);
+		$pagination = new Pagination($request, $rowCount);
 
 		$query .= $sort->query();
 		$query .= $pagination->query();
 
 		$transactions = [];
 
-		$rs = $app['db']->executeQuery($query, $params);
+		$rs = $db->executeQuery($query, $params);
 
 		while ($row = $rs->fetch())
 		{
@@ -131,7 +134,7 @@ class TransactionController extends AbstractController
 
 			if ($inter_schema)
 			{
-				$inter_transaction = $app['db']->fetchAssoc('select t.*
+				$inter_transaction = $db->fetchAssoc('select t.*
 					from ' . $inter_schema . '.transactions t
 					where t.transid = ?', [$t['transid']]);
 
@@ -143,14 +146,11 @@ class TransactionController extends AbstractController
 			}
 		}
 
-//		$row_count = $app['db']->fetchColumn('select count(t.*)
-//			from ' . $schema . '.transactions t ' . $where_sql, $params_sql);
-
 		return $this->render('transaction/' . $access . '_index.html.twig', [
 			'transactions'	=> $transactions,
 			'filter'		=> $filter->createView(),
 			'filtered'		=> $filtered,
-			'pagination'	=> $pagination->get($row_count),		
+			'pagination'	=> $pagination->get(),		
 			'sort'			=> $sort->get(),
 		]);
 	}

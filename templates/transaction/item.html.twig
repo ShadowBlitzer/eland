@@ -11,16 +11,16 @@
 
 <dl>
 	<dt>{{- 'label.time'|trans -}}</dt>
-	<dd>{{- t.cdate|web_date('min') -}}</dd>
+	<dd>{{- t.cdate|date_format('min') -}}</dd>
 
 	<dt>{{- 'label.amount'|trans -}}</dt>
 	<dd>{{- t.amount -}}&nbsp;{{- config('currency', schema) -}}</dd>
 
 	<dt>{{- 'label.from'|trans -}}</dt>
-	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_from|web_user|raw -}}</dd>
+	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_from|user_format|raw -}}</dd>
 
 	<dt>{{- 'label.to'|trans -}}</dt>
-	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_to|web_user|raw -}}</dd>
+	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_to|user_format|raw -}}</dd>
 
 	<dt>{{- 'label.description'|trans -}}</dt>
 	<dd>{{- t.description -}}</dd>	
