@@ -2,79 +2,75 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use exception\missing_parameter_exception;
 use exception\invalid_parameter_value_exception;
 
 class SessionView
 {
-	private $default_ary = [
+	private $defaultAry = [
 		'news'	=> 'extended',
 		'user'	=> 'list',
 		'ad'	=> 'extended',
 	];
 
 	private $session;
-	private $schema;
-	private $access;
 
-	public function __construct(Session $session, string $schema, string $access)
+	public function __construct(SessionInterface $session)
 	{
 		$this->session = $session;
-		$this->schema = $schema;
-		$this->access = $access;
 	}
 
-	public function get(string $entity):string
+	public function get(string $entity, string $schema, string $access):string
 	{
 		if (!isset($entity) || $entity === '')
 		{
 			throw new missing_parameter_exception(sprintf('"entity" is not set in %s', __CLASS__));
 		}
 
-		if (!isset($this->default_ary[$entity]))
+		if (!isset($this->defaultAry[$entity]))
 		{
 			throw new invalid_parameter_value_exception(sprintf('invalid "entity" %s in %s', $entity, __CLASS__));
 		}		
 
-		$key = $this->schema . '_' . $this->access . '_' . $entity . '_view';
+		$key = $schema . '_' . $access . '_' . $entity . '_view';
 	
 		$get = $this->session->get($key);
 
 		if (!isset($get))
 		{
-			$get = $this->default_ary[$entity];
+			$get = $this->defaultAry[$entity];
 			$this->session->set($key, $get);
 		}
 
 		return $get;
 	}
 
-	public function set(string $entity, string $view)
+	public function set(string $entity, string $schema, string $access, string $view)
 	{
-		if (!$view || !$entity || !isset($this->default_ary[$entity]))
+		if (!$view || !$entity || !isset($this->defaultAry[$entity]))
 		{
 			return;
 		}
 
-		$key = $this->schema . '_' . $this->access . '_' . $entity . '_view';
+		$key = $schema . '_' . $access . '_' . $entity . '_view';
 		
 		$this->session->set($key, $view);
 	}
 
-	public function merge(array $param, string $entity = null):array
+	public function merge(array $params, string $entity = null):array
 	{
 		if (!isset($entity) || $entity === '')
 		{
-			return $param;
+			return $params;
 		}
 
-		if (!isset($this->default_ary[$entity]))
+		if (!isset($this->defaultAry[$entity]))
 		{
-			return $param;
+			return $params;
 		}
 
-		return array_merge($param, ['view' => $this->get($entity)]);		
+		return array_merge($params, ['view' => $this->get($entity, $params['schema'], $params['access'])]);		
 	}
 
 }

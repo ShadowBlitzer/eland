@@ -1,12 +1,12 @@
 {
   "name": "eLAND",
   "engines": {
-    "node": "5.7.x",
-    "npm": "3.8.x"
+    "node": "9",
+    "npm": "5"
   },
   "devDependencies": {
     "@symfony/webpack-encore": "^0.17.0",
-    "gitbook-cli": "^1.0.1"
+    "gitbook-cli": "^2"
   },
   "scripts": {
     "docs:prepare": "gitbook install",

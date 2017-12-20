@@ -18,14 +18,12 @@ class ViewExtension extends AbstractExtension
 	public function getFilters()
     {
 		return [
-			new TwigFilter('view', ['App\Twig\ViewExtension', 'get'], [
-				'needs_context'		=> true,
-			]),           
+			new TwigFilter('view', ['App\Twig\ViewExtension', 'get']),           
         ];
     }
 
-	public function get(array $param, string $entity = null):array
+	public function get(array $params, string $entity):array
 	{
-		return $this->sessionView->merge($param, $entity);
+		return $this->sessionView->merge($params, $entity);
 	}
 }

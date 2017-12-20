@@ -6,7 +6,7 @@ use App\Service\DateFormatCache;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class DateFormatExtension extends AbstractExtension;
+class DateFormatExtension extends AbstractExtension
 {
 	private $dateFormatCache;
 	private $format = [];

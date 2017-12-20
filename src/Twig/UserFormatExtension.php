@@ -4,7 +4,7 @@ namespace App\Twig;
 
 use App\Service\UserSimpleCache;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -20,7 +20,7 @@ class UserFormatExtension extends AbstractExtension
 	public function __construct(
 		UserSimpleCache $userSimpleCache,
 		RequestStack $request_stack,
-		UrlGenerator $urlGenerator
+		UrlGeneratorInterface $urlGenerator
 	)
 	{
 		$this->userSimpleCache = $userSimpleCache;
@@ -39,8 +39,10 @@ class UserFormatExtension extends AbstractExtension
         ];
     }
 
-	public function get(int $id):string
+	public function get(array $context, int $id):string
 	{
+		
+
 		if (!isset($this->local[$this->schema]))
 		{
 			$this->local[$this->schema] = $this->userSimpleCache->get($this->schema);
