@@ -7,6 +7,7 @@ require('../css/users_map.scss');
 require('../css/jqplot.scss');
 require('../css/ajax_loader.scss');
 require('../css/misc.scss');
+require('../css/admin.scss');
 require('../css/print.scss');
 
 
