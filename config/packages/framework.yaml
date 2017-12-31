@@ -1,6 +1,6 @@
 framework:
     secret: '%env(APP_SECRET)%'
-    #csrf_protection: ~
+    csrf_protection: ~
     http_method_override: true
 
     session:
@@ -11,3 +11,6 @@ framework:
     #fragments: ~
     php_errors:
         log: true
+
+    assets:
+        json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'

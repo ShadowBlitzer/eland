@@ -1,0 +1,33 @@
+/** input sm **/
+
+.sm-size {
+    width: 5em;
+}
+  
+/** **/
+
+div.pan-sub {
+    border-radius: 5px;
+    border: 1px solid #99a;
+    padding: 2px 5px;
+    margin: 5px 0;
+}
+
+/** **/
+
+span.num {
+    font-weight: bold;
+}
+
+/** addons **/
+
+div.panel-info form div.form-group span.input-group-addon,
+div.panel-info form div.form-group span.input-group-btn button.btn{
+    background-color: #5bc0de;
+    border-color: #46b8da;
+    color: #fff;
+}
+
+span.badge-text {
+    font-size: 0.9em;
+}
