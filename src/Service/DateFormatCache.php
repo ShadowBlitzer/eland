@@ -39,7 +39,7 @@ class DateFormatCache
 
 				$pre = 'month_abbrev';
 
-				if ($trans_key !== false)
+				if ($transKey !== false)
 				{
 					list($trDateFormat, $dateFormat, $trPrecision) = explode('.', $transKey);
 

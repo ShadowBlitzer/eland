@@ -1,8 +1,8 @@
 {% macro flash() -%}
-	{%- if global.request.hasPreviousSession -%}
-		{%- if global.session.flashbag.peekAll()|length > 0 -%}
+	{%- if app.request.hasPreviousSession -%}
+		{%- if app.session.flashbag.peekAll()|length > 0 -%}
 			<div id="flash">
-			{%- for type, flashMessages in global.session.flashbag.all() -%}
+			{%- for type, flashMessages in app.session.flashbag.all() -%}
 				{%- for idx, msg in flashMessages -%}
 					{%- if type == 'error' -%}{%- set type = 'danger' -%}{%- endif -%}
 					<div class="row">

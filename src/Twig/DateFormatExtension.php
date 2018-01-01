@@ -33,8 +33,12 @@ class DateFormatExtension extends AbstractExtension
 
 		if (!isset($this->format[$precision]))
 		{
+			$request = $context['app']->getRequest();
+			$locale = $request->getLocale();
+			$schema = $request->attributes->get('schema');
+
 			$this->format[$precision] = $this->dateFormatCache
-				->get($precision, $context['locale'], $context['schema']);
+				->get($precision, $locale, $schema);
 		}
 
 		return strftime($this->format[$precision], $time);
@@ -44,8 +48,12 @@ class DateFormatExtension extends AbstractExtension
 	{
 		if (!isset($this->format[$precision]))
 		{
+			$request = $context['app']->getRequest();
+			$locale = $request->getLocale();
+			$schema = $request->attributes->get('schema');
+
 			$this->format[$precision] = $this->dateFormatCache
-				->get($precision, $context['locale'], $context['schema']);
+				->get($precision, $locale, $schema);
 		}
 
 		return $this->format[$precision];

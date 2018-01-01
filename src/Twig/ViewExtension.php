@@ -18,7 +18,7 @@ class ViewExtension extends AbstractExtension
 	public function getFilters()
     {
 		return [
-			new TwigFilter('view', ['App\Twig\ViewExtension', 'get']),           
+			new TwigFilter('view', [$this, 'get']),           
         ];
     }
 

@@ -60,7 +60,7 @@ class DatepickerExtension extends AbstractExtension
 
 	public function getFormat(array $context):string
 	{
-		$format = $this->DateFormatExtension->getFormat($context, 'day');
+		$format = $this->dateFormatExtension->getFormat($context, 'day');
 
 		return str_replace($this->formatSearch, $this->formatReplace, $format);
 	}

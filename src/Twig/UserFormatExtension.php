@@ -11,6 +11,8 @@ class UserFormatExtension extends AbstractExtension
 {
 	private $userSimpleCache;
 	private $local;
+	private $schema;
+	private $access;
 	private $format = [];
 
 	public function __construct(
@@ -31,14 +33,23 @@ class UserFormatExtension extends AbstractExtension
         ];
     }
 
-	public function get(array $context, int $id):string
+	public function get(array $context, int $id, string $schema):string
 	{
-		if (!isset($this->local[$context['schema']]))
+		if (!isset($this->schema))
 		{
-			$this->local[$context['schema']] = $this->userSimpleCache->get($context['schema']);
+			$attributes = $context['app']->getRequest()->attributes;
+			$this->schema = $attributes->get('schema');
+			$this->access = $attributes->get('access');
 		}
 
-		if (!isset($this->local[$this->schema][$id]))
+		$access = $schema === $this->schema ? $this->access : 'g';
+
+		if (!isset($this->local[$schema]))
+		{
+			$this->local[$schema] = $this->userSimpleCache->get($schema);
+		}
+
+		if (!isset($this->local[$schema][$id]))
 		{
 			return '';
 		}
@@ -46,12 +57,12 @@ class UserFormatExtension extends AbstractExtension
 		$out = '<a href="';
 		$out .= $this->urlGenerator->generate('user_show', [
 			'user'		=> $id,
-			'access'	=> $context['access'],
-			'schema'	=> $context['schema'],
-			'user_type'	=> $this->local[$context['schema']][$id][0],
+			'access'	=> $access,
+			'schema'	=> $schema,
+			'user_type'	=> $this->local[$schema][$id][0],
 		]);
 		$out .= '">';
-		$out .= $this->local[$context['schema']][$id][1];
+		$out .= $this->local[$schema][$id][1];
 		$out .= '</a>';
 
 		return $out;

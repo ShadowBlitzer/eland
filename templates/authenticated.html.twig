@@ -61,7 +61,7 @@
 
     {%- block navbar_user_items -%}{%- endblock -%}
 
-    {{- m.li_302_no_param({'route': 'logout', 'fa': 'sign-out', 'title': 'logout.title'}) -}}
+   {# {{- m.li_302_no_param({'route': 'logout', 'fa': 'sign-out', 'title': 'logout.title'}) -}}  #}
     {{- m.nav_dropdown_end() -}}
 
   {%- endblock navbar_user -%}
@@ -78,7 +78,7 @@
 
   {%- for key in menu_en -%}
     {%- if menu_ary[key] is defined -%}
-		{{- m.li(key, menu_ary[key], active_menu, acc_sch|view(key)) -}}
+{#		{{- m.li(key, menu_ary[key], active_menu, acc_sch|view(key)) -}} #}
     {%- endif -%}
   {%- endfor -%}
   

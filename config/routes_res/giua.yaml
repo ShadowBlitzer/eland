@@ -18,6 +18,14 @@ transaction_index:
     controller: App\Controller\TransactionController::index
     path: /transactions
 
+transaction_add:
+    controller: App\Controller\TransactionController::add
+    path: /transactions/add
+
+transaction_show:
+    controller: App\Controller\TransactionController::show
+    path: /transactions/{transaction}
+
 transaction:
     resource: giua/giua_transaction.yaml
     prefix: /transactions

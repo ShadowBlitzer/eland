@@ -10,9 +10,9 @@
 {% set admin_menu_ary = {
   'status': {'title': 'status.title', 'fa': 'exclamation-triangle', 'route': 'status'},
   'page': {'title': 'page_a_index.title', 'fa': 'file-code-o', 'route': 'page_a_index'},
-  'permission': {'title': 'permission.title', 'fa': 'hand-paper-o', 'route': 'permission'},
+  'permission': {'title': 'permission.title', 'fa': 'hand-paper-o', 'route': 'permission_index'},
   'category': {'title': 'category_index.title', 'fa': 'clone', 'route': 'category_index'},
-  'typecontact': {'title': 'type_contact_index.title', 'fa': 'circle-o-notch', 'route': 'typecontact_index'},
+  'typecontact': {'title': 'type_contact_index.title', 'fa': 'circle-o-notch', 'route': 'type_contact_index'},
   'custom': {'title': 'custom_field_index.title', 'fa': 'circle-o-notch', 'route': 'custom_field_index'},
   'contactdetail': {'title': 'contact_detail_index.title', 'fa': 'map-marker', 'route': 'contactdetail_index'},
   'config': {'title': 'config.title', 'fa': 'gears', 'route': 'config_index'},
@@ -48,7 +48,7 @@
   {%- endfor -%}
 
   {{- m.divider() -}}
-  {{- m.li_302_no_param({'route': 'logout', 'fa': 'sign-out', 'title': 'logout.title'}) -}}
+ {#  {{- m.li_302_no_param({'route': 'logout', 'fa': 'sign-out', 'title': 'logout.title'}) -}} #}
   {{- m.nav_dropdown_end() -}}
 
 {%- endblock navbar_admin -%}

@@ -199,8 +199,24 @@ type_contact_del:
         type_contact: '%app.id%'
 
 
-#$app->mount('/{_locale}/{schema}/{access}/contact-details', new provider\contact_detail_controller_provider());
+contactdetail_index:
+   controller: App\Controller\ContactDetailController::index
+   path: /contact-details
 
+contactdetail_add:
+   controller: App\Controller\ContactDetailController::add
+   path: /contact-details/add
+
+contactdetail_edit:
+   controller: App\Controller\ContactDetailController::add
+   path: /contact-details/{contact_detail}/edit
+
+contactdetail_del:
+   controller: App\Controller\ContactDetailController::del
+   path: /contact-details/{contact_detail}/del 
+
+
+            
 
 
 

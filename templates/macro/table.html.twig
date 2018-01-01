@@ -25,6 +25,7 @@
 
 {%- macro body(rows, columns, col_format, acc_sch, forms) -%}
     {%- import 'macro/badge.html.twig' as ba -%}
+    {%- set schema = acc_sch['schema'] -%}
     <tbody>
     {%- for row in rows -%}
     <tr{%- if row.class is defined %} class="{{- row.class -}}"{%- endif -%}>
@@ -42,7 +43,7 @@
             {%- if col_format[c].render == 'date' -%}
                 {{- ((row[c]) ?? '')|date_format(col_format[c].date_precision ?? 'min') -}}
             {%- elseif col_format[c].render == 'user' -%}
-                {{- (row[c])|user_format|raw -}}
+                {{- (row[c])|user_format(schema)|raw -}}
             {%- elseif col_format[c].render == 'badge' -%}
                 {{- ba.badge(row[c]) -}}
             {%- elseif col_format[c].render == 'yes_no' -%}
