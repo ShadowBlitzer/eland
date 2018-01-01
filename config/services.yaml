@@ -42,6 +42,6 @@ services:
     Predis\Client:
         arguments: ['%env(REDIS_URL)']
 
-    Twig_Extensions_Extension_Intl:
-        class: Twig_Extensions_Extension_Intl
-        tags: [twig.extension]
+#    Twig_Extensions_Extension_Intl:
+#        class: Twig_Extensions_Extension_Intl
+#        tags: [twig.extension]

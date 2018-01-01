@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Controller\Admin;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
+class CustomFieldController extends AbstractController
+{
+	public function index(Request $request, string $schema)
+	{
+		return $this->render('custom_field/a_index.html.twig', []);
+	}
+}
+

@@ -1,0 +1,15 @@
+schema:
+    resource: routes_schema.yaml
+    prefix: /{schema}
+    requirements:
+        schema: '[a-z][a-z0-9]*'
+
+annotation_main_index:
+    resource: ../src/Controller/Index/
+    type: annotation
+
+
+
+
+
+    

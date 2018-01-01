@@ -1,0 +1,26 @@
+giua_auth:
+    resource: ../src/Controller/Guest/
+    type: annotation
+    prefix: /{access}
+    requirements:
+        access: '[giua]'
+
+ua_auth:
+    resource: ../src/Controller/User/
+    type: annotation
+    prefix: /{access}
+    requirements:
+        access: '[ua]'
+
+a_auth:
+    resource: ../src/Controller/Admin/
+    type: annotation
+    prefix: /{access}
+    requirements:
+        access: a
+
+public: 
+    resource: ../src/Controller/System/
+    type: annotation
+
+
