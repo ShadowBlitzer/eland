@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Translation\TranslatorInterface;
 use App\Form\Extension\EtokenManagerInterface;
 
-class EtokenValidationListener implements EventSubscriberInterface
+class EtokenValidationSubscriber implements EventSubscriberInterface
 {
     private $etokenManager;
     private $translator;
@@ -26,11 +26,11 @@ class EtokenValidationListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            FormEvents::PRE_SUBMIT => 'pre_submit',
+            FormEvents::PRE_SUBMIT => 'preSubmit',
         );
     }
 
-    public function pre_submit(FormEvent $event)
+    public function preSubmit(FormEvent $event)
     {
         $form = $event->getForm();
 

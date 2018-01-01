@@ -170,9 +170,9 @@ class TransactionController extends AbstractController
 		return $this->render('transaction/' . $access . '_show_self.html.twig', []);
 	}
 
-	public function add(Request $request, string $schema, string $access)
+	public function add(FormFactoryInterface $formFactory, Request $request, string $schema, string $access)
 	{
-		$form = $app->form()
+		$form = $formFactory->createBuilder()
 			->add('id_from', TypeaheadUserType::class, [
 				'source_id'	=> 'form_id_to',		
 			])
@@ -215,7 +215,7 @@ class TransactionController extends AbstractController
 		]);
 	}
 
-	public function edit(Request $request, string $schema, string $access, array $trans)
+	public function edit(FormFactoryInterface $formFactory, Request $request, string $schema, string $access, array $trans)
 	{
 		$form = $app->form($transaction)
 			->add('description', TextAddonType::class, [

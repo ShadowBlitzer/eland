@@ -1,5 +1,7 @@
 require('../css/typeahead.scss');
 require('../css/bg_types.scss');
+require('../css/bootstrap.scss');
+require('../css/fontawesome.scss');
 require('../css/common.scss');
 require('../css/label.scss');
 require('../css/jssor.scss');
