@@ -19,6 +19,10 @@ use form\register_type;
 
 class RegisterController extends AbstractController
 {
+	/**
+	 * @Route("/register", name="register")
+	 * @Method({"GET", "POST"})
+	 */
 	public function form(Request $request, string $schema)
 	{
 		$form = $app->build_form(register_type::class)
@@ -29,10 +33,10 @@ class RegisterController extends AbstractController
 			$data = $form->getData();
 
 			$app['mail_queue_confirm_link']
-				->set_to([$data['email']])
-				->set_data($data)
-				->set_template('confirm_register')
-				->set_route('register_confirm')
+				->setTo([$data['email']])
+				->setData($data)
+				->setTemplate('confirm_register')
+				->setRoute('register_confirm')
 				->put();
 
 			$this->addFlash('info', 'register.confirm_email_info', ['%email%' => $data['email']]);
@@ -44,9 +48,9 @@ class RegisterController extends AbstractController
 	}
 
 	/**
-	 *
+	 * @Route("/register/{token}", name="register_confirm")
+	 * @Method("GET")
 	 */
-
 	public function confirm(Request $request, string $schema, string $token)
 	{
 		$data = $app['mail_validated_confirm_link']->get();

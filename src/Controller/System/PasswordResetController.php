@@ -21,6 +21,10 @@ use App\Form\PasswordResetType;
 
 class PasswordResetController extends AbstractController
 {
+	/**
+	 * @Route("/password-reset", name="password_reset")
+	 * @Method({"GET", "POST"})
+	 */
 	public function form(Request $request, string $schema)
 	{
 		$form = $app->form()
@@ -72,6 +76,10 @@ class PasswordResetController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/password-reset/{token}", name="password_reset_token")
+	 * @Method({"GET", "POST"})
+	 */
 	public function newPassword(Request $request, string $schema, string $token)
 	{
 		if ($request->getMethod() === 'GET')

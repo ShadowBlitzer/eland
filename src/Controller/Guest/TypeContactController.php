@@ -17,6 +17,10 @@ class TypeContactController extends AbstractController
 		'mail', 'web', 'adr', 'gsm', 'tel',
 	];
 
+	/**
+	 * @Route("/contact-types", name="typecontact_index")
+	 * @Method("GET")
+	 */
 	public function index(Request $request, string $schema, string $access)
 	{
 		$types = $app['db']->fetchAll('select * 
@@ -42,10 +46,10 @@ class TypeContactController extends AbstractController
 		]);
 	}
 
-	/*
-	*
-	*/
-
+	/**
+	 * @Route("/contact-types/add", name="typecontact_add")
+	 * @Method({"GET", "POST"})
+	 */
 	public function add(Request $request, string $schema, string $access)
 	{
 		$data = [
@@ -75,10 +79,10 @@ class TypeContactController extends AbstractController
 		]);
 	}
 
-	/*
-	*
-	*/
-
+	/**
+	 * @Route("/contact-types/{id}/edit", name="typecontact_edit")
+	 * @Method({"GET", "POST"})
+	 */
 	public function edit(Request $request, string $schema, string $access, array $type_contact)
 	{
 		$id = $type_contact['id'];
@@ -114,6 +118,10 @@ class TypeContactController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/contact-types/{id}/del", name="typecontact_del")
+	 * @Method({"GET", "POST"})
+	 */
 	public function del(Request $request, string $schema, string $access, array $type_contact)
 	{
 		$id = $type_contact['id'];

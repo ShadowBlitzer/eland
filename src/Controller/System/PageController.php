@@ -26,6 +26,7 @@ class PageController extends AbstractController
         $response->isNotModified($request);
         return $response;
 	}
+
 	
 	public function aIndex(Request $request, string $schema, string $access)
 	{

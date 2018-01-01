@@ -15,6 +15,11 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class LogController extends AbstractController
 {
+
+	/**
+	 * @Route("/logs", name="log_index")
+	 * @Method("GET")
+	 */
 	public function index(Request $request, string $schema)
 	{
 		return $this->render('log/a_index.html.twig', []);

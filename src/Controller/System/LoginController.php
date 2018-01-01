@@ -19,6 +19,10 @@ use util\user;
 
 class LoginController extends AbstractController
 {
+	/**
+	 * @Route("/login", name="login")
+	 * @Method({"GET", "POST"})
+	 */
 	public function form(Request $request, string $schema)
 	{
 		$form = $app->build_form(login_type::class)

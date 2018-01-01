@@ -9,6 +9,7 @@
 		"ext-imagick": "*",
 		"ext-intl": "*",
 		"ext-mbstring": "*",
+		"doctrine/doctrine-fixtures-bundle": "^3.0",
 		"predis/predis": "^1.1",
 		"rollerworks/password-strength-bundle": "^2.0",
 		"sensio/framework-extra-bundle": "^5.1",

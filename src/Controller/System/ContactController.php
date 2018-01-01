@@ -12,6 +12,10 @@ use form\contact_type;
 
 class ContactController extends AbstractController
 {
+	/**
+	 * @Route("/contact", name="contact_form")
+	 * @Method({"GET", "POST"})
+	 */
 	public function form(Request $request, string $schema)
 	{
 		$form = $app->build_form(contact_type::class)
@@ -38,6 +42,10 @@ class ContactController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/contact/{token}", name="contact_confirm")
+	 * @Method("GET")
+	 */
 	public function confirm(Request $request, string $schema, string $token)
 	{
 		$data = $app['mail_validated_confirm_link']->get();
@@ -50,12 +58,12 @@ class ContactController extends AbstractController
 			return $app->reroute('confirm', ['schema' => $schema]);
 		}
 
-		$app['mail_queue']->set_template('contact_admin')
-			->set_vars($data)
-			->set_schema($schema)
-			->set_to($app['mail_admin']->get($schema))
-			->set_reply_to([$data['email']])
-			->set_priority(900000)
+		$app['mail_queue']->setTemplate('contact_admin')
+			->setVars($data)
+			->setSchema($schema)
+			->setTo($app['mail_admin']->get($schema))
+			->setReplyTo([$data['email']])
+			->setPriority(900000)
 			->put();
 
 		$this->addFlash('success', 'contact.success');

@@ -16,6 +16,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class NotificationController extends AbstractController
 {
+	/**
+	 * @Route("/notifications", name="notification_index")
+	 * @Method("GET")
+	 */
 	public function index(Request $request, string $schema, string $access)
 	{
 		return $this->render('notification/' . $access . '_index.html.twig', []);

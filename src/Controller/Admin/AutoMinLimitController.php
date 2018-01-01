@@ -15,6 +15,10 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class AutoMinLimitController extends AbstractController
 {
+	/**
+	 * @Route("/auto-min-limit", name="auto_min_limit")
+	 * @Method({"GET", "POST"})
+	 */
 	public function form(Request $request, string $schema)
 	{
 		$row = $app['xdb']->get('setting', 'autominlimit', $schema);

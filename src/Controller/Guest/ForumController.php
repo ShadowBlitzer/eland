@@ -29,7 +29,5 @@ class ForumController extends AbstractController
 			'message'	=> $message,
 		]);
 	}
-
-
 }
 

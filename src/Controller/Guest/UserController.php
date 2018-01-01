@@ -15,6 +15,11 @@ use form\column_select\user_column_select_type;
 
 class UserController extends AbstractController
 {
+
+	/**
+	 * @Route("/users", name="user_no_view")
+	 * @Method("GET")
+	 */
 	public function noView(Request $request, string $schema, string $access, string $user_type)
 	{
 		return $app->reroute('user_index', [
@@ -25,6 +30,10 @@ class UserController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/users/{view}", name="user_index")
+	 * @Method({"GET", "POST"})
+	 */
 	public function index(Request $request,
 		string $schema, string $access, string $view, string $user_type)
 	{		
@@ -240,11 +249,19 @@ class UserController extends AbstractController
 		return $this->render('user/' . $access . '_' . $view . '.html.twig', $vars);
 	}
 
+	/**
+	 * @Route("/users/{id}", name="user_show")
+	 * @Method("GET")
+	 */
 	public function show(Request $request, string $schema, string $access, array $user)
 	{
 		return $this->render('user/' . $access . '_show.html.twig', []);
 	}
 
+	/**
+	 * @Route("/users/self", name="user_show_self")
+	 * @Method("GET")
+	 */
 	public function showSelf(Request $request, string $schema, string $access)
 	{
 		return $this->render('user/' . $access . '_show_self.html.twig', []);

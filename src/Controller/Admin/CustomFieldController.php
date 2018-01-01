@@ -9,6 +9,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class CustomFieldController extends AbstractController
 {
+	/**
+	 * @Route("/custom-fields", name="customfield_index")
+	 * @Method({"GET", "POST"})
+	 */
 	public function index(Request $request, string $schema)
 	{
 		return $this->render('custom_field/a_index.html.twig', []);

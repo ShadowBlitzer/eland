@@ -9,6 +9,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class MassTransactionController extends AbstractController
 {
+
+	/**
+	 * @Route("/mass-transaction", name="mass_transaction_index")
+	 * @Method({"GET", "POST"})
+	 */
 	public function form(Request $request, string $schema)
 	{
 		return $this->render('mass_transaction/a_form.html.twig', []);

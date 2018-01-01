@@ -10,6 +10,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserTypeaheadController extends AbstractController
 {
+	/**
+	 * @Route("/users/typeahead/{user_type}", name="user_typeahead")
+	 * @Method("GET")
+	 */
 	public function getLocal(Request $request,
 		string $schema, string $access, string $user_type)
 	{
@@ -130,6 +134,10 @@ class UserTypeaheadController extends AbstractController
 		return $response;
 	}
 
+	/**
+	 * @Route("/users/interlets-typeahead/{id}", name="user_interlets_typeahead")
+	 * @Method("GET")
+	 */
 	public function getInterlets(Request $request, 
 		string $schema, string $access, int $user)
 	{

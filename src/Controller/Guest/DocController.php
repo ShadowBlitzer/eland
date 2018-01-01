@@ -9,6 +9,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class DocController extends AbstractController
 {
+	/**
+	 * @Route("/docs", name="doc_index")
+	 * @Method("GET")
+	 */
 	public function index(Request $request, string $schema, string $access)
 	{
 
@@ -16,6 +20,10 @@ class DocController extends AbstractController
 		return $this->render('doc/' . $access . '_index.html.twig', []);
 	}
 
+	/**
+	 * @Route("/docs/{map}", name="doc_map")
+	 * @Method("GET")
+	 */
 	public function map(Request $request, string $schema, string $access, array $doc)
 	{
 
@@ -23,10 +31,14 @@ class DocController extends AbstractController
 		return $this->render('doc/' . $access . '_index.html.twig', []);
 	}
 
-	public function show(Request $request, string $schema, string $access, array $forum)
+	/**
+	 * @Route("/docs/{id}", name="doc_show")
+	 * @Method("GET")
+	 */
+	public function show(Request $request, string $schema, string $access, array $doc)
 	{
 		return $this->render('doc/' . $access . '_show.html.twig', [
-			'message'	=> $message,
+			'doc'	=> $doc,
 		]);
 	}
 }

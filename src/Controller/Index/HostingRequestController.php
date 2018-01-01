@@ -11,6 +11,10 @@ use App\Form\Post\HostingRequestType;
 
 class HostingRequestController extends AbstractController
 {
+	/**
+	 * @Route("/hosting-request", name="hosting_request")
+	 * @Method({"GET", "POST"})
+	 */
 	public function form(Request $request)
 	{
 		$form = $app->build_form(HostingRequestType::class)

@@ -30,10 +30,10 @@ use App\Service\Config;
 class TransactionController extends AbstractController
 {
 
-	/*
-	* @Router("/transactions", name="transaction_index")
-	*/
-
+	/**
+	 * @Route("/transactions", name="transaction_index")
+	 * @Method("GET")
+	 */
 	public function index(FormFactoryInterface $formFactory, Db $db, Request $request, string $schema, string $access)
 	{
 		$where = $params = [];
@@ -163,7 +163,10 @@ class TransactionController extends AbstractController
 		]);
 	}
 
-
+	/**
+	 * @Route("/transactions/{id}", name="transaction_show")
+	 * @Method("GET")
+	 */
 	public function show(Request $request, string $schema, string $access, array $transaction)
 	{
 		return $this->render('transaction/' . $access . '_show.html.twig', [
@@ -173,11 +176,19 @@ class TransactionController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/transactions/self", name="transaction_show_self")
+	 * @Method("GET")
+	 */
 	public function showSelf(Request $request, string $schema, string $access)
 	{
 		return $this->render('transaction/' . $access . '_show_self.html.twig', []);
 	}
 
+	/**
+	 * @Route("/transactions/add", name="transaction_add")
+	 * @Method({"GET", "POST"})
+	 */
 	public function add(FormFactoryInterface $formFactory, Request $request, string $schema, string $access)
 	{
 		$form = $formFactory->createBuilder()
@@ -223,6 +234,10 @@ class TransactionController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/transactions/{id}/edit", name="transaction_edit")
+	 * @Method({"GET", "POST"})
+	 */
 	public function edit(FormFactoryInterface $formFactory, Request $request, string $schema, string $access, array $trans)
 	{
 		$form = $app->form($transaction)

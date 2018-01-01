@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RedirectingController extends AbstractController
 {
+
     public function removeTrailingSlash(Request $request)
     {
         $pathInfo = $request->getPathInfo();

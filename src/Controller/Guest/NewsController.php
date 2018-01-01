@@ -17,6 +17,10 @@ use exception\invalid_parameter_value_exception;
 
 class NewsController extends AbstractController 
 {
+	/**
+	 * @Route("/news", name="news_no_view")
+	 * @Method("GET")
+	 */
 	public function noView(Request $request, string $schema, string $access)
 	{
 		return $app->reroute('news_index', [
@@ -26,6 +30,10 @@ class NewsController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/news/{view}", name="news_index")
+	 * @Method("GET")
+	 */
 	public function index(Request $request, string $schema, string $access, string $view)
 	{
 		$s_admin = $access === 'a';
@@ -149,6 +157,10 @@ class NewsController extends AbstractController
 		return $this->render('news/' . $access . '_' . $view . '.html.twig', $vars);
 	}
 
+	/**
+	 * @Route("/news/{id}", name="news_show")
+	 * @Method("GET")
+	 */
 	public function show(Request $request, string $schema, string $access, array $news)
 	{
 		$vars = ['news'	=> $news];
@@ -186,6 +198,10 @@ class NewsController extends AbstractController
 		return $this->render('news/' . $access . '_show.html.twig', $vars);
 	}
 
+	/**
+	 * @Route("/news/add", name="news_add")
+	 * @Method({"GET", "POST"})
+	 */
 	public function add(Request $request, string $schema, string $access)
 	{
 		$form = $app->build_form(news_type::class)
@@ -231,6 +247,10 @@ class NewsController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/news/{id}/edit", name="news_edit")
+	 * @Method({"GET", "POST"})
+	 */
 	public function edit(Request $request, string $schema, string $access, array $news)
 	{
 		$form = $app->build_form(news_type::class, $news)
@@ -256,6 +276,10 @@ class NewsController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/news/{id}/del", name="news_del")
+	 * @Method({"GET", "POST"})
+	 */
 	public function del(Request $request, string $schema, string $access, array $news)
 	{
 		$form = $app->form()

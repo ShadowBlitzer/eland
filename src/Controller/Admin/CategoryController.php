@@ -12,6 +12,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class CategoryController extends AbstractController
 {
+	/**
+	 * @Route("/categories", name="category_index")
+	 * @Method("GET")
+	 */
 	public function index(Request $request, string $schema, string $access)
 	{
 		return $this->render('category/a_index.html.twig', [
@@ -19,6 +23,10 @@ class CategoryController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @Route("/categories/add", name="category_add")
+	 * @Method({"GET", "POST"})
+	 */
 	public function add(Request $request, string $schema, string $access, int $parent_category)
 	{
 		$data = [
@@ -62,10 +70,10 @@ class CategoryController extends AbstractController
 		]);
 	}
 
-	/*
-	*
-	*/
-
+	/**
+	 * @Route("/categories/{id}/edit", name="category_edit")
+	 * @Method({"GET", "POST"})
+	 */
 	public function edit(Request $request, string $schema, string $access, array $category)
 	{
 		$id = $category['id'];
@@ -115,10 +123,10 @@ class CategoryController extends AbstractController
 		]);
 	}
 
-	/*
-	*
-	*/
-
+	/**
+	 * @Route("/categories/{id}/del", name="category_del")
+	 * @Method({"GET", "POST"})
+	 */
 	public function del(Request $request, string $schema, string $access, array $category)
 	{
 		$id = $category['id'];

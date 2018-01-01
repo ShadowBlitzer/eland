@@ -7,40 +7,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-/*
-ad_show_self_no_view:
-    controller: App\Controller\AdController::showSelfNoView
-    path: /self
-
-ad_show_self:
-    controller: App\Controller\AdController::showSelf
-    path: /self/{view}
-    requirements:
-        view: '%app.ad.views%'
-  
-ad_add:
-    controller: App\Controller\AdController::add
-    path: /add
-
-ad_edit:
-    controller: App\Controller\AdController::edit
-    path: /{ad}/edit
-    requirements:
-        ad: '\d++'
-
-ad_del:
-    controller: App\Controller\AdController::del
-    path: /{ad}/del
-    requirements:
-        ad: '\d++'
-*/
-
-
 class AdController extends AbstractController
 {
-	/*
-	* @Route("/transactions", name="transaction_index", requirements={"_locale"="%})
-	*/
+	/**
+	 * @Route("/ads", name="ad_no_view")
+	 * @Method("GET")
+	 */
 	public function noView(Request $request, string $schema, string $access)
 	{
 		return $app->reroute('ad_index', [
@@ -50,7 +22,10 @@ class AdController extends AbstractController
 		]);
 	}
 
-
+	/**
+	 * @Route("/ads/{view}", name="ad_index")
+	 * @Method("GET")
+	 */
 	public function index(Request $request, string $schema, string $access, string $view = null)
 	{
 		$app['view']->set('ad', $view);
@@ -58,6 +33,10 @@ class AdController extends AbstractController
 		return $this->render('ad/' . $access . '_index.html.twig', []);
 	}
 
+	/**
+	 * @Route("/ads/self", name="ad_self_no_view")
+	 * @Method("GET")
+	 */
 	public function showSelfNoView(Request $request, string $schema, string $access)
 	{
 		return $app->reroute('ad_show_self', [
@@ -67,11 +46,19 @@ class AdController extends AbstractController
 		]);		
 	}
 
+	/**
+	 * @Route("/ads/self/{view}", name="ad_self")
+	 * @Method("GET")
+	 */
 	public function showSelf(Request $request, string $schema, string $access)
 	{
 		return $this->render('ad/' . $access . '_show_self.html.twig', []);
 	}
 
+	/**
+	 * @Route("/ads/{id}", name="ad_show")
+	 * @Method("GET")
+	 */
 	public function show(Request $request, string $schema, string $access, array $ad)
 	{
 		return $this->render('ad/' . $access . '_show.html.twig', [

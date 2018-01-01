@@ -16,6 +16,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class MainController extends AbstractController
 {
+	/**
+	 * @Route("/", name="main_index")
+	 * @Method("GET")
+	 */
 	public function index(Request $request)
 	{
 		return $this->render('main/index.html.twig');

@@ -100,6 +100,10 @@ class ExportController extends AbstractController
 
 	private $r = "\r\n";
 
+	/**
+	 * @Route("/export", name="export")
+	 * @Method({"GET", "POST"})
+	 */
 	public function index(Request $request, string $schema)
 	{
 		set_time_limit(60);
