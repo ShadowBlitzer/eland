@@ -18,7 +18,7 @@ class TypeContactController extends AbstractController
 	];
 
 	/**
-	 * @Route("/contact-types", name="typecontact_index")
+	 * @Route("/contact-types", name="type_contact_index")
 	 * @Method("GET")
 	 */
 	public function index(Request $request, string $schema, string $access)

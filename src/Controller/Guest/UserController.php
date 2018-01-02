@@ -250,7 +250,7 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/{id}", name="user_show")
+	 * @Route("/users/{user}", name="user_show")
 	 * @Method("GET")
 	 */
 	public function show(Request $request, string $schema, string $access, array $user)

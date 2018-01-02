@@ -164,7 +164,7 @@ class TransactionController extends AbstractController
 	}
 
 	/**
-	 * @Route("/transactions/{id}", name="transaction_show")
+	 * @Route("/transactions/{transaction}", name="transaction_show")
 	 * @Method("GET")
 	 */
 	public function show(Request $request, string $schema, string $access, array $transaction)

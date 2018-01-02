@@ -27,18 +27,21 @@ class PageController extends AbstractController
         return $response;
 	}
 
-	
+	/**
+	 * @Route("/{access}/pages", name="page_a_index", requirements={"access"="a"})
+	 * @Method("GET")
+	 */
 	public function aIndex(Request $request, string $schema, string $access)
 	{
-
-
-
-
 		return $this->render('page/a_index.html.twig', [
 
 		]);
 	}
 
+	/**
+	 * @Route("/{access}/pages/add", name="page_a_add", requirements={"access"="a"})
+	 * @Method({"GET", "POST"})
+	 */
 	public function aAdd(Request $request, string $schema, string $access)
 	{
 		$data = [

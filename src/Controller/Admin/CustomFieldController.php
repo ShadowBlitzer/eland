@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class CustomFieldController extends AbstractController
 {
 	/**
-	 * @Route("/custom-fields", name="customfield_index")
+	 * @Route("/custom-fields", name="custom_field_index")
 	 * @Method({"GET", "POST"})
 	 */
 	public function index(Request $request, string $schema)

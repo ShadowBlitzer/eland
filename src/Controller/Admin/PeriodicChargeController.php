@@ -11,7 +11,7 @@ class PeriodicChargeController extends AbstractController
 {
 
 	/**
-	 * @Route("/periodic-charge", name="periodic_charge_index")
+	 * @Route("/periodic-charge", name="periodic_charge")
 	 * @Method({"GET", "POST"})
 	 */
 	public function form(Request $request, string $schema, string $access)

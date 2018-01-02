@@ -17,7 +17,7 @@ class LogController extends AbstractController
 {
 
 	/**
-	 * @Route("/logs", name="log_index")
+	 * @Route("/logs", name="log")
 	 * @Method("GET")
 	 */
 	public function index(Request $request, string $schema)

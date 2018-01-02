@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class ContactDetailController extends AbstractController
 {
 	/**
-	 * @Route("/contact-details", name="contactdetail_index")
+	 * @Route("/contact-details", name="contact_detail_index")
 	 * @Method({"GET", "POST"})
 	 */
 	public function index(Request $request, string $schema)
