@@ -27,7 +27,10 @@ class ForumController extends AbstractController
 		return $this->render('forum/' . $access . '_index.html.twig', []);
 	}
 
-	
+	/**
+	 * @Route("/forum/{id}", name="forum_show")
+	 * @Method("GET")
+	 */	
 	public function show(Request $request, string $schema, string $access, array $forum)
 	{
 		return $this->render('forum/' . $access . '_show.html.twig', [
