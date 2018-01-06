@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
+use App\Service\SessionView;
+
 class AdController extends AbstractController
 {
 	/**
@@ -26,9 +28,10 @@ class AdController extends AbstractController
 	 * @Route("/ads/{view}", name="ad_index")
 	 * @Method("GET")
 	 */
-	public function index(Request $request, string $schema, string $access, string $view = null)
+	public function index(SessionView $sessionView, 
+		Request $request, string $schema, string $access, string $view = null)
 	{
-		$app['view']->set('ad', $view);
+		$sessionView->set('ad', $schema, $access, $view);
 
 		return $this->render('ad/' . $access . '_index.html.twig', []);
 	}

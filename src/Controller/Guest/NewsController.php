@@ -10,8 +10,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use util\sort;
-use util\pagination;
+use App\Service\SessionView;
+use App\Util\Sort;
+use App\Util\Pagination;
+
 use form\post\news_type;
 use exception\invalid_parameter_value_exception;
 
@@ -34,11 +36,12 @@ class NewsController extends AbstractController
 	 * @Route("/news/{view}", name="news_index")
 	 * @Method("GET")
 	 */
-	public function index(Request $request, string $schema, string $access, string $view)
+	public function index(SessionView $sessionView, Request $request, 
+		string $schema, string $access, string $view)
 	{
 		$s_admin = $access === 'a';
 
-		$app['view']->set('news', $view);
+		$sessionView->set('news', $schema, $access, $view);
 		
 		$where = $params = [];
 
