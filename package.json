@@ -26,9 +26,15 @@
     "gitbook-cli": "^2.3.2",
     "jquery": "^3.2.1",
     "node-sass": "^4.7.2",
+    "path-to-regexp": "^2.1.0",
     "popper.js": "^1.12.9",
     "postcss-loader": "^2.0.9",
     "public-cdn-webpack-plugin": "^0.1.5",
-    "sass-loader": "^6.0.6"
+    "sass-loader": "^6.0.6",
+    "vue": "^2.5.13",
+    "vue-loader": "^13.7.0",
+    "vue-router": "^3.0.1",
+    "vue-template-compiler": "^2.5.13",
+    "vuex": "^3.0.1"
   }
 }
