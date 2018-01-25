@@ -4,14 +4,18 @@ namespace App\Controller\Guest;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 use App\Util\Sort;
 use App\Util\Pagination;
-use form\filter\user_filter_type;
-use form\column_select\user_column_select_type;
+use App\Service\SessionView;
+use App\Service\SessionColumns;
+use App\Form\Filter\UserFilterType;
+use App\Form\ColumnSelect\UserColumnSelectType;
 
 class UserController extends AbstractController
 {
@@ -20,7 +24,7 @@ class UserController extends AbstractController
 	 * @Route("/users", name="user_no_view")
 	 * @Method("GET")
 	 */
-	public function noView(Request $request, string $schema, string $access, string $user_type)
+	public function noView(Request $request, string $schema, string $access, string $user_type):Response
 	{
 		return $app->reroute('user_index', [
 			'schema'	=> $schema,
@@ -34,12 +38,14 @@ class UserController extends AbstractController
 	 * @Route("/users/{view}", name="user_index")
 	 * @Method({"GET", "POST"})
 	 */
-	public function index(Request $request,
-		string $schema, string $access, string $view, string $user_type)
+	public function index(FormFactoryInterface $formFactory, 
+		SessionView $sessionView, SessionColumns $sessionColumns, 
+		Request $request,
+		string $schema, string $access, string $view, string $user_type):Response
 	{		
 		$s_admin = $access === 'a';
 
-		$app['view']->set('user', $view);
+		$sessionView->set('user', $schema, $access, $view);
 
 		$new_user_treshold = gmdate('Y-m-d H:i:s', time() - ($app['config']->get('newuserdays', $schema) * 84600));
 		
@@ -86,20 +92,21 @@ class UserController extends AbstractController
 		];
 
 
-		$column_select = $app->build_named_form('col', user_column_select_type::class, $columns)
+		$columnSelect = $formFactory->createNamedBuilder('col', UserColumnSelectType::class, $columns)
+			->getForm()
 			->handleRequest($request);
 
-		if ($column_select->isSubmitted() && $column_select->isValid())
+		if ($columnSelect->isSubmitted() && $columnSelect->isValid())
 		{
-			$new_columns = $column_select->getData();
+			$newColumns = $columnSelect->getData();
 
-			$columns = $new_columns;
-
+			$columns = $newColumns;
 		}
 
 		$where = $where_q = $params = [];
 
-		$filter = $app->build_named_form('f', user_filter_type::class)
+		$filter = $formFactory->createNamedBuilder('f', UserFilterType::class)
+			->getForm()
 			->handleRequest($request);
 
 		if ($filter->isSubmitted() && $filter->isValid())
@@ -253,7 +260,7 @@ class UserController extends AbstractController
 	 * @Route("/users/{user}", name="user_show")
 	 * @Method("GET")
 	 */
-	public function show(Request $request, string $schema, string $access, array $user)
+	public function show(Request $request, string $schema, string $access, array $user):Response
 	{
 		return $this->render('user/' . $access . '_show.html.twig', []);
 	}

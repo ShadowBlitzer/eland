@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use exception\missing_parameter_exception;
 use exception\invalid_parameter_value_exception;
 
@@ -25,49 +25,45 @@ class SessionColumns
 	];
 
 	private $session;
-	private $schema;
-	private $access;
 
-	public function __construct(Session $session, string $schema, string $access)
+	public function __construct(SessionInterface $session)
 	{
 		$this->session = $session;
-		$this->schema = $schema;
-		$this->access = $access;
 	}
 
-	public function get(string $entity)
+	public function get(string $entity, string $schema, string $access):array
 	{
 		if (!isset($entity) || $entity === '')
 		{
 			throw new missing_parameter_exception(sprintf('"entity" is not set in %s', __CLASS__));
 		}
 
-		if (!isset($this->default_ary[$entity][$this->access]))
+		if (!isset($this->defaultAry[$entity]))
 		{
 			throw new invalid_parameter_value_exception(sprintf('invalid "entity" %s in %s', $entity, __CLASS__));
 		}		
 
-		$key = $this->schema . '_' . $this->access . '_' . $entity . '_columns';
+		$key = $schema . '_' . $access . '_' . $entity . '_columns';
 	
 		$get = $this->session->get($key);
 
 		if (!isset($get))
 		{
-			$get = $this->default_ary[$entity][$access];
+			$get = $this->default_ary[$entity][$access];   // TODO
 			$this->session->set($key, $get);
 		}
 
 		return $get;
 	}
 
-	public function set(string $entity, array $columns)
+	public function set(string $entity, string $schema, string $access, array $columns)
 	{
 		if (!$view || !$entity || !isset($this->default_ary[$entity]))
 		{
 			return;
 		}
 
-		$key = $this->schema . '_' . $this->access . '_' . $entity . '_columns';
+		$key = $schema . '_' . $access . '_' . $entity . '_columns';
 		
 		$this->session->set($key, $columns);
 	}

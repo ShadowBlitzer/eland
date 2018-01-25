@@ -78,7 +78,7 @@ class Xdb
 	/*
 	 */
 
-	public function set_user(string $user_schema, $user_id)
+	public function setUser(string $user_schema, $user_id)
 	{
 		$this->user_schema = $user_schema;
 		$this->user_id = ctype_digit((string) $user_id) ? $user_id : 0;
@@ -238,7 +238,7 @@ class Xdb
 	 *
 	 */
 
-	public function get_many(array $filters = [], string $query_extra = ''):array
+	public function getMany(array $filters = [], string $query_extra = ''):array
 	{
 		$sql_where = [];
 		$sql_params = [];

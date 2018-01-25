@@ -10,9 +10,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Symfony\Component\Form\FormFactoryInterface;
+
 use App\Service\SessionView;
 use App\Util\Sort;
 use App\Util\Pagination;
+
+use Doctrine\DBAL\Connection as Db;
+use App\Service\Xdb; 
 
 use form\post\news_type;
 use exception\invalid_parameter_value_exception;
@@ -36,7 +41,8 @@ class NewsController extends AbstractController
 	 * @Route("/news/{view}", name="news_index")
 	 * @Method("GET")
 	 */
-	public function index(SessionView $sessionView, Request $request, 
+	public function index(FormFactoryInterface $formFactory, Db $db, Xdb $xdb,
+		SessionView $sessionView, Request $request, 
 		string $schema, string $access, string $view)
 	{
 		$s_admin = $access === 'a';
@@ -49,7 +55,7 @@ class NewsController extends AbstractController
 		$where = $filtered ? ' where ' . implode(' and ', $where) . ' ' : '';
 
 		$query = ' from ' . $schema . '.news n ' . $where;
-		$row_count = $app['db']->fetchColumn('select count(n.*)' . $query, $params);
+		$row_count = $db->fetchColumn('select count(n.*)' . $query, $params);
 		$query = 'select n.*' . $query;
 
 		$sort = new sort($request);
@@ -66,11 +72,11 @@ class NewsController extends AbstractController
 		$query .= $sort->query();
 		$query .= $pagination->query();
 
-		$news = $app['db']->fetchAll($query, $params);
+		$news = $db->fetchAll($query, $params);
 		
 		$newsAccessAry = $toApproveAry = $approve_headline_ary = [];
 		
-		$rows = $app['xdb']->getMany(['agg_schema' => $schema, 'agg_type' => 'news_access']);
+		$rows = $xdb->getMany(['agg_schema' => $schema, 'agg_type' => 'news_access']);
 		
 		foreach ($rows as $row)
 		{
@@ -84,7 +90,7 @@ class NewsController extends AbstractController
 		
 			if (!isset($newsAccessAry[$newsId]))
 			{
-				$app['xdb']->set('news_access', $newsId, ['access' => 'interlets'], $schema);
+				$xdb->set('news_access', $newsId, ['access' => 'interlets'], $schema);
 				$news[$k]['access'] = 'interlets';
 				continue;
 			}
