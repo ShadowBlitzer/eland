@@ -9,6 +9,7 @@ use service\cache;
 use service\queue;
 use service\user_cache;
 use Monolog\Logger;
+use service\geocode as geocode_service;
 
 class geocode extends queue_model implements queue_interface
 {
@@ -18,27 +19,17 @@ class geocode extends queue_model implements queue_interface
 	private $db;
 	private $user_cache;
 
-	private $curl;
-	private $geocoder;
+	private $geocode_service;
 
-	public function __construct(db $db, cache $cache, queue $queue, Logger $monolog, user_cache $user_cache)
+	public function __construct(db $db, cache $cache, queue $queue, 
+		Logger $monolog, user_cache $user_cache, geocode_service $geocode_service)
 	{
 		$this->queue = $queue;
 		$this->monolog = $monolog;
 		$this->cache = $cache;
 		$this->db = $db;
 		$this->user_cache = $user_cache;
-
-		$this->curl = new \Ivory\HttpAdapter\CurlHttpAdapter();
-		$this->geocoder = new \Geocoder\ProviderAggregator();
-
-		$this->geocoder->registerProviders([
-			new \Geocoder\Provider\GoogleMaps(
-				$this->curl, 'nl', 'be', true
-			),
-		]);
-
-		$this->geocoder->using('google_maps')->limit(1);
+		$this->geocode_service = $geocode_service;
 
 		parent::__construct();
 	}
@@ -76,41 +67,28 @@ class geocode extends queue_model implements queue_interface
 
 		$this->cache->set($geo_status_key, ['value' => 'error'], 31536000); // 1 year
 
-		try
+		if (getenv('GEO_BLOCK') === '1')
 		{
-			$address_collection = $this->geocoder->geocode($adr);
-
-			if (is_object($address_collection))
-			{
-				$address = $address_collection->first();
-
-				$ary = [
-					'lat'	=> $address->getLatitude(),
-					'lng'	=> $address->getLongitude(),
-				];
-
-				$this->cache->set($key, $ary);
-				$this->cache->del($geo_status_key);
-				$this->cache->del('geo_sleep');
-
-				$log = 'Geocoded: ' . $adr . ' : ' . implode('|', $ary);
-
-				$this->monolog->info('(cron) ' . $log . ' ' . $log_user, ['schema' => $sch]);
-
-				return;
-			}
-
-			$log_1 = 'Geocode return NULL for: ' . $adr;
-
-		}
-
-		catch (Exception $e)
-		{
-			$log = 'Geocode adr: ' . $adr . ' exception: ' . $e->getMessage();
-
+			error_log('geo coding is blocked. not processing: ' . json_encode($data));
 			return;
 		}
 
+		$coords = $this->geocode_service->getCoordinates($adr);
+
+		if (count($coords))
+		{
+				$this->cache->set($key, $coords);
+				$this->cache->del($geo_status_key);
+				$this->cache->del('geo_sleep');
+
+				$log = 'Geocoded: ' . $adr . ' : ' . implode('|', $coords);
+
+				$this->monolog->info('(cron) ' . $log . ' ' . $log_user, ['schema' => $sch]);
+
+				return;	
+		}
+
+		$log = 'Geocode return NULL for: ' . $adr;
 		$this->monolog->info('cron geocode: ' . $log . ' ' . $log_user, ['schema' => $sch]);
 
 		return;

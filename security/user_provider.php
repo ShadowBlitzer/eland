@@ -28,9 +28,6 @@ class user_provider implements UserProviderInterface
 
     public function loadUserByUsername($username)
     {
-
-
-
         $data = $this->xdb->get('user', $username);
 
         if ($data === '{}')

@@ -1,16 +1,6 @@
-#Overzicht
+# Overzicht
 
 * [eLAND](README.md)
-
-* Gebruikers
-  * [Bulk acties met je vraag en aanbod](bulk-acties-met-je-vraag-en-aanbod.md)
-    * [Selectie](bulk-selectie.md)
-    * [Verlengen](bulk-verlengen.md)
-    * [Zichtbaarheid](bulk-zichtbaarheid.md)
-  * [Zichtbaarheid van je gegevens](zichtbaarheid.md)
-    * [Volledige naam](zichtbaarheid-volledige-naam.md)
-    * [Contactgegevens](zichtbaarheid-contactgegevens.md)
-    * [Vraag en aanbod](zichtbaarheid-vraag-en-aanbod.md)
 
 * [Admin](admin.md)
   * [Admin pagina's](admin-paginas.md)
@@ -21,7 +11,7 @@
     * [Export](admin-export.md)
     * [Automatische mimimum limiet](admin-automatische-minimum-limiet.md)
     * [Massa transactie](admin-massa-transactie.md)
-    * [Logs](admin-logs.md)    
+    * [Logs](admin-logs.md)
   * [Gebruikers beheren](admin-gebruikers-beheren.md)
   * [Stijl](admin-stijl.md)
     * [Logo toevoegen](admin-logo-toevoegen.md)
@@ -35,5 +25,3 @@
   * [Import CSV](import-csv.md)
   * [Development server](development-server.md)
   * [Using Gitbook](using-gitbook.md)
-
-
