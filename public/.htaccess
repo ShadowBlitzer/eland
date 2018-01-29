@@ -1,2 +1,5 @@
 FallbackResource index.php
 
+<Directory "/build">
+    Header set Cache-Control "public, max-age=31536000"
+</Directory>
