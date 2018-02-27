@@ -72,7 +72,7 @@ class CategoryRepository
 			where id_parent = ?', [$id]);
 	}
 
-	public function del(int $id, string $schema)
+	public function delete(int $id, string $schema)
 	{
 		$this->db->delete($schema . '.categories', ['id' => $id]);
 	}

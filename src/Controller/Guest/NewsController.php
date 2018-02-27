@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -43,6 +44,7 @@ class NewsController extends AbstractController
 	 * @Method("GET|POST")
 	 */
 	public function index(FormFactoryInterface $formFactory, NewsRepository $newsRepository,
+		TranslatorInterface $translator,
 		Db $db, Xdb $xdb,
 		SessionView $sessionView, Request $request, 
 		string $schema, string $access, string $view)
@@ -60,7 +62,7 @@ class NewsController extends AbstractController
 		$row_count = $db->fetchColumn('select count(n.*)' . $query, $params);
 		$query = 'select n.*' . $query;
 
-		$sort = new sort($request);
+		$sort = new Sort($request);
 
 		$sort->addColumns([
 			'headline'		=> 'asc',
@@ -69,7 +71,7 @@ class NewsController extends AbstractController
 		])
 		->setDefault('itemdate');
 
-		$pagination = new pagination($request, $row_count);
+		$pagination = new Pagination($request, $row_count);
 
 		$query .= $sort->query();
 		$query .= $pagination->query();
@@ -147,7 +149,7 @@ class NewsController extends AbstractController
 
 						$newsRepository->approve($id, $schema);
 
-						$this->addFlash('success', 'news.approve.success', ['%name%' => $name]);
+						$this->addFlash('success', $translator->trans('news.approve.success', ['%name%' => $name]));
 						break;
 					}
 				}
@@ -169,10 +171,11 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/{id}", name="news_show")
+	 * @Route("/news/{id}", name="news_show", requirements={"id"="\d+"})
 	 * @Method("GET")
 	 */
-	public function show(NewsRepository $newsRepository, Request $request, string $schema, string $access, int $id)
+	public function show(NewsRepository $newsRepository, TranslatorInterface $translator, 
+		Request $request, string $schema, string $access, int $id)
 	{
 		$news = $newsRepository->get($id, $schema);
 
@@ -191,12 +194,12 @@ class NewsController extends AbstractController
 				&& $approveForm->get('approve')->isClicked())
 			{
 				$newsRepository->approve($news['id'], $schema);
-				$this->addFlash('success', 'news.approve.success', ['%name%' => $news['headline']]);
+				$this->addFlash('success', $translator->trans('news.approve.success', ['%name%' => $news['headline']]));
 
 				return $this->redirectoRoute('news_show', [
 					'schema'	=> $schema,
 					'access'	=> $access,
-					'news'		=> $news['id'],
+					'news'		=> $id,
 				]);
 			}
 
@@ -215,7 +218,9 @@ class NewsController extends AbstractController
 	 * @Route("/news/add", name="news_add")
 	 * @Method({"GET", "POST"})
 	 */
-	public function add(Request $request, string $schema, string $access)
+	public function add(TranslatorInterface $translator, NewsRepository $newsRepository, 
+		SessionView $seesionView,
+		Request $request, string $schema, string $access)
 	{
 		$form = $this->createForm(NewsType::class)
 			->handleRequest($request);
@@ -226,27 +231,27 @@ class NewsController extends AbstractController
 
 			$data['approved'] = $access === 'a';
 
-			$data['id'] = $app['news_repository']->insert($data, $schema);
+			$data['id'] = $newsRepository->insert($schema, $data);
 
 			if (!$data['approved'])
 			{
-				$app['mail_queue']->set_template('news_review_admin')
-					->set_vars(['news' => $data])
-					->set_schema($schema)
-					->set_to($app['mail_newsadmin']->get($schema))
-					->set_priority(900000)
+				$app['mail_queue']->setTemplate('news_review_admin')
+					->setVars(['news' => $data])
+					->setSchema($schema)
+					->setTo($app['mail_newsadmin']->get($schema))
+					->setPriority(900000)
 					->put();
 
-				$this->addFlash('info', 'news_add.approve_info', ['%name%' => $data['headline']]);
+				$this->addFlash('info', $translator->trans('news_add.approve_info', ['%name%' => $data['headline']]));
 
 				return $this->redirectToRoute('news_index', [
 					'schema' 	=> $schema,
 					'access'	=> $access,
-					'view'		=> $app['view']->get('news'),
+					'view'		=> $sessionView->get('news', $schema, $access),
 				]);					
 			}
 
-			$this->addFlash('success', 'news_add.success', ['%name%'  => $data['headline']]);
+			$this->addFlash('success', $translator->trans('news_add.success', ['%name%'  => $data['headline']]));
 
 			return $this->redirectToRoute('news_show', [
 				'schema' 	=> $schema,
@@ -264,7 +269,8 @@ class NewsController extends AbstractController
 	 * @Route("/news/{id}/edit", name="news_edit")
 	 * @Method({"GET", "POST"})
 	 */
-	public function edit(NewsRepository $newsRepository, Request $request, string $schema, string $access, int $id)
+	public function edit(NewsRepository $newsRepository, TranslatorInterface $translator, 
+		Request $request, string $schema, string $access, int $id)
 	{
 		$news = $newsRepository->get($id, $schema);
 
@@ -275,14 +281,14 @@ class NewsController extends AbstractController
 		{
 			$data = $form->getData();
 
-			$newsRepository->update($news['id'] ,$data, $schema);
+			$newsRepository->update($id ,$schema, $data);
 
-			$this->addFlash('success', 'news_edit.success', ['%name%'  => $data['headline']]);
+			$this->addFlash('success', $translator->trans('news_edit.success', ['%name%'  => $data['headline']]));
 
 			return $this->redirectToRoute('news_show', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-				'news'		=> $news['id'],
+				'id'		=> $id,
 			]);				
 		}
 	
@@ -296,6 +302,7 @@ class NewsController extends AbstractController
 	 * @Method({"GET", "POST"})
 	 */
 	public function del(NewsRepository $newsRepository, SessionView $sessionView, 
+		TranslatorInterface $translator,
 		Request $request, string $schema, string $access, int $id)
 	{
 		$news = $newsRepository->get($id, $schema);
@@ -307,9 +314,9 @@ class NewsController extends AbstractController
 
 		if ($form->isSubmitted() && $form->isValid())
 		{
-			$app['news_repository']->delete($news['id'], $schema);
+			$newsRepository->delete($id, $schema);
 
-			$this->addFlash('success', 'news_del.success', ['%name%' => $news['headline']]);
+			$this->addFlash('success', $translator->trans('news_del.success', ['%name%' => $news['headline']]));
 
 			return $this->redirectToRoute('news_index', [
 				'schema' 	=> $schema,

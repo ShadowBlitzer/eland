@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Form\FormFactoryInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -61,7 +62,7 @@ class LogController extends AbstractController
 
 		$params_sql = $where_sql = [];
 
-		$params_sql[] = $app['this_group']->get_schema();
+		$params_sql[] = $schema;
 
 		if ($letscode)
 		{
@@ -86,14 +87,14 @@ class LogController extends AbstractController
 			$params['q'] = $q;
 		}
 
-		if ($fdate)
+		if ($from_date)
 		{
 			$where_sql[] = 'ts >= ?';
 			$params_sql[] = $fdate;
 			$params['fdate'] = $fdate;
 		}
 
-		if ($tdate)
+		if ($to_date)
 		{
 			$where_sql[] = 'ts <= ?';
 			$params_sql[] = $tdate;

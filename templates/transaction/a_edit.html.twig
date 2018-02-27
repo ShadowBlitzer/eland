@@ -13,7 +13,7 @@
     {%- embed 'transaction/item.html.twig' with {'t': form.vars.value} -%}
     {%- endembed -%}
     {{- form_row(form.description, {'label': 'label.description', 'addon_fa': 'pencil'}) -}}
-    {{- b.cancel(path('transaction_show', acc_sch|merge({'transaction': form.vars.value.id }))) -}}
+    {{- b.cancel(path('transaction_show', acc_sch|merge({'id': form.vars.value.id }))) -}}
     {{- b.edit(form.submit) -}}
     {{- p.form_end(form) -}}
 {%- endblock inner -%}

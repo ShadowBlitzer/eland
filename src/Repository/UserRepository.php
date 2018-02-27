@@ -13,22 +13,22 @@ class UserRepository
 	private $xdb;
 	private $redis;
 	private $ttl = 2592000;
-	private $redis_prefix = 'user_cache_';
-	private $is_cli;
+	private $redisPrefix = 'user_cache_';
+	private $isCli;
 
 	public function __construct(Db $db, Xdb $xdb, Redis $redis)
 	{
 		$this->db = $db;
 		$this->xdb = $xdb;
 		$this->redis = $redis;
-		$this->is_cli = php_sapi_name() === 'cli' ? true : false;
+		$this->isCli = php_sapi_name() === 'cli' ? true : false;
 	}
 
 	public function clear(int $id, string $schema)
 	{
-		$redis_key = $this->redis_prefix . $schema . '_' . $id;
+		$redisKey = $this->redisPrefix . $schema . '_' . $id;
 
-		$this->redis->del($redis_key);
+		$this->redis->del($redisKey);
 		unset($this->local[$schema][$id]);
 
 		return;
@@ -36,18 +36,18 @@ class UserRepository
 
 	public function get(int $id, string $schema):array
 	{
-		$redis_key = $this->redis_prefix . $schema . '_' . $id;
+		$redisKey = $this->redisPrefix . $schema . '_' . $id;
 
 		if (isset($this->local[$schema][$id]))
 		{
 			return $this->local[$schema][$id];
 		}
 
-		if ($this->redis->exists($redis_key))
+		if ($this->redis->exists($redisKey))
 		{
-			$user = unserialize($this->redis->get($redis_key));
+			$user = unserialize($this->redis->get($redisKey));
 
-			if (!$this->is_cli)
+			if (!$this->isCli)
 			{
 				$this->local[$schema][$id] = $user;
 			}
@@ -59,9 +59,10 @@ class UserRepository
 
 		if (isset($user))
 		{
-			$this->redis->set($redis_key, serialize($user));
-			$this->redis->expire($redis_key, $this->ttl);
-			if (!$this->is_cli)
+			$this->redis->set($redisKey, serialize($user));
+			$this->redis->expire($redisKey, $this->ttl);
+		
+			if (!$this->isCli)
 			{
 				$this->local[$schema][$id] = $user;
 			}
@@ -117,18 +118,18 @@ class UserRepository
 
 		$user = serialize($user);
 
-		$redis_key = $this->redis_prefix . $schema . '_' . $id;
+		$redisKey = $this->redisPrefix . $schema . '_' . $id;
 
-		if ($this->redis->exists($redis_key))
+		if ($this->redis->exists($redisKey))
 		{
-			if ($this->redis->get($redis_key) === $user)
+			if ($this->redis->get($redisKey) === $user)
 			{
 				return;
 			}
 		}
 
-		$this->redis->set($redis_key, $user);
-		$this->redis->expire($redis_key, $this->ttl);
+		$this->redis->set($redisKey, $user);
+		$this->redis->expire($redisKey, $this->ttl);
 		unset($this->local[$schema][$id]);
 	}
 }

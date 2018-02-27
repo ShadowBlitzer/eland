@@ -17,6 +17,9 @@ use App\Service\SessionColumns;
 use App\Form\Filter\UserFilterType;
 use App\Form\ColumnSelect\UserColumnSelectType;
 
+use App\Repository\UserRepository;
+use App\Repository\ConfigRepository;
+
 class UserController extends AbstractController
 {
 
@@ -24,30 +27,32 @@ class UserController extends AbstractController
 	 * @Route("/users", name="user_no_view")
 	 * @Method("GET")
 	 */
-	public function noView(Request $request, string $schema, string $access, string $user_type):Response
+	public function noView(SessionView $sessionView, 
+		Request $request, string $schema, string $access, string $user_type):Response
 	{
 		return $this->redirectToRoute('user_index', [
 			'schema'	=> $schema,
 			'access'	=> $access,
 			'user_type'	=> $user_type,
-			'view'		=> $app['view']->get('user'),
+			'view'		=> $sessionView->get('user', $schema, $access),
 		]);
 	}
 
 	/**
-	 * @Route("/users/{view}", name="user_index")
+	 * @Route("/users/{view}/{userType}", name="user_index", defaults={"userType"="active"})
 	 * @Method({"GET", "POST"})
 	 */
 	public function index(FormFactoryInterface $formFactory, 
+		ConfigRepository $configRepository,
 		SessionView $sessionView, SessionColumns $sessionColumns, 
 		Request $request,
-		string $schema, string $access, string $view, string $user_type):Response
+		string $schema, string $access, string $view, string $userType):Response
 	{		
 		$s_admin = $access === 'a';
 
 		$sessionView->set('user', $schema, $access, $view);
 
-		$new_user_treshold = gmdate('Y-m-d H:i:s', time() - ($app['config']->get('newuserdays', $schema) * 84600));
+		$newUserTreshold = gmdate('Y-m-d H:i:s', time() - ($configRepository->get('newuserdays', $schema) * 84600));
 		
 		$columns = [
 			'base'	=> [
@@ -91,7 +96,6 @@ class UserController extends AbstractController
 			],
 		];
 
-
 		$columnSelect = $formFactory->createNamedBuilder('col', UserColumnSelectType::class, $columns)
 			->getForm()
 			->handleRequest($request);
@@ -130,7 +134,7 @@ class UserController extends AbstractController
 			$where[] = implode(' or ', $where_q);
 		}
 
-		switch ($user_type)
+		switch ($userType)
 		{
 			case 'active': 
 				$where[] = 'u.status in (1, 2, 7)';
@@ -139,7 +143,7 @@ class UserController extends AbstractController
 				$where[] = 'u.status = 1';
 				$where[] = 'u.adate is not null';
 				$where[] = 'u.adate > ?';
-				$params[] = $new_user_treshold;
+				$params[] = $newUserTreshold;
 				break;
 			case 'leaving':
 				$where[] = 'u.status = 2';
@@ -170,11 +174,11 @@ class UserController extends AbstractController
 		$where = count($where) ? ' where ' . implode(' and ', $where) . ' ' : '';
 
 		$query = ' from ' . $schema . '.users u ' . $where;
-		$row_count = $app['db']->fetchColumn('select count(u.*)' . $query, $params);
-		$balance_sum = $app['db']->fetchColumn('select sum(u.saldo)' . $query, $params) ?? 0;
+		$rowCount = $app['db']->fetchColumn('select count(u.*)' . $query, $params);
+		$balanceSum = $app['db']->fetchColumn('select sum(u.saldo)' . $query, $params) ?? 0;
 		$query = 'select u.*' . $query;
 
-		$sort = new sort($request);
+		$sort = new Sort($request);
 
 		$sort->add_columns([
 			'letscode'		=> 'asc',
@@ -188,7 +192,7 @@ class UserController extends AbstractController
 		])
 		->set_default('letscode');
 
-		$pagination = new pagination($request, $row_count);
+		$pagination = new Pagination($request, $rowCount);
 
 		$query .= $sort->query();
 		$query .= $pagination->query();
@@ -215,7 +219,7 @@ class UserController extends AbstractController
 			{
 				$row['class'] = 'danger';
 			}
-			else if ($row['adate'] > $new_user_treshold  && $row['status'] === 1)
+			else if ($row['adate'] > $newUserTreshold  && $row['status'] === 1)
 			{
 				$row['class'] = 'success';
 			}
@@ -245,12 +249,12 @@ class UserController extends AbstractController
 			'user_type'		=> $user_type,
 			'filter'		=> $filter->createView(),
 			'filtered'		=> $filtered,
-			'pagination'	=> $pagination->get($row_count),		
+			'pagination'	=> $pagination->get($rowCount),		
 			'sort'			=> $sort->get(),
 			'columns'		=> $cols,
 			'column_select'	=> $column_select->createView(),
 			'sel_form'		=> $sel_form->createView(),
-			'balance_sum'	=> $balance_sum,
+			'balance_sum'	=> $balanceSum,
 		];
 
 		return $this->render('user/' . $access . '_' . $view . '.html.twig', $vars);

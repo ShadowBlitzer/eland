@@ -156,7 +156,7 @@ class CategoryController extends AbstractController
 
 		if ($form->isSubmitted() && $form->isValid())
 		{
-			$categoryRepository->del($id, $schema);
+			$categoryRepository->delete($id, $schema);
 
 			$this->addFlash('success', $translator->trans('category_del.success', ['%name%'  => $category['name']]));
 

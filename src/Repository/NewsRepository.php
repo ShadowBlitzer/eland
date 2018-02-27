@@ -48,7 +48,7 @@ class NewsRepository
 		return $data;
 	}
 
-	public function insert(array $data, string $schema):int
+	public function insert(string $schema, array $data):int
 	{
 		$data['cdate'] = gmdate('Y-m-d H:i:s');
 		$data['id_user'] = 1;//($s_master) ? 0 : $s_id;
@@ -67,7 +67,7 @@ class NewsRepository
 		return $id;
 	}
 
-	public function update(int $id, array $data, string $schema)
+	public function update(int $id, string $schema, array $data)
 	{
 		$data['sticky'] = $data['sticky'] ? 't' : 'f';
 		$data['approved'] = $data['approved'] ? 't' : 'f';

@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use Doctrine\DBAL\Connection as db;
-use App\Service\Pagination;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Util\Pagination;
+use App\Util\Sort;
+use App\Filter\TransactionFilter;
 
 class TransactionRepository
 {
@@ -18,6 +20,68 @@ class TransactionRepository
 	public function getAll(Pagination $pagination, string $schema):array
 	{
 
+	}
+
+	public function getFiltered(string $schema, TransactionFilter $transactionFilter, Sort $sort, Pagination $pagination):array
+	{
+		$query = 'select t.* from ' . $schema . '.transactions t';
+		$query .= $transactionFilter->getWhere();
+		$query .= $sort->query();
+		$query .= $pagination->query();
+
+		$transactions = [];
+
+		$rs = $this->db->executeQuery($query, $transactionFilter->getParams());
+
+		while ($row = $rs->fetch())
+		{
+			if ($row['real_to'] || $row['real_from'])
+			{
+				$row['class'] = 'warning';			
+			}
+
+			$transactions[] = $row;
+		}
+
+		foreach ($transactions as $key => $t)
+		{
+			if (!($t['real_from'] || $t['real_to']))
+			{
+				continue;
+			}
+
+			$inter_schema = false;
+
+			if (isset($interlets_accounts_schemas[$t['id_from']]))
+			{
+				$inter_schema = $interlets_accounts_schemas[$t['id_from']];
+			}
+			else if (isset($interlets_accounts_schemas[$t['id_to']]))
+			{
+				$inter_schema = $interlets_accounts_schemas[$t['id_to']];
+			}
+
+			if ($inter_schema)
+			{
+				$inter_transaction = $db->fetchAssoc('select t.*
+					from ' . $inter_schema . '.transactions t
+					where t.transid = ?', [$t['transid']]);
+
+				if ($inter_transaction)
+				{
+					$transactions[$key]['inter_schema'] = $inter_schema;
+					$transactions[$key]['inter_transaction'] = $inter_transaction;
+				}
+			}
+		}		
+
+		return $transactions;
+	}
+
+	public function getFilteredRowCount(string $schema, TransactionFilter $transactionFilter):int
+	{
+		$query = 'select count(t.*) from ' . $schema . '.transactions t' . $transactionFilter->getWhere();
+		return $this->db->fetchColumn($query, $transactionFilter->getParams());
 	}
 
 	public function get(int $id, string $schema):array

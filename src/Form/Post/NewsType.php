@@ -13,13 +13,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Form\Input\TextAddonType;
 use App\Form\Input\EmailAddonType;
 use App\Form\Input\BadgeChoiceType;
+use App\Form\Input\DatepickerType;
 
 class NewsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('itemdate', 'datepicker_type')
+            ->add('itemdate', DatepickerType::class)
             ->add('sticky', CheckboxType::class, [
                 'required'  => false,
             ])

@@ -17,17 +17,16 @@
 	<dd>{{- t.amount -}}&nbsp;{{- config('currency', schema) -}}</dd>
 
 	<dt>{{- 'label.from'|trans -}}</dt>
-	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_from|user_format|raw -}}</dd>
+	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_from|user_format(schema)|raw -}}</dd>
 
 	<dt>{{- 'label.to'|trans -}}</dt>
-	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_to|user_format|raw -}}</dd>
+	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_to|user_format(schema)|raw -}}</dd>
 
 	<dt>{{- 'label.description'|trans -}}</dt>
 	<dd>{{- t.description -}}</dd>	
 
 	<dt>{{- 'label.transaction_id'|trans -}}</dt>
 	<dd>{{- t.transid -}}</dd>
-
 <dl>
 
 </div>
