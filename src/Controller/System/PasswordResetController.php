@@ -27,7 +27,7 @@ class PasswordResetController extends AbstractController
 	 */
 	public function form(Request $request, string $schema)
 	{
-		$form = $app->form()
+		$form = $this->createFormBuilder()
 			->add('email', EmailAddonType::class, [
 				'constraints' => new Assert\Email(),
 			])
@@ -65,7 +65,7 @@ class PasswordResetController extends AbstractController
 
 				$this->addFlash('success', 'password_reset.link_send_success', ['%email%' => $email]);
 
-				return $app->reroute('login', ['schema' => $schema]);
+				return $this->redirectToRoute('login', ['schema' => $schema]);
 			}
 
 			$this->addFlash('error', 'password_reset.unknown_email_address');
@@ -91,13 +91,13 @@ class PasswordResetController extends AbstractController
 			if (!count($data))
 			{
 				$this->addFlash('error', 'password_reset.confirm_not_found');
-				return $app->reroute('password_reset', ['schema' => $schema]);
+				return $this->redirectToRoute('password_reset', ['schema' => $schema]);
 			}
 		}
 
 		// note: unwanted access is protected by _etoken 
 
-		$form = $app->form()
+		$form = $this->createFormBuilder()
 			->add('password', PasswordResetType::class)
 			->add('submit', SubmitType::class)
 			->getForm();
@@ -110,7 +110,7 @@ class PasswordResetController extends AbstractController
 
 
 			$this->addFlash('success', 'password_reset.new_password_success');
-			return $app->reroute('login', ['schema' => $schema]);
+			return $this->redirectToRoute('login', ['schema' => $schema]);
 		}
 
 		return $this->render('password_reset/new_password.html.twig', ['form' => $form->createView()]);

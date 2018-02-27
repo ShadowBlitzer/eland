@@ -15,12 +15,12 @@ class AdController extends AbstractController
 	 * @Route("/ads", name="ad_no_view")
 	 * @Method("GET")
 	 */
-	public function noView(Request $request, string $schema, string $access)
+	public function noView(SessionView $sessionView, Request $request, string $schema, string $access)
 	{
-		return $app->reroute('ad_index', [
+		return $this->redirectToRoute('ad_index', [
 			'schema'	=> $schema,
 			'access'	=> $access,
-			'view'		=> $app['view']->get('ad'),
+			'view'		=> $sessionView->get('ad', $schema, $access),
 		]);
 	}
 
@@ -29,7 +29,7 @@ class AdController extends AbstractController
 	 * @Method("GET")
 	 */
 	public function index(SessionView $sessionView, 
-		Request $request, string $schema, string $access, string $view = null)
+		Request $request, string $schema, string $access, string $view)
 	{
 		$sessionView->set('ad', $schema, $access, $view);
 
@@ -40,12 +40,12 @@ class AdController extends AbstractController
 	 * @Route("/ads/self", name="ad_self_no_view")
 	 * @Method("GET")
 	 */
-	public function showSelfNoView(Request $request, string $schema, string $access)
+	public function showSelfNoView(SessionView $sessionView, Request $request, string $schema, string $access)
 	{
-		return $app->reroute('ad_show_self', [
+		return $this->redirectToRoute('ad_show_self', [
 			'schema'	=> $schema,
 			'access'	=> $access,
-			'view'		=> $app['view']->get('ad'),
+			'view'		=> $sessionView->get('ad', $schema, $access),
 		]);		
 	}
 

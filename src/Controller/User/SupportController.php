@@ -24,7 +24,7 @@ class SupportController extends AbstractController
 	 */
 	public function form(Request $request, string $schema, string $access)
 	{
-		$form = $app->form()
+		$form = $this->createFormBuilder()
 			->add('message', TextareaType::class, [
 				'constraints' => [
 					new Assert\NotBlank(),

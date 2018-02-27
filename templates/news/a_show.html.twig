@@ -13,8 +13,8 @@
     {%- if approve_form is defined -%}
         {{- tb.approve(approve_form.approve, 'news.title_top_btn.approve') -}}        
     {%- endif -%}
-    {{- tb.edit(path('news_edit', acc_sch|merge({'news': news.id})), 'news.title_top_btn.edit') -}}
-    {{- tb.del(path('news_del', acc_sch|merge({'news': news.id})), 'news.title_top_btn.del') -}}
+    {{- tb.edit(path('news_edit', acc_sch|merge({'id': news.id})), 'news.title_top_btn.edit') -}}
+    {{- tb.del(path('news_del', acc_sch|merge({'id': news.id})), 'news.title_top_btn.del') -}}
 {%- endblock top_buttons -%}
 
 {%- block top_buttons_right -%}
@@ -38,5 +38,3 @@
 {% endembed %}
 
 {%- endblock inner %}
-
-

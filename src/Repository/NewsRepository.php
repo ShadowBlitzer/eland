@@ -92,7 +92,7 @@ class NewsRepository
 
 	public function getNext(int $id, string $schema, array $access_ary)
 	{
-		$rows = $this->xdb->get_many([
+		$rows = $this->xdb->getMany([
 			'agg_schema' 	=> $schema,
 			'agg_type' 		=> 'news_access',
 			'eland_id' 		=> ['>' => $id],
@@ -105,7 +105,7 @@ class NewsRepository
 
 	public function getPrev(int $id, string $schema, array $access_ary)
 	{
-		$rows = $this->xdb->get_many([
+		$rows = $this->xdb->getMany([
 			'agg_schema' => $schema,
 			'agg_type' => 'news_access',
 			'eland_id' => ['<' => $id],

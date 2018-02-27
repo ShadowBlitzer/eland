@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use Symfony\Component\Form\FormFactoryInterface;
 
+use App\Repository\NewsRepository;
+
 use App\Service\SessionView;
 use App\Util\Sort;
 use App\Util\Pagination;
@@ -19,8 +21,7 @@ use App\Util\Pagination;
 use Doctrine\DBAL\Connection as Db;
 use App\Service\Xdb; 
 
-use form\post\news_type;
-use exception\invalid_parameter_value_exception;
+use App\Form\Post\NewsType;
 
 class NewsController extends AbstractController 
 {
@@ -28,20 +29,21 @@ class NewsController extends AbstractController
 	 * @Route("/news", name="news_no_view")
 	 * @Method("GET")
 	 */
-	public function noView(Request $request, string $schema, string $access)
+	public function noView(SessionView $sessionView, Request $request, string $schema, string $access)
 	{
-		return $app->reroute('news_index', [
+		return $this->redirectToRoute('news_index', [
 			'schema'	=> $schema,
 			'access'	=> $access,
-			'view'		=> $app['view']->get('news'),
+			'view'		=> $sessionView->get('news', $schema, $access),
 		]);
 	}
 
 	/**
-	 * @Route("/news/{view}", name="news_index")
-	 * @Method("GET")
+	 * @Route("/news/{view}", name="news_index", requirements={"view" = "list|extended"})
+	 * @Method("GET|POST")
 	 */
-	public function index(FormFactoryInterface $formFactory, Db $db, Xdb $xdb,
+	public function index(FormFactoryInterface $formFactory, NewsRepository $newsRepository,
+		Db $db, Xdb $xdb,
 		SessionView $sessionView, Request $request, 
 		string $schema, string $access, string $view)
 	{
@@ -124,7 +126,7 @@ class NewsController extends AbstractController
 
 		if ($s_admin && count($toApproveAry))
 		{
-			$approveForm = $app->form();
+			$approveForm = $this->createFormBuilder();
 
 			foreach($toApproveAry as $key)
 			{
@@ -143,7 +145,7 @@ class NewsController extends AbstractController
 						list($approve_str, $id) = explode('_', $key);
 						$name = $approve_headline_ary[$id];				
 
-						$app['news_repository']->approve($id, $schema);
+						$newsRepository->approve($id, $schema);
 
 						$this->addFlash('success', 'news.approve.success', ['%name%' => $name]);
 						break;
@@ -157,7 +159,7 @@ class NewsController extends AbstractController
 
 				$params = $request->attributes->all();
 				unset($params['_route_params'], $params['_route']);
-				return $app->reroute('news_index', $params);
+				return $this->redirectToRoute('news_index', $params);
 			}
 
 			$vars['approve_form'] = $approveForm->createView();
@@ -170,13 +172,15 @@ class NewsController extends AbstractController
 	 * @Route("/news/{id}", name="news_show")
 	 * @Method("GET")
 	 */
-	public function show(Request $request, string $schema, string $access, array $news)
+	public function show(NewsRepository $newsRepository, Request $request, string $schema, string $access, int $id)
 	{
+		$news = $newsRepository->get($id, $schema);
+
 		$vars = ['news'	=> $news];
 
 		if ($access === 'a' && !$news['approved'])
 		{
-			$approveForm = $app->form()
+			$approveForm = $this->createFormBuilder()
 				->add('approve', SubmitType::class)
 				->getForm();
 			
@@ -186,10 +190,10 @@ class NewsController extends AbstractController
 				&& $approveForm->isValid() 
 				&& $approveForm->get('approve')->isClicked())
 			{
-				$app['news_repository']->approve($news['id'], $schema);
+				$newsRepository->approve($news['id'], $schema);
 				$this->addFlash('success', 'news.approve.success', ['%name%' => $news['headline']]);
 
-				return $app->reroute('news_show', [
+				return $this->redirectoRoute('news_show', [
 					'schema'	=> $schema,
 					'access'	=> $access,
 					'news'		=> $news['id'],
@@ -201,8 +205,8 @@ class NewsController extends AbstractController
 
 		$access_ary = ['public', 'interlets', 'users', 'admin'];
 
-		$vars['prev'] = $app['news_repository']->get_prev($news['id'], $schema, $access_ary);
-		$vars['next'] = $app['news_repository']->get_next($news['id'], $schema, $access_ary);
+		$vars['prev'] = $newsRepository->getPrev($news['id'], $schema, $access_ary);
+		$vars['next'] = $newsRepository->getNext($news['id'], $schema, $access_ary);
 
 		return $this->render('news/' . $access . '_show.html.twig', $vars);
 	}
@@ -213,7 +217,7 @@ class NewsController extends AbstractController
 	 */
 	public function add(Request $request, string $schema, string $access)
 	{
-		$form = $app->build_form(news_type::class)
+		$form = $this->createForm(NewsType::class)
 			->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid())
@@ -235,7 +239,7 @@ class NewsController extends AbstractController
 
 				$this->addFlash('info', 'news_add.approve_info', ['%name%' => $data['headline']]);
 
-				return $app->reroute('news_index', [
+				return $this->redirectToRoute('news_index', [
 					'schema' 	=> $schema,
 					'access'	=> $access,
 					'view'		=> $app['view']->get('news'),
@@ -244,7 +248,7 @@ class NewsController extends AbstractController
 
 			$this->addFlash('success', 'news_add.success', ['%name%'  => $data['headline']]);
 
-			return $app->reroute('news_show', [
+			return $this->redirectToRoute('news_show', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
 				'news'		=> $data['id'],
@@ -260,20 +264,22 @@ class NewsController extends AbstractController
 	 * @Route("/news/{id}/edit", name="news_edit")
 	 * @Method({"GET", "POST"})
 	 */
-	public function edit(Request $request, string $schema, string $access, array $news)
+	public function edit(NewsRepository $newsRepository, Request $request, string $schema, string $access, int $id)
 	{
-		$form = $app->build_form(news_type::class, $news)
+		$news = $newsRepository->get($id, $schema);
+
+		$form = $this->createForm(NewsType::class, $news)
 			->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 
-			$app['news_repository']->update($news['id'] ,$data, $schema);
+			$newsRepository->update($news['id'] ,$data, $schema);
 
 			$this->addFlash('success', 'news_edit.success', ['%name%'  => $data['headline']]);
 
-			return $app->reroute('news_show', [
+			return $this->redirectToRoute('news_show', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
 				'news'		=> $news['id'],
@@ -289,9 +295,12 @@ class NewsController extends AbstractController
 	 * @Route("/news/{id}/del", name="news_del")
 	 * @Method({"GET", "POST"})
 	 */
-	public function del(Request $request, string $schema, string $access, array $news)
+	public function del(NewsRepository $newsRepository, SessionView $sessionView, 
+		Request $request, string $schema, string $access, int $id)
 	{
-		$form = $app->form()
+		$news = $newsRepository->get($id, $schema);
+	
+		$form = $this->createFormBuilder()
 			->add('submit', SubmitType::class)
 			->getForm()
 			->handleRequest($request);
@@ -302,10 +311,10 @@ class NewsController extends AbstractController
 
 			$this->addFlash('success', 'news_del.success', ['%name%' => $news['headline']]);
 
-			return $app->reroute('news_index', [
+			return $this->redirectToRoute('news_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-				'view'		=> $app['view']->get('news'),
+				'view'		=> $sessionView->get('news', $schema, $access),
 			]);				
 		}
 

@@ -16,10 +16,10 @@
     <span class="pull-right">
     <span class="btn-group" role="group">
     <a href="{{- path(entity~'_index', acc_sch|view(entity)) -}}" title="{{- 'nav.overview'|trans -}}" class="btn btn-default">
-    {{- bg.fa_view(({}|view(entity))['view']|default('list')) -}}    
+    {{- bg.fa_view((acc_sch|view(entity))['view']) -}}    
     </a>
     {%- if prev -%}
-        <a href="{{- path(entity~'_show', acc_sch|merge({(entity): prev})) -}}" title="{{- 'nav.previous'|trans -}}" class="btn btn-default">
+        <a href="{{- path(entity~'_show', acc_sch|merge({'id': prev})) -}}" title="{{- 'nav.previous'|trans -}}" class="btn btn-default">
         <i class="fa fa-chevron-down"></i>
         </a>
     {%- else -%}
@@ -28,7 +28,7 @@
         </button>
     {%- endif -%}
     {%- if next -%}
-        <a href="{{- path(entity~'_show', acc_sch|merge({(entity): next})) -}}" title="{{- 'nav.next'|trans -}}" class="btn btn-default">
+        <a href="{{- path(entity~'_show', acc_sch|merge({'id': next})) -}}" title="{{- 'nav.next'|trans -}}" class="btn btn-default">
         <i class="fa fa-chevron-up"></i>
         </a>
     {%- else -%}

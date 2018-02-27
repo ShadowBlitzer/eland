@@ -110,7 +110,7 @@ class ExportController extends AbstractController
 
 		$csv_ary = array_keys($this->elas_csv_ary);
 
-		$form = $app->form([], [
+		$form = $this->createFormBuilder([], [
 			'etoken_enabled'	=> false,
 		]);
 

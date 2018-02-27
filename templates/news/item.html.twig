@@ -8,7 +8,7 @@
 <div class="media-body">
 {%- block media_heading -%}
 	<h3 class="media-heading">
-	<a href="{{- path('news_show', acc_sch|merge({'news': n.id})) -}}">
+	<a href="{{- path('news_show', acc_sch|merge({'id': n.id})) -}}">
 	{{- n.headline -}}
 	</a>
 	</h3>
@@ -35,7 +35,7 @@
 
 <div class="panel-footer">
 
-<p><i class="fa fa-user"></i>&nbsp;{{ n.id_user|user_format|raw -}}  
+<p><i class="fa fa-user"></i>&nbsp;{{ n.id_user|user_format(schema)|raw -}}  
 
 {%- block admin_buttons -%}{%- endblock -%}
 </p>

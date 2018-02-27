@@ -14,7 +14,7 @@ class CategoryRepository
 		$this->db = $db;
 	}
 
-	public function get_all(string $schema):array
+	public function getAll(string $schema):array
 	{
 		$categories = $this->db->fetchAll('select * 
 			from ' . $schema . '.categories 
@@ -57,4 +57,41 @@ class CategoryRepository
 		
 		return $data;
 	}
+
+	public function getCountAds(int $id, string $schema):int
+	{
+		return $this->db->fetchColumn('select count(*)
+			from ' . $schema . '.categories 
+			where id_parent = ?', [$id]);	
+	}
+
+	public function getCountSubcategories(int $id, string $schema):int
+	{
+		return $this->db->fetchColumn('select count(*)
+			from ' . $schema . '.categories 
+			where id_parent = ?', [$id]);
+	}
+
+	public function del(int $id, string $schema)
+	{
+		$this->db->delete($schema . '.categories', ['id' => $id]);
+	}
+
+	public function update(int $id, string $schema, array $data)
+	{
+		$this->db->update($schema . '.categories', $data, ['id' => $id]);	
+	}
+
+	public function getName(int $id, string $schema):string
+	{
+		return $this->db->fetchColumn('select name
+			from ' . $schema . '.categories 
+			where id = ?', [$id]);
+	}
+
+	public function insert(string $schema, array $data)
+	{
+		$this->db->insert($schema . '.categories', $data);
+	}
 }
+

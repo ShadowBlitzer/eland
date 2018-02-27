@@ -25,7 +25,7 @@ class LoginController extends AbstractController
 	 */
 	public function form(Request $request, string $schema)
 	{
-		$form = $app->build_form(login_type::class)
+		$form = $this->createForm(login_type::class)
 			->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid())

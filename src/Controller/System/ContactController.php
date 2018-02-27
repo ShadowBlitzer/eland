@@ -18,7 +18,7 @@ class ContactController extends AbstractController
 	 */
 	public function form(Request $request, string $schema)
 	{
-		$form = $app->build_form(contact_type::class)
+		$form = $this->createForm(contact_type::class)
 			->handleRequest($request);
 
 		if ($form->isValid())
@@ -34,7 +34,7 @@ class ContactController extends AbstractController
 
 			$this->addFlash('info', 'contact.confirm_email_info', ['%email%' => $data['email']]);
 
-			return $app->reroute('login', ['schema' => $schema]);
+			return $this->redirectToRoute('login', ['schema' => $schema]);
 		}
 
 		return $this->render('contact/form.html.twig', [
@@ -55,7 +55,7 @@ class ContactController extends AbstractController
 		if (!count($data))
 		{
 			$this->addFlash('error', 'contact.confirm_not_found');
-			return $app->reroute('confirm', ['schema' => $schema]);
+			return $this->redirectToRoute('confirm', ['schema' => $schema]);
 		}
 
 		$app['mail_queue']->setTemplate('contact_admin')
@@ -68,7 +68,7 @@ class ContactController extends AbstractController
 
 		$this->addFlash('success', 'contact.success');
 
-		return $app->reroute('login', ['schema' => $schema]);
+		return $this->redirectToRoute('login', ['schema' => $schema]);
 	}
 }
 

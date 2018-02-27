@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
+use App\Repository\ConfigRepository;
+
 class ConfigController extends AbstractController
 {
 	/**

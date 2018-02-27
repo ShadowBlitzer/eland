@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
+use App\Repository\ConfigRepository;
+
 class AutoMinLimitController extends AbstractController
 {
 	/**
@@ -47,7 +49,7 @@ class AutoMinLimitController extends AbstractController
 			];
 		}
 
-		$form = $app->form($data)
+		$form = $this->createFormBuilder($data)
 			->add('enabled', CheckboxType::class)
 			->add('trans_percentage', PercentType::class, [
 				'type'			=> 'integer',				
@@ -87,9 +89,9 @@ class AutoMinLimitController extends AbstractController
 
 			$this->addFlash('success', $app->trans('auto_min_limit.success'));
 
-			return $app->redirect($app->path('auto_min_limit', [
+			return $this->redirectToRoute('auto_min_limit', [
 				'schema' => $schema,
-			]));				
+			]);				
 		}
 
 		return $this->render('auto_min_limit/a_form.html.twig', [

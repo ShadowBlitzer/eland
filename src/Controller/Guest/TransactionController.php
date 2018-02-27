@@ -227,10 +227,7 @@ class TransactionController extends AbstractController
 		{
 			$data = $form->getData();
 
-			// do something with the data
-
-			// redirect somewhere
-			return $app->redirect('...');
+			return $this->redirectToRoute('');
 		}
 
 		return $this->render('transaction/' . $access . '_add.html.twig', [
@@ -244,7 +241,7 @@ class TransactionController extends AbstractController
 	 */
 	public function edit(FormFactoryInterface $formFactory, Request $request, string $schema, string $access, array $trans)
 	{
-		$form = $app->form($transaction)
+		$form = $this->createFormBuilder($transaction)
 			->add('description', TextAddonType::class, [
 				'constraints' 	=> [
 					new Assert\NotBlank(),
@@ -268,7 +265,7 @@ class TransactionController extends AbstractController
 
 			$this->addFlash('success', 'transaction_edit.success');
 			
-			return $app->reroute('transaction_show', [
+			return $this->redirectToRoute('transaction_show', [
 				'schema'		=> $schema,
 				'access'		=> $access,
 				'transaction'	=> $transaction['id'],

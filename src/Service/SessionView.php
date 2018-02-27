@@ -31,7 +31,7 @@ class SessionView
 		if (!isset($this->defaultAry[$entity]))
 		{
 			throw new invalid_parameter_value_exception(sprintf('invalid "entity" %s in %s', $entity, __CLASS__));
-		}		
+		}
 
 		$key = $schema . '_' . $access . '_' . $entity . '_view';
 	
@@ -58,13 +58,8 @@ class SessionView
 		$this->session->set($key, $view);
 	}
 
-	public function merge(array $params, string $entity = null):array
+	public function merge(array $params, string $entity):array
 	{
-		if (!isset($entity) || $entity === '')
-		{
-			return $params;
-		}
-
 		if (!isset($this->defaultAry[$entity]))
 		{
 			return $params;

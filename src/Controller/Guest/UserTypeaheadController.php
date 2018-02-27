@@ -19,7 +19,7 @@ class UserTypeaheadController extends AbstractController
 	{
 		if ($access !== 'a' && !in_array($user_type, ['active', 'direct']))
 		{
-			return $app->json([], 403);
+			return $this->json([], 403);
 		}
 
 		switch($user_type)
@@ -47,7 +47,7 @@ class UserTypeaheadController extends AbstractController
 				$where_sql = '1 = 1';
 				break;
 			default:
-				return $app->json([], 404);
+				return $this->json([], 404);
 				exit;
 				break;
 		}
@@ -143,30 +143,30 @@ class UserTypeaheadController extends AbstractController
 	{
 		if (!in_array($access, ['a', 'u']))
 		{
-			return $app->json([], 403);
+			return $this->json([], 403);
 		}
 
 		if (!$app['config']->get('interlets_en', $schema))
 		{
-			return $app->json([], 403);
+			return $this->json([], 403);
 		}
 
 		if ($app['config']->get('template_lets', $schema))
 		{
-			return $app->json([], 403);
+			return $this->json([], 403);
 		}
 
 		$user = $app['user_cache']->get($user);
 
 		if (!$user)
 		{
-			return $app->json([], 404);
+			return $this->json([], 404);
 		}
 
 		if ($user['accountrole'] !== 'interlets'
 			|| !$user['letscode'])
 		{
-			return $app->json([], 404);
+			return $this->json([], 404);
 		}
 
 		if ($user['interlets.schema'])

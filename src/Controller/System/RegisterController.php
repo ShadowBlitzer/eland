@@ -25,7 +25,7 @@ class RegisterController extends AbstractController
 	 */
 	public function form(Request $request, string $schema)
 	{
-		$form = $app->build_form(register_type::class)
+		$form = $this->createForm(register_type::class)
 			->handleRequest($request);
 
 		if ($form->isSubmitted && $form->isValid())
@@ -41,7 +41,7 @@ class RegisterController extends AbstractController
 
 			$this->addFlash('info', 'register.confirm_email_info', ['%email%' => $data['email']]);
 
-			return $app->reroute('login', ['schema' => $schema]);
+			return $this->redirectToRoute('login', ['schema' => $schema]);
 		}
 
 		return $this->render('register/form.html.twig', ['form' => $form->createView()]);
@@ -60,7 +60,7 @@ class RegisterController extends AbstractController
 		if (!count($data))
 		{
 			$this->addFlash('error', 'register.confirm_not_found');
-			return $app->reroute('register', ['schema' => $schema]);
+			return $this->redirectToRoute('register', ['schema' => $schema]);
 		}
 
 		// TO DO: process data

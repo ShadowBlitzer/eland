@@ -48,7 +48,7 @@ class PageController extends AbstractController
 
 		];
 
-		$form = $app->build_form('page_type', $data)
+		$form = $this->createForm('page_type', $data)
 			->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid())
@@ -89,7 +89,7 @@ class PageController extends AbstractController
 			
 		];
 
-		$form = $app->build_form('page_type', $data)
+		$form = $this->createForm('page_type', $data)
 			->handleRequest($request);
 
 

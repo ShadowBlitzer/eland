@@ -17,10 +17,10 @@ class HostingRequestController extends AbstractController
 	 */
 	public function form(Request $request)
 	{
-		$form = $app->build_form(HostingRequestType::class)
+		$form = $this->createForm(HostingRequestType::class)
 			->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 			
@@ -33,7 +33,7 @@ class HostingRequestController extends AbstractController
 
 			$this->addFlash('info', 'hosting_request.confirm_email_info', ['%email%' => $data['email']]);
 
-			return $app->reroute('main_index');
+			return $this->redirectToRoute('main_index');
 		}
 
 		return $this->render('hosting_request/form.html.twig', [
@@ -50,7 +50,7 @@ class HostingRequestController extends AbstractController
 		if (!count($data))
 		{
 			$this->addFlash('error', 'hosting_request.confirm_not_found');
-			return $app->reroute('hosting_request');
+			return $this->redirectToRoute('hosting_request');
 		}
 
 		$app['mail_queue']->setTemplate('hosting_request')
@@ -83,6 +83,6 @@ class HostingRequestController extends AbstractController
 
 		$this->addFlash('success', 'hosting_request.success');
 
-		return $app->reroute('main_index');
+		return $this->redirectToRoute('main_index');
 	}
 }

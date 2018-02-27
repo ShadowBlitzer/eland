@@ -9,9 +9,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
+
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
+use App\Form\Filter\LogFilterType;
 
 class LogController extends AbstractController
 {
@@ -20,38 +22,21 @@ class LogController extends AbstractController
 	 * @Route("/logs", name="log")
 	 * @Method("GET")
 	 */
-	public function index(Request $request, string $schema)
+	public function index(FormFactoryInterface $formFactory, Request $request, string $schema, string $access)
 	{
 		return $this->render('log/a_index.html.twig', []);
 
-		$filter = $app['form.factory']->createNamedBuilder('', FormType::class, [], [
-				'csrf_protection'	=> false,
-			])
-			->setMethod('GET')
-			->add('q', TextType::class, ['required' => false])
-			->add('letscode', TextType::class, ['required' => false])
-			->add('type', TextType::class, ['required' => false])
-			->add('fdate', TextType::class, ['required' => false])
-			->add('tdate', TextType::class, ['required' => false])
-			->add('z', SubmitType::class)
-			->getForm();
+		$filter = $formFactory->createNamedBuilder('f', LogFilterType::class)
+			->getForm()
+			->handleRequest($request);
 
-		$filter->handleRequest($request);
-
-		if ($filter->isValid())
+		if ($filter->isSubmitted() && $filter->isValid())
 		{
-			var_dump('Filter is valid.');
 			$data = $filter->getData();
-/*
-			// do something with the data
 
-			// redirect somewhere
-			return $app->redirect('...');
-*/
+
+
 		}
-
-
-
 
 		$q = $_GET['q'] ?? '';
 		$letscode = $_GET['letscode'] ?? '';
@@ -144,5 +129,4 @@ class LogController extends AbstractController
 			'filter'		=> $filter->createView(),
 		]);
 	}
-
 }

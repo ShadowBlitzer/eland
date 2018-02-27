@@ -19,8 +19,8 @@
 			{%- if n.approve_button is defined -%}
 				{{- b.approve_md(approve_form[n.approve_button]) -}}
 			{%- endif -%}
-			{{- b.edit_link(path('news_edit', acc_sch|merge({'news': n.id}))) -}}
-			{{- b.del_link(path('news_del', acc_sch|merge({'news': n.id}))) -}}
+			{{- b.edit_link(path('news_edit', acc_sch|merge({'id': n.id}))) -}}
+			{{- b.del_link(path('news_del', acc_sch|merge({'id': n.id}))) -}}
 			</span>
 		{%- endblock admin_buttons -%}
 	{%- endembed -%}

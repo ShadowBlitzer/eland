@@ -26,7 +26,7 @@ class UserController extends AbstractController
 	 */
 	public function noView(Request $request, string $schema, string $access, string $user_type):Response
 	{
-		return $app->reroute('user_index', [
+		return $this->redirectToRoute('user_index', [
 			'schema'	=> $schema,
 			'access'	=> $access,
 			'user_type'	=> $user_type,

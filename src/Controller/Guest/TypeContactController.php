@@ -57,7 +57,7 @@ class TypeContactController extends AbstractController
 			'abbrev'	=> '',
 		];
 
-		$form = $app->build_form('type_contact_type', $data)
+		$form = $this->createForm('type_contact_type', $data)
 			->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid())
@@ -68,7 +68,7 @@ class TypeContactController extends AbstractController
 
 			$this->addFlash('success', 'type_contact_add.success', ['%name%'  => $data['name']]);
 
-			return $app->reroute('typecontact_index', [
+			return $this->redirectToRoute('typecontact_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
 			]);				
@@ -95,7 +95,7 @@ class TypeContactController extends AbstractController
 			);			
 		}
 
-		$form = $app->build_form('type_contact_type', $type_contact, [
+		$form = $this->createForm('type_contact_type', $type_contact, [
 			'ignore' => ['id' => $id],
 		])->handleRequest($request);
 
@@ -107,7 +107,7 @@ class TypeContactController extends AbstractController
 
 			$this->addFlash('success', 'type_contact_edit.success', ['%name%'  => $data['name']]);
 
-			return $app->reroute('typecontact_index', [
+			return $this->redirectToRoute('typecontact_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
 			]);				
@@ -144,7 +144,7 @@ class TypeContactController extends AbstractController
 			);
 		}
 
-		$form = $app->form()
+		$form = $this->createFormBuilder()
 			->add('submit', SubmitType::class)
 			->getForm()
 			->handleRequest($request);
@@ -155,7 +155,7 @@ class TypeContactController extends AbstractController
 
 			$this->addFlash('success', 'type_contact_del.success', ['%name%'  => $type_contact['name']]);
 
-			return $app->reroute('typecontact_index', [
+			return $this->redirectToRoute('typecontact_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
 			]);				
