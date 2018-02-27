@@ -1,0 +1,15 @@
+Transaction:
+  type: object
+  config:
+    description: a transaction from a account to another account within the same currency
+    fields:
+      id:
+        type: ID!
+      from:
+        type: Account!
+      to:
+        type: Account!
+      amount:
+        type: Int!
+      description:
+        type: String

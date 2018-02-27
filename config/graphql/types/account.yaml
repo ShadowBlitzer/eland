@@ -1,0 +1,9 @@
+Account:
+  type: object
+  config:
+    description: "An account with a balance in a certain currency which can belong to a community member"
+    fields:
+      id:
+        type: ID!
+      member:
+        type: Member

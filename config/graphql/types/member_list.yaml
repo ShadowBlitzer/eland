@@ -1,0 +1,11 @@
+MemberList:
+  type: object
+  config:
+    description: Member list of a Community
+    fields:
+      id:
+        type: ID!
+      user:
+        type: User!
+      community:
+        type: Community!

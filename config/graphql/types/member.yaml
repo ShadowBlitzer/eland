@@ -1,0 +1,11 @@
+Member:
+  type: object
+  config:
+    description: Membership relation of a User to a Community
+    fields:
+      id:
+        type: ID!
+      user:
+        type: User!
+      community:
+        type: Community!

@@ -86,6 +86,21 @@
     "ocramius/proxy-manager": {
         "version": "2.2.0"
     },
+    "overblog/dataloader-bundle": {
+        "version": "v0.4.0"
+    },
+    "overblog/dataloader-php": {
+        "version": "v0.5.2"
+    },
+    "overblog/graphiql-bundle": {
+        "version": "0.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.1",
+            "ref": "fe8d172f2480efc598f5a8be0e732656d3594cec"
+        }
+    },
     "overblog/graphql-bundle": {
         "version": "0.9",
         "recipe": {

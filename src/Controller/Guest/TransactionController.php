@@ -36,6 +36,10 @@ class TransactionController extends AbstractController
 	 */
 	public function index(FormFactoryInterface $formFactory, Db $db, Request $request, string $schema, string $access)
 	{
+/*
+		$oufti = random_bytes(16);
+		var_dump(rtrim(strtr(base64_encode($oufti), '+/', '-_'), '='));
+*/
 		$where = $params = [];
 
 		$filter = $formFactory->createNamedBuilder('f', TransactionFilterType::class, ['andor' => 'and'])
