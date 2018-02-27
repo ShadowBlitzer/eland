@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbbb2f3f8789f2cdfc9bed9f176eac1b",
+    "content-hash": "52d33a4bb737bac14c245000f2a299e5",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -1403,249 +1403,6 @@
             "time": "2017-11-16T23:22:31+00:00"
         },
         {
-            "name": "overblog/dataloader-bundle",
-            "version": "v0.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/overblog/dataloader-bundle.git",
-                "reference": "005b73f413744a9716862e6e943ae205d6ca3af9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/overblog/dataloader-bundle/zipball/005b73f413744a9716862e6e943ae205d6ca3af9",
-                "reference": "005b73f413744a9716862e6e943ae205d6ca3af9",
-                "shasum": ""
-            },
-            "require": {
-                "overblog/dataloader-php": "^0.5.0",
-                "php": ">=5.5",
-                "symfony/dependency-injection": "^2.7 || ^3.1 || ^4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.1 || ^5.5 || ^6.0",
-                "react/promise": "^2.5",
-                "sensio/framework-extra-bundle": "^3.0",
-                "symfony/phpunit-bridge": "^2.7 || ^3.1 || ^4.0",
-                "symfony/yaml": "^2.7 || ^3.1 || ^4.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Overblog\\DataLoaderBundle\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Overblog",
-                    "homepage": "http://www.over-blog.com"
-                }
-            ],
-            "description": "DataLoader Symfony bundle implementation.",
-            "keywords": [
-                "Batching",
-                "caching",
-                "dataLoader"
-            ],
-            "time": "2017-11-16T12:57:10+00:00"
-        },
-        {
-            "name": "overblog/dataloader-php",
-            "version": "v0.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/overblog/dataloader-php.git",
-                "reference": "49832277a0c4fe4193115f686ed8acdfbb356904"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/overblog/dataloader-php/zipball/49832277a0c4fe4193115f686ed8acdfbb356904",
-                "reference": "49832277a0c4fe4193115f686ed8acdfbb356904",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.5|^7.0"
-            },
-            "replace": {
-                "overblog/promise-adapter": "self.version"
-            },
-            "require-dev": {
-                "guzzlehttp/promises": "^1.3.0",
-                "phpunit/phpunit": "^4.1|^5.1",
-                "react/promise": "^2.5.0",
-                "webonyx/graphql-php": "^0.9.14"
-            },
-            "suggest": {
-                "guzzlehttp/promises": "To use with Guzzle promise",
-                "react/promise": "To use with ReactPhp promise",
-                "webonyx/graphql-php": "To use with Webonyx GraphQL native promise"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.5-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Overblog\\DataLoader\\": "src/",
-                    "Overblog\\PromiseAdapter\\": "lib/promise-adapter/src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "DataLoaderPhp is a generic utility to be used as part of your application's data fetching layer to provide a simplified and consistent API over various remote data sources such as databases or web services via batching and caching.",
-            "keywords": [
-                "Batching",
-                "caching",
-                "dataLoader"
-            ],
-            "time": "2017-08-18T17:10:51+00:00"
-        },
-        {
-            "name": "overblog/graphql-bundle",
-            "version": "v0.10.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/overblog/GraphQLBundle.git",
-                "reference": "22822a6ca501aca7d57e33ea666ab44b474dc32f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/overblog/GraphQLBundle/zipball/22822a6ca501aca7d57e33ea666ab44b474dc32f",
-                "reference": "22822a6ca501aca7d57e33ea666ab44b474dc32f",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/doctrine-cache-bundle": "^1.2",
-                "overblog/graphql-php-generator": "^0.6.0",
-                "php": ">=5.6",
-                "symfony/cache": "^3.1 || ^4.0",
-                "symfony/config": "^3.1 || ^4.0",
-                "symfony/dependency-injection": "^3.1 || ^4.0",
-                "symfony/expression-language": "^3.1 || ^4.0",
-                "symfony/framework-bundle": "^3.1 || ^4.0",
-                "symfony/options-resolver": "^3.1 || ^4.0",
-                "symfony/property-access": "^3.1 || ^4.0",
-                "webonyx/graphql-php": "^0.10.0 || ^0.11.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.5 || ^6.0",
-                "react/promise": "^2.5",
-                "sensio/framework-extra-bundle": "^3.0",
-                "symfony/asset": "^3.1 || ^4.0",
-                "symfony/browser-kit": "^3.1 || ^4.0",
-                "symfony/console": "^3.1 || ^4.0",
-                "symfony/css-selector": "^3.1 || ^4.0",
-                "symfony/phpunit-bridge": "^3.1 || ^4.0",
-                "symfony/process": "^3.1 || ^4.0",
-                "symfony/security-bundle": "^3.1 || ^4.0",
-                "symfony/templating": "^3.1 || ^4.0",
-                "symfony/twig-bundle": "^3.1 || ^4.0",
-                "symfony/web-profiler-bundle": "^3.1 || ^4.0",
-                "symfony/yaml": "^3.1 || ^4.0"
-            },
-            "suggest": {
-                "nelmio/cors-bundle": "For more flexibility when using CORS prefight",
-                "react/promise": "To use ReactPHP promise adapter",
-                "twig/twig": "If you want to use graphiQL."
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.10-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Overblog\\GraphQLBundle\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Overblog",
-                    "homepage": "http://www.over-blog.com"
-                }
-            ],
-            "description": "This bundle provides tools to build a GraphQL server in your Symfony App.",
-            "keywords": [
-                "Relay",
-                "graphql"
-            ],
-            "time": "2018-01-26T16:18:10+00:00"
-        },
-        {
-            "name": "overblog/graphql-php-generator",
-            "version": "v0.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/overblog/GraphQLPhpGenerator.git",
-                "reference": "e6d006a81fb7512d8b1b1fac816373f5df48a3f4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/overblog/GraphQLPhpGenerator/zipball/e6d006a81fb7512d8b1b1fac816373f5df48a3f4",
-                "reference": "e6d006a81fb7512d8b1b1fac816373f5df48a3f4",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.4|~7.0",
-                "webonyx/graphql-php": "^0.10.0 || ^0.11.0"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "^1.11",
-                "phpunit/phpunit": "^4.1|^5.1",
-                "sllh/php-cs-fixer-styleci-bridge": "^1.5",
-                "symfony/expression-language": "^2.7|^3.0",
-                "symfony/filesystem": "^2.7|^3.0",
-                "symfony/process": "^2.7|^3.0",
-                "symfony/yaml": "^2.7|^3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Overblog\\GraphQLGenerator\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Overblog",
-                    "homepage": "http://www.over-blog.com"
-                }
-            ],
-            "description": "GraphQL types generator",
-            "keywords": [
-                "generator",
-                "graphql",
-                "type"
-            ],
-            "time": "2017-11-06T10:25:29+00:00"
-        },
-        {
             "name": "phpdocumentor/reflection-common",
             "version": "1.0.1",
             "source": {
@@ -2106,16 +1863,16 @@
         },
         {
             "name": "rollerworks/password-strength-validator",
-            "version": "v1.0.5",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollerworks/PasswordStrengthValidator.git",
-                "reference": "5e29d831d94a4814ea8416b767c609f773495c67"
+                "reference": "df1da96e960b74e183f4923dba88c19bf78bbab8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollerworks/PasswordStrengthValidator/zipball/5e29d831d94a4814ea8416b767c609f773495c67",
-                "reference": "5e29d831d94a4814ea8416b767c609f773495c67",
+                "url": "https://api.github.com/repos/rollerworks/PasswordStrengthValidator/zipball/df1da96e960b74e183f4923dba88c19bf78bbab8",
+                "reference": "df1da96e960b74e183f4923dba88c19bf78bbab8",
                 "shasum": ""
             },
             "require": {
@@ -2167,7 +1924,7 @@
                 "symfony",
                 "validator"
             ],
-            "time": "2017-11-03T17:53:24+00:00"
+            "time": "2018-02-26T18:55:42+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -2857,56 +2614,6 @@
                 }
             ],
             "description": "Symfony EventDispatcher Component",
-            "homepage": "https://symfony.com",
-            "time": "2018-01-03T07:38:00+00:00"
-        },
-        {
-            "name": "symfony/expression-language",
-            "version": "v4.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/expression-language.git",
-                "reference": "b826c255f22333eccd3365734d2c4e150c284843"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/expression-language/zipball/b826c255f22333eccd3365734d2c4e150c284843",
-                "reference": "b826c255f22333eccd3365734d2c4e150c284843",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3",
-                "symfony/cache": "~3.4|~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\ExpressionLanguage\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony ExpressionLanguage Component",
             "homepage": "https://symfony.com",
             "time": "2018-01-03T07:38:00+00:00"
         },
@@ -5232,53 +4939,6 @@
             "time": "2018-01-29T19:49:41+00:00"
         },
         {
-            "name": "webonyx/graphql-php",
-            "version": "v0.11.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "b97cad0f4a50131c85d9224e8e36ebbcf1c6b425"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/b97cad0f4a50131c85d9224e8e36ebbcf1c6b425",
-                "reference": "b97cad0f4a50131c85d9224e8e36ebbcf1c6b425",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": ">=5.5,<8.0-DEV"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8",
-                "psr/http-message": "^1.0"
-            },
-            "suggest": {
-                "psr/http-message": "To use standard GraphQL server",
-                "react/promise": "To leverage async resolving on React PHP platform"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/deprecated.php"
-                ],
-                "psr-4": {
-                    "GraphQL\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD"
-            ],
-            "description": "A PHP port of GraphQL reference implementation",
-            "homepage": "https://github.com/webonyx/graphql-php",
-            "keywords": [
-                "api",
-                "graphql"
-            ],
-            "time": "2017-12-12T09:03:21+00:00"
-        },
-        {
             "name": "zendframework/zend-code",
             "version": "3.3.0",
             "source": {
@@ -5387,74 +5047,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "overblog/graphiql-bundle",
-            "version": "v0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/overblog/GraphiQLBundle.git",
-                "reference": "d6e77ce252417faa65f708f901b1e2f12b105ca8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/overblog/GraphiQLBundle/zipball/d6e77ce252417faa65f708f901b1e2f12b105ca8",
-                "reference": "d6e77ce252417faa65f708f901b1e2f12b105ca8",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.6 || ^7.0",
-                "symfony/http-foundation": "^3.2.2 || ^4.0",
-                "symfony/routing": "^3.2 || ^4.0",
-                "symfony/twig-bundle": "^3.2.10 || ^4.0"
-            },
-            "require-dev": {
-                "overblog/graphql-bundle": "^0.9.0 || ^0.10.0",
-                "phpunit/phpunit": "^5.7 || ^6.0",
-                "sensio/framework-extra-bundle": "^3.0 || ^4.0",
-                "symfony/browser-kit": "^3.2 || ^4.0",
-                "symfony/config": "^3.2 || ^4.0",
-                "symfony/console": "^3.2 || ^4.0",
-                "symfony/dependency-injection": "^3.2 || ^4.0",
-                "symfony/expression-language": "^3.2 || ^4.0",
-                "symfony/framework-bundle": "^3.2.2 || ^4.0",
-                "symfony/templating": "^3.2 || ^4.0",
-                "symfony/yaml": "^3.2 || ^4.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Overblog\\GraphiQLBundle\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Overblog",
-                    "homepage": "http://www.over-blog.com"
-                },
-                {
-                    "name": "Renato Mefi",
-                    "email": "renato@mefi.in"
-                }
-            ],
-            "description": "Symfony GraphiQLBundle makes possible to render the UI into your symfony project",
-            "keywords": [
-                "graphiql",
-                "graphql"
-            ],
-            "time": "2018-01-24T16:22:34+00:00"
-        },
         {
             "name": "symfony/dotenv",
             "version": "v4.0.4",

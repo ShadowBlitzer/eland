@@ -1,5 +1,5 @@
 web=1
-worker=1
 mail=1
-sync=1
+sync-elas=1
 geo=1
+worker=1

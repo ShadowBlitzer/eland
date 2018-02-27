@@ -46,8 +46,3 @@ services:
 #        class: Twig_Extensions_Extension_Intl
 #        tags: [twig.extension]
 
-overblog_dataloader:
-    defaults:
-        # required
-        promise_adapter: overblog_dataloader.react_promise_adapter
-    loaders:
