@@ -6,6 +6,7 @@ use App\Service\Xdb;
 use Doctrine\DBAL\Connection as Db;
 use Predis\Client as Redis;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Filter\UserFilter;
 
 class UserRepository
 {
@@ -23,6 +24,73 @@ class UserRepository
 		$this->redis = $redis;
 		$this->isCli = php_sapi_name() === 'cli' ? true : false;
 	}
+
+	public function getFiltered(string $schema, UserFilter $userFilter, Sort $sort, Pagination $pagination):array
+	{
+		$query = 'select u.* from ' . $schema . '.users u';
+		$query .= $userFilter->getWhere();
+		$query .= $sort->query();
+		$query .= $pagination->query();
+
+		$users = [];
+
+		$rs = $this->db->executeQuery($query, $userFilter->getParams());
+
+		while ($row = $rs->fetch())
+		{
+			if ($row['real_to'] || $row['real_from'])
+			{
+				$row['class'] = 'warning';			
+			}
+
+			$transactions[] = $row;
+		}
+
+		foreach ($transactions as $key => $t)
+		{
+			if (!($t['real_from'] || $t['real_to']))
+			{
+				continue;
+			}
+
+			$inter_schema = false;
+
+			if (isset($interlets_accounts_schemas[$t['id_from']]))
+			{
+				$inter_schema = $interlets_accounts_schemas[$t['id_from']];
+			}
+			else if (isset($interlets_accounts_schemas[$t['id_to']]))
+			{
+				$inter_schema = $interlets_accounts_schemas[$t['id_to']];
+			}
+
+			if ($inter_schema)
+			{
+				$inter_transaction = $db->fetchAssoc('select t.*
+					from ' . $inter_schema . '.transactions t
+					where t.transid = ?', [$t['transid']]);
+
+				if ($inter_transaction)
+				{
+					$transactions[$key]['inter_schema'] = $inter_schema;
+					$transactions[$key]['inter_transaction'] = $inter_transaction;
+				}
+			}
+		}		
+
+		return $transactions;
+	}
+
+	public function getFilteredRowCount(string $schema, UserFilter $userFilter):int
+	{
+		$query = 'select count(t.*) from ' . $schema . '.transactions t' . $userFilter->getWhere();
+		return $this->db->fetchColumn($query, $transactionFilter->getParams());
+	}
+
+
+
+
+
 
 	public function clear(int $id, string $schema)
 	{

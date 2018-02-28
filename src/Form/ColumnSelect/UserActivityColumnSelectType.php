@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
 use App\Form\ColumnSelect\QuantityColumnSelectType;
 use App\Form\Input\NumberAddonType;
+use App\Form\Typeahead\TypeaheadUserType;
 
 class UserActivityColumnSelectType extends AbstractType
 {
@@ -21,7 +22,7 @@ class UserActivityColumnSelectType extends AbstractType
             ])
             ->add('exclude', CollectionType::class, [
                 'required'      => false,
-                'entry_type'    => 'typeahead_user_type',
+                'entry_type'    => TypeaheadUserType::class,
                 'entry_options' => [
                     'source_route'  => 'user_typeahead',
                     'source_params' => [

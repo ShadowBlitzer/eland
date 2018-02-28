@@ -5,17 +5,17 @@ namespace App\Filter;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\Filter\TransactionFilterType;
 
-use App\Filter\AbstractFilter;
+use App\Filter\AbstractFormFilter;
 
-class TransactionFilter extends AbstractFilter
+class TransactionFilter extends AbstractFormFilter
 {
-    public function filter(Request $request)
+    public function filter()
     {
-        $this->where = $this->params = [];
+        $this->andWhere = $this->orWhere = $this->params = [];
 
 		$this->filter = $this->formFactory->createNamedBuilder('f', TransactionFilterType::class, ['andor' => 'and'])
 			->getForm()
-			->handleRequest($request);
+			->handleRequest($this->request);
 
 		if ($this->filter->isSubmitted() && $this->filter->isValid())
 		{
@@ -23,7 +23,7 @@ class TransactionFilter extends AbstractFilter
 
 			if (isset($data['q']))
 			{
-				$this->where[] = 't.description ilike ?';
+				$this->andWhere[] = 't.description ilike ?';
 				$this->params[] = '%' . $data['q'] . '%';
 			}
 
@@ -46,21 +46,21 @@ class TransactionFilter extends AbstractFilter
 				$whereCode = ['(' . implode(' or ', $whereCode) . ')'];
 			}
 
-			$this->where = array_merge($this->where, $whereCode);
+			$this->andWhere = array_merge($this->andWhere, $whereCode);
 
 			if (isset($data['from_date']))
 			{
-				$this->where[] = 't.date >= ?';
+				$this->andWhere[] = 't.date >= ?';
 				$this->params[] = $data['from_date'];
 			}
 
 			if (isset($data['to_date']))
 			{
-				$this->where[] = 't.date <= ?';
+				$this->andWhere[] = 't.date <= ?';
 				$this->params[] = $data['to_date'];
 			}
         }
 
-        $this->where = count($this->where) ? ' where ' . implode(' and ', $this->where) . ' ' : '';
+		return $this;
     }
 }

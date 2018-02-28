@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use App\Form\Input\addon_type;
+use App\Form\Input\TextAddonType;
 
 class UserFilterType extends AbstractType
 {
@@ -19,7 +19,7 @@ class UserFilterType extends AbstractType
     {
         $builder
 			->setMethod('GET')
-			->add('q', addon_type::class, [
+			->add('q', TextAddonType::class, [
                 'required' => false,
             ])
 			->add('submit', SubmitType::class);

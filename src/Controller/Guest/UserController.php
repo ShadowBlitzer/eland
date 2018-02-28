@@ -16,6 +16,9 @@ use App\Service\SessionView;
 use App\Service\SessionColumns;
 use App\Form\Filter\UserFilterType;
 use App\Form\ColumnSelect\UserColumnSelectType;
+use App\Filter\UserFilter;
+use App\Filter\UserTypeFilter;
+use App\ColumnSelect\UserColumnSelect;
 
 use App\Repository\UserRepository;
 use App\Repository\ConfigRepository;
@@ -44,6 +47,10 @@ class UserController extends AbstractController
 	 */
 	public function index(FormFactoryInterface $formFactory, 
 		ConfigRepository $configRepository,
+		UserRepository $userRepository,
+		UserFilter $userFilter,
+		UserTypeFilter $userTypeFilter,
+		UserColumnSelect $userColumnSelect,
 		SessionView $sessionView, SessionColumns $sessionColumns, 
 		Request $request,
 		string $schema, string $access, string $view, string $userType):Response
@@ -109,30 +116,12 @@ class UserController extends AbstractController
 
 		$where = $where_q = $params = [];
 
-		$filter = $formFactory->createNamedBuilder('f', UserFilterType::class)
-			->getForm()
-			->handleRequest($request);
+		$userFilter->setRequest($request)
+			->filter();
 
-		if ($filter->isSubmitted() && $filter->isValid())
-		{
-			$data = $filter->getData();
-
-			if (isset($data['q']))
-			{
-				$where_q[] = 'u.name ilike ?';
-				$params[] = '%' . $data['q'] . '%';
-
-				$where_q[] = 'u.letscode ilike ?';
-				$params[] = '%' . $data['q'] . '%';				
-			}
-		}
-
-		$filtered = count($where_q) ? true : false;
-		
-		if ($filtered)
-		{
-			$where[] = implode(' or ', $where_q);
-		}
+		$userTypeFilter->setType($userType)
+			->setNewUserTreshold($newUserTreshold)
+			->filter();
 
 		switch ($userType)
 		{
@@ -174,13 +163,14 @@ class UserController extends AbstractController
 		$where = count($where) ? ' where ' . implode(' and ', $where) . ' ' : '';
 
 		$query = ' from ' . $schema . '.users u ' . $where;
+
 		$rowCount = $app['db']->fetchColumn('select count(u.*)' . $query, $params);
 		$balanceSum = $app['db']->fetchColumn('select sum(u.saldo)' . $query, $params) ?? 0;
 		$query = 'select u.*' . $query;
 
 		$sort = new Sort($request);
 
-		$sort->add_columns([
+		$sort->addColumns([
 			'letscode'		=> 'asc',
 			'name'			=> 'asc',
 			'fullname'		=> 'asc', 
@@ -190,16 +180,14 @@ class UserController extends AbstractController
 			'mdate'			=> 'desc',
 			'cdate'			=> 'desc',
 		])
-		->set_default('letscode');
+		->setDefault('letscode');
 
 		$pagination = new Pagination($request, $rowCount);
 
 		$query .= $sort->query();
 		$query .= $pagination->query();
 
-//		$users = $app['db']->fetchAll($query, $params);
-
-		$sel_form = $app->namedForm('sel');
+		$selForm = $app->namedForm('sel');
 
 		$users = [];
 
@@ -224,15 +212,15 @@ class UserController extends AbstractController
 				$row['class'] = 'success';
 			}
 
-			$sel_form->add($row['id'], CheckboxType::class, [
+			$selForm->add($row['id'], CheckboxType::class, [
 				'required'	=> false,
 			]);
 
 			$users[] = $row;
 		}
 
-		$sel_form = $sel_form->getForm();
-		$sel_form->handleRequest($request);
+		$selForm = $selForm->getForm();
+		$selForm->handleRequest($request);
 
 		$cols = [];
 
@@ -246,14 +234,14 @@ class UserController extends AbstractController
 
 		$vars = [
 			'users'			=> $users,
-			'user_type'		=> $user_type,
-			'filter'		=> $filter->createView(),
-			'filtered'		=> $filtered,
+			'user_type'		=> $userType,
+			'filter'		=> $userFilter->createView(),
+			'filtered'		=> $userFilter->isFiltered(),
 			'pagination'	=> $pagination->get($rowCount),		
 			'sort'			=> $sort->get(),
 			'columns'		=> $cols,
-			'column_select'	=> $column_select->createView(),
-			'sel_form'		=> $sel_form->createView(),
+			'column_select'	=> $columnSelect->createView(),
+			'sel_form'		=> $selForm->createView(),
 			'balance_sum'	=> $balanceSum,
 		];
 

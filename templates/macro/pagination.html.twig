@@ -51,7 +51,8 @@
 	<div class="col-md-12">
 	<ul class="pagination">
 
-	{%- if pagination.page > 1 -%}
+	{%- if false and pagination.page > 1 -%}
+		{# disabled #}
 		<li>
 		<a href="{{- path(route, all_params|merge(
 			{'p': {'start': ((pagination.page - 2) * pagination.limit)|replace_when_zero, 
@@ -87,7 +88,8 @@
 		</li>
 	{%- endif -%}
 
-	{%- if pagination.page < pagination.page_count -%}
+	{%- if false and pagination.page < pagination.page_count -%}
+		{# disabled #}
 		<li>
 		<a href="{{- path(route, all_params|merge(
 			{'p': {'start': pagination.page * pagination.limit, 

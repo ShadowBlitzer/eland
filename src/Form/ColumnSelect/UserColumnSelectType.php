@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use App\Form\ColumnSelect\BaseUserColumnSelectType;
 use App\Form\ColumnSelect\UserBalanceOnDateColumnSelectType;
+use App\Form\ColumnSelect\UserContactDetailColumnSelectType;
 use App\Form\ColumnSelect\UserParsedAddressColumnSelectType;
 use App\Form\ColumnSelect\UserAdColumnSelectType;
 use App\Form\ColumnSelect\UserActivityColumnSelectType;
@@ -19,7 +20,7 @@ class UserColumnSelectType extends AbstractType
         $builder
             ->add('base', BaseUserColumnSelectType::class)
             ->add('balance_on_date', UserBalanceOnDateColumnSelectType::class)
-            ->add('contact_detail', 'user_contact_detail_column_select_type')
+            ->add('contact_detail', UserContactDetailColumnSelectType::class)
             ->add('parsed_address', UserParsedAddressColumnSelectType::class)
             ->add('ad', UserAdColumnSelectType::class)
             ->add('activity', UserActivityColumnSelectType::class)

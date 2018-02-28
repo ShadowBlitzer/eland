@@ -25,7 +25,8 @@ class TransactionRepository
 	public function getFiltered(string $schema, TransactionFilter $transactionFilter, Sort $sort, Pagination $pagination):array
 	{
 		$query = 'select t.* from ' . $schema . '.transactions t';
-		$query .= $transactionFilter->getWhere();
+		$query .= $transactionFilter->isFiltered() ? ' where ' : '';
+		$query .= $transactionFilter->getWhereQueryString();
 		$query .= $sort->query();
 		$query .= $pagination->query();
 
@@ -80,7 +81,9 @@ class TransactionRepository
 
 	public function getFilteredRowCount(string $schema, TransactionFilter $transactionFilter):int
 	{
-		$query = 'select count(t.*) from ' . $schema . '.transactions t' . $transactionFilter->getWhere();
+		$query = 'select count(t.*) from ' . $schema . '.transactions t';
+		$query .= $transactionFilter->isFiltered() ? ' where ' : '';
+		$query .= $transactionFilter->getWhereQueryString();
 		return $this->db->fetchColumn($query, $transactionFilter->getParams());
 	}
 

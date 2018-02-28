@@ -10,7 +10,7 @@ class Pagination
 	private $limit;
 	private $rowCount = 0;
 
-	private $adjacentNum = 1;
+	private $adjacentNum = 2;
 
 	private $limitOptions = [
 		10 		=> 10,

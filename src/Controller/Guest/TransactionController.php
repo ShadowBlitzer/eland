@@ -38,7 +38,8 @@ class TransactionController extends AbstractController
 		$oufti = random_bytes(16);
 		var_dump(rtrim(strtr(base64_encode($oufti), '+/', '-_'), '='));
 */
-		$transactionFilter->filter($request);
+		$transactionFilter->setRequest($request)
+			->filter();
 
 		$rowCount = $transactionRepository->getFilteredRowCount($schema, $transactionFilter);		
 		$pagination = new Pagination($request, $rowCount);

@@ -5,6 +5,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use App\Form\Input\DatepickerType;
 
 class UserBalanceOnDateColumnSelectType extends AbstractType
 {
@@ -14,7 +15,7 @@ class UserBalanceOnDateColumnSelectType extends AbstractType
             ->add('enable', CheckboxType::class, [
                 'required'  => false,
             ])
-            ->add('date', 'datepicker_type', [
+            ->add('date', DatepickerType::class, [
                 'required'  => false,
                 'attr'      => [
                     'data-date-end-date'    => '0d',
