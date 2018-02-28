@@ -23,65 +23,43 @@ class UserTypeFilter extends AbstractFilter
 
     public function filter()
     {
-        $this->where = $this->params = [];
+        $this->orWhere = $this->andWhere = $this->params = [];
 
 		switch ($this->type)
 		{
 			case 'active': 
-				$this->where[] = 'u.status in (1, 2, 7)';
+				$this->andWhere[] = 'u.status in (1, 2, 7)';
 				break;
 			case 'new':
-				$this->where[] = 'u.status = 1';
-				$this->where[] = 'u.adate is not null';
-				$this->where[] = 'u.adate > ?';
-				$params[] = $this->newUserTreshold;
+				$this->andWhere[] = 'u.status = 1';
+				$this->andWhere[] = 'u.adate is not null';
+				$this->andWhere[] = 'u.adate > ?';
+				$this->params[] = $this->newUserTreshold;
 				break;
 			case 'leaving':
-				$this->where[] = 'u.status = 2';
+				$this->andWhere[] = 'u.status = 2';
 				break;			
 			case 'interlets': 
-				$this->where[] = 'u.accountrole = \'interlets\'';
-				$this->where[] = 'u.status in (1, 2, 7)';
+				$this->andWhere[] = 'u.accountrole = \'interlets\'';
+				$this->andWhere[] = 'u.status in (1, 2, 7)';
 				break;
 			case 'direct':
-				$this->where[] = 'u.status in (1, 2, 7)';
-				$this->where[] = 'u.accountrole != \'interlets\'';
+				$this->andWhere[] = 'u.status in (1, 2, 7)';
+				$this->andWhere[] = 'u.accountrole != \'interlets\'';
 				break;
 			case 'pre-active':
-				$this->where[] = 'u.adate is null';
-				$this->where[] = 'u.status not in (1, 2, 7)';
+				$this->andWhere[] = 'u.adate is null';
+				$this->andWhere[] = 'u.status not in (1, 2, 7)';
 				break;
 			case 'post-active':
-				$this->where[] = 'u.adate is not null';
-				$this->where[] = 'u.status not in (1, 2, 7)';
+				$this->andWhere[] = 'u.adate is not null';
+				$this->andWhere[] = 'u.status not in (1, 2, 7)';
 				break;
 			case 'all':
 				break;
 			default: 
-				$this->where[] = '1 = 2';
+				$this->andWhere[] = '1 = 2';
 				break;
-        }
-
-		$this->where = count($this->where) ? ' where ' . implode(' and ', $this->where) . ' ' : '';    
+        }   
 	}
-
-    public function isFiltered():bool
-    {
-        return strlen($this->where) > 0;
-    }
-
-    public function getWhere():string
-    {
-        return $this->where;
-    }
-
-    public function getParams():array
-    {
-        return $this->params;
-    }
-
-    public function createView():FormView
-    {
-        return $this->filter->createView();
-    }
 }

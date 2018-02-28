@@ -18,6 +18,7 @@ use App\Form\Filter\UserFilterType;
 use App\Form\ColumnSelect\UserColumnSelectType;
 use App\Filter\UserFilter;
 use App\Filter\UserTypeFilter;
+use App\Filter\FilterQuery;
 use App\ColumnSelect\UserColumnSelect;
 
 use App\Repository\UserRepository;
@@ -31,12 +32,12 @@ class UserController extends AbstractController
 	 * @Method("GET")
 	 */
 	public function noView(SessionView $sessionView, 
-		Request $request, string $schema, string $access, string $user_type):Response
+		Request $request, string $schema, string $access, string $userType):Response
 	{
 		return $this->redirectToRoute('user_index', [
 			'schema'	=> $schema,
 			'access'	=> $access,
-			'user_type'	=> $user_type,
+			'userType'	=> $userType,
 			'view'		=> $sessionView->get('user', $schema, $access),
 		]);
 	}
@@ -114,8 +115,6 @@ class UserController extends AbstractController
 			$columns = $newColumns;
 		}
 
-		$where = $where_q = $params = [];
-
 		$userFilter->setRequest($request)
 			->filter();
 
@@ -123,50 +122,12 @@ class UserController extends AbstractController
 			->setNewUserTreshold($newUserTreshold)
 			->filter();
 
-		switch ($userType)
-		{
-			case 'active': 
-				$where[] = 'u.status in (1, 2, 7)';
-				break;
-			case 'new':
-				$where[] = 'u.status = 1';
-				$where[] = 'u.adate is not null';
-				$where[] = 'u.adate > ?';
-				$params[] = $newUserTreshold;
-				break;
-			case 'leaving':
-				$where[] = 'u.status = 2';
-				break;			
-			case 'interlets': 
-				$where[] = 'u.accountrole = \'interlets\'';
-				$where[] = 'u.status in (1, 2, 7)';
-				break;
-			case 'direct':
-				$where[] = 'u.status in (1, 2, 7)';
-				$where[] = 'u.accountrole != \'interlets\'';
-				break;
-			case 'pre-active':
-				$where[] = 'u.adate is null';
-				$where[] = 'u.status not in (1, 2, 7)';
-				break;
-			case 'post-active':
-				$where[] = 'u.adate is not null';
-				$where[] = 'u.status not in (1, 2, 7)';
-				break;
-			case 'all':
-				break;
-			default: 
-				$where[] = '1 = 2';
-				break;
-		}
+		$filterQuery = new FilterQuery();
+		$filterQuery->add($userFilter)
+			->add($userTypeFilter);
 
-		$where = count($where) ? ' where ' . implode(' and ', $where) . ' ' : '';
-
-		$query = ' from ' . $schema . '.users u ' . $where;
-
-		$rowCount = $app['db']->fetchColumn('select count(u.*)' . $query, $params);
-		$balanceSum = $app['db']->fetchColumn('select sum(u.saldo)' . $query, $params) ?? 0;
-		$query = 'select u.*' . $query;
+		$rowCount = $userRepository->getFilteredRowCount($schema, $filterQuery);
+		$balanceSum = $userRepository->getFilteredBalanceSum($schema, $filterQuery);
 
 		$sort = new Sort($request);
 
@@ -184,43 +145,36 @@ class UserController extends AbstractController
 
 		$pagination = new Pagination($request, $rowCount);
 
-		$query .= $sort->query();
-		$query .= $pagination->query();
+		$users = $userRepository->getFiltered($schema, $filterQuery, $sort, $pagination);
 
-		$selForm = $app->namedForm('sel');
+		$selectForm = $formFactory->createNamedBuilder('sel');
 
-		$users = [];
-
-		$rs = $app['db']->executeQuery($query, $params);
-
-		while($row = $rs->fetch())
+		foreach($users as $key => $user)
 		{
-			if (!in_array($row['status'], [1, 2, 7]))
+			if (!in_array($user['status'], [1, 2, 7]))
 			{
-				$row['class'] = isset($row['adate']) ? 'inactive' : 'info';
+				$users[$key]['class'] = isset($user['adate']) ? 'inactive' : 'info';
 			}
-			else if ($row['accountrole'] === 'interlets')
+			else if ($user['accountrole'] === 'interlets')
 			{
-				$row['class'] = 'warning';
+				$users[$key]['class'] = 'warning';
 			}
-			else if ($row['status'] === 2)
+			else if ($user['status'] === 2)
 			{
-				$row['class'] = 'danger';
+				$users[$key]['class'] = 'danger';
 			}
-			else if ($row['adate'] > $newUserTreshold  && $row['status'] === 1)
+			else if ($user['adate'] > $newUserTreshold  && $user['status'] === 1)
 			{
-				$row['class'] = 'success';
+				$users[$key]['class'] = 'success';
 			}
 
-			$selForm->add($row['id'], CheckboxType::class, [
+			$selectForm->add($user['id'], CheckboxType::class, [
 				'required'	=> false,
 			]);
-
-			$users[] = $row;
 		}
 
-		$selForm = $selForm->getForm();
-		$selForm->handleRequest($request);
+		$selectForm = $selectForm->getForm();
+		$selectForm->handleRequest($request);
 
 		$cols = [];
 
@@ -241,7 +195,7 @@ class UserController extends AbstractController
 			'sort'			=> $sort->get(),
 			'columns'		=> $cols,
 			'column_select'	=> $columnSelect->createView(),
-			'sel_form'		=> $selForm->createView(),
+			'sel_form'		=> $selectForm->createView(),
 			'balance_sum'	=> $balanceSum,
 		];
 
@@ -249,7 +203,7 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/{user}", name="user_show")
+	 * @Route("/users/{id}", name="user_show", requirements={"id"="\d+"})
 	 * @Method("GET")
 	 */
 	public function show(Request $request, string $schema, string $access, array $user):Response
@@ -261,9 +215,18 @@ class UserController extends AbstractController
 	 * @Route("/users/self", name="user_show_self")
 	 * @Method("GET")
 	 */
-	public function showSelf(Request $request, string $schema, string $access)
+	public function showSelf(Request $request, string $schema, string $access):Response
 	{
 		return $this->render('user/' . $access . '_show_self.html.twig', []);
+	}
+
+	/**
+	 * @Route("/users/add", name="user_add")
+	 * @Method("GET|POST")
+	 */
+	public function add(Request $request, string $schema, string $access):Response
+	{
+		return $this->render('user/' . $access . '_add.html.twig', []);
 	}
 }
 

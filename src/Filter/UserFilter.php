@@ -11,7 +11,7 @@ class UserFilter extends AbstractFormFilter
 {
     public function filter()
     {
-        $this->where = $this->params = [];
+        $this->andWhere = $this->orWhere = $this->params = [];
 
 		$this->filter = $this->formFactory->createNamedBuilder('f', UserFilterType::class)
 			->getForm()
@@ -19,18 +19,21 @@ class UserFilter extends AbstractFormFilter
 
 		if ($this->filter->isSubmitted() && $this->filter->isValid())
 		{
-			$data = $filter->getData();
+			$data = $this->filter->getData();
 
 			if (isset($data['q']))
 			{
-				$where_q[] = 'u.name ilike ?';
-				$params[] = '%' . $data['q'] . '%';
+				$this->orWhere[] = 'u.name ilike ?';
+				$this->params[] = '%' . $data['q'] . '%';
 		
-				$where_q[] = 'u.letscode ilike ?';
-				$params[] = '%' . $data['q'] . '%';				
+				$this->orWhere[] = 'u.letscode ilike ?';
+				$this->params[] = '%' . $data['q'] . '%';	
+				
+				$this->orWhere[] = 'u.postcode ilike ?';
+				$this->params[] = '%' . $data['q'] . '%';					
 			}
         }
 
-        $this->where = count($this->where) ? ' where ' . implode(' or ', $this->where) . ' ' : '';
+		return $this;
     }
 }

@@ -7,6 +7,9 @@ use Doctrine\DBAL\Connection as Db;
 use Predis\Client as Redis;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Filter\UserFilter;
+use App\Filter\FilterQuery;
+use App\Util\Sort;
+use App\Util\Pagination;
 
 class UserRepository
 {
@@ -25,72 +28,36 @@ class UserRepository
 		$this->isCli = php_sapi_name() === 'cli' ? true : false;
 	}
 
-	public function getFiltered(string $schema, UserFilter $userFilter, Sort $sort, Pagination $pagination):array
+	public function getFiltered(string $schema, FilterQuery $filterQuery, Sort $sort, Pagination $pagination):array
 	{
 		$query = 'select u.* from ' . $schema . '.users u';
-		$query .= $userFilter->getWhere();
+		$query .= $filterQuery->getWhereQueryString();
 		$query .= $sort->query();
 		$query .= $pagination->query();
 
 		$users = [];
 
-		$rs = $this->db->executeQuery($query, $userFilter->getParams());
+		$rs = $this->db->executeQuery($query, $filterQuery->getParams());
 
 		while ($row = $rs->fetch())
 		{
-			if ($row['real_to'] || $row['real_from'])
-			{
-				$row['class'] = 'warning';			
-			}
-
-			$transactions[] = $row;
+			$users[] = $row;
 		}
 
-		foreach ($transactions as $key => $t)
-		{
-			if (!($t['real_from'] || $t['real_to']))
-			{
-				continue;
-			}
-
-			$inter_schema = false;
-
-			if (isset($interlets_accounts_schemas[$t['id_from']]))
-			{
-				$inter_schema = $interlets_accounts_schemas[$t['id_from']];
-			}
-			else if (isset($interlets_accounts_schemas[$t['id_to']]))
-			{
-				$inter_schema = $interlets_accounts_schemas[$t['id_to']];
-			}
-
-			if ($inter_schema)
-			{
-				$inter_transaction = $db->fetchAssoc('select t.*
-					from ' . $inter_schema . '.transactions t
-					where t.transid = ?', [$t['transid']]);
-
-				if ($inter_transaction)
-				{
-					$transactions[$key]['inter_schema'] = $inter_schema;
-					$transactions[$key]['inter_transaction'] = $inter_transaction;
-				}
-			}
-		}		
-
-		return $transactions;
+		return $users;
 	}
 
-	public function getFilteredRowCount(string $schema, UserFilter $userFilter):int
+	public function getFilteredRowCount(string $schema, FilterQuery $filterQuery):int
 	{
-		$query = 'select count(t.*) from ' . $schema . '.transactions t' . $userFilter->getWhere();
-		return $this->db->fetchColumn($query, $transactionFilter->getParams());
+		$query = 'select count(u.*) from ' . $schema . '.users u' . $filterQuery->getWhereQueryString();
+		return $this->db->fetchColumn($query, $filterQuery->getParams());
 	}
 
-
-
-
-
+	public function getFilteredBalanceSum(string $schema, FilterQuery $filterQuery):int
+	{
+		$query = 'select sum(u.saldo) from ' . $schema . '.users u' . $filterQuery->getWhereQueryString();
+		return $this->db->fetchColumn($query, $filterQuery->getParams()) ?? 0;
+	}
 
 	public function clear(int $id, string $schema)
 	{

@@ -20,6 +20,7 @@ use App\Form\Filter\TransactionFilterType;
 use App\Form\Post\TransactionType;
 use App\Form\Post\TransactionDescriptionType;
 use App\Filter\TransactionFilter;
+use App\Filter\FilterQuery;
 
 use App\Service\Config;
 
@@ -41,7 +42,10 @@ class TransactionController extends AbstractController
 		$transactionFilter->setRequest($request)
 			->filter();
 
-		$rowCount = $transactionRepository->getFilteredRowCount($schema, $transactionFilter);		
+		$filterQuery = new FilterQuery();
+		$filterQuery->add($transactionFilter);
+
+		$rowCount = $transactionRepository->getFilteredRowCount($schema, $filterQuery);		
 		$pagination = new Pagination($request, $rowCount);
 
 		$sort = new Sort($request);
@@ -53,7 +57,7 @@ class TransactionController extends AbstractController
 		])
 			->setDefault('cdate');
 
-		$transactions = $transactionRepository->getFiltered($schema, $transactionFilter, $sort, $pagination);
+		$transactions = $transactionRepository->getFiltered($schema, $filterQuery, $sort, $pagination);
 
 		return $this->render('transaction/' . $access . '_index.html.twig', [
 			'transactions'	=> $transactions,

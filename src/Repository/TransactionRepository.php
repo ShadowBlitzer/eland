@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Util\Pagination;
 use App\Util\Sort;
 use App\Filter\TransactionFilter;
+use App\Filter\FilterQuery;
 
 class TransactionRepository
 {
@@ -22,17 +23,16 @@ class TransactionRepository
 
 	}
 
-	public function getFiltered(string $schema, TransactionFilter $transactionFilter, Sort $sort, Pagination $pagination):array
+	public function getFiltered(string $schema, FilterQuery $filterQuery, Sort $sort, Pagination $pagination):array
 	{
 		$query = 'select t.* from ' . $schema . '.transactions t';
-		$query .= $transactionFilter->isFiltered() ? ' where ' : '';
-		$query .= $transactionFilter->getWhereQueryString();
+		$query .= $filterQuery->getWhereQueryString();
 		$query .= $sort->query();
 		$query .= $pagination->query();
 
 		$transactions = [];
 
-		$rs = $this->db->executeQuery($query, $transactionFilter->getParams());
+		$rs = $this->db->executeQuery($query, $filterQuery->getParams());
 
 		while ($row = $rs->fetch())
 		{
@@ -79,12 +79,11 @@ class TransactionRepository
 		return $transactions;
 	}
 
-	public function getFilteredRowCount(string $schema, TransactionFilter $transactionFilter):int
+	public function getFilteredRowCount(string $schema, FilterQuery $filterQuery):int
 	{
 		$query = 'select count(t.*) from ' . $schema . '.transactions t';
-		$query .= $transactionFilter->isFiltered() ? ' where ' : '';
-		$query .= $transactionFilter->getWhereQueryString();
-		return $this->db->fetchColumn($query, $transactionFilter->getParams());
+		$query .= $filterQuery->getWhereQueryString();
+		return $this->db->fetchColumn($query, $filterQuery->getParams());
 	}
 
 	public function get(int $id, string $schema):array

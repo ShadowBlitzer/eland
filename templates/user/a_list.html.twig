@@ -66,7 +66,7 @@
     <ul class="nav nav-tabs">
     {%- for key, rec in nav -%}
         <li{%- if key == user_type %} class="active"{%- endif -%}>
-            <a href="{{- path('user_index', acc_sch|merge({'view': 'list', 'user_type': key})) -}}" class="{{- rec.class -}}">
+            <a href="{{- path('user_index', acc_sch|merge({'view': 'list', 'userType': key})) -}}" class="{{- rec.class -}}">
                {{- (rec.label)|trans -}} 
             </a>
         </li>
@@ -82,19 +82,19 @@
 		'letscode': {
 			'lbl': label_code,
 			'route': 'user_show',
-			'route_key': 'user',
+			'route_key': 'id',
 			'route_col_id': 'id'
 		},
 		'name': {
 			'lbl': 'label.name',
 			'route': 'user_show',
-			'route_key': 'user',
+			'route_key': 'id',
 			'route_col_id': 'id'
 		},
 		'fullname': {
 			'lbl': 'label.full_name',
 			'route': 'user_show',
-			'route_key': 'user',
+			'route_key': 'id',
 			'route_col_id': 'id'
 		},
 		'postcode': {

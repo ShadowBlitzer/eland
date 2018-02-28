@@ -59,7 +59,7 @@ class NewsController extends AbstractController
 		$where = $filtered ? ' where ' . implode(' and ', $where) . ' ' : '';
 
 		$query = ' from ' . $schema . '.news n ' . $where;
-		$row_count = $db->fetchColumn('select count(n.*)' . $query, $params);
+		$rowCount = $db->fetchColumn('select count(n.*)' . $query, $params);
 		$query = 'select n.*' . $query;
 
 		$sort = new Sort($request);
@@ -71,7 +71,7 @@ class NewsController extends AbstractController
 		])
 		->setDefault('itemdate');
 
-		$pagination = new Pagination($request, $row_count);
+		$pagination = new Pagination($request, $rowCount);
 
 		$query .= $sort->query();
 		$query .= $pagination->query();
@@ -122,7 +122,7 @@ class NewsController extends AbstractController
 			'news'			=> $news,
 //			'filter'		=> $filter->createView(),
 			'filtered'		=> $filtered,
-			'pagination'	=> $pagination->get($row_count),		
+			'pagination'	=> $pagination->get($rowCount),		
 			'sort'			=> $sort->get(),
 		];
 
