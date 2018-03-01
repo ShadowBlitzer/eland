@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -23,7 +24,7 @@ class LogController extends AbstractController
 	 * @Route("/logs", name="log")
 	 * @Method("GET")
 	 */
-	public function index(FormFactoryInterface $formFactory, Request $request, string $schema, string $access)
+	public function index(FormFactoryInterface $formFactory, Request $request, string $schema, string $access):Response
 	{
 		return $this->render('log/a_index.html.twig', []);
 

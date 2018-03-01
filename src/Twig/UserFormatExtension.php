@@ -56,7 +56,7 @@ class UserFormatExtension extends AbstractExtension
 
 		$out = '<a href="';
 		$out .= $this->urlGenerator->generate('user_show', [
-			'user'		=> $id,
+			'id'		=> $id,
 			'access'	=> $access,
 			'schema'	=> $schema,
 			'user_type'	=> $this->local[$schema][$id][0],

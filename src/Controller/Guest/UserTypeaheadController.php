@@ -4,9 +4,9 @@ namespace App\Controller\Guest;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Response;
 
 class UserTypeaheadController extends AbstractController
 {
@@ -15,7 +15,7 @@ class UserTypeaheadController extends AbstractController
 	 * @Method("GET")
 	 */
 	public function getLocal(Request $request,
-		string $schema, string $access, string $user_type)
+		string $schema, string $access, string $user_type):Response
 	{
 		if ($access !== 'a' && !in_array($user_type, ['active', 'direct']))
 		{
@@ -139,7 +139,7 @@ class UserTypeaheadController extends AbstractController
 	 * @Method("GET")
 	 */
 	public function getInterlets(Request $request, 
-		string $schema, string $access, int $user)
+		string $schema, string $access, int $user):Response
 	{
 		if (!in_array($access, ['a', 'u']))
 		{

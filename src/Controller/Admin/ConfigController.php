@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -15,7 +16,7 @@ class ConfigController extends AbstractController
 	 * @Route("/config", name="config_index")
 	 * @Method("GET")
 	 */
-	public function index(Request $request, string $schema, string $access)
+	public function index(Request $request, string $schema, string $access):Reponse
 	{
 		return $this->render('config/a_index.html.twig', []);
 	}

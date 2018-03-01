@@ -14,7 +14,7 @@ use App\Util\Sort;
 use App\Util\Pagination;
 use App\Service\SessionView;
 use App\Service\SessionColumns;
-use App\Form\Filter\UserFilterType;
+
 use App\Form\ColumnSelect\UserColumnSelectType;
 use App\Filter\UserFilter;
 use App\Filter\UserTypeFilter;

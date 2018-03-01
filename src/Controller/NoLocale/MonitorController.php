@@ -4,6 +4,7 @@ namespace App\Controller\NoLocale;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -13,7 +14,7 @@ class MonitorController extends AbstractController
 	* @Route("/monitor", name="monitor")
 	* @Method("GET")
 	*/
-	public function status(Request $request)
+	public function status(Request $request):Response
 	{
 		try
 		{

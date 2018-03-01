@@ -4,6 +4,7 @@ namespace App\Controller\System;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -23,7 +24,7 @@ class LoginController extends AbstractController
 	 * @Route("/login", name="login")
 	 * @Method({"GET", "POST"})
 	 */
-	public function form(Request $request, string $schema)
+	public function form(Request $request, string $schema):Response
 	{
 		$form = $this->createForm(login_type::class)
 			->handleRequest($request);

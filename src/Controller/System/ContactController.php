@@ -4,6 +4,7 @@ namespace App\Controller\System;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -16,7 +17,7 @@ class ContactController extends AbstractController
 	 * @Route("/contact", name="contact_form")
 	 * @Method({"GET", "POST"})
 	 */
-	public function form(Request $request, string $schema)
+	public function form(Request $request, string $schema):Response
 	{
 		$form = $this->createForm(contact_type::class)
 			->handleRequest($request);
@@ -46,7 +47,7 @@ class ContactController extends AbstractController
 	 * @Route("/contact/{token}", name="contact_confirm")
 	 * @Method("GET")
 	 */
-	public function confirm(Request $request, string $schema, string $token)
+	public function confirm(Request $request, string $schema, string $token):Response
 	{
 		$data = $app['mail_validated_confirm_link']->get();
 

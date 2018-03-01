@@ -4,6 +4,7 @@ namespace App\Controller\Index;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -15,7 +16,7 @@ class HostingRequestController extends AbstractController
 	 * @Route("/hosting-request", name="hosting_request")
 	 * @Method({"GET", "POST"})
 	 */
-	public function form(Request $request)
+	public function form(Request $request):Reponse
 	{
 		$form = $this->createForm(HostingRequestType::class)
 			->handleRequest($request);
@@ -41,7 +42,7 @@ class HostingRequestController extends AbstractController
 		]);
 	}
 
-	public function confirm(Request $request, string $token)
+	public function confirm(Request $request, string $token):Response
 	{
 		$data = $app['mail_validated_confirm_link']->get();
 

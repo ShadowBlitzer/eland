@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -20,7 +21,7 @@ class CategoryController extends AbstractController
 	 * @Route("/categories", name="category_index")
 	 * @Method("GET")
 	 */
-	public function index(CategoryRepository $categoryRepository, Request $request, string $schema, string $access)
+	public function index(CategoryRepository $categoryRepository, Request $request, string $schema, string $access):Response
 	{
 		return $this->render('category/a_index.html.twig', [
 			'categories'	=> $categoryRepository->getAll($schema),
@@ -33,7 +34,7 @@ class CategoryController extends AbstractController
 	 */
 	public function add(CategoryRepository $categoryRepository, 
 		TranslatorInterface $translator,	
-		Request $request, string $schema, string $access, int $parentCategory = null)
+		Request $request, string $schema, string $access, int $parentCategory = null):Response
 	{
 		$data = [
 			'id_parent'	=> $parentCategory,
@@ -82,7 +83,7 @@ class CategoryController extends AbstractController
 	 */
 	public function edit(CategoryRepository $categoryRepository, 
 		TranslatorInterface $translator,
-		Request $request, string $schema, string $access, int $id)
+		Request $request, string $schema, string $access, int $id):Response
 	{
 		$category = $categoryRepository->get($id, $schema);
 
@@ -131,7 +132,7 @@ class CategoryController extends AbstractController
 	 */
 	public function del(CategoryRepository $categoryRepository, 
 		TranslatorInterface $translator,
-		Request $request, string $schema, string $access, int $id)
+		Request $request, string $schema, string $access, int $id):Response
 	{
 		$category = $categoryRepository->get($id, $schema);
 

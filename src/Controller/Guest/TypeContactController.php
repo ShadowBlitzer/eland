@@ -4,6 +4,7 @@ namespace App\Controller\Guest;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -21,7 +22,7 @@ class TypeContactController extends AbstractController
 	 * @Route("/contact-types", name="type_contact_index")
 	 * @Method("GET")
 	 */
-	public function index(Request $request, string $schema, string $access)
+	public function index(Request $request, string $schema, string $access):Response
 	{
 		$types = $app['db']->fetchAll('select * 
 			from ' . $schema . '.type_contact tc');
@@ -50,7 +51,7 @@ class TypeContactController extends AbstractController
 	 * @Route("/contact-types/add", name="typecontact_add")
 	 * @Method({"GET", "POST"})
 	 */
-	public function add(Request $request, string $schema, string $access)
+	public function add(Request $request, string $schema, string $access):Response
 	{
 		$data = [
 			'name'		=> '',
@@ -83,7 +84,7 @@ class TypeContactController extends AbstractController
 	 * @Route("/contact-types/{id}/edit", name="typecontact_edit")
 	 * @Method({"GET", "POST"})
 	 */
-	public function edit(Request $request, string $schema, string $access, array $type_contact)
+	public function edit(Request $request, string $schema, string $access, array $type_contact):Response
 	{
 		$id = $type_contact['id'];
 
@@ -122,7 +123,7 @@ class TypeContactController extends AbstractController
 	 * @Route("/contact-types/{id}/del", name="typecontact_del")
 	 * @Method({"GET", "POST"})
 	 */
-	public function del(Request $request, string $schema, string $access, array $type_contact)
+	public function del(Request $request, string $schema, string $access, array $type_contact):Response
 	{
 		$id = $type_contact['id'];
 

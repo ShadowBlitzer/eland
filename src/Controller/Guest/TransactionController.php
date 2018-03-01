@@ -4,6 +4,7 @@ namespace App\Controller\Guest;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -33,7 +34,7 @@ class TransactionController extends AbstractController
 	 */
 	public function index(TransactionRepository $transactionRepository, 
 		TransactionFilter $transactionFilter,
-		Request $request, string $schema, string $access)
+		Request $request, string $schema, string $access):Response
 	{
 /*
 		$oufti = random_bytes(16);
@@ -73,7 +74,7 @@ class TransactionController extends AbstractController
 	 * @Method("GET")
 	 */
 	public function show(TransactionRepository $transactionRepository, 
-		Request $request, string $schema, string $access, int $id)
+		Request $request, string $schema, string $access, int $id):Response
 	{
 		$transaction = $transactionRepository->get($id, $schema);
 
@@ -89,7 +90,7 @@ class TransactionController extends AbstractController
 	 * @Method("GET")
 	 */
 	public function showSelf(TransactionRepository $transactionRepository, 
-		Request $request, string $schema, string $access)
+		Request $request, string $schema, string $access):Response
 	{
 		return $this->render('transaction/' . $access . '_show_self.html.twig', []);
 	}
@@ -100,7 +101,7 @@ class TransactionController extends AbstractController
 	 */
 	public function add(TransactionRepository $transactionRepository,
 		TranslatorInterface $translator,
-		Request $request, string $schema, string $access)
+		Request $request, string $schema, string $access):Response
 	{
 		$form = $this->createForm(TransactionType::class);
 
@@ -124,7 +125,7 @@ class TransactionController extends AbstractController
 	 */
 	public function edit(TransactionRepository $transactionRepository, 
 		TranslatorInterFace $translator,
-		Request $request, string $schema, string $access, int $id)
+		Request $request, string $schema, string $access, int $id):Response
 	{
 		$transaction = $transactionRepository->get($id, $schema);
 

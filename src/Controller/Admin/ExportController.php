@@ -4,10 +4,9 @@ namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use exception\missing_function_exception;
 
@@ -104,7 +103,7 @@ class ExportController extends AbstractController
 	 * @Route("/export", name="export")
 	 * @Method({"GET", "POST"})
 	 */
-	public function index(Request $request, string $schema)
+	public function index(Request $request, string $schema):Response
 	{
 		set_time_limit(60);
 

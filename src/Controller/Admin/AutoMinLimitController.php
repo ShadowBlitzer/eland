@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -21,7 +22,7 @@ class AutoMinLimitController extends AbstractController
 	 * @Route("/auto-min-limit", name="auto_min_limit")
 	 * @Method({"GET", "POST"})
 	 */
-	public function form(Request $request, string $schema)
+	public function form(Request $request, string $schema):Response
 	{
 		$row = $app['xdb']->get('setting', 'autominlimit', $schema);
 		

@@ -4,6 +4,7 @@ namespace App\Controller\System;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -24,7 +25,7 @@ class IndexController extends AbstractController
 	 *
 	 */
 
-	public function token(Request $request, $token)
+	public function token(Request $request, $token):Response
 	{
 		$ticket = json_decode($app['xdb']->get('ticket_' . $token), true);
 
@@ -33,7 +34,7 @@ class IndexController extends AbstractController
 		return $app->redirect('/vote');
 	}
 
-	public function home(Request $request)
+	public function home(Request $request):Response
 	{
 		$token = $app['token']->set_hyphen_chance(9)->set_length(12)->gen();
 
@@ -47,7 +48,7 @@ class IndexController extends AbstractController
 		]);
 	}
 
-	public function pay(Request $request)
+	public function pay(Request $request):Response
 	{
 		$editors = $app['xdb']->get('project_editors');
 		$settings = $app['xdb']->get('settings');

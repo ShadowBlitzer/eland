@@ -4,6 +4,7 @@ namespace App\Controller\Index;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -20,7 +21,7 @@ class MainController extends AbstractController
 	 * @Route("/", name="main_index")
 	 * @Method("GET")
 	 */
-	public function index(Request $request)
+	public function index(Request $request):Response
 	{
 		return $this->render('main/index.html.twig');
 	}

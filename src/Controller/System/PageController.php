@@ -4,18 +4,19 @@ namespace App\Controller\System;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class PageController extends AbstractController
 {
 
-	public function terms(Request $request)
+	public function terms(Request $request):Response
 	{
 		return $this->render('page/terms.html.twig', []);
 	}
 
-    public function show(Request $request, string $schema, array $page)
+    public function show(Request $request, string $schema, string $slug):Response
     {
 		$response = $app->render('page/show.html.twig', [
 			'content'	=> $page,
@@ -31,7 +32,7 @@ class PageController extends AbstractController
 	 * @Route("/{access}/pages", name="page_a_index", requirements={"access"="a"})
 	 * @Method("GET")
 	 */
-	public function aIndex(Request $request, string $schema, string $access)
+	public function aIndex(Request $request, string $schema, string $access):Response
 	{
 		return $this->render('page/a_index.html.twig', [
 
@@ -42,7 +43,7 @@ class PageController extends AbstractController
 	 * @Route("/{access}/pages/add", name="page_a_add", requirements={"access"="a"})
 	 * @Method({"GET", "POST"})
 	 */
-	public function aAdd(Request $request, string $schema, string $access)
+	public function aAdd(Request $request, string $schema, string $access):Response
 	{
 		$data = [
 
@@ -83,7 +84,7 @@ class PageController extends AbstractController
 		]);
 	}
 
-	public function aEdit(Request $request, string $schema, string $access, $page)
+	public function aEdit(Request $request, string $schema, string $access, $page):Response
 	{
 		$data = [
 			
@@ -98,14 +99,14 @@ class PageController extends AbstractController
 		]);
 	}
 
-	public function aDel(Request $request, string $schema, string $access, array $page)
+	public function aDel(Request $request, string $schema, string $access, array $page):Response
 	{
 		return $this->render('page/a_del.html.twig', [
 			'page'	=> $page,
 		]);
 	}
 
-	public function aShow(Request $request, string $schema, string $access, array $page)
+	public function aShow(Request $request, string $schema, string $access, array $page):Response
 	{
 		return $app->render('page/a_show.html.twig', [
 			'page'	=> $page,

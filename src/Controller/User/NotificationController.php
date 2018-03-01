@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -20,25 +21,25 @@ class NotificationController extends AbstractController
 	 * @Route("/notifications", name="notification_index")
 	 * @Method("GET")
 	 */
-	public function index(Request $request, string $schema, string $access)
+	public function index(Request $request, string $schema, string $access):Response
 	{
 		return $this->render('notification/' . $access . '_index.html.twig', []);
 	}
 
 
-	public function form_self(Request $request, string $schema, string $access)
+	public function form_self(Request $request, string $schema, string $access):Response
 	{
 
 		return $this->render('notification/' . $access . '_show.html.twig', []);
 	}
 
-	public function show_self(Request $request, string $schema, string $access)
+	public function show_self(Request $request, string $schema, string $access):Response
 	{
 
 		return $this->render('notification/' . $access . '_show_self.html.twig', []);
 	}
 
-	public function add(Request $request, string $schema, string $access)
+	public function add(Request $request, string $schema, string $access):Response
 	{
 		return $this->render('notification/' . $access . '_register.html.twig', []);
 	}

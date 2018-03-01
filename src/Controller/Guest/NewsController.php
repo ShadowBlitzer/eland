@@ -4,6 +4,7 @@ namespace App\Controller\Guest;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -30,7 +31,7 @@ class NewsController extends AbstractController
 	 * @Route("/news", name="news_no_view")
 	 * @Method("GET")
 	 */
-	public function noView(SessionView $sessionView, Request $request, string $schema, string $access)
+	public function noView(SessionView $sessionView, Request $request, string $schema, string $access):Response
 	{
 		return $this->redirectToRoute('news_index', [
 			'schema'	=> $schema,
@@ -47,7 +48,7 @@ class NewsController extends AbstractController
 		TranslatorInterface $translator,
 		Db $db, Xdb $xdb,
 		SessionView $sessionView, Request $request, 
-		string $schema, string $access, string $view)
+		string $schema, string $access, string $view):Response
 	{
 		$s_admin = $access === 'a';
 
@@ -175,7 +176,7 @@ class NewsController extends AbstractController
 	 * @Method("GET")
 	 */
 	public function show(NewsRepository $newsRepository, TranslatorInterface $translator, 
-		Request $request, string $schema, string $access, int $id)
+		Request $request, string $schema, string $access, int $id):Response
 	{
 		$news = $newsRepository->get($id, $schema);
 
@@ -220,7 +221,7 @@ class NewsController extends AbstractController
 	 */
 	public function add(TranslatorInterface $translator, NewsRepository $newsRepository, 
 		SessionView $seesionView,
-		Request $request, string $schema, string $access)
+		Request $request, string $schema, string $access):Response
 	{
 		$form = $this->createForm(NewsType::class)
 			->handleRequest($request);
@@ -270,7 +271,7 @@ class NewsController extends AbstractController
 	 * @Method({"GET", "POST"})
 	 */
 	public function edit(NewsRepository $newsRepository, TranslatorInterface $translator, 
-		Request $request, string $schema, string $access, int $id)
+		Request $request, string $schema, string $access, int $id):Responnse
 	{
 		$news = $newsRepository->get($id, $schema);
 
@@ -303,7 +304,7 @@ class NewsController extends AbstractController
 	 */
 	public function del(NewsRepository $newsRepository, SessionView $sessionView, 
 		TranslatorInterface $translator,
-		Request $request, string $schema, string $access, int $id)
+		Request $request, string $schema, string $access, int $id):Response
 	{
 		$news = $newsRepository->get($id, $schema);
 	
