@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use exception\missing_function_exception;
+
+use App\exception\MissingFunctionException;
 
 class ExportController extends AbstractController
 {
@@ -129,7 +130,7 @@ class ExportController extends AbstractController
 			{
 				if (!function_exists('exec'))
 				{
-					throw new missing_function_exception(
+					throw new MissingFunctionException(
 						sprintf('function "exec" does not exist 
 							in class %s', __CLASS__));
 				}

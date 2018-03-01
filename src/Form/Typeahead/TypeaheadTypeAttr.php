@@ -6,9 +6,9 @@ use App\Service\Thumbprint;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-use exception\conflicting_options_exception;
-use exception\invalid_format_exception;
-use exception\missing_options_exception;
+use App\Form\Exception\ConflictingOptionsException;
+use App\Form\Exception\InvalidFormatException;
+use App\Form\Exception\MissingOptionsException;
 
 class TypeaheadTypeAttr
 {
@@ -30,7 +30,7 @@ class TypeaheadTypeAttr
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function get(array $options)
+    public function get(array $options):array
     {
         $attr = [];
 
@@ -38,14 +38,14 @@ class TypeaheadTypeAttr
         {
             if (isset($options['source_id']))
             {
-                throw new conflicting_options_exception(sprintf(
+                throw new ConflictingOptionsException(sprintf(
                     'options "source_route" and "source_id" can 
                     not be both set in %s', __CLASS__));
             }
 
             if (isset($options['source']))
             {
-                throw new conflicting_options_exception(sprintf(
+                throw new ConflictingOptionsException(sprintf(
                     'options "source_route" and "source" can 
                     not be both set in %s', __CLASS__));
             }
@@ -56,7 +56,7 @@ class TypeaheadTypeAttr
             {
                 if (!is_array($options['source_params']))
                 {
-                    throw new invalid_format_exception(sprintf(
+                    throw new InvalidFormatException(sprintf(
                         'option "source_params" must be an
                         array in %s', __CLASS__));
                 }
@@ -75,7 +75,7 @@ class TypeaheadTypeAttr
         {
             if (isset($options['data_path']))
             {
-                throw new conflicting_options_exception(sprintf(
+                throw new ConflictingOptionsException(sprintf(
                     'options "data_path" and "data_source" can 
                     not be both set in %s', __CLASS__));
             }
@@ -84,13 +84,13 @@ class TypeaheadTypeAttr
 
             if (!is_array($source))
             {
-                throw new invalid_format_exception(sprintf(
+                throw new InvalidFormatException(sprintf(
                     'option "source" must be an
                     array in %s', __CLASS__));
             }
 
-            $data_typeahead = [];
-            $base_params = [
+            $dataTypeahead = [];
+            $baseParams = [
                 'schema'    => $this->schema,
                 'access'    => $this->access,
             ];
@@ -99,27 +99,27 @@ class TypeaheadTypeAttr
             {
                 if (!isset($s['route']))
                 {
-                    throw new invalid_format_exception(sprintf(
+                    throw new InvalidFormatException(sprintf(
                         'a "route" key is missing from option "source" 
                         in %s', __CLASS__));
                 }
 
                 $params = isset($s['params']) && is_array($s['params']) ? $s['params'] : [];
-                $params = array_merge($params, $base_params);
+                $params = array_merge($params, $baseParams);
 
                 $path = $this->urlGenerator->generate($s['route'], $params);
 
-                $data_typeahead[] = [
+                $dataTypeahead[] = [
                     'path'          => $path,
                     'thumbprint'    => $this->thumbprint->get($path),
                 ];
             }
 
-            $attr['data-typeahead'] = json_encode($data_typeahead);            
+            $attr['data-typeahead'] = json_encode($dataTypeahead);            
         }
         else
         {
-            throw new missing_options_exception(sprintf(
+            throw new MissingOptionsException(sprintf(
                 'either "data-source" of "source" option needs 
                 to be set for the typeahead type in %s', __CLASS__));
         }

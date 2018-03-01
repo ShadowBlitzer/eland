@@ -78,10 +78,10 @@ class Cache
 
 	public function get(string $id):array
 	{
-		return json_decode($this->get_string($id) ?? '{}', true);
+		return json_decode($this->getString($id) ?? '{}', true);
 	}
 
-	public function get_string(string $id) // returns null when key not available // TODO conditional return ?string in php7.1 
+	public function getString(string $id) // returns null when key not available // TODO conditional return ?string in php7.1 
 	{
 		$key = $this->prefix . $id;
 
@@ -113,10 +113,6 @@ class Cache
 		return null;
 	}
 
-	/**
-	 *
-	 */
-
 	public function exists(string $id):bool 
 	{
 		$key = $this->prefix . $id;
@@ -133,17 +129,13 @@ class Cache
 					or expires is null)', [$id]) ? true : false;
 	}
 
-	/**
-	 *
-	 */
-
-	public function expire(string $id, int $time)
+	public function expire(string $id, int $time):Cache
 	{
 		$id = trim($id);
 
 		if (!$id)
 		{
-			return;
+			return $this;
 		}
 
 		$this->redis->expire('cache_' . $id, $time);
@@ -152,39 +144,31 @@ class Cache
 
 		$this->db->update('xdb.cache', ['expires' => $time], ['id' => $id]);
 
-		return;
+		return $this;
 	}
 
-	/**
-	 *
-	 */
-
-	public function del(string $id)
+	public function del(string $id):Cache
 	{
 		$id = trim($id);
 
 		if (!$id)
 		{
-			return;
+			return $this;
 		}
 
 		$this->redis->del('cache_' . $id);
 
 		$this->db->delete('xdb.cache', ['id' => $id]);
 
-		return;
+		return $this;
 	}
 
-	/**
-	 *
-	 */
-
-	public function cleanup()
+	public function cleanup():Cache
 	{
 		$this->db->executeQuery('delete from xdb.cache
 			where expires < timezone(\'utc\'::text, now()) and expires is not null');
 
-		return;
+		return $this;
 	}
 }
 

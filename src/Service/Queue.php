@@ -28,11 +28,7 @@ class Queue
 		$this->db = $db;
 	}
 
-	/*
-	*
-	*/
-
-	public function set(string $topic, array $data, int $priority = 0)
+	public function set(string $topic, array $data, int $priority = 0):Queue
 	{
 		$insert = [
 			'topic'			=> $topic,
@@ -41,6 +37,8 @@ class Queue
 		];
 
 		$this->db->insert('xdb.queue', $insert);
+
+		return $this;
 	}
 
 	public function get(string $topic):array
@@ -77,4 +75,3 @@ class Queue
 		return $this->db->fetchColumn('select count(*) from xdb.queue');
 	}
 }
-

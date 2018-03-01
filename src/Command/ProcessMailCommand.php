@@ -10,8 +10,19 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Finder\Finder;
 
+use App\Service\BootCount;
+use App\Service\Queue;
+
+use App\Repository\ConfigRepository;
+
 class ProcessMailCommand extends Command
 {
+    public function __construct(BootCount $bootCount, Queue $queue)
+    {
+        $this->bootCount = $bootCount;
+        $this->queue = $queue;
+    }
+
     protected function configure()
     {
         $this
@@ -29,24 +40,24 @@ class ProcessMailCommand extends Command
         $cyan = new OutputFormatterStyle('cyan'); 
         $output->getFormatter()->setStyle('cyan', $cyan);
  
-        $boot = $app['boot_count']->get('mail');
+        $boot = $this->bootCount->get('mail');
 
         error_log('... mail service started ... ' . $boot);
 
-        $loop_count = 1;
+        $loopCount = 1;
 
         while (true)
         {
             sleep(2);
 
-            if ($loop_count % 1800 === 0)
+            if ($loopCount % 1800 === 0)
             {
-                error_log('..mail.. ' . $boot . ' .. ' . $loop_count);
+                error_log('..mail.. ' . $boot . ' .. ' . $loopCount);
             }
 
-            $loop_count++;
+            $loopCount++;
 
-            $record = $app['queue']->get('mail');
+            $record = $this->queue->get('mail');
 
             if (!count($record))
             {
@@ -94,11 +105,11 @@ class ProcessMailCommand extends Command
 
             echo json_encode($app['mail_from']->get());
 
-            $app['mail_message']->set_to($record['to'])
-                ->set_from($app['mail_from']->get())
-                ->set_text($app['mail_template']->get_text())
-                ->set_html($app['mail_template']->get_html())
-                ->set_subject($app['mail_template']->get_subject())
+            $app['mail_message']->setTo($record['to'])
+                ->setFrom($app['mail_from']->get())
+                ->setNext($app['mail_template']->getText())
+                ->setHtml($app['mail_template']->getHtml())
+                ->setSubject($app['mail_template']->getSubject())
                 ->send();
 
             $app['mail_from']->clear();

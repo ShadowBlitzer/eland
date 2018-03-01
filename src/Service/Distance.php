@@ -25,7 +25,7 @@ class Distance
 		$this->cache = $cache;
 	}
 
-	public function set_from_geo(string $adr = '', string $s_id = '', string $s_schema = '')
+	public function setFromGeo(string $adr = '', string $s_id = '', string $s_schema = ''):Distance
 	{
 		if ($this->geo)
 		{
@@ -64,7 +64,7 @@ class Distance
 		return $this;
 	}
 
-	public function set_to_geo(string $adr = '')
+	public function setToGeo(string $adr = ''):Distance
 	{
 		if (!$adr)
 		{
@@ -94,17 +94,17 @@ class Distance
 		return $this;
 	}
 
-	public function get_to_data()
+	public function getToData():string
 	{
 		return htmlspecialchars(json_encode($this->to));
 	}
 
-	public function get_to_geo()
+	public function getToGeo()
 	{
 		return $this->to_geo;
 	}
 
-	public function calc()
+	public function calc():Distance
 	{
 		if (!$this->geo || !$this->to_geo)
 		{
@@ -121,7 +121,7 @@ class Distance
 		return $this;
 	}
 
-	public function format()
+	public function format():string
 	{
 		if (!$this->geo || !$this->to_geo)
 		{
@@ -141,7 +141,7 @@ class Distance
 		return round($this->dist) . ' km';
 	}
 
-	public function format_parenthesis()
+	public function formatParenthesis():string
 	{
 		$p = $this->format();
 

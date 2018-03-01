@@ -5,7 +5,7 @@ namespace App\Service;
 use service\xdb;
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as predis;
-use exception\logical_exception;
+use App\Exception\LogicalException;
 
 class UserSimpleCache
 {
@@ -68,7 +68,7 @@ class UserSimpleCache
 
 			if (!isset($user_type))
 			{
-				throw new logical_exception(sprintf(
+				throw new LogicalException(sprintf(
 					'no user_type defined for status %s, accountrole %s and 
 					adate %s in %s', $status, $role, $adate, __CLASS__));
 			}
