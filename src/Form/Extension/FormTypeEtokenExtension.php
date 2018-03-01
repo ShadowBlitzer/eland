@@ -15,6 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Form\Extension\EtokenManagerInterface;
+use App\Form\Extension\EtokenValidationSubscriber;
 
 class FormTypeEtokenExtension extends AbstractTypeExtension
 {
@@ -22,7 +23,7 @@ class FormTypeEtokenExtension extends AbstractTypeExtension
     private $translator;
 
     public function __construct(
-        etoken_manager_interface $etokenManager, 
+        EtokenManagerInterface $etokenManager, 
         TranslatorInterface $translator = null
     )
     {
@@ -40,7 +41,7 @@ class FormTypeEtokenExtension extends AbstractTypeExtension
             return;
         }
 
-        $builder->addEventSubscriber(new etoken_validation_listener(
+        $builder->addEventSubscriber(new EtokenValidationSubscriber(
             $this->etokenManager,
             $this->translator
         ));

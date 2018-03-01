@@ -46,3 +46,10 @@ services:
 #        class: Twig_Extensions_Extension_Intl
 #        tags: [twig.extension]
 
+    App\Form\Extension\FormTypeEtokenExtension:
+        tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
+    App\Form\Extension\FormTypeExtraVarExtension:
+        tags:
+            - { name: form.type.extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
+    
