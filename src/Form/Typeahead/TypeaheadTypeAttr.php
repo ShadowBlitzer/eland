@@ -5,10 +5,7 @@ namespace App\Form\Typeahead;
 use App\Service\Thumbprint;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-use App\Form\Exception\ConflictingOptionsException;
-use App\Form\Exception\InvalidFormatException;
-use App\Form\Exception\MissingOptionsException;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
 
 class TypeaheadTypeAttr
 {
@@ -38,14 +35,14 @@ class TypeaheadTypeAttr
         {
             if (isset($options['source_id']))
             {
-                throw new ConflictingOptionsException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'options "source_route" and "source_id" can 
                     not be both set in %s', __CLASS__));
             }
 
             if (isset($options['source']))
             {
-                throw new ConflictingOptionsException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'options "source_route" and "source" can 
                     not be both set in %s', __CLASS__));
             }
@@ -56,7 +53,7 @@ class TypeaheadTypeAttr
             {
                 if (!is_array($options['source_params']))
                 {
-                    throw new InvalidFormatException(sprintf(
+                    throw new InvalidArgumentException(sprintf(
                         'option "source_params" must be an
                         array in %s', __CLASS__));
                 }
@@ -75,7 +72,7 @@ class TypeaheadTypeAttr
         {
             if (isset($options['data_path']))
             {
-                throw new ConflictingOptionsException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'options "data_path" and "data_source" can 
                     not be both set in %s', __CLASS__));
             }
@@ -84,7 +81,7 @@ class TypeaheadTypeAttr
 
             if (!is_array($source))
             {
-                throw new InvalidFormatException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'option "source" must be an
                     array in %s', __CLASS__));
             }
@@ -99,7 +96,7 @@ class TypeaheadTypeAttr
             {
                 if (!isset($s['route']))
                 {
-                    throw new InvalidFormatException(sprintf(
+                    throw new InvalidArgumentException(sprintf(
                         'a "route" key is missing from option "source" 
                         in %s', __CLASS__));
                 }
@@ -119,7 +116,7 @@ class TypeaheadTypeAttr
         }
         else
         {
-            throw new MissingOptionsException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'either "data-source" of "source" option needs 
                 to be set for the typeahead type in %s', __CLASS__));
         }

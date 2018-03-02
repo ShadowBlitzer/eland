@@ -8,9 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
-use exception\not_empty_exception;
-use exception\protected_exception;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class TypeContactController extends AbstractController
 {
@@ -90,7 +88,7 @@ class TypeContactController extends AbstractController
 
 		if (in_array($type_contact['abbrev'], $this->protected_types))
 		{
-			throw new protected_exception(
+			throw new ConflictHttpException(
 				'This contact type is protected 
 					and cannot be edited.'
 			);			
@@ -129,7 +127,7 @@ class TypeContactController extends AbstractController
 
 		if (in_array($type_contact['abbrev'], $this->protected_types))
 		{
-			throw new protected_exception(
+			throw new ConflictHttpException(
 				'This contact type is protected 
 					and cannot be deleted.'
 			);			
@@ -139,7 +137,7 @@ class TypeContactController extends AbstractController
 			from ' . $schema . '.contact 
 			where id_type_contact = ?', [$id]))
 		{
-			throw new not_empty_exception(
+			throw new ConflictHttpException(
 				'The contact type cannot be deleted 
 					because contacts of this type exist.'
 			);

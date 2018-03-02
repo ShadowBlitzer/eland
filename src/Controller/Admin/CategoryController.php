@@ -8,11 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 use App\Repository\CategoryRepository;
 use App\Form\Post\CategoryType;
 
-use exception\not_empty_exception;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class CategoryController extends AbstractController
@@ -138,14 +138,14 @@ class CategoryController extends AbstractController
 
 		if ($categoryRepository->getCountSubcategories($id, $schema))
 		{
-			throw new not_empty_exception(
+			throw new ConflictHttpException(
 				'The category has subcategories and thus cannot be deleted.'
 			);
 		}
 
 		if ($categoryRepository->getCountAds($id, $schema))
 		{
-			throw new not_empty_exception(
+			throw new ConflictHttpException(
 				'The category has messages and thus cannot be deleted.'
 			);			
 		}

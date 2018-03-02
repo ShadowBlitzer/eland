@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-use App\exception\MissingFunctionException;
+use App\exception\FunctionNotAvailableException;
 
 class ExportController extends AbstractController
 {
@@ -130,7 +130,7 @@ class ExportController extends AbstractController
 			{
 				if (!function_exists('exec'))
 				{
-					throw new MissingFunctionException(
+					throw new FunctionNotAvailableException(
 						sprintf('function "exec" does not exist 
 							in class %s', __CLASS__));
 				}
