@@ -21,6 +21,8 @@ class ProcessMailCommand extends Command
     {
         $this->bootCount = $bootCount;
         $this->queue = $queue;
+
+        parent::__construct();
     }
 
     protected function configure()
@@ -33,7 +35,7 @@ class ProcessMailCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $app = $this->getSilexApplication();
+
         $io = new SymfonyStyle($input, $output);
         $magenta = new OutputFormatterStyle('magenta'); 
         $output->getFormatter()->setStyle('magenta', $magenta);
