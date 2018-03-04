@@ -8,7 +8,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Finder\Finder;
+
+use Predis\Client as Predis;
 
 use App\Service\BootCount;
 use App\Service\Queue;
@@ -17,10 +18,15 @@ use App\Repository\ConfigRepository;
 
 class ProcessMailCommand extends Command
 {
-    public function __construct(BootCount $bootCount, Queue $queue)
+    private $bootCount;
+    private $queue;
+    private $predis;
+
+    public function __construct(BootCount $bootCount, Queue $queue, Predis $predis)
     {
         $this->bootCount = $bootCount;
         $this->queue = $queue;
+        $this->predis = $predis;
 
         parent::__construct();
     }
@@ -35,7 +41,6 @@ class ProcessMailCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $io = new SymfonyStyle($input, $output);
         $magenta = new OutputFormatterStyle('magenta'); 
         $output->getFormatter()->setStyle('magenta', $magenta);
@@ -55,6 +60,12 @@ class ProcessMailCommand extends Command
             if ($loopCount % 1800 === 0)
             {
                 error_log('..mail.. ' . $boot . ' .. ' . $loopCount);
+            }
+
+            if ($loopCount % 10 === 0)
+            {
+                $this->predis->set('monitor_process_mail', '1');
+                $this->predis->expire('monitor_process_mail', 900);              
             }
 
             $loopCount++;

@@ -8,12 +8,30 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Finder\Finder;
+
+use Predis\Client as Predis;
+
+use App\Service\BootCount;
+use App\Service\Queue;
+
 use util\queue_container;
 use util\task_container;
 
 class ProcessGeoCommand extends Command
 {
+    private $bootCount;
+    private $queue;
+    private $predis;
+
+    public function __construct(BootCount $bootCount, Queue $queue, Predis $predis)
+    {
+        $this->bootCount = $bootCount;
+        $this->queue = $queue;
+        $this->predis = $predis;
+
+        parent::__construct();
+    }
+
     protected function configure()
     {
         $this
@@ -24,31 +42,30 @@ class ProcessGeoCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $app = $this->getSilexApplication();
         $io = new SymfonyStyle($input, $output);
         $magenta = new OutputFormatterStyle('magenta'); 
         $output->getFormatter()->setStyle('magenta', $magenta);
         $cyan = new OutputFormatterStyle('cyan'); 
         $output->getFormatter()->setStyle('cyan', $cyan);
  
-        $boot = $app['boot_count']->get('geo');
+        $boot = $this->bootCount->get('geo');
 
         error_log('... geo service started ... ' . $boot);
 
-        $loop_count = 1;
+        $loopCount = 1;
 
         while (true)
         {
             sleep(120);
 
-            if ($loop_count % 1800 === 0)
+            if ($loopCount % 1800 === 0)
             {
-                error_log('..geo.. ' . $boot . ' .. ' . $loop_count);
+                error_log('..geo.. ' . $boot . ' .. ' . $loopCount);
             }
 
-            $loop_count++;
+            $loopCount++;
 
-            $record = $app['queue']->get('geo');
+            $record = $this->queue->get('geo');
 
             if (!count($record))
             {

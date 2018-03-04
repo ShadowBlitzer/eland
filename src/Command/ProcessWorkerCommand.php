@@ -11,8 +11,28 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Finder\Finder;
 use util\task_container;
 
+use Predis\Client as Predis;
+
+use App\Service\BootCount;
+use App\Service\Queue;
+
 class ProcessWorkerCommand extends Command
 {
+    private $bootCount;
+    private $queue;
+    private $predis;
+
+
+    public function __construct(BootCount $bootCount, Queue $queue, Predis $predis)
+    {
+        $this->bootCount = $bootCount;
+        $this->queue = $queue;
+        $this->predis = $predis;
+
+        parent::__construct();
+    }
+
+
     protected function configure()
     {
         $this
@@ -30,14 +50,14 @@ class ProcessWorkerCommand extends Command
         $cyan = new OutputFormatterStyle('cyan'); 
         $output->getFormatter()->setStyle('cyan', $cyan);
 
-        $boot = $app['boot_count']->get('worker');
+        $boot = $bootCount->get('worker');
 
         echo 'worker started .. ' . $boot . "\n";
 
         $task = new task_container($app, 'task');
         $schema_task = new task_container($app, 'schema_task');
 
-        $loop_count = 1;
+        $loopCount = 1;
 
         while (true)
         {
@@ -54,19 +74,18 @@ class ProcessWorkerCommand extends Command
                 $schema_task->run();
             }
 
-            if ($loop_count % 1000 === 0)
+            if ($loopCount % 1000 === 0)
             {
-                error_log('..worker.. ' . $boot['count'] . ' .. ' . $loop_count);
+                error_log('..worker.. ' . $boot . ' .. ' . $loopCount);
             }
 
-            if ($loop_count % 10 === 0)
+            if ($loopCount % 10 === 0)
             {
-                $app['predis']->set('monitor_service_worker', '1');
-                $app['predis']->expire('monitor_service_worker', 900);
+                $this->predis->set('monitor_process_worker', '1');
+                $this->predis->expire('monitor_process_worker', 900);
             }
 
-            $loop_count++;
+            $loopCount++;
         }
-
     }
 }

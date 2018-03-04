@@ -22,7 +22,6 @@ class MigrateElasCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $app = $this->getSilexApplication();
         $io = new SymfonyStyle($input, $output);
         $magenta = new OutputFormatterStyle('magenta'); 
         $output->getFormatter()->setStyle('magenta', $magenta);
