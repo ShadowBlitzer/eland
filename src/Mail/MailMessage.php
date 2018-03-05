@@ -76,17 +76,17 @@ class MailMessage
 	public function send()
 	{
 		$failedRecipients = [];
-		$monologVars = isset($this->schema) ? ['schema' => $this->schema] : [];
+		$logVars = isset($this->schema) ? ['schema' => $this->schema] : [];
 		
 		if ($this->mailer->send($this->message, $failedRecipients))
 		{
 			$this->logger->info(sprintf('mail send: %s, to %s', 
-				$this->message->getSubject(), json_encode($this->message->getTo())), $monologVars);
+				$this->message->getSubject(), json_encode($this->message->getTo())), $logVars);
 		}
 		else
 		{
 			$this->logger->error(sprintf('failed sending mail %s, failed recipients: %s', 
-				$this->logger->getSubject(), json_encode($failedRecipients)), $monologVars);
+				$this->logger->getSubject(), json_encode($failedRecipients)), $logVars);
 		}
 
 		$this->mailer->getTransport()->stop();

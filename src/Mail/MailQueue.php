@@ -2,13 +2,13 @@
 
 namespace App\Mail;
 
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use App\Service\Queue;
 use App\Service\Config;
 
 class MailQueue
 {
-	private $monolog;
+	private $logger;
 	private $queue;
 	private $config;
 
@@ -20,9 +20,9 @@ class MailQueue
 	private $priority = 0;
 	private $schema;
 
-	public function __construct(Logger $monolog, Queue $queue, Config $config)
+	public function __construct(LoggerInterFace $logger, Queue $queue, Config $config)
 	{
-		$this->monolog = $monolog;
+		$this->logger = $logger;
 		$this->queue = $queue;
 		$this->config = $config;
 	}
@@ -77,7 +77,7 @@ class MailQueue
 		{
 			if (!$this->config->get('mailenabled', $this->schema))
 			{
-				$this->monolog->info(sprintf(
+				$this->logger->info(sprintf(
 					'mail functionality not enabled in 
 					configuration, mail not queued: %s', json_encode($data)), [
 						'schema'	=> $this->schema,

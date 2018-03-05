@@ -40,7 +40,7 @@ class EtokenValidationSubscriber implements EventSubscriberInterface
 
             $errorMessage = $this->etokenManager->getErrorMessage($data['_etoken']);
 
-            if ($error_message)
+            if ($errorMessage)
             {
                 if (null !== $this->translator) 
                 {
