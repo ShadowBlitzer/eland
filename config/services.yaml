@@ -3,6 +3,7 @@
 parameters:
     router.request_context.host: '%env(APP_HOST)%'
     router.request_context.scheme: '%env(APP_SCHEME)%'
+    site_name: '%env(SITE_NAME)%'
     app.default_locale: nl
     app.locales: en|nl
     app.user.types: active|new|leaving|direct|interlets|pre-active|post-active|all
@@ -52,4 +53,13 @@ services:
     App\Form\Extension\FormTypeExtraVarExtension:
         tags:
             - { name: form.type.extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
+
+    App\Mail\MailEnv:
+        arguments: 
+            $noreplyAddress: '%env(MAIL_NOREPLY_ADDRESS)%'
+            $fromAddress: '%env(MAIL_FROM_ADDRESS)%'
+            $hosterAddress: '%env(MAIL_HOSTER_ADDRESS)%'
+    App\Mail\MailFrom:
+        arguments:
+            $siteName: '%site_name%'
     

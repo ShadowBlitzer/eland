@@ -57,8 +57,8 @@ Indexes:
 class Xdb
 {
 	private $ip;
-	private $user_schema = '';
-	private $user_id = 0;
+	private $userSchema = '';
+	private $userId = 0;
 	private $db;
 
 	public function __construct(db $db)
@@ -78,61 +78,63 @@ class Xdb
 	/*
 	 */
 
-	public function setUser(string $user_schema, $user_id)
+	public function setUser(string $userSchema, $userId):Xdb
 	{
-		$this->user_schema = $user_schema;
-		$this->user_id = ctype_digit((string) $user_id) ? $user_id : 0;
+		$this->userSchema = $userSchema;
+		$this->userId = ctype_digit((string) $userId) ? $userId : 0;
+
+		return $this;
 	}
 
 	/*
 	 *
 	 */
 
-	public function set(string $agg_type, string $eland_id, array $data, string $agg_schema, string $event_time = '')
+	public function set(string $aggType, string $elandId, array $data, string $aggSchema, string $eventTime = ''):Xdb
 	{
-		$agg_id = $agg_schema . '_' . $agg_type . '_' . $eland_id;
+		$aggId = $aggSchema . '_' . $aggType . '_' . $elandId;
 
 		$row = $this->db->fetchAssoc('select data, agg_version
 			from xdb.aggs
-			where agg_id = ?', [$agg_id]);
+			where agg_id = ?', [$aggId]);
 
 		if ($row)
 		{
-			$prev_data = json_decode($row['data'], true);
+			$prevData = json_decode($row['data'], true);
 
-			$data = array_diff_assoc($data, $prev_data);
-			$agg_version = $row['agg_version'] + 1;
+			$data = array_diff_assoc($data, $prevData);
+			$aggVersion = $row['agg_version'] + 1;
 			$ev = 'updated';
 		}
 		else
 		{
-			$agg_version = 1;
+			$aggVersion = 1;
 			$ev = 'created';
 		}
 
 		if (!count($data))
 		{
-			return;
+			return $this;
 		}
 
-		$event = $agg_type . '_' . $ev;
+		$event = $aggType . '_' . $ev;
 
 		$insert = [
-			'user_id'		=> $this->user_id,
-			'user_schema'	=> $this->user_schema,
-			'agg_id'		=> $agg_id,
-			'agg_type'		=> $agg_type,
-			'agg_schema'	=> $agg_schema,
-			'eland_id'		=> $eland_id,
-			'agg_version'	=> $agg_version,
-			'event'			=> $agg_type . '_' . $ev,
+			'user_id'		=> $this->userId,
+			'user_schema'	=> $this->userSchema,
+			'agg_id'		=> $aggId,
+			'agg_type'		=> $aggType,
+			'agg_schema'	=> $aggSchema,
+			'eland_id'		=> $elandId,
+			'agg_version'	=> $aggVersion,
+			'event'			=> $aggType . '_' . $ev,
 			'data'			=> json_encode($data),
 			'ip'			=> $this->ip,
 		];
 
-		if ($event_time)
+		if ($eventTime)
 		{
-			$insert['event_time'] = $event_time;
+			$insert['event_time'] = $eventTime;
 		}
 
 		try
@@ -149,9 +151,9 @@ class Xdb
 			{
 				unset($insert['data']);
 				$update = $insert;
-				$update['data'] = json_encode(array_merge($prev_data, $data));
+				$update['data'] = json_encode(array_merge($prevData, $data));
 
-				$this->db->update('xdb.aggs', $update, ['agg_id' => $agg_id]);
+				$this->db->update('xdb.aggs', $update, ['agg_id' => $aggId]);
 			}
 
 			$this->db->commit();
@@ -160,36 +162,37 @@ class Xdb
 		{
 			$this->db->rollback();
 			throw $e;
-			exit;
 		}
+
+		return $this;
 	}
 
 	/*
 	 *
 	 */
 
-	public function del(string $agg_type, string $eland_id , string $agg_schema)
+	public function del(string $aggType, string $elandId , string $aggSchema):Xdb
 	{
-		$agg_id = $agg_schema . '_' . $agg_type . '_' . $eland_id;
+		$aggId = $aggSchema . '_' . $aggType . '_' . $elandId;
 
-		$agg_version = $this->db->fetchColumn('select agg_version
+		$aggVersion = $this->db->fetchColumn('select agg_version
 			from xdb.aggs
-			where agg_id = ?', [$agg_id]);
+			where agg_id = ?', [$aggId]);
 
-		if (!$agg_version)
+		if (!$aggVersion)
 		{
-			return; // 'Not found: ' . $agg_id . ', could not delete';
+			return $this; // 'Not found: ' . $agg_id . ', could not delete' exception;
 		}
 
 		$insert = [
-			'user_id'		=> $this->user_id,
-			'user_schema'	=> $this->user_schema,
-			'agg_id'		=> $agg_id,
-			'agg_type'		=> $agg_type,
-			'agg_schema'	=> $agg_schema,
-			'eland_id'		=> $eland_id,
-			'agg_version'	=> $agg_version + 1,
-			'event'			=> $agg_type . '_deleted',
+			'user_id'		=> $this->userId,
+			'user_schema'	=> $this->userSchema,
+			'agg_id'		=> $aggId,
+			'agg_type'		=> $aggType,
+			'agg_schema'	=> $aggSchema,
+			'eland_id'		=> $elandId,
+			'agg_version'	=> $aggVersion + 1,
+			'event'			=> $aggType . '_deleted',
 			'data'			=> '{}',
 			'ip'			=> $this->ip,
 		];
@@ -200,7 +203,7 @@ class Xdb
 
 			$this->db->insert('xdb.events', $insert);
 
-			$this->db->delete('xdb.aggs', ['agg_id' => $agg_id]);
+			$this->db->delete('xdb.aggs', ['agg_id' => $aggId]);
 
 			$this->db->commit();
 		}
@@ -208,19 +211,20 @@ class Xdb
 		{
 			$this->db->rollback();
 			throw $e;
-			exit;
 		}
+
+		return $this;
 	}
 
 	/*
 	 *
 	 */
 
-	public function get(string $agg_type, string $eland_id, string $agg_schema):array
+	public function get(string $aggType, string $elandId, string $aggSchema):array
 	{
-		$agg_id = $agg_schema . '_' . $agg_type . '_' . $eland_id;
+		$aggId = $aggSchema . '_' . $aggType . '_' . $elandId;
 
-		$row = $this->db->fetchAssoc('select * from xdb.aggs where agg_id = ?', [$agg_id]);
+		$row = $this->db->fetchAssoc('select * from xdb.aggs where agg_id = ?', [$aggId]);
 
 		if (!$row)
 		{
@@ -229,7 +233,7 @@ class Xdb
 
 		$row['data'] = json_decode($row['data'], true);
 
-		error_log(' - xdb get ' . $agg_id . ' - ');
+		error_log(' - xdb get ' . $aggId . ' - ');
 
 		return $row;
 	}
@@ -238,26 +242,24 @@ class Xdb
 	 *
 	 */
 
-	public function getMany(array $filters = [], string $query_extra = ''):array
+	public function getMany(array $filters = [], string $queryExtra = ''):array
 	{
-		$sql_where = [];
-		$sql_params = [];
-		$sql_types = [];
+		$sqlWhere = $sqlParams = $sqlTypes = [];
 
 		if (isset($filters['agg_id_ary']))
 		{
-			$sql_where[] = 'agg_id in (?)';
-			$sql_params[] = $filters['agg_id_ary'];
-			$sql_types[] = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
+			$sqlWhere[] = 'agg_id in (?)';
+			$sqlParams[] = $filters['agg_id_ary'];
+			$sqlTypes[] = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
 		}
 
 		unset($filters['agg_id_ary']);
 
 		if (isset($filters['access']))
 		{
-			$sql_where[] = 'data->>\'access\' in (?)';
-			$sql_params[] = $filters['access'];
-			$sql_types[] = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
+			$sqlWhere[] = 'data->>\'access\' in (?)';
+			$sqlParams[] = $filters['access'];
+			$sqlTypes[] = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
 		}
 
 		unset($filters['access']);
@@ -271,33 +273,33 @@ class Xdb
 
 				if ($k === 0)
 				{
-					$sql_where[] = $key . ' ' . $v;
+					$sqlWhere[] = $key . ' ' . $v;
 				}
 				else
 				{
-					$sql_where[] = $key . ' ' . $k . ' ?';
-					$sql_params[] = $v;
-					$sql_types[] = \PDO::PARAM_STR;
+					$sqlWhere[] = $key . ' ' . $k . ' ?';
+					$sqlParams[] = $v;
+					$sqlTypes[] = \PDO::PARAM_STR;
 				}
 			}
 			else
 			{
-				$sql_where[] = $key . ' = ?';
-				$sql_params[] = $value;
-				$sql_types[] = \PDO::PARAM_STR;
+				$sqlWhere[] = $key . ' = ?';
+				$sqlParams[] = $value;
+				$sqlTypes[] = \PDO::PARAM_STR;
 			}
 		}
 
 		$query = 'select * from xdb.aggs';
 
-		if (count($sql_where))
+		if (count($sqlWhere))
 		{
-			$query .= ' where ' . implode(' and ', $sql_where);
+			$query .= ' where ' . implode(' and ', $sqlWhere);
 		}
 
-		$query .= ($query_extra) ? ' ' . $query_extra : '';
+		$query .= $queryExtra ? ' ' . $queryExtra : '';
 
-		$stmt = $this->db->executeQuery($query, $sql_params, $sql_types);
+		$stmt = $this->db->executeQuery($query, $sqlParams, $sqlTypes);
 
 		$ary = [];
 
@@ -317,31 +319,21 @@ class Xdb
 	 *
 	 */
 
-	public function count(string $agg_type, string $eland_id, string $agg_schema):int
+	public function count(string $aggType, string $elandId, string $aggSchema):int
 	{
-		$sql_where = $sql_params = [];
+		$sqlWhere = $sqlParams = [];
 
-		if ($agg_type)
-		{
-			$sql_where[] = 'agg_type = ?';
-			$sql_params[] = $agg_type;
-		}
+		$sqlWhere[] = 'agg_type = ?';
+		$sqlParams[] = $aggType;
 
-		if ($eland_id)
-		{
-			$sql_where[] = 'eland_id = ?';
-			$sql_params[] = $eland_id;
-		}
+		$sqlWhere[] = 'eland_id = ?';
+		$sqlParams[] = $elandId;
 
-		if ($agg_schema)
-		{
-			$sql_where[] = 'agg_schema = ?';
-			$sql_params[] = $agg_schema;
-		}
+		$sqlWhere[] = 'agg_schema = ?';
+		$sqlParams[] = $aggSchema;
 
-		$where = count($sql_where) ? ' where ' . implode(' and ', $sql_where) : '';
+		$where = count($sqlWhere) ? ' where ' . implode(' and ', $sqlWhere) : '';
 
-		return $this->db->fetchColumn('select count(*) from xdb.aggs' . $where, $sql_params);
+		return $this->db->fetchColumn('select count(*) from xdb.aggs' . $where, $sqlParams);
 	}
 }
-

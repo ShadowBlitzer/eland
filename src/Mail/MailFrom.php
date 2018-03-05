@@ -23,7 +23,7 @@ class MailFrom
 	)
 	{
 		$this->config = $config;
-		$this->mail_env = $mailEnv;
+		$this->mailEnv = $mailEnv;
 		$this->siteName = $siteName;
 	}
 

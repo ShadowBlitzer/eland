@@ -3,12 +3,13 @@
 namespace App\Service;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 use exception\missing_parameter_exception;
 use exception\invalid_parameter_value_exception;
 
 class SessionColumns
 {
-	private $default_ary = [
+	private $defaultAry = [
 		'news'	=> 'extended',
 		'user'	=> [
 			'a'	=> [
@@ -49,7 +50,7 @@ class SessionColumns
 
 		if (!isset($get))
 		{
-			$get = $this->default_ary[$entity][$access];   // TODO
+			$get = $this->defaultAry[$entity][$access];   // TODO
 			$this->session->set($key, $get);
 		}
 
@@ -58,7 +59,7 @@ class SessionColumns
 
 	public function set(string $entity, string $schema, string $access, array $columns)
 	{
-		if (!$view || !$entity || !isset($this->default_ary[$entity]))
+		if (!$view || !$entity || !isset($this->defaultAry[$entity]))
 		{
 			return;
 		}

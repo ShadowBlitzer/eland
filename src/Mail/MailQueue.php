@@ -101,10 +101,16 @@ class MailQueue
 		}
 		 
 		$this->putParam($this->template, $this->vars, $this->to, $data, $this->priority);
+		$this->clear();
 
+		return $this;
+	}
+
+	public function clear():MailQueue
+	{
 		unset($this->template, $this->vars, $this->to, $this->replyTo, $this->cc, $this->schema);
-		$this->priority = 0;
-
+		$this->priority = 0;	
+		
 		return $this;
 	}
 

@@ -21,6 +21,6 @@ class MailValidated
 
 	public function get(string $email, string $schema):bool
 	{
-		return count($this->xdb->get('email_validated', $email, $schema)) ? true : false;
+		return $this->xdb->count('email_validated', $email, $schema) === 0 ? false : true;
 	}
 }

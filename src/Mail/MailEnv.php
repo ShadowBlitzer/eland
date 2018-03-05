@@ -10,8 +10,6 @@ class MailEnv
 
 	public function __construct(string $noreplyAddress, string $fromAddress, string $hosterAddress)
 	{
-
-
 		$this->noreplyAddress = $noreplyAddress;
 		$this->fromAddress = $fromAddress;
 		$this->hosterAddress = $hosterAddress;

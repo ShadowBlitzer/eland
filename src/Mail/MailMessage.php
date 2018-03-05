@@ -3,20 +3,20 @@
 namespace App\Mail;
 
 use Swift_Mailer as Mailer;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class MailMessage
 {
 	private $mailer;
-	private $monolog;
+	private $logger;
 
 	private $message;
 	private $schema;
 
-	public function __construct(Mailer $mailer, Logger $monolog)
+	public function __construct(Mailer $mailer, LoggerInterface $logger)
 	{
 		$this->mailer = $mailer;
-		$this->monolog = $monolog;
+		$this->logger = $logger;
 	}
 
 	public function init():MailMessage
@@ -80,13 +80,13 @@ class MailMessage
 		
 		if ($this->mailer->send($this->message, $failedRecipients))
 		{
-			$this->monolog->info(sprintf('mail send: %s, to %s', 
+			$this->logger->info(sprintf('mail send: %s, to %s', 
 				$this->message->getSubject(), json_encode($this->message->getTo())), $monologVars);
 		}
 		else
 		{
-			$this->monolog->error(sprintf('failed sending mail %s, failed recipients: %s', 
-				$this->message->getSubject(), json_encode($failedRecipients)), $monologVars);
+			$this->logger->error(sprintf('failed sending mail %s, failed recipients: %s', 
+				$this->logger->getSubject(), json_encode($failedRecipients)), $monologVars);
 		}
 
 		$this->mailer->getTransport()->stop();

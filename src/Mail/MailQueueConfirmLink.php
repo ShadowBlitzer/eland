@@ -56,8 +56,13 @@ class MailQueueConfirmLink
 	public function put():MailQueueConfirmLink
 	{
 		$this->putParam($this->to, $this->data, $this->template, $this->route);
+		$this->clear();	
+		return $this;
+	}
+
+	public function clear():MailQueueConfirmLink
+	{
 		unset($this->to, $this->data, $this->template, $this->route);
-	
 		return $this;
 	}
 
