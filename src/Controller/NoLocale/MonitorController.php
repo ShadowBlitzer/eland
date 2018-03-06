@@ -7,6 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
+use Psr\Log\LoggerInterface;
+use Doctrine\DBAL\Connection as Db;
+use Predis\Client as Predis;
 
 class MonitorController extends AbstractController
 {
@@ -14,46 +18,39 @@ class MonitorController extends AbstractController
 	* @Route("/monitor", name="monitor")
 	* @Method("GET")
 	*/
-	public function status(Request $request):Response
+	public function status(LoggerInterface $logger, Db $db, Predis $predis, Request $request):Response
 	{
 		try
 		{
-			$app['db']->fetchColumn('select max(id) from xdb.events');
+			$db->fetchColumn('select max(agg_id) from xdb.events');
 		}
-		catch(Exception $e)
+		catch(\Exception $e)
 		{
-			http_response_code(503);
-			$app['monolog']->error('db_fail: ' . $e->getMessage());
-			throw $e;
-			exit;
+			throw new ServiceUnavailableHttpException('db fail: ' . $e->getMessage());
 		}
 
 		try
 		{
-			$app['predis']->incr('eland_monitor');
-			$app['predis']->expire('eland_monitor', 400);
-
-			$monitor_count = $app['predis']->get('eland_monitor');
-
-			if ($monitor_count > 2)
-			{
-				$monitor_service_worker = $app['predis']->get('monitor_service_worker');
-
-				if (!$monitor_service_worker)
-				{
-					http_response_code(503);
-					$app['monolog']->error('web service is up but service worker is down');
-					exit;
-				}
-			}
+			$predis->incr('eland_monitor');
+			$predis->expire('eland_monitor', 400);
 		}
-		catch(Exception $e)
+		catch(\Exception $e)
 		{
-			$app['monolog']->error('redis_fail: ' . $e->getMessage());
-			throw $e;
-			exit;
+			throw new ServiceUnavailableHttpException('redis fail: ' . $e->getMessage());			
 		}
 
-		exit;
+		$monitorCount = $predis->get('eland_monitor');
+
+		if ($monitorCount > 2)
+		{
+			$monitorServiceWorker = $predis->get('monitor_service_worker');
+
+			if (!$monitorServiceWorker)
+			{
+				throw new ServiceUnavailableHttpException('service worker is down');					
+			}		
+		}
+
+        return new Response('<html><body>Ok</body></html>');		
 	}
 }

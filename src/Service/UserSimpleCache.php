@@ -4,7 +4,7 @@ namespace App\Service;
 
 use service\xdb;
 use Doctrine\DBAL\Connection as db;
-use Predis\Client as predis;
+use Predis\Client as Predis;
 use App\Exception\LogicalException;
 
 class UserSimpleCache
@@ -14,7 +14,7 @@ class UserSimpleCache
 	private $ttl = 120; //2592000;
 	private $prefix = 'user_simple_cache_';
 
-	public function __construct(db $db, predis $predis)
+	public function __construct(db $db, Predis $predis)
 	{
 		$this->db = $db;
 		$this->predis = $predis;

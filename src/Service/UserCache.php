@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use service\Xdb;
+use App\Service\Xdb;
 use Doctrine\DBAL\Connection as Db;
 use Predis\Client as Predis;
 
