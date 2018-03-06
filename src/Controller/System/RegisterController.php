@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Form\Post\RegisterType;
 use App\Mail\MailQueueConfirmLink;
@@ -19,7 +20,9 @@ class RegisterController extends AbstractController
 	 * @Route("/register", name="register")
 	 * @Method({"GET", "POST"})
 	 */
-	public function form(MailQueueConfirmLink $mailQueueConfirmLink, Request $request, string $schema):Response
+	public function form(MailQueueConfirmLink $mailQueueConfirmLink, 
+		TranslatorInterface $translator,
+		Request $request, string $schema):Response
 	{
 		$form = $this->createForm(RegisterType::class)
 			->handleRequest($request);
@@ -35,7 +38,7 @@ class RegisterController extends AbstractController
 				->setRoute('register_confirm')
 				->put();
 
-			$this->addFlash('info', 'register.confirm_email_info', ['%email%' => $data['email']]);
+			$this->addFlash('info', $translator->trans('register.confirm_email_info', ['%email%' => $data['email']]));
 
 			return $this->redirectToRoute('login', ['schema' => $schema]);
 		}
@@ -47,7 +50,9 @@ class RegisterController extends AbstractController
 	 * @Route("/register/{token}", name="register_confirm")
 	 * @Method("GET")
 	 */
-	public function confirm(MailValidatedConfirmLink $mailValidatedConfirmLink, Request $request, string $schema, string $token):Response
+	public function confirm(MailValidatedConfirmLink $mailValidatedConfirmLink, 
+		TranslatorInterface $translator,
+		Request $request, string $schema, string $token):Response
 	{
 		$data = $mailValidatedConfirmLink->get();
 	
@@ -55,7 +60,7 @@ class RegisterController extends AbstractController
 		
 		if (!count($data))
 		{
-			$this->addFlash('error', 'register.confirm_not_found');
+			$this->addFlash('error', $translator->trans('register.confirm_not_found'));
 			return $this->redirectToRoute('register', ['schema' => $schema]);
 		}
 
