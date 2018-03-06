@@ -87,7 +87,7 @@ class PasswordResetController extends AbstractController
 		$form = $this->createForm(PasswordResetFormType::class)
 			->handleRequest($request);
 
-		if ($form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 

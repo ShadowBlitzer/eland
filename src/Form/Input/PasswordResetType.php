@@ -38,7 +38,7 @@ class PasswordResetType extends AbstractType
             'addon_label'       => null,
             'addon_class'       => null,
             'addon_btn_fa'      => null,
-            'addon_btn_label'   => 'label.generate',
+            'addon_btn_label'   => 'btn.generate',
             'addon_btn_class'   => 'btn-default',
             'addon_btn_attr'    => [
                 'id'    => 'generate',
