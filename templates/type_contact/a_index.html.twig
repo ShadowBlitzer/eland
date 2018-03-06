@@ -4,7 +4,7 @@
 {% import 'macro/mini_button.html.twig' as mb %}
 
 {%- block top_buttons -%}
-{{- tb.add(path('typecontact_add', acc_sch), 'type_contact_add.title') -}}
+{{- tb.add(path('type_contact_add', acc_sch), 'type_contact_add.title') -}}
 {%- endblock top_buttons -%}
 
 {%- block inner -%}
@@ -22,7 +22,7 @@
 </thead>
 <tbody>
 
-{%- for t in types -%}
+{%- for t in contact_types -%}
 
     {%- set protected = t.abbrev in protected_types ? true : false -%}
     <tr>
@@ -31,7 +31,7 @@
     {%- if protected -%}
     {{- t.abbrev -}}*
     {%- else -%}
-    <a href="{{- path('typecontact_edit', acc_sch|merge({'type_contact': t.id})) -}}">
+    <a href="{{- path('type_contact_edit', acc_sch|merge({'id': t.id})) -}}">
     {{- t.abbrev -}}
     </a>
     {%- endif -%}
@@ -42,24 +42,24 @@
     {%- if protected -%}
     {{- t.name -}}*
     {%- else -%}
-    <a href="{{- path('typecontact_edit', acc_sch|merge({'type_contact': t.id})) -}}">
+    <a href="{{- path('type_contact_edit', acc_sch|merge({'id': t.id})) -}}">
     {{- t.name -}}
     </a>
     {%- endif -%}
     </td>
 
-    {%- set can_delete = not protected and contact_count_ary[t.id] is not defined -%}
+    {%- set can_delete = not protected and not t.count -%}
 
     <td>
-    {%- if not protected and contact_count_ary[t.id] is not defined -%}
-        {{- mb.del(path('typecontact_del', acc_sch|merge({'type_contact': t.id})), 'type_contact_del.btn') -}}
+    {%- if not protected and not t.count -%}
+        {{- mb.del(path('type_contact_del', acc_sch|merge({'id': t.id})), 'type_contact_del.btn') -}}
     {%- endif -%}
     </td>
 
     <td>
-    {%- if contact_count_ary[t.id] is defined -%}
-    <a href="{{- path('contactdetail_index', acc_sch|merge({'type_contact': t.id})) -}}">
-    {{- contact_count_ary[t.id] -}}
+    {%- if t.count -%}
+    <a href="{{- path('contact_detail_index', acc_sch|merge({'id': t.id})) -}}">
+    {{- t.count -}}
     {%- endif -%}
     </td>
 

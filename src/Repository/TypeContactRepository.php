@@ -14,9 +14,18 @@ class TypeContactRepository
 		$this->db = $db;
 	}
 
-	public function getAll(string $schema)
+	public function getAll(string $schema):array
 	{
+		return $this->db->fetchAll('select tc.*
+			from ' . $schema . '.type_contact tc');
+	}
 
+	public function getAllWithCount(string $schema):array
+	{
+		return $this->db->fetchAll('select tc.*, count(c.*)
+			from ' . $schema . '.type_contact tc, ' . $schema . '.contact c 
+			where c.id_type_contact = tc.id
+			group by tc.id');
 	}
 
 	public function getAllAbbrev(string $schema):array
@@ -49,5 +58,20 @@ class TypeContactRepository
         }
 		
 		return $data;
+	}
+
+	public function update(int $id, string $schema, array $data)
+	{
+		$this->db->update($schema . '.type_contact', $data, ['id' => $id]);
+	}
+
+	public function insert(string $schema, array $data)
+	{
+		$this->db->insert($schema . '.type_contact', $data);
+	}
+
+	public function delete(int $id, string $schema)
+	{
+		$this->db->delete($schema . '.type_contact', ['id' => $id]);
 	}
 }

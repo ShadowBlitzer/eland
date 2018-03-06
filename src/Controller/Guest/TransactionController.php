@@ -36,10 +36,6 @@ class TransactionController extends AbstractController
 		TransactionFilter $transactionFilter,
 		Request $request, string $schema, string $access):Response
 	{
-/*
-		$oufti = random_bytes(16);
-		var_dump(rtrim(strtr(base64_encode($oufti), '+/', '-_'), '='));
-*/
 		$transactionFilter->setRequest($request)
 			->filter();
 

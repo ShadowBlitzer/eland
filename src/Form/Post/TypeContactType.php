@@ -30,13 +30,13 @@ class TypeContactType extends AbstractType
             'constraints' 	=> [
                 new Assert\NotBlank(),
                 new Assert\Length(['max' => 10, 'min' => 1]),
-                new unique_in_column([
+ /*               new unique_in_column([
                     'db'        => $this->db,
                     'schema'    => $this->schema,
                     'table'     => 'type_contact',
                     'column'    => 'abbrev',
                     'ignore'    => $options['ignore'],
-                ]),
+                ]), */
             ],
                 'attr'	=> [
                     'maxlength'	=> 10,

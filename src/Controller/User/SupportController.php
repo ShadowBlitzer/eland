@@ -7,14 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Form\Post\SupportType;
 use App\Mail\MailQueue;
@@ -26,7 +19,9 @@ class SupportController extends AbstractController
 	 * @Route("/support", name="support")
 	 * @Method({"GET", "POST"})
 	 */
-	public function form(MailQueue $mailQueue, MailAdmin $mailAdmin, Request $request, string $schema, string $access):Response
+	public function form(MailQueue $mailQueue, MailAdmin $mailAdmin, 
+		TranslatorInterface $translator,	
+		Request $request, string $schema, string $access):Response
 	{
 		$form = $this->createForm(SupportType::class);
 		$form->handleRequest($request);		
@@ -43,7 +38,7 @@ class SupportController extends AbstractController
 				->setPriority(900000)
 				->put();
 
-			$this->addFlash('success', $app->trans('support.success'));
+			$this->addFlash('success', $translator->trans('support.success'));
 
 			return $this->redirectToRoute('support', ['schema' => $schema, 'access' => $access]);
 		}

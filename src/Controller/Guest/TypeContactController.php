@@ -9,10 +9,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\Translation\TranslatorInterface;
+
+use App\Repository\TypeContactRepository;
+use App\Form\Post\TypeContactType;
 
 class TypeContactController extends AbstractController
 {
-	private $protected_types = [
+	private $protectedTypes = [
 		'mail', 'web', 'adr', 'gsm', 'tel',
 	];
 
@@ -20,52 +24,43 @@ class TypeContactController extends AbstractController
 	 * @Route("/contact-types", name="type_contact_index")
 	 * @Method("GET")
 	 */
-	public function index(Request $request, string $schema, string $access):Response
+	public function index(TypeContactRepository $typeContactRepository, 
+		Request $request, string $schema, string $access):Response
 	{
-		$types = $app['db']->fetchAll('select * 
-			from ' . $schema . '.type_contact tc');
-		
-		$contact_count_ary = [];
-		
-		$rs = $app['db']->prepare('select id_type_contact, count(id)
-			from ' . $schema . '.contact
-			group by id_type_contact');
-
-		$rs->execute();
-		
-		while($row = $rs->fetch())
-		{
-			$contact_count_ary[$row['id_type_contact']] = $row['count'];
-		}
+		$contactTypes = $typeContactRepository->getAllWithCount($schema);
 
 		return $this->render('type_contact/a_index.html.twig', [
-			'types'					=> $types,
-			'contact_count_ary' 	=> $contact_count_ary,
-			'protected_types'		=> $this->protected_types,
+//			'types'					=> $types,
+//			'contact_count_ary' 	=> $contact_count_ary,
+			'contact_types'			=> $contactTypes,
+			'protected_types'		=> $this->protectedTypes,
 		]);
 	}
 
 	/**
-	 * @Route("/contact-types/add", name="typecontact_add")
+	 * @Route("/contact-types/add", name="type_contact_add")
 	 * @Method({"GET", "POST"})
 	 */
-	public function add(Request $request, string $schema, string $access):Response
+	public function add(TypeContactRepository $typeContactRepository, 
+		TranslatorInterface $translator,
+		Request $request, string $schema, string $access):Response
 	{
 		$data = [
 			'name'		=> '',
 			'abbrev'	=> '',
 		];
 
-		$form = $this->createForm('type_contact_type', $data)
+		$form = $this->createForm(TypeContactType::class, $data)
 			->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 
-			$app['db']->insert($schema . '.type_contact', $data);
+			$typeContactRepository->create($schema, $data);
+//			$app['db']->insert($schema . '.type_contact', $data);
 
-			$this->addFlash('success', 'type_contact_add.success', ['%name%'  => $data['name']]);
+			$this->addFlash('success', $translator->trans('type_contact_add.success', ['%name%'  => $data['name']]));
 
 			return $this->redirectToRoute('typecontact_index', [
 				'schema' 	=> $schema,
@@ -79,14 +74,17 @@ class TypeContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact-types/{id}/edit", name="typecontact_edit")
+	 * @Route("/contact-types/{id}/edit", name="type_contact_edit")
 	 * @Method({"GET", "POST"})
 	 */
-	public function edit(Request $request, string $schema, string $access, array $type_contact):Response
+	public function edit(
+		TypeContactRepository $typeContactRepository,
+		TranslatorInterface $translator,
+		Request $request, string $schema, string $access, int $id):Response
 	{
-		$id = $type_contact['id'];
+		$typeContact = $typeContactRepository->get($id, $schema);
 
-		if (in_array($type_contact['abbrev'], $this->protected_types))
+		if (in_array($typeContact['abbrev'], $this->protectedTypes))
 		{
 			throw new ConflictHttpException(
 				'This contact type is protected 
@@ -94,7 +92,7 @@ class TypeContactController extends AbstractController
 			);			
 		}
 
-		$form = $this->createForm('type_contact_type', $type_contact, [
+		$form = $this->createForm(TypeContactType::class, $typeContact, [
 			'ignore' => ['id' => $id],
 		])->handleRequest($request);
 
@@ -102,9 +100,11 @@ class TypeContactController extends AbstractController
 		{
 			$data = $form->getData();
 
-			$app['db']->update($schema . '.type_contact', $data, ['id' => $id]);
+			$typeContactTypeRepository->update($id, $schema, $data);
 
-			$this->addFlash('success', 'type_contact_edit.success', ['%name%'  => $data['name']]);
+//			$app['db']->update($schema . '.type_contact', $data, ['id' => $id]);
+
+			$this->addFlash('success', $translator->trans('type_contact_edit.success', ['%name%'  => $data['name']]));
 
 			return $this->redirectToRoute('typecontact_index', [
 				'schema' 	=> $schema,
@@ -118,14 +118,16 @@ class TypeContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact-types/{id}/del", name="typecontact_del")
+	 * @Route("/contact-types/{id}/del", name="type_contact_del")
 	 * @Method({"GET", "POST"})
 	 */
-	public function del(Request $request, string $schema, string $access, array $type_contact):Response
+	public function del(TypeContactRepository $typeContactRepository, 
+		TranslatorInterface $translator,
+		Request $request, string $schema, string $access, int $id):Response
 	{
-		$id = $type_contact['id'];
+		$typeContact = $typeContactRepository->get($id, $schema);
 
-		if (in_array($type_contact['abbrev'], $this->protected_types))
+		if (in_array($typeContact['abbrev'], $this->protectedTypes))
 		{
 			throw new ConflictHttpException(
 				'This contact type is protected 
@@ -133,16 +135,21 @@ class TypeContactController extends AbstractController
 			);			
 		}
 
-		if ($app['db']->fetchColumn('select count(*)
-			from ' . $schema . '.contact 
-			where id_type_contact = ?', [$id]))
+		if ($typeContactRepository->getContactCount($id, $schema) !== 0)
 		{
 			throw new ConflictHttpException(
 				'The contact type cannot be deleted 
 					because contacts of this type exist.'
-			);
+			);			
 		}
+/*
+		if ($app['db']->fetchColumn('select count(*)
+			from ' . $schema . '.contact 
+			where id_type_contact = ?', [$id]))
+		{
 
+		}
+*/
 		$form = $this->createFormBuilder()
 			->add('submit', SubmitType::class)
 			->getForm()
@@ -150,9 +157,11 @@ class TypeContactController extends AbstractController
 
 		if ($form->isSubmitted() && $form->isValid())
 		{
-			$app['db']->delete($schema . '.type_contact', ['id' => $id]);
+//			$app['db']->delete($schema . '.type_contact', ['id' => $id]);
 
-			$this->addFlash('success', 'type_contact_del.success', ['%name%'  => $type_contact['name']]);
+			$typeContactRepository->delete($id, $schema);
+
+			$this->addFlash('success', $translator->trans('type_contact_del.success', ['%name%'  => $type_contact['name']]));
 
 			return $this->redirectToRoute('typecontact_index', [
 				'schema' 	=> $schema,
