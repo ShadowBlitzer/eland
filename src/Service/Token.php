@@ -20,7 +20,7 @@ class Token
 	{
 		$this->charsH = str_repeat('-', $this->hyphenChance) . $this->chars;
 		$this->charsLen = strlen($this->chars) - 1;
-		$this->charsHLen = strlen($this->chars_h) - 1;
+		$this->charsHLen = strlen($this->charsH) - 1;
 
 		return $this;
 	}

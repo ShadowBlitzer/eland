@@ -106,6 +106,23 @@ class UserRepository
 		return $user;
 	}
 
+	public function getByEmail($email, $schema):array
+	{
+		$id = $this->db->fetchColumn('select c.id_user
+			from ' . $schema . '.contact c,
+				' . $schema . '.type_contact tc
+			where c. value = ?
+				and tc.id = c.id_type_contact
+				and tc.abbrev = \'mail\'', [$email]);
+
+		if (!isset($id))
+		{
+			return [];
+		}
+
+		return $this->get($id, $schema);
+	}
+
 	private function readFromDb(int $id, string $schema)
 	{
 		$user = $this->db->fetchAssoc('select * from ' . $schema . '.users where id = ?', [$id]);

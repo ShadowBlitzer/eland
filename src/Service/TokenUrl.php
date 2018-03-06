@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Service\TokenCache;
 
@@ -19,7 +18,7 @@ class TokenUrl
 
 	public function __construct(
 		RequestStack $requestStack, 
-		UrlGenerator $urlGenerator,	
+		UrlGeneratorInterFace $urlGenerator,	
 		TokenCache $tokenCache
 	)
 	{

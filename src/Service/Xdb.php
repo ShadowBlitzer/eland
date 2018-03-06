@@ -143,7 +143,7 @@ class Xdb
 
 			$this->db->insert('xdb.events', $insert);
 
-			if ($agg_version == 1)
+			if ($aggVersion === 1)
 			{
 				$this->db->insert('xdb.aggs', $insert);
 			}

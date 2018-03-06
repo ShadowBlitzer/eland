@@ -45,7 +45,7 @@ class SupportController extends AbstractController
 
 			$this->addFlash('success', $app->trans('support.success'));
 
-			return $app->redirect($app->path('support', ['schema' => $schema]));
+			return $this->redirectToRoute('support', ['schema' => $schema, 'access' => $access]);
 		}
 
 		return $this->render('support/' . $access . '_form.html.twig', [

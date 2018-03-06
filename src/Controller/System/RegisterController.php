@@ -8,15 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Validator\Constraints as Assert;
-use form\email_addon_type;
-use form\addon_type;
-use form\register_type;
+use App\Form\Post\RegisterType;
+use App\Mail\MailQueueConfirmLink;
+use App\Mail\MailValidatedConfirmLink;
+use App\Mail\MailAdmin;
 
 class RegisterController extends AbstractController
 {
@@ -24,16 +19,16 @@ class RegisterController extends AbstractController
 	 * @Route("/register", name="register")
 	 * @Method({"GET", "POST"})
 	 */
-	public function form(Request $request, string $schema):Reponse
+	public function form(MailQueueConfirmLink $mailQueueConfirmLink, Request $request, string $schema):Response
 	{
-		$form = $this->createForm(register_type::class)
+		$form = $this->createForm(RegisterType::class)
 			->handleRequest($request);
 
-		if ($form->isSubmitted && $form->isValid())
+		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
 
-			$app['mail_queue_confirm_link']
+			$mailQueueConfirmLink
 				->setTo([$data['email']])
 				->setData($data)
 				->setTemplate('confirm_register')
@@ -52,9 +47,9 @@ class RegisterController extends AbstractController
 	 * @Route("/register/{token}", name="register_confirm")
 	 * @Method("GET")
 	 */
-	public function confirm(Request $request, string $schema, string $token):Response
+	public function confirm(MailValidatedConfirmLink $mailValidatedConfirmLink, Request $request, string $schema, string $token):Response
 	{
-		$data = $app['mail_validated_confirm_link']->get();
+		$data = $mailValidatedConfirmLink->get();
 	
 		error_log(json_encode($data));
 		
@@ -68,9 +63,9 @@ class RegisterController extends AbstractController
 
 		$email = strtolower($data['email']);
 
-		$user_email = $app['xdb']->get('user_email_' . $email);
+		$userEmail = $app['xdb']->get('user_email_' . $email);
 
-		if ($user_email !== '{}')
+		if ($userEmail !== '{}')
 		{
 			return $this->render('page/panel_danger.html.twig', [
 				'subject'	=> 'register_confirm.email_already_exists.subject',
@@ -80,9 +75,9 @@ class RegisterController extends AbstractController
 
 		$username = strtolower($data['username']);
 
-		$user_username = $app['xdb']->get('username_' . $username);
+		$userUsername = $app['xdb']->get('username_' . $username);
 
-		if ($user_username !== '{}')
+		if ($userUsername !== '{}')
 		{
 			return $this->render('page/panel_danger.html.twig', [
 				'subject'	=> 'register_confirm.username_already_exists.subject',

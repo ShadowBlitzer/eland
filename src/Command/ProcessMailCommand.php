@@ -57,7 +57,7 @@ class ProcessMailCommand extends Command
 
             $loopCount++;
 
-            $this->MailprocessQueue->run();
+            $this->mailProcessQueue->run();
         }
     }
 }

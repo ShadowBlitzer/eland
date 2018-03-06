@@ -17,16 +17,16 @@ class MailEnv
 
 	public function getNoreply():string
 	{
-		return $this->noreply_address;
+		return $this->noreplyAddress;
 	}
 
 	public function getFrom():string
 	{
-		return $this->from_address;
+		return $this->fromAddress;
 	}
 
 	public function getHoster():string 
 	{
-		return $this->hoster_address;
+		return $this->hosterAddress;
 	}
 }

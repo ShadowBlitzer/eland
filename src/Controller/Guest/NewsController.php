@@ -79,7 +79,7 @@ class NewsController extends AbstractController
 
 		$news = $db->fetchAll($query, $params);
 		
-		$newsAccessAry = $toApproveAry = $approve_headline_ary = [];
+		$newsAccessAry = $toApproveAry = $approveHeadlineAry = [];
 		
 		$rows = $xdb->getMany(['agg_schema' => $schema, 'agg_type' => 'news_access']);
 		
@@ -108,7 +108,7 @@ class NewsController extends AbstractController
 				$approveButton = 'approve_' . $n['id'];
 				$news[$k]['approve_button'] = $approveButton;
 				$toApproveAry[] = $approveButton;
-				$approve_headline_ary[$n['id']] = $n['headline'];
+				$approveHeadlineAry[$n['id']] = $n['headline'];
 			}
 
 /*		
@@ -145,8 +145,8 @@ class NewsController extends AbstractController
 				{
 					if ($approveForm->get($key)->isClicked())
 					{
-						list($approve_str, $id) = explode('_', $key);
-						$name = $approve_headline_ary[$id];				
+						list($approveStr, $id) = explode('_', $key);
+						$name = $approveHeadlineAry[$id];				
 
 						$newsRepository->approve($id, $schema);
 
@@ -155,9 +155,9 @@ class NewsController extends AbstractController
 					}
 				}
 
-				if (!isset($approve_str))
+				if (!isset($approveStr))
 				{
-					$this->addFlash('error', 'news.approve.error');					
+					$this->addFlash('error', $translator->trans('news.approve.error'));					
 				}
 
 				$params = $request->attributes->all();

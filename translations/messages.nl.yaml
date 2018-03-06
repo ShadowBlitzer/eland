@@ -370,7 +370,7 @@ password_reset:
     Stuur een link naar je mailbox waarmee 
     je je paswoord opnieuw kan instellen.
   unknown_email_address: >-
-    Dit email adres is niet gekend.
+    Email adres %email% is niet gekend in deze groep.
   link_send_success: >-
     Een link om je paswoord te resetten
     werd gestuurd naar %email%. Deze link 
