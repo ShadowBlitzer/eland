@@ -7,8 +7,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Form\Post\HostingRequestType;
+use App\Mail\MailQueueConfirmLink;
+use App\Mail\MailValidatedConfirmLink;
+use App\Mail\MailQueue;
+use App\Mail\MailEnv;
 
 class HostingRequestController extends AbstractController
 {
@@ -16,7 +21,9 @@ class HostingRequestController extends AbstractController
 	 * @Route("/hosting-request", name="hosting_request")
 	 * @Method({"GET", "POST"})
 	 */
-	public function form(Request $request):Reponse
+	public function form(MailQueueConfirmLink $mailQueueConfirmLink, 
+		TranslatorInterface $translator,
+		Request $request):Response
 	{
 		$form = $this->createForm(HostingRequestType::class)
 			->handleRequest($request);
@@ -25,14 +32,14 @@ class HostingRequestController extends AbstractController
 		{
 			$data = $form->getData();
 			
-			$app['mail_queue_confirm_link']
+			$mailQueueConfirmLink
 				->setTo([$data['email']])
 				->setData($data)
 				->setTemplate('confirm_hosting_request')
 				->setRoute('hosting_request_confirm')
 				->put();
 
-			$this->addFlash('info', 'hosting_request.confirm_email_info', ['%email%' => $data['email']]);
+			$this->addFlash('info', $translator->trans('hosting_request.confirm_email_info', ['%email%' => $data['email']]));
 
 			return $this->redirectToRoute('main_index');
 		}
@@ -42,21 +49,28 @@ class HostingRequestController extends AbstractController
 		]);
 	}
 
-	public function confirm(Request $request, string $token):Response
+	/**
+	 * @Route("/hosting-request/{token}", name="hosting_request_confirm")
+	 * @Method({"GET"})
+	 */
+	public function confirm(
+		TranslatorInterface $translator,
+		MailQueue $mailQueue, MailEnv $mailEnv, MailValidatedConfirmLink $mailValidatedConfirmLink,
+		Request $request, string $token):Response
 	{
-		$data = $app['mail_validated_confirm_link']->get();
+		$data = $mailValidatedConfirmLink->get();
 
 		error_log(json_encode($data));
 		
 		if (!count($data))
 		{
-			$this->addFlash('error', 'hosting_request.confirm_not_found');
+			$this->addFlash('error', $translator->trans('hosting_request.confirm_not_found'));
 			return $this->redirectToRoute('hosting_request');
 		}
 
-		$app['mail_queue']->setTemplate('hosting_request')
+		$mailQueue->setTemplate('hosting_request')
 			->setVars($data)
-			->setTo([$app['mail_env']->getHoster()])
+			->setTo([$mailEnv->getHoster()])
 			->setReplyTo([$data['email'] => $data['group_name']])
 			->setPriority(900000)
 			->put();
@@ -82,7 +96,7 @@ class HostingRequestController extends AbstractController
 */
 
 
-		$this->addFlash('success', 'hosting_request.success');
+		$this->addFlash('success', $translator->trans('hosting_request.success'));
 
 		return $this->redirectToRoute('main_index');
 	}
