@@ -4,17 +4,20 @@ namespace App\Repository;
 
 use Doctrine\DBAL\Connection as Db;
 use App\Service\Xdb;
+use App\Service\XdbAccess;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class NewsRepository
 {
 	private $db;
 	private $xdb;
+	private $xdbAccess;
 
-	public function __construct(Db $db, Xdb $xdb)
+	public function __construct(Db $db, Xdb $xdb, XdbAccess $xdbAccess)
 	{
 		$this->db = $db;
 		$this->xdb = $xdb;
+		$this->xdbAccess = $xdbAccess;
 	}
 
 	public function getAll(string $schema)
@@ -90,26 +93,26 @@ class NewsRepository
 		$this->xdb->del('news_access', $id, $schema);
 	}
 
-	public function getNext(int $id, string $schema, array $access_ary)
+	public function getNext(int $id, string $schema, string $access)
 	{
-		$rows = $this->xdb->getMany([
+		$rows = $this->xdb->getFiltered([
 			'agg_schema' 	=> $schema,
 			'agg_type' 		=> 'news_access',
 			'eland_id' 		=> ['>' => $id],
-			'access' 		=> $access_ary,
+			'access' 		=> $this->xdbAccess->get($access),
 		], 
 		'order by eland_id asc limit 1');
 
 		return count($rows) ? reset($rows)['eland_id'] : null;
 	}
 
-	public function getPrev(int $id, string $schema, array $access_ary)
+	public function getPrev(int $id, string $schema, string $access)
 	{
-		$rows = $this->xdb->getMany([
+		$rows = $this->xdb->getFiltered([
 			'agg_schema' => $schema,
 			'agg_type' => 'news_access',
 			'eland_id' => ['<' => $id],
-			'access' => $access_ary,
+			'access' => $this->xdbAccess->get($access),
 		], 'order by eland_id desc limit 1');
 
 		return count($rows) ? reset($rows)['eland_id'] : null;

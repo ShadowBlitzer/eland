@@ -207,10 +207,8 @@ class NewsController extends AbstractController
 			$vars['approve_form'] = $approveForm->createView();
 		}
 
-		$access_ary = ['public', 'interlets', 'users', 'admin'];
-
-		$vars['prev'] = $newsRepository->getPrev($news['id'], $schema, $access_ary);
-		$vars['next'] = $newsRepository->getNext($news['id'], $schema, $access_ary);
+		$vars['prev'] = $newsRepository->getPrev($news['id'], $schema, $access);
+		$vars['next'] = $newsRepository->getNext($news['id'], $schema, $access);
 
 		return $this->render('news/' . $access . '_show.html.twig', $vars);
 	}
