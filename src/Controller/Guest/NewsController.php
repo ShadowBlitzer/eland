@@ -81,7 +81,7 @@ class NewsController extends AbstractController
 		
 		$newsAccessAry = $toApproveAry = $approveHeadlineAry = [];
 		
-		$rows = $xdb->getMany(['agg_schema' => $schema, 'agg_type' => 'news_access']);
+		$rows = $xdb->getFiltered(['agg_schema' => $schema, 'agg_type' => 'news_access']);
 		
 		foreach ($rows as $row)
 		{

@@ -132,7 +132,7 @@ class autominlimit
 
 		if ($this->group_minlimit !== '' && $new_minlimit <= $this->group_minlimit)
 		{
-			$this->xdb->set('autominlimit', $to_id, ['minlimit' => '', 'erased' => true], $this->schema);
+			$this->xdb->set('autominlimit', $to_id, $this->schema, ['minlimit' => '', 'erased' => true]);
 			$this->db->update($this->schema . '.users', ['minlimit' => -999999999], ['id' => $to_id]);
 			$this->user_cache->clear($to_id, $this->schema);
 
@@ -142,7 +142,7 @@ class autominlimit
 			return;
 		}
 
-		$this->xdb->set('autominlimit', $to_id, ['minlimit' => $new_minlimit]);
+		$this->xdb->set('autominlimit', $to_id, $this->schema, ['minlimit' => $new_minlimit]);
 
 		$this->db->update($this->schema . '.users', ['minlimit' => $new_minlimit], ['id' => $to_id]);
 

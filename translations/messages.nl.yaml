@@ -127,6 +127,7 @@ label:
   letscode: LETScode
   location: Plaats
   location_explain: Waar?
+  map: Map
   max: Max
   maximum_limit: Maximum limiet
   menu: Menu
@@ -307,8 +308,29 @@ transaction_add:
 forum_index:
   title: Forum
 
+doc:
+  document: Document
+  no_items: Er zijn nog geen documenten opgeladen.
+  title_top_btn:
+    add: Document opladen
+
 doc_index:
   title: Documenten
+
+doc_map_index:
+  title: Documenten map "%name%"
+
+doc_add:
+  title: Document opladen
+
+doc_edit:
+  title: Document aanpassen
+
+doc_map_edit: 
+  title: Documenten map %name% aanpassen
+
+
+
 
 news:
   title_top_btn:

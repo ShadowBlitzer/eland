@@ -87,7 +87,7 @@ class AutoMinLimitController extends AbstractController
 			$data['exclusive'] = implode(',', $data['exclusive']);
 			$data['trans_exclusive'] = implode(',', $data['trans_exclusive']);
 
-			$app['xdb']->set('setting', 'autominlimit', $data, $schema);
+			$app['xdb']->set('setting', 'autominlimit', $schema, $data);
 
 			$this->addFlash('success', $app->trans('auto_min_limit.success'));
 

@@ -40,7 +40,7 @@ class NewsRepository
 		if (!count($row))	
 		{
 			$row['data']['access'] = 'interlets';
-			$this->xdb->set('news_access', $id, ['access' => 'interlets'], $schema);
+			$this->xdb->set('news_access', $id, $schema, ['access' => 'interlets']);
 		}
 
 		$data['access'] = $row['data']['access'];	
@@ -62,7 +62,7 @@ class NewsRepository
 		$this->db->insert($schema . '.news', $data);
 		$id = $this->db->lastInsertId($schema . '.news_id_seq');
 
-		$this->xdb->set('news_access', $id, ['access' => $access], $schema);
+		$this->xdb->set('news_access', $id, $schema, ['access' => $access]);
 
 		return $id;
 	}
@@ -76,7 +76,7 @@ class NewsRepository
 		unset($data['access']);
 		
 		$this->db->update($schema . '.news', $data, ['id' => $id]);
-		$this->xdb->set('news_access', $id, ['access' => $access], $schema);
+		$this->xdb->set('news_access', $id, $schema, ['access' => $access]);
 	}
 
 	public function approve(int $id, string $schema)

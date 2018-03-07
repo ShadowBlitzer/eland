@@ -49,7 +49,7 @@ class config
 
 	public function set(string $name, string $value, string $schema)
 	{
-		$this->xdb->set('setting', $name, ['value' => $value], $schema);
+		$this->xdb->set('setting', $name, $schema, ['value' => $value]);
 
 		$this->predis->del($schema . '_config_' . $name);
 
@@ -91,7 +91,7 @@ class config
 			$value = $this->db->fetchColumn('select value 
 				from ' . $schema . '.config 
 				where setting = ?', [$key]);
-			$this->xdb->set('setting', $key, ['value' => $value], $schema);
+			$this->xdb->set('setting', $key, $schema, ['value' => $value]);
 		}
 
 		if (isset($value))

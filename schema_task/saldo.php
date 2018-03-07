@@ -360,7 +360,7 @@ class saldo extends schema_task
 				}
 				else
 				{
-					$this->xdb->set('news_access', $news_id, ['access' => 'interlets'], $this->schema);
+					$this->xdb->set('news_access', $news_id, $this->schema, ['access' => 'interlets']);
 					$row['access'] = 'interlets';
 				}
 

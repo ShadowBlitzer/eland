@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use Doctrine\DBAL\Connection as db;
+use Doctrine\DBAL\Driver\PDOStatement;
 
 /*
                                 Table "xdb.events"
@@ -90,7 +91,7 @@ class Xdb
 	 *
 	 */
 
-	public function set(string $aggType, string $elandId, array $data, string $aggSchema, string $eventTime = ''):Xdb
+	public function set(string $aggType, string $elandId, string $aggSchema, array $data, string $eventTime = ''):Xdb
 	{
 		$aggId = $aggSchema . '_' . $aggType . '_' . $elandId;
 
@@ -239,10 +240,55 @@ class Xdb
 	}
 
 	/**
-	 *
+	 * method getMany renamed to getFiltered
 	 */
 
-	public function getMany(array $filters = [], string $queryExtra = ''):array
+	public function getFiltered(array $filters = [], string $queryExtra = ''):array
+	{
+		$stmt = $this->getFilterStatement($filters, $queryExtra, false);
+
+		$ary = [];
+
+		while ($row = $stmt->fetch())
+		{
+			$row['data'] = json_decode($row['data'], true);
+
+			$ary[$row['agg_id']] = $row;
+		}
+
+		error_log(' - Xdb::getFiltered - ' . json_encode($filters));
+
+		return $ary;
+	}
+
+	public function getFilteredData(array $filters = [], string $queryExtra = ''):array
+	{
+		$stmt = $this->getFilterStatement($filters, $queryExtra, false);
+
+		$ary = [];
+
+		while ($row = $stmt->fetch())
+		{			
+			$ary[$row['agg_id']] = json_decode($row['data'], true);
+			$ary[$row['agg_id']]['id'] = $row['eland_id'];	
+			$ary[$row['agg_id']]['ts'] = $row['ts'];						
+		}
+
+		error_log(' - Xdb::getFilteredData - ' . json_encode($filters));
+
+		return $ary;
+	}	
+
+	public function countFiltered(array $filters = [], string $queryExtra = ''):int
+	{
+		$stmt = $this->getFilterStatement($filters, $queryExtra, true);
+
+		$row = $stmt->fetch();
+
+		return $row['count'];
+	}
+
+	private function getFilterStatement(array $filters, string $queryExtra = '', bool $isCount):PDOStatement
 	{
 		$sqlWhere = $sqlParams = $sqlTypes = [];
 
@@ -290,7 +336,9 @@ class Xdb
 			}
 		}
 
-		$query = 'select * from xdb.aggs';
+		$query = 'select ';
+		$query .= $isCount ? 'count(*)' : '*';
+		$query .= ' from xdb.aggs';
 
 		if (count($sqlWhere))
 		{
@@ -299,26 +347,13 @@ class Xdb
 
 		$query .= $queryExtra ? ' ' . $queryExtra : '';
 
-		$stmt = $this->db->executeQuery($query, $sqlParams, $sqlTypes);
-
-		$ary = [];
-
-		while ($row = $stmt->fetch())
-		{
-			$row['data'] = json_decode($row['data'], true);
-
-			$ary[$row['agg_id']] = $row;
-		}
-
-		error_log(' - xdb get_many - ');
-
-		return $ary;
+		return $this->db->executeQuery($query, $sqlParams, $sqlTypes);
 	}
 
 	/**
 	 *
 	 */
-
+/// TODO count what? type? events?
 	public function count(string $aggType, string $elandId, string $aggSchema):int
 	{
 		$sqlWhere = $sqlParams = [];

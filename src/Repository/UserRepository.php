@@ -145,7 +145,7 @@ class UserRepository
 		else
 		{
 			$user += ['fullname_access' => 'admin'];
-			$this->xdb->set('user_fullname_access', $id, ['fullname_access' => 'admin'], $schema);
+			$this->xdb->set('user_fullname_access', $id, $schema, ['fullname_access' => 'admin']);
 		}
 
 		if ($user['accountrole'] === 'interlets')

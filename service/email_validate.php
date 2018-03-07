@@ -53,7 +53,7 @@ class email_validate
 			return;
 		}
 
-		$this->xdb->set('email_validated', $data['email'], $data, $data['schema']);
+		$this->xdb->set('email_validated', $data['email'], $data['schema'], $data);
 
 		$this->monolog->debug('email ' . $data['email'] . ' validated from ' . $data['source'],
 			['schema' => $data['schema']]);
