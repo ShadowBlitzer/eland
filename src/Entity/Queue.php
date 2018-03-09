@@ -7,7 +7,7 @@ use App\Entity\PostgresNowUTC;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\QueueRepository")
- * @ORM\Table(name="queue", schema="c")
+ * @ORM\Table(name="queue", schema="c", indexes={@ORM\Index(name="topic_idx", columns={"topic"})})
  * @ORM\HasLifecycleCallbacks
  */
 class Queue
@@ -15,7 +15,7 @@ class Queue
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      */
     private $id;
 
@@ -30,12 +30,12 @@ class Queue
     private $ts;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default":0})
      */
     private $priority;
 
     /**
-     * @ORM\Column(type="json_array", options={"jsonb"=true})
+     * @ORM\Column(type="json_array", options={"jsonb":true})
      */
     private $data;
 
@@ -47,16 +47,3 @@ class Queue
         $this->ts = new PostgresNowUTC();
     }
 }
-
-
-/*
-create table if not exists xdb.queue (
-ts timestamp without time zone default timezone('utc'::text, now()),
-id bigserial primary key,
-topic varchar(60) not null,
-data jsonb,
-priority int default 0);
-
-create index on xdb.queue(id, priority);
-
-*/

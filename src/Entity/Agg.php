@@ -7,7 +7,7 @@ use App\Entity\DateTimeUTC;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AggRepository")
- * @ORM\Table(name="agg", schema="c")
+ * @ORM\Table(name="agg", schema="c", indexes={@ORM\Index(name="agg_type_system_idx", columns={"agg_type", "system_id"})})
  */
 class Agg
 {
@@ -18,7 +18,7 @@ class Agg
     private $id;
 
     /**
-     * @ORM\Column(name="version_id", type="integer")
+     * @ORM\Column(name="agg_version", type="integer")
      */
     private $version;
 
@@ -28,31 +28,27 @@ class Agg
     private $system;
 
     /**
-     * @ORM\Column(name="ts", type="datetime")
+     * @ORM\Column(name="agg_type", type="string", nullable=true)
      */
-    private $ts;
+    private $type;    
 
     /**
-     * @ORM\Column(type="json_array", options={"jsonb"=true})
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    private $updatedAt;    
+
+    /**
+     * @ORM\Column(type="json_array", options={"jsonb":true})
      */
     private $data;
 
     /**
-     * @ORM\Column(type="json_array", options={"jsonb"=true})
+     * @ORM\Column(type="json_array", options={"jsonb":true})
      */
     private $meta; 
 }
-
-/* 
-create table if not exists xdb.ag (
-    ts timestamp without time zone default timezone('utc'::text, now()),
-    id uuid primary key not null,
-    type varchar(32),
-    segment uuid,
-    version int not null,
-    data jsonb,
-    meta jsonb
-    );
-    
-    create index on xdb.ag(type, segment);
-*/   

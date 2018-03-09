@@ -3,50 +3,35 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\PostgresNowUTC;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
- * @ORM\Table(name="event", schema="e")
+ * @ORM\Table(name="event", schema="e", 
+ *     indexes={@ORM\Index(name="agg_idx", columns={"agg_id"})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="agg_version_unique_idx", columns={"agg_id", "agg_version"})}
+ * )
  */
 class Event
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="guid")
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="sequence_id", type="bigint")
      */
-    private $id;
+    private $sequenceId;
 
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="agg_id", type="guid")
      */
-    private $version;
+    private $aggId;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="agg_version", type="integer")
      */
-    private $ts;
+    private $aggVersion;
 
     /**
-     * @ORM\Column(type="json_array", options={"jsonb"=true})
+     * @ORM\Column(type="json_array", options={"jsonb":true})
      */
     private $data;
-
-    /**
-     * @ORM\Column(type="json_array", options={"jsonb"=true})
-     */
-    private $meta;
 }
-
-/*
-create table if not exists xdb.ev (
-ts timestamp without time zone default timezone('utc'::text, now()),
-id uuid not null,
-version int not null,
-data jsonb,
-meta jsonb
-);
-
-alter table xdb.ev add primary key (id, version);
-*/
