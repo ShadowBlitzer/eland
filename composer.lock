@@ -1863,25 +1863,28 @@
         },
         {
             "name": "rollerworks/password-strength-validator",
-            "version": "v1.0.6",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollerworks/PasswordStrengthValidator.git",
-                "reference": "df1da96e960b74e183f4923dba88c19bf78bbab8"
+                "reference": "6943d80f23c7ac4cc65035d664928e413e2c7b43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollerworks/PasswordStrengthValidator/zipball/df1da96e960b74e183f4923dba88c19bf78bbab8",
-                "reference": "df1da96e960b74e183f4923dba88c19bf78bbab8",
+                "url": "https://api.github.com/repos/rollerworks/PasswordStrengthValidator/zipball/6943d80f23c7ac4cc65035d664928e413e2c7b43",
+                "reference": "6943d80f23c7ac4cc65035d664928e413e2c7b43",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
                 "psr/container": "^1.0",
+                "psr/log": "^1.0",
                 "symfony/polyfill-mbstring": "^1.5.0",
                 "symfony/validator": "^2.8.9 || ^3.3.6 || ^4.0"
             },
             "require-dev": {
+                "guzzlehttp/psr7": "^1.4",
+                "php-http/httplug": "^1.1",
                 "symfony/config": "^3.3.6 || ^4.0",
                 "symfony/console": "^3.3.6 || ^4.0",
                 "symfony/phpunit-bridge": "^3.3.6 || ^4.0"
@@ -1924,7 +1927,7 @@
                 "symfony",
                 "validator"
             ],
-            "time": "2018-02-26T18:55:42+00:00"
+            "time": "2018-03-10T15:07:06+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -2719,16 +2722,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.70",
+            "version": "v1.0.71",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "1f00c05d35523dc0ac52e4a457989a069be5a7a4"
+                "reference": "51d7ddce85ca8b73a1fc16771f607b7d56692dbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/1f00c05d35523dc0ac52e4a457989a069be5a7a4",
-                "reference": "1f00c05d35523dc0ac52e4a457989a069be5a7a4",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/51d7ddce85ca8b73a1fc16771f607b7d56692dbd",
+                "reference": "51d7ddce85ca8b73a1fc16771f607b7d56692dbd",
                 "shasum": ""
             },
             "require": {
@@ -2761,7 +2764,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2018-02-22T07:00:47+00:00"
+            "time": "2018-03-10T21:15:53+00:00"
         },
         {
             "name": "symfony/form",

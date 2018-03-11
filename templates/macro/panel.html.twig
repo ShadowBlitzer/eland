@@ -1,7 +1,7 @@
 {%- macro form_start(form) -%}
 	{%- import _self as p -%}
 	{{- p.post() -}}
-	{{- form_start(form) -}}
+	{{- form_start(form, {'attr': {'novalidate': 'novalidate'}}) -}} {# TODO remove novalidate #}
 	{{- form_errors(form) -}}
 {%- endmacro form_start -%}
 
