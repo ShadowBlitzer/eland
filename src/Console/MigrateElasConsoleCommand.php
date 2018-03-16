@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
-class MigrateElasCommand extends Command
+class MigrateElasConsoleCommand extends Command
 {
     protected function configure()
     {

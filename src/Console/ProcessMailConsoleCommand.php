@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,7 +9,7 @@ use Predis\Client as Predis;
 use App\Service\BootCount;
 use App\Mail\MailProcessQueue;
 
-class ProcessMailCommand extends Command
+class ProcessMailConsoleCommand extends Command
 {
     private $bootCount;
     private $predis;
