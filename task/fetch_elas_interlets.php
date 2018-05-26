@@ -304,22 +304,48 @@ class fetch_elas_interlets extends task
 			->last()
 			->filter('tr')
 			->first()
-			->nextAll()
-			->each(function ($node) use (&$msgs, $cached)
+			->nextAll();
+
+		if (!$msgs_table->count())
+		{
+			return;
+		}
+
+		$msgs_table->each(function ($node) use (&$msgs, $cached)
 		{
 			$first_td = $node->filter('td')->first();
 			$va = $first_td->text();
 			$va = substr($va, 0, 1);
 
 			$next_tds = $first_td->siblings();
-			$a = $next_tds->eq(0)->filter('a');
+
+			if (!$next_tds->count())
+			{
+				return;
+			}
+
+			$eq0 = $next_tds->eq(0);
+
+			if (!$eq0->count())
+			{
+				return;
+			}
+
+			$eq1 = $next_tds->eq(1);
+
+			if (!$eq1->count())
+			{
+				return;
+			}
+
+			$a = $eq0->filter('a');
 			$del = $a->filter('del')->count();
 
-			if (!$del)
+			if (!$del && $next_tds->count())
 			{
 				$href = $a->attr('href');
 				$content = $a->text();
-				$user = $next_tds->eq(1)->text();
+				$user = $eq1->text();
 
 				$user = rtrim($user, ') ');
 				$pos = strrpos($user, '(');
@@ -343,8 +369,6 @@ class fetch_elas_interlets extends task
 					'fetch_count'	=> $count,
 					'fetched_at'	=> is_array($c) ? $c['fetched_at'] : $this->now_gmdate,
 				];
-
-//				error_log($this->domain . ' _' . $va . '_  id:' . $id . ' c: ' . $content . ' -- ' . $user);
 
 				$msgs[$id] = $msg;
 			}
