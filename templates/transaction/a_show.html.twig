@@ -1,7 +1,7 @@
-{% extends 'admin.html.twig' %}
+{%- extends 'admin.html.twig' -%}
 
-{% import 'macro/top_button.html.twig' as tb %}
-{% import 'macro/button_group.html.twig' as bg %}
+{%- import 'macro/top_button.html.twig' as tb -%}
+{%- import 'macro/button_group.html.twig' as bg -%}
 
 {%- block top_buttons -%}
     {{- tb.edit(path('transaction_edit', acc_sch|merge({'id': transaction.id})), 'transaction.title_top_btn.edit') -}}
@@ -15,10 +15,9 @@
     {{- 'transaction_show.title'|trans -}}
 {%- endblock heading -%}
 
-{% block inner -%}
+{%- block inner -%}
 
-{% embed 'transaction/item.html.twig' with {'t': transaction} %}
-{% endembed %}
+{%- embed 'transaction/item.html.twig' with {'t': transaction} -%}
+{%- endembed -%}
 
-{%- endblock inner %}
-
+{%- endblock inner -%}

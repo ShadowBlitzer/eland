@@ -1,15 +1,11 @@
-{% extends 'page/a_form.html.twig' %}
+{% extends 'page/a_form.html.twig' -%}
 
-{% import 'macro/button.html.twig' as b %}
+{% import 'macro/button.html.twig' as b -%}
 
 {% block heading -%}
     {{- 'page_a_add.title'|trans -}}
-{%- endblock %}
+{%- endblock -%}
 
 {% block submit -%}
     {{- b.add(form.submit) -}}
-{%- endblock submit %}
-
-
-
-
+{%- endblock submit -%}

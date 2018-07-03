@@ -12,7 +12,7 @@
 
 {%- set menu_left_en = [
   'login', 'contact', 'register'
-] 
+]
 
 -%}
 
@@ -23,11 +23,9 @@
 		{{- m.li_anon(key, menu_ary[key], active_menu, schema) -}}
     {%- endif -%}
   {%- endfor -%}
-  
+
 {%- endblock menu_left -%}
 
 {#
-{% block fa %}{{ anon_routes[active_route].fa }}{% endblock fa %}
+{% block fa %}{{- anon_routes[active_route].fa }}{% endblock fa %}
 #}
-
-

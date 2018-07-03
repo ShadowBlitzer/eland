@@ -1,29 +1,28 @@
-{% extends 'admin.html.twig' %}
+{%- extends 'admin.html.twig' -%}
 
-{% import 'macro/panel.html.twig' as p %}
-{% import 'macro/button.html.twig' as b %}
+{%- import 'macro/panel.html.twig' as p -%}
+{%- import 'macro/button.html.twig' as b -%}
 
-{% block inner -%}
-{{- form_start(form) -}}
+{%- block inner -%}
+    {{- form_start(form) -}}
 
-{{- p.default() -}}
-<h3>{{- 'export.elas.db.title'|trans -}}</h3>
-<p>{{- 'export.elas.db.explain'|trans -}}</p>
-{{- p.body() -}}
-{{- b.default(form.elas_db, 'export.elas.db.btn') -}}
-{{- p.end() -}}
+    {{- p.default() -}}
+    <h3>{{- 'export.elas.db.title'|trans -}}</h3>
+    <p>{{- 'export.elas.db.explain'|trans -}}</p>
+    {{- p.body() -}}
+    {{- b.default(form.elas_db, 'export.elas.db.btn') -}}
+    {{- p.end() -}}
 
-{{- p.default() -}}
-<h3>{{- 'export.elas.csv.title'|trans -}}</h3>
-<p>{{- 'export.elas.csv.explain'|trans -}}</p>
-{{- p.body() -}}
-{{- b.default(form.users, 'export.elas.csv.users.btn') -}}
-{{- b.default(form.contacts, 'export.elas.csv.contacts.btn') -}}
-{{- b.default(form.categories, 'export.elas.csv.categories.btn') -}}
-{{- b.default(form.messages, 'export.elas.csv.messages.btn') -}}
-{{- b.default(form.transactions, 'export.elas.csv.transactions.btn') -}}
-{{- p.end() -}}
+    {{- p.default() -}}
+    <h3>{{- 'export.elas.csv.title'|trans -}}</h3>
+    <p>{{- 'export.elas.csv.explain'|trans -}}</p>
+    {{- p.body() -}}
+    {{- b.default(form.users, 'export.elas.csv.users.btn') -}}
+    {{- b.default(form.contacts, 'export.elas.csv.contacts.btn') -}}
+    {{- b.default(form.categories, 'export.elas.csv.categories.btn') -}}
+    {{- b.default(form.messages, 'export.elas.csv.messages.btn') -}}
+    {{- b.default(form.transactions, 'export.elas.csv.transactions.btn') -}}
+    {{- p.end() -}}
 
-{{- form_end(form) -}}
-{%- endblock inner %}
-
+    {{- form_end(form) -}}
+{%- endblock inner -%}

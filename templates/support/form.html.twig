@@ -1,5 +1,5 @@
-{% import 'macro/panel.html.twig' as p %}
-{% import 'macro/button.html.twig' as b %}
+{%- import 'macro/panel.html.twig' as p %}
+{%- import 'macro/button.html.twig' as b %}
 
 {{- config('support_form_top_text', schema) -}}
 
@@ -10,5 +10,3 @@
 {{- p.form_end(form) -}}
 
 {{- config('support_form_bottom_text', schema) -}}
-
-

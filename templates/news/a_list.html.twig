@@ -1,10 +1,10 @@
-{% extends 'news/a_index.html.twig' %}
+{%- extends 'news/a_index.html.twig' -%}
 
-{% import 'macro/asset.html.twig' as a %}
-{% import 'macro/table.html.twig' as t %}
-{% import 'macro/panel.html.twig' as p %}
+{%- import 'macro/asset.html.twig' as a -%}
+{%- import 'macro/table.html.twig' as t -%}
+{%- import 'macro/panel.html.twig' as p -%}
 
-{% set view = 'list' %}
+{%- set view = 'list' -%}
 
 {%- block csv -%}
 	{{- p.csv() -}}
@@ -34,7 +34,7 @@
 		'render': 'yes_no'
 	},
 	'access': {
-		'lbl': 'label.access', 
+		'lbl': 'label.access',
 		'hide':'phone',
         'render': 'badge'
 	}
@@ -47,6 +47,3 @@
 {{- t.end() -}}
 
 {%- endblock in_pagination -%}
-
-
-

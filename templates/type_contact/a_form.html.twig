@@ -1,22 +1,21 @@
-{% extends 'admin.html.twig' %}
+{%- extends 'admin.html.twig' -%}
 
-{% import 'macro/button.html.twig' as b %}
-{% import 'macro/panel.html.twig' as p %}
+{%- import 'macro/button.html.twig' as b -%}
+{%- import 'macro/panel.html.twig' as p -%}
 
-{% block inner -%}
+{%- block inner -%}
 
-{{ p.form_start(form) }}
+{{- p.form_start(form) -}}
 
-{% block form_fields -%}
-    {{ form_row(form.abbrev, {'label': 'type_contact.abbreviation'}) }}
-    {{ form_row(form.name, {'label': 'type_contact.name'}) }}
-{%- endblock form_fields %}
+{%- block form_fields -%}
+    {{- form_row(form.abbrev, {'label': 'type_contact.abbreviation'}) -}}
+    {{- form_row(form.name, {'label': 'type_contact.name'}) -}}
+{%- endblock form_fields -%}
 
-{{ b.cancel(path('type_contact_index', acc_sch)) }}
+{{- b.cancel(path('type_contact_index', acc_sch)) -}}
 
-{% block submit %}{% endblock %}
+{%- block submit -%}{%- endblock -%}
 
-{{ p.form_end(form) }}
+{{- p.form_end(form) -}}
 
-{%- endblock inner %}
-
+{%- endblock inner -%}

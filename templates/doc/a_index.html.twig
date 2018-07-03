@@ -1,7 +1,7 @@
-{% extends 'admin.html.twig' %}
+{%- extends 'admin.html.twig' %}
 
-{% import 'macro/asset.html.twig' as a %}
-{% import 'macro/top_button.html.twig' as tb %}
+{%- import 'macro/asset.html.twig' as a %}
+{%- import 'macro/top_button.html.twig' as tb %}
 
 {%- block top_buttons -%}
 	{{- tb.add(path('doc_add', acc_sch), 'doc.title_top_btn.add') -}}
@@ -28,10 +28,8 @@
 		    <td>{{- ba.badge(d.access) -}}</td>
             <td>
             {{- b.edit_link(path('doc_edit', acc_sch|merge({'id': d.id}))) -}}&nbsp;
-            {{- b.del_link(path('doc_del', acc_sch|merge({'id': d.id}))) -}}           
+            {{- b.del_link(path('doc_del', acc_sch|merge({'id': d.id}))) -}}
             </td>
         {%- endblock table_body_extra -%}
     {%- endembed -%}
 {%- endblock inner -%}
-
-

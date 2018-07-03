@@ -16,7 +16,6 @@
     {%- block text_footer -%}
         {%- if schema is defined %}
 
-
 {{ 'mail.footer'|trans({'%systemname%': config('systemname', schema)}) -}}
         {%- endif -%}
     {%- endblock text_footer -%}
@@ -30,7 +29,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body bgcolor="#FFFFFF" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
-    {%- block html_noreply_pretext -%} 
+    {%- block html_noreply_pretext -%}
         {%- if no_reply is defined -%}
         <p><i>{{-'mail.no_reply'|trans -}}</i></p>
         {%- endif -%}

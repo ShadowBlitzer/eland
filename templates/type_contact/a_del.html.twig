@@ -1,17 +1,17 @@
-{% extends 'type_contact/a_form.html.twig' %}
+{%- extends 'type_contact/a_form.html.twig' -%}
 
-{% import 'macro/button.html.twig' as b %}
+{%- import 'macro/button.html.twig' as b -%}
 
-{% block heading -%}
-    {{ 'type_contact_del.title'|trans({'%name%': name}) }}
-{%- endblock %}
+{%- block heading -%}
+    {{- 'type_contact_del.title'|trans({'%name%': name}) -}}
+{%- endblock -%}
 
-{% block form_fields -%}
+{%- block form_fields -%}
 <p class="text-danger"><strong>
-    {{ 'type_contact_del.warning'|trans({'%name%': name}) }}
+    {{- 'type_contact_del.warning'|trans({'%name%': name}) -}}
 </strong></p>
-{%- endblock %}
+{%- endblock -%}
 
-{% block submit -%}
-    {{ b.del(form.submit) }}
-{%- endblock %}
+{%- block submit -%}
+    {{- b.del(form.submit) -}}
+{%- endblock -%}

@@ -1,34 +1,34 @@
-{% extends 'base.html.twig' %}
+{%- extends 'base.html.twig' -%}
 
-{% form_theme form _self %}
+{%- form_theme form _self -%}
 
-{% block checkbox_radio_label %}
+{%- block checkbox_radio_label -%}
     {# Do not display the label if widget is not defined in order to prevent double label rendering #}
-    {% if widget is defined %}
-        {% if required %}
-            {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) %}
-        {% endif %}
-        {% if parent_label_class is defined %}
-            {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ parent_label_class)|trim}) %}
-        {% endif %}
-        {% if label is not same as(false) and label is empty %}
+    {%- if widget is defined -%}
+        {%- if required -%}
+            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) -%}
+        {%- endif -%}
+        {%- if parent_label_class is defined -%}
+            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ parent_label_class)|trim}) -%}
+        {%- endif -%}
+        {%- if label is not same as(false) and label is empty -%}
             {%- if label_format is not empty -%}
-                {% set label = label_format|replace({
+                {%- set label = label_format|replace({
                     '%name%': name,
                     '%id%': id,
-                }) %}
+                }) -%}
             {%- else -%}
-                {% set label = name|humanize %}
+                {%- set label = name|humanize -%}
             {%- endif -%}
-        {% endif %}
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        {%- endif -%}
+        <label{%- for attrname, attrvalue in label_attr -%} {{ attrname }}="{{ attrvalue }}"{%- endfor -%}>
             {{- widget|raw }} {{ label is not same as(false) ? (translation_domain is same as(false) ? label|raw : label|trans({}, translation_domain)|raw) -}}
         </label>
-    {% endif %}
-{% endblock checkbox_radio_label %}
+    {%- endif -%}
+{%- endblock checkbox_radio_label -%}
 
 
-{% block content %}
+{%- block content -%}
 
 <div class="row">
 <div class="col-md-12">
@@ -85,7 +85,7 @@
 
 {{ form_errors(form.accept) }}
 
-{% set accept_label = 'register.accept'|trans({'%url%': path('terms')}) %}
+{%- set accept_label = 'register.accept'|trans({'%url%': path('terms')}) -%}
 
 {{ form_widget(form.accept, {'label': accept_label}) }}
 
@@ -100,8 +100,8 @@
 </div>
 </div>
 
-{% endblock content %}
+{%- endblock content -%}
 
-{% block js %}
-<script src="{{ asset('generate_password.js') }}"></script>
-{% endblock js %}
+{%- block js -%}
+    <script src="{{ asset('generate_password.js') }}"></script>
+{%- endblock js -%}

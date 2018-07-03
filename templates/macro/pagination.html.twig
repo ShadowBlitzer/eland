@@ -55,7 +55,7 @@
 		{# disabled #}
 		<li>
 		<a href="{{- path(route, all_params|merge(
-			{'p': {'start': ((pagination.page - 2) * pagination.limit)|replace_when_zero, 
+			{'p': {'start': ((pagination.page - 2) * pagination.limit)|replace_when_zero,
 			'limit': pagination.limit}}) ) -}}">&#9668;</a>
 		</li>
 	{%- endif -%}
@@ -71,7 +71,7 @@
 
 		<li{%- if pa == pagination.page %} class="active"{%- endif -%}>
 		<a href="{{- path(route, all_params|merge(
-			{'p':{'start': ((pa - 1) * pagination.limit)|replace_when_zero, 
+			{'p':{'start': ((pa - 1) * pagination.limit)|replace_when_zero,
 			'limit': pagination.limit}}) ) -}}">
 		{{- pa -}}
 		</a>
@@ -92,10 +92,10 @@
 		{# disabled #}
 		<li>
 		<a href="{{- path(route, all_params|merge(
-			{'p': {'start': pagination.page * pagination.limit, 
+			{'p': {'start': pagination.page * pagination.limit,
 			'limit': pagination.limit}}) ) -}}">&#9658;</a>
 		</li>
-	{% endif %}
+	{%- endif -%}
 
 	</ul>
 
@@ -108,4 +108,3 @@
 	}) -}}</span></div>
 
 {%- endmacro pagination_pages -%}
-

@@ -1,25 +1,25 @@
-{% extends 'admin.html.twig' %}
+{%- extends 'admin.html.twig' -%}
 
-{% import 'macro/asset.html.twig' as a %}
-{% import 'macro/button.html.twig' as b %}
-{% import 'macro/panel.html.twig' as p %}
+{%- import 'macro/asset.html.twig' as a -%}
+{%- import 'macro/button.html.twig' as b -%}
+{%- import 'macro/panel.html.twig' as p -%}
 
-{% block css -%}
+{%- block css -%}
 {%- include 'asset/datepicker_css.html.twig' -%}
-{%- endblock css %}
+{%- endblock css -%}
 
-{% block js -%}
+{%- block js -%}
     {%- include 'asset/datepicker_js.html.twig' -%}
-{%- endblock js %}
+{%- endblock js -%}
 
 {%- block inner -%}
 
     {{- p.form_start(form) -}}
 
-    {{- form_row(form.itemdate, {'label': 'label.event_date', 
+    {{- form_row(form.itemdate, {'label': 'label.event_date',
         'sub_label': 'label.event_date_explain'}) -}}
     {{- form_row(form.sticky, {'label': 'label.keep_after_date'}) -}}
-    {{- form_row(form.location, {'label': 'label.location', 
+    {{- form_row(form.location, {'label': 'label.location',
         'sub_label': 'label.location_explain', 'addon_fa': 'map-marker'}) -}}
     {{- form_row(form.headline, {'label': 'label.title', 'addon_fa': 'pencil'}) -}}
     {{- form_row(form.newsitem, {'label': 'label.message', 'attr': {'rows': 10}}) -}}
@@ -30,5 +30,3 @@
     {{- p.form_end(form) -}}
 
 {%- endblock inner -%}
-
-

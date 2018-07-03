@@ -1,7 +1,7 @@
-{% extends 'admin.html.twig' %}
+{% extends 'admin.html.twig' -%}
 
-{% import 'macro/asset.html.twig' as a %}
-{% import 'macro/top_button.html.twig' as tb %}
+{% import 'macro/asset.html.twig' as a -%}
+{% import 'macro/top_button.html.twig' as tb -%}
 
 {% block top_buttons -%}
 {{- tb.add(path('page_a_add', acc_sch), 'page_a_add.title') -}}
@@ -11,6 +11,4 @@
 
 <p>ADMIN PAGE INDEX</p>
 
-{%- endblock inner %}
-
-
+{%- endblock inner -%}

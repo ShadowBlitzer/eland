@@ -1,6 +1,6 @@
-{% import 'macro/panel.html.twig' as p %}
-{% import 'macro/button.html.twig' as b %}
-{% import 'macro/filter.html.twig' as fi %}
+{%- import 'macro/panel.html.twig' as p -%}
+{%- import 'macro/button.html.twig' as b -%}
+{%- import 'macro/filter.html.twig' as fi -%}
 
 {%- set placeholder_code = config('template_lets', schema) ? 'letscode' : 'code' -%}
 
@@ -12,8 +12,8 @@
         'label': false,
         'addon_fa': 'search',
         'attr': {
-            'placeholder': 'keyword', 
-        }  
+            'placeholder': 'keyword',
+        }
     }) -}}
 </div>
 </div>

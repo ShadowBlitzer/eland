@@ -4,7 +4,7 @@
 {%- set interlets = real_from is defined or real_to is defined -%}
 
 <div class="panel panel-info printview">
-<div class="panel-body{%- if interlets %} bg-warning{%- endif -%}">
+<div class="panel-body{%- if interlets -%} bg-warning{%- endif -%}">
 
 <div class="media">
 <div class="media-body">
@@ -23,7 +23,7 @@
 	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_to|user_format(schema)|raw -}}</dd>
 
 	<dt>{{- 'label.description'|trans -}}</dt>
-	<dd>{{- t.description -}}</dd>	
+	<dd>{{- t.description -}}</dd>
 
 	<dt>{{- 'label.transaction_id'|trans -}}</dt>
 	<dd>{{- t.transid -}}</dd>

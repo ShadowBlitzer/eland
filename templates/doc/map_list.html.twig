@@ -3,28 +3,25 @@
 <div class="panel panel-default printview">
 <div class="table-responsive">
 <table class="table table-bordered table-striped table-hover footable" data-filter="#q" data-filter-minimum="1">
-<thead>
-
-<tr>
-<th data-sort-initial="true">{{- 'label.map'|trans -}}</th>
-{%- block table_head_extra -%}{%- endblock -%}
-</tr>
-
-</thead>
-<tbody>
-
-{%- for m in maps -%}
-<tr class="info">
-    <td>
-       <a href="{{- path('doc_map', acc_sch|merge({'mapId': m.id})) -}}">{{- m.map_name -}}</a>
-    </td>
-    {%- block table_body_extra -%}{%- endblock -%}
-    </tr>
-{%- endfor -%}
-
-</tbody>
+    <thead>
+        <tr>
+        <th data-sort-initial="true">{{- 'label.map'|trans -}}</th>
+        {%- block table_head_extra -%}{%- endblock -%}
+        </tr>
+    </thead>
+    <tbody>
+        {%- for m in maps -%}
+            <tr class="info">
+                <td>
+                    <a href="{{- path('doc_map', acc_sch|merge({'mapId': m.id})) -}}">
+                        {{- m.map_name -}}
+                    </a>
+                </td>
+                {%- block table_body_extra -%}{%- endblock -%}
+            </tr>
+        {%- endfor -%}
+    </tbody>
 </table>
-
 </div>
 </div>
 

@@ -1,15 +1,11 @@
-{% extends 'type_contact/a_form.html.twig' %}
+{%- extends 'type_contact/a_form.html.twig' -%}
 
-{% import 'macro/button.html.twig' as b %}
+{%- import 'macro/button.html.twig' as b -%}
 
-{% block heading -%}
-    {{ 'type_contact_edit.title'|trans({'%name%': form.vars.value.name}) }}
-{%- endblock %}
+{%- block heading -%}
+    {{- 'type_contact_edit.title'|trans({'%name%': form.vars.value.name}) -}}
+{%- endblock -%}
 
-{% block submit -%}
-    {{ b.edit(form.submit) }}
-{%- endblock %}
-
-
-
-
+{%- block submit -%}
+    {{- b.edit(form.submit) -}}
+{%- endblock -%}

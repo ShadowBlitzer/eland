@@ -1,6 +1,6 @@
-{% extends 'news/a_form.html.twig' %}
+{%- extends 'news/a_form.html.twig' -%}
 
-{% import 'macro/button.html.twig' as b %}
+{%- import 'macro/button.html.twig' as b -%}
 
 {%- block heading -%}
     {{- 'news_add.title'|trans -}}
@@ -9,6 +9,3 @@
 {%- block submit -%}
     {{-  b.add(form.submit) -}}
 {%- endblock submit -%}
-
-
-

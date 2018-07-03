@@ -1,17 +1,17 @@
-{% extends 'category/a_form.html.twig' %}
+{%- extends 'category/a_form.html.twig' -%}
 
-{% import 'macro/button.html.twig' as b %}
+{%- import 'macro/button.html.twig' as b -%}
 
-{% block heading -%}
+{%- block heading -%}
     {{- 'category_del.title'|trans({'%name%': fullname}) -}}
-{%- endblock %}
+{%- endblock -%}
 
-{% block form_fields -%}
+{%- block form_fields -%}
 <p class="text-danger"><strong>
     {{- 'category_del.warning'|trans({'%name%': fullname}) -}}
 </strong></p>
-{%- endblock %}
+{%- endblock -%}
 
-{% block submit -%}
+{%- block submit -%}
     {{- b.del(form.submit) -}}
-{%- endblock %}
+{%- endblock -%}
