@@ -2,106 +2,109 @@
 
 {% spaceless -%}
 {%- block all -%}
-<!DOCTYPE html{% block html %}{% endblock %}>
-<html lang="{{- app.request.locale -}}">
-<head>
+    <!doctype html>
+    <html lang="{{- app.request.locale -}}">
+    <head>
 
-<title>{%- block title -%}eLAND{%- endblock title -%}</title>
+    <title>
+        {%- block title -%}
+            eLAND
+        {%- endblock title -%}
+    </title>
 
-{#
-{{- a.css('bootstrap/3.3.7/css/bootstrap.min.css', 'maxcdn') -}}
-{{- a.css('font-awesome/4.7.0/css/font-awesome.min.css', 'maxcdn') -}}
-{{- a.css('jquery-footable/2.0.3/css/footable.core.min.css', 'cdnjs') -}}
- {{- a.css('Swiper/4.0.3/css/swiper.min.css', 'cdnjs') -}}
-{{- a.css('base.css') -}}
-{{- a.css('print.css', 'css', 'print') -}} #}
-{{- a.css('build/app.css') -}}
-{%- block css -%}
-{#
-{% include 'asset/summernote_css.html.twig' %}
-{% include 'asset/fileupload_css.html.twig' %}
-{% include 'asset/datepicker_css.html.twig' %}
-{% include 'asset/leaflet_css.html.twig' %}
-#}
-{%- endblock css -%}
+    {#
+    {{- a.css('bootstrap/3.3.7/css/bootstrap.min.css', 'maxcdn') -}}
+    {{- a.css('font-awesome/4.7.0/css/font-awesome.min.css', 'maxcdn') -}}
+    {{- a.css('jquery-footable/2.0.3/css/footable.core.min.css', 'cdnjs') -}}
+    {{- a.css('Swiper/4.0.3/css/swiper.min.css', 'cdnjs') -}}
+    {{- a.css('base.css') -}}
+    {{- a.css('print.css', 'css', 'print') -}} #}
+    {{- a.css('build/vendor.css') -}}
+    {%- block css -%}
+    {#
+    {% include 'asset/summernote_css.html.twig' %}
+    {% include 'asset/fileupload_css.html.twig' %}
+    {% include 'asset/datepicker_css.html.twig' %}
+    {% include 'asset/leaflet_css.html.twig' %}
+    #}
+    {%- endblock css -%}
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#d55b5b">
+    <meta name="theme-color" content="#ffffff">
 
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#d55b5b">
-<meta name="theme-color" content="#ffffff">
+    </head>
 
-</head>
+    <body{%- block body_attr -%}{%- endblock -%}>
 
-<body{%- block body_attr -%}{%- endblock -%}>
+    {% block loading_img %}
+    {# <img src="{{- asset('loading.gif', 'loc_img') -}}" class="ajax-loader"> #}
+    {% endblock loading_img %}
 
-{% block loading_img %}
-{# <img src="{{- asset('loading.gif', 'loc_img') -}}" class="ajax-loader"> #}
-{% endblock loading_img %}
+    <div class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid{%- block navbar_container_class -%}{%- endblock -%}">
 
-<div class="navbar navbar-default navbar-fixed-top">
-<div class="container-fluid{%- block navbar_container_class -%}{%- endblock -%}">
+    <div class="navbar-header">
+        {%- block navbar_toggle_left -%}{%- endblock -%}
+        {%- block navbar_toggle_menu -%}{%- endblock -%}
 
-<div class="navbar-header">
+        <a href="{%- block url_index -%}#{%- endblock -%}" class="pull-left hidden-xs">
+            <div class="logo">
+            </div>
+        </a>
+        <a href="{{- block('url_index') -}}" class="navbar-brand">
+            {{- block('title') -}}
+        </a>
+    </div>
 
-{%- block navbar_toggle_left -%}{%- endblock -%}
-{%- block navbar_toggle_menu -%}{%- endblock -%}
+    {%- block navbar_menu -%}{%- endblock -%}
 
-<a href="{%- block url_index -%}#{%- endblock -%}" class="pull-left hidden-xs">
-<div class="logo"></div>
-</a>
-<a href="{{- block('url_index') -}}" class="navbar-brand">
-{{- block('title') -}}</a>
-</div>
+    </div>
+    </div>
 
-{%- block navbar_menu -%}{%- endblock -%}
+    {%- block content -%}{%- endblock -%}
 
-</div>
-</div>
+    {%- block footer -%}
+        <footer class="footer">
+        <p>{{- 'eland.explain'|trans({'%link_eland_open%': '<a href="http://letsa.net">', '%link_close%': '</a>'})|raw -}}</p>
+        {%- block footer_extra -%}{%- endblock -%}
+        </footer>
+    {%- endblock footer -%}
 
-{%- block content -%}{%- endblock -%}
+    </div>
 
-{%- block footer -%}
+    {#
+    {{- a.js('jquery-3.2.1.min.js', 'jquery') -}}
+    {{- a.js('bootstrap/3.3.7/js/bootstrap.min.js', 'maxcdn') -}}
+    {{- a.js('jquery-footable/2.0.3/js/footable.min.js', 'cdnjs') -}}
+    {{- a.js('jquery-footable/2.0.3/js/footable.sort.min.js', 'cdnjs') -}}
+    {{- a.js('jquery-footable/2.0.3/js/footable.filter.min.js', 'cdnjs') -}}
+    {{- a.js('typeahead.js/0.11.1/typeahead.bundle.min.js', 'cdnjs') -}}
+    {{- a.js('typeahead.js') -}}
+    {{- a.js('base.js') -}}
+    #}
 
-    <footer class="footer">
-    <p>{{- 'eland.explain'|trans({'%link_eland_open%': '<a href="http://letsa.net">', '%link_close%': '</a>'})|raw -}}</p>
-    {%- block footer_extra -%}{%- endblock -%}
-    </footer>
+    {{- a.js('build/manifest.js') -}}
+    {{- a.js('build/vendor.js') -}}
 
-{%- endblock footer -%}
+    {%- block js -%}
+    {#
+    {% include 'asset/summernote_js.html.twig' %}
+    {% include 'asset/fileupload_js.html.twig' %}
+    {% include 'asset/jssor_js.html.twig' %}
+    {% include 'asset/jqplot_js.html.twig' %}
+    {% include 'asset/datepicker_js.html.twig' %}
+    {% include 'asset/isotope_js.html.twig' %}
+    {% include 'asset/leaflet_js.html.twig' %}
+    #}
+    {%- endblock -%}
 
-</div>
-
-{# 
-{{- a.js('jquery-3.2.1.min.js', 'jquery') -}}
-{{- a.js('bootstrap/3.3.7/js/bootstrap.min.js', 'maxcdn') -}}
-{{- a.js('jquery-footable/2.0.3/js/footable.min.js', 'cdnjs') -}}
-{{- a.js('jquery-footable/2.0.3/js/footable.sort.min.js', 'cdnjs') -}}
-{{- a.js('jquery-footable/2.0.3/js/footable.filter.min.js', 'cdnjs') -}}
-{{- a.js('typeahead.js/0.11.1/typeahead.bundle.min.js', 'cdnjs') -}}
-{{- a.js('typeahead.js') -}}
-{{- a.js('base.js') -}}
-#}
-
-{{- a.js('build/app.js') -}}
-
-{%- block js -%}
-{#
-{% include 'asset/summernote_js.html.twig' %}
-{% include 'asset/fileupload_js.html.twig' %}
-{% include 'asset/jssor_js.html.twig' %}
-{% include 'asset/jqplot_js.html.twig' %}
-{% include 'asset/datepicker_js.html.twig' %}
-{% include 'asset/isotope_js.html.twig' %}
-{% include 'asset/leaflet_js.html.twig' %}
-#}
-{%- endblock -%}
-
-</body>
-</html>
+    </body>
+    </html>
 {%- endblock all -%}
 {%- endspaceless %}

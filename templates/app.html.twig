@@ -1,33 +1,34 @@
-{% extends 'base.html.twig' %}
+{%- extends 'base.html.twig'-%}
 
-{% import 'macro/flash.html.twig' as f %}
-{% import 'macro/menu.html.twig' as m %}
+{%- import 'macro/flash.html.twig' as f-%}
+{%- import 'macro/menu.html.twig' as m-%}
 
-{% set route_params = app.request.attributes.get('_route_params') %}
-{% set query_params = app.request.query.all %}
-{% set all_params = route_params|merge(query_params) %}
-{% set route = app.request.attributes.get('_route') %}
-{% set route_ary = route|split('_') %}
-{% set active_menu = route_ary[1] is defined and route_ary[1] == 'self' ? route : route_ary[0] %}
-{% set schema = app.request.attributes.get('schema') %}
-{# {% set access = app.request.attributes.get('access') %} #}
-{% if access is defined %}
-	{% set acc_sch = {'schema': schema, 'access': access} %}
-{% endif %}
+{%- set route_params = app.request.attributes.get('_route_params')-%}
+{%- set query_params = app.request.query.all-%}
+{%- set all_params = route_params|merge(query_params)-%}
+{%- set route = app.request.attributes.get('_route')-%}
+{%- set route_ary = route|split('_')-%}
+{%- set active_menu = route_ary[1] is defined and route_ary[1] == 'self' ? route : route_ary[0]-%}
+{%- set schema = app.request.attributes.get('schema')-%}
+{# {%- set access = app.request.attributes.get('access')-%} #}
+{%- if access is defined-%}
+	{%- set acc_sch = {'schema': schema, 'access': access}-%}
+{%- endif-%}
 
-{% set menu_el =
+{%- set menu_el =
 	menu_ary[active_menu] ??
 	personal_menu_ary[active_menu] ??
 	admin_menu_ary[active_menu] ??
 	'undefined'
 %}
 
-{%- block title -%}{{- config('systemname', schema) -}}{%- endblock title -%}
+{%- block title -%}
+	{{- config('systemname', schema) -}}
+{%- endblock title -%}
 
-{%- block url_index -%}{%- endblock url_index -%}
+{%- block url_index -%}{%- endblock -%}
 
 {%- block content -%}
-
 	<div class="row-offcanvas row-offcanvas-left">
 	<div id="sidebar" class="sidebar-offcanvas">
 
@@ -75,7 +76,7 @@
 		{%- block heading -%}
 			{{- menu_el['title']|trans -}}
 		{%- endblock heading -%}
-		{%- if filtered is defined and filtered %} <span class="small">{{- 'tag.filtered'|trans -}}
+		{%- if filtered is defined and filtered-%} <span class="small">{{- 'tag.filtered'|trans -}}
 			</span>{%- endif -%}
 		{%- block heading_post -%}{%- endblock -%}
 		{%- block heading_right -%}{%- endblock -%}

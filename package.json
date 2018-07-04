@@ -1,5 +1,5 @@
 {
-  "name": "elan",
+  "name": "eland",
   "license": "AGPL-3.0",
   "version": "0.1.0",
   "repository": {
@@ -19,18 +19,20 @@
     "docs:publish": "npm run docs:build && cd _book && git init && git commit --allow-empty -m 'Update docs' && git checkout -b gh-pages && git add --all && git commit -am 'Update docs' && git push https://github.com/eeemarv/eland gh-pages --force"
   },
   "dependencies": {
-    "@symfony/webpack-encore": "^0.17.0",
-    "autoprefixer": "^7.2.3",
-    "bootstrap": "^4.0.0",
-    "bootstrap-sass": "^3.3.7",
+    "@symfony/webpack-encore": "^0.20.1",
+    "autoprefixer": "^8.6.4",
+    "bootstrap": "^4.1.1",
     "font-awesome": "^4.7.0",
+    "font-awesome-loader": "^1.0.2",
+    "fontawesome": "^4.7.2",
     "gitbook-cli": "^2.3.2",
-    "jquery": "^3.2.1",
-    "node-sass": "^4.7.2",
+    "jquery": "^3.3.1",
+    "node-sass": "^4.9.0",
     "path-to-regexp": "^2.1.0",
-    "popper.js": "^1.12.9",
-    "postcss-loader": "^2.0.9",
+    "popper.js": "^1.14.3",
+    "postcss-loader": "^2.1.5",
     "public-cdn-webpack-plugin": "^0.1.5",
-    "sass-loader": "^6.0.6"
+    "sass-loader": "^7.0.3",
+    "yarn": "^1.7.0"
   }
 }

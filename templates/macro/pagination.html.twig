@@ -22,89 +22,73 @@
 		{%- set params = params|merge({'view': all_params.view}) -%}
 	{%- endif -%}
 	<div>
-	<form>
-	<span>{{- 'pagination.items_per_page'|trans }} </span>
-	<select name="p[limit]" onchange="this.form.submit();">
-		{%- for o in pagination.limit_options -%}
-			<option value="{{- o -}}"{%- if o == pagination.limit %} selected="selected"{%- endif -%}>
-			{{- o -}}
-			</option>
-		{%- endfor -%}
-	</select>
+		<form>
+			<span>{{- 'pagination.items_per_page'|trans }} </span>
+			<select name="p[limit]" onchange="this.form.submit();">
+				{%- for o in pagination.limit_options -%}
+					<option value="{{- o -}}"{%- if o == pagination.limit %} selected="selected"{%- endif -%}>
+						{{- o -}}
+					</option>
+				{%- endfor -%}
+			</select>
 
-	{%- for i1, ary in all_params -%}
-		{%- if ary is iterable and i1 != 'p' -%}
-			{%- for i2, value in ary -%}
-				<input name="{{- i1 -}}[{{- i2 -}}]" value="{{- value -}}" type="hidden">
+			{%- for i1, ary in all_params -%}
+				{%- if ary is iterable and i1 != 'p' -%}
+					{%- for i2, value in ary -%}
+						<input name="{{- i1 -}}[{{- i2 -}}]" value="{{- value -}}" type="hidden">
+					{%- endfor -%}
+				{%- endif -%}
 			{%- endfor -%}
-		{%- endif -%}
-	{%- endfor -%}
-
-	</form>
+		</form>
 	</div>
-
 {%- endmacro pagination_limit_select -%}
 
 {%- macro pagination_pages(route, all_params, pagination) -%}
+	{%- import _self as pag -%}
 
-	<div class="row print-hide">
-	<div class="col-md-12">
+	<div class="row">
+	<div class="nav">
 	<ul class="pagination">
 
-	{%- if false and pagination.page > 1 -%}
-		{# disabled #}
-		<li>
-		<a href="{{- path(route, all_params|merge(
-			{'p': {'start': ((pagination.page - 2) * pagination.limit)|replace_when_zero,
-			'limit': pagination.limit}}) ) -}}">&#9668;</a>
-		</li>
-	{%- endif -%}
-
 	{%- if pagination.min > 1 -%}
-		<li>
-		<a href="{{- path(route, all_params|merge(
-			{'p': {'start': null, 'limit': pagination.limit}})) -}}">1</a>
-		</li>
+		{{- pag.link('1', path(route, all_params|merge(
+				{'p': {'start': null, 'limit': pagination.limit}}))) -}}
 	{%- endif -%}
 
 	{%- for pa in pagination.min..pagination.max -%}
-
-		<li{%- if pa == pagination.page %} class="active"{%- endif -%}>
-		<a href="{{- path(route, all_params|merge(
-			{'p':{'start': ((pa - 1) * pagination.limit)|replace_when_zero,
-			'limit': pagination.limit}}) ) -}}">
-		{{- pa -}}
-		</a>
-		</li>
-
+		{{- pag.link(pa, path(route, all_params|merge(
+				{'p':{'start': ((pa - 1) * pagination.limit)|replace_when_zero,
+				'limit': pagination.limit}})),
+				pa == pagination.page)
+		-}}
 	{%- endfor -%}
 
 	{%- if pagination.max < pagination.page_count -%}
-		<li>
-		<a href="{{- path(route, all_params|merge(
-			{'p': {'start': (pagination.page_count - 1) * pagination.limit, 'limit': pagination.limit}}) ) -}}">
-		{{- pagination.page_count -}}
-		</a>
-		</li>
-	{%- endif -%}
-
-	{%- if false and pagination.page < pagination.page_count -%}
-		{# disabled #}
-		<li>
-		<a href="{{- path(route, all_params|merge(
-			{'p': {'start': pagination.page * pagination.limit,
-			'limit': pagination.limit}}) ) -}}">&#9658;</a>
-		</li>
+		{{- pag.link(pagination.page_count,
+			path(route, all_params|merge(
+				{'p': {'start': (pagination.page_count - 1) * pagination.limit,
+				'limit': pagination.limit}})))
+		-}}
 	{%- endif -%}
 
 	</ul>
+	</div>
 
 	<div class="pull-right hidden-xs">
 
-	<div><span>{{- 'pagination.count_items_and_pages'|trans({
-		'%total%': pagination.row_count,
-		'%page%': pagination.page,
-		'%pages_total%': pagination.page_count
-	}) -}}</span></div>
-
+	<div>
+		<span>
+			{{- 'pagination.count_items_and_pages'|trans({
+				'%total%': pagination.row_count,
+				'%page%': pagination.page,
+				'%pages_total%': pagination.page_count
+			}) -}}
+		</span>
+	</div>
 {%- endmacro pagination_pages -%}
+
+{%- macro link(label, link, active) -%}
+	<li class="page-item{%- if active|default(false) %} active{%- endif -%}">
+		<a class="page-link" href="{{- link -}}">{{- label -}}</a>
+	</li>
+{%- endmacro link -%}

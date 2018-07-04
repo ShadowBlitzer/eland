@@ -12,4 +12,6 @@ require('../css/misc.scss');
 require('../css/admin.scss');
 require('../css/print.scss');
 
-
+const $ = require('jquery');
+require('bootstrap');
+require('fontawesome');
