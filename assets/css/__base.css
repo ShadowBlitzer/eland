@@ -170,7 +170,7 @@ body {
   position: relative;
   z-index: 1;
   will-change: transform;
-  background-color: #FFF; 
+  background-color: #FFF;
   min-height: 100vh;
 }
 
@@ -228,7 +228,7 @@ body
    position: fixed;
    top: 8em;
    width: 33%;
-  } 
+  }
 }
 */
 
@@ -538,31 +538,31 @@ div.user_map {
     margin-right: 10px;
 }
 
-.jqplot-y2axis, 
-.jqplot-y3axis, 
-.jqplot-y4axis, 
-.jqplot-y5axis, 
-.jqplot-y6axis, 
-.jqplot-y7axis, 
-.jqplot-y8axis, 
-.jqplot-y9axis, 
+.jqplot-y2axis,
+.jqplot-y3axis,
+.jqplot-y4axis,
+.jqplot-y5axis,
+.jqplot-y6axis,
+.jqplot-y7axis,
+.jqplot-y8axis,
+.jqplot-y9axis,
 .jqplot-yMidAxis {
     margin-left: 10px;
     margin-right: 10px;
 }
 
-.jqplot-axis-tick, 
-.jqplot-xaxis-tick, 
-.jqplot-yaxis-tick, 
-.jqplot-x2axis-tick, 
-.jqplot-y2axis-tick, 
+.jqplot-axis-tick,
+.jqplot-xaxis-tick,
+.jqplot-yaxis-tick,
+.jqplot-x2axis-tick,
+.jqplot-y2axis-tick,
 .jqplot-y3axis-tick,
-.jqplot-y4axis-tick, 
-.jqplot-y5axis-tick, 
-.jqplot-y6axis-tick, 
-.jqplot-y7axis-tick, 
-.jqplot-y8axis-tick, 
-.jqplot-y9axis-tick, 
+.jqplot-y4axis-tick,
+.jqplot-y5axis-tick,
+.jqplot-y6axis-tick,
+.jqplot-y7axis-tick,
+.jqplot-y8axis-tick,
+.jqplot-y9axis-tick,
 .jqplot-yMidAxis-tick {
     position: absolute;
     white-space: pre;
@@ -595,13 +595,13 @@ div.user_map {
     font-size: 1.5em;
 }
 
-.jqplot-y2axis-tick, 
-.jqplot-y3axis-tick, 
-.jqplot-y4axis-tick, 
-.jqplot-y5axis-tick, 
-.jqplot-y6axis-tick, 
-.jqplot-y7axis-tick, 
-.jqplot-y8axis-tick, 
+.jqplot-y2axis-tick,
+.jqplot-y3axis-tick,
+.jqplot-y4axis-tick,
+.jqplot-y5axis-tick,
+.jqplot-y6axis-tick,
+.jqplot-y7axis-tick,
+.jqplot-y8axis-tick,
 .jqplot-y9axis-tick {
     left: 0px;
     top: 15px;
@@ -636,9 +636,9 @@ div.user_map {
     position: absolute;
 }
 
-.jqplot-y2axis-label, .jqplot-y3axis-label, 
-.jqplot-y4axis-label, .jqplot-y5axis-label, 
-.jqplot-y6axis-label, .jqplot-y7axis-label, 
+.jqplot-y2axis-label, .jqplot-y3axis-label,
+.jqplot-y4axis-label, .jqplot-y5axis-label,
+.jqplot-y6axis-label, .jqplot-y7axis-label,
 .jqplot-y8axis-label, .jqplot-y9axis-label {
     font-size: 11pt;
     margin-left: 10px;
@@ -840,4 +840,3 @@ div.panel-info form div.form-group span.input-group-btn button.btn{
 span.badge-text {
   font-size: 0.9em;
 }
-
