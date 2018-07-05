@@ -24,8 +24,8 @@
 {%- endmacro li_param -%}
 
 {%- macro li(key, item, active_menu, acc_sch) -%}
-    <li{%- if active_menu == key %} class="active"{%- endif -%}>
-        <a href="{{- path(item['route'], acc_sch) -}}">
+    <li class="nav-item{%- if active_menu == key %} active{%- endif -%}">
+        <a class="nav-link" href="{{- path(item['route'], acc_sch) -}}">
             <i class="fa fa-{{- item['fa'] -}}">
             </i> {{ item['title']|trans -}}
         </a>
@@ -42,7 +42,7 @@
 {%- endmacro li_302 -%}
 
 {%- macro li_302_no_param(item) -%}
-    <li>
+    <li class="nav-item">
         <a href="{{- path(item['route']) -}}">
             <i class="fa fa-{{- item['fa'] -}}">
             </i> {{ item['title']|trans -}}
@@ -51,8 +51,8 @@
 {%- endmacro li_302_no_param -%}
 
 {%- macro li_anon(key, item, active_menu, schema) -%}
-    <li{%- if active_menu == key %} class="active"{%- endif -%}>
-        <a href="{{- path(item['route'], {'schema': schema}) -}}">
+    <li class="nav-item{%- if active_menu == key %} active{%- endif -%}">
+        <a href="{{- path(item['route'], {'schema': schema}) -}}" class="nav-link">
             <i class="fa fa-{{- item['fa'] -}}">
             </i> {{ item['title']|trans -}}
         </a>

@@ -13,7 +13,9 @@ Encore
         'jquery',
         'bootstrap',
         'font-awesome/scss/font-awesome.scss',
-        'bootstrap/scss/bootstrap.scss'
+        'bootstrap/scss/bootstrap.scss',
+        './assets/css/offcanvas.scss',
+        './assets/js/base.js'
     ])
     .enablePostCssLoader()
 ;

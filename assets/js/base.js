@@ -23,14 +23,14 @@ $(document).ready(function() {
 
 	$('[data-toggle=offcanvas]').click(function() {
 		slideout.toggle();
-	});	  
+	});
 
       // Toggle button
       document.querySelector('.toggle-button').addEventListener('click', function() {
         slideout.toggle();
     });
 */
-	$('.footable').footable();
+//	$('.footable').footable();
 
 	$('a[data-elas-group-id]').click(function() {
 
