@@ -3,7 +3,7 @@
     <span class="pull-right">
     <span class="btn-group" role="group">
     {%-for view, title in view_ary -%}
-        <a href="{{- path(route, all_params|merge({'view': view})) -}}" title="{{- title|trans -}}" class="btn btn-default{%- if current_view == view %} active{%- endif -%}">
+        <a href="{{- path(route, all_params|merge({'view': view})) -}}" title="{{- title|trans -}}" class="btn btn-outline-secondary{%- if current_view == view %} active{%- endif -%}">
         {{- bg.fa_view(view) -}}
         </a>
     {%- endfor -%}
@@ -16,7 +16,7 @@
     <span class="pull-right">
     <span class="btn-group" role="group">
     <a href="{{- path(entity~'_index', acc_sch|view(entity)) -}}" title="{{- 'nav.overview'|trans -}}" class="btn btn-default">
-    {{- bg.fa_view((acc_sch|view(entity))['view']|default('list')) -}}    
+    {{- bg.fa_view((acc_sch|view(entity))['view']|default('list')) -}}
     </a>
     {%- if prev -%}
         <a href="{{- path(entity~'_show', acc_sch|merge({'id': prev})) -}}" title="{{- 'nav.previous'|trans -}}" class="btn btn-default">

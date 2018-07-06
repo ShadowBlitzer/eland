@@ -62,3 +62,10 @@
 {%- macro divider() -%}
     <li class="divider"></li>
 {%- endmacro divider -%}
+
+{%- macro item(key, item, active_menu, acc_sch) -%}
+    <a class="list-group-item{%- if active_menu == key %} active{%- endif -%}" href="{{- path(item['route'], acc_sch) -}}">
+        <i class="fa fa-{{- item['fa'] -}}">
+        </i> {{ item['title']|trans -}}
+    </a>
+{%- endmacro item -%}
