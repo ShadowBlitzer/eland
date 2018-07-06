@@ -1,5 +1,5 @@
 {%- macro cancel(location) -%}
-    <a href="{{- location -}}" class="btn btn-default btn-lg">
+    <a href="{{- location -}}" class="btn btn-outline-secondary btn-lg">
     <i class="fa fa-rotate-left"></i>&nbsp;<span class="hidden-xs">
     {{- 'btn.cancel'|trans -}}</span></a>&nbsp;
 {%- endmacro cancel -%}
@@ -19,46 +19,46 @@
 {%- endmacro del_link -%}
 
 {% macro add(form_submit) -%}
-    {{- form_widget(form_submit, {'label': 'btn.add',  
-        'fa': 'plus', 'span_attr': {'class': 'hidden-xs'}, 
+    {{- form_widget(form_submit, {'label': 'btn.add',
+        'fa': 'plus', 'span_attr': {'class': 'hidden-xs'},
         'attr': {'class': 'btn-success btn-lg'}}) -}}&nbsp;
 {%- endmacro add %}
 
 {% macro info(form_submit, label) -%}
-    {{- form_widget(form_submit, {'label': label, 
+    {{- form_widget(form_submit, {'label': label,
         'attr': {'class': 'btn-info btn-lg'}}) -}}&nbsp;
 {%- endmacro info %}
 
 {% macro edit(form_submit) -%}
-    {{- form_widget(form_submit, {'label': 'btn.edit', 
+    {{- form_widget(form_submit, {'label': 'btn.edit',
         'fa': 'pencil', 'span_attr': {'class': 'hidden-xs'},
         'attr': {'class': 'btn-info btn-lg'}}) -}}&nbsp;
 {%- endmacro edit %}
 
 {% macro del(form_submit) -%}
-    {{- form_widget(form_submit, {'label': 'btn.delete', 
-        'fa': 'times', 'span_attr': {'class': 'hidden-xs'}, 
+    {{- form_widget(form_submit, {'label': 'btn.delete',
+        'fa': 'times', 'span_attr': {'class': 'hidden-xs'},
         'attr': {'class': 'btn-danger btn-lg'}}) -}}&nbsp;
 {%- endmacro del %}
 
 {% macro show(form_submit) -%}
-    {{- form_widget(form_submit, {'label': 'btn.show', 
-        'attr': {'class': 'btn-default btn-lg btn-block'}}) -}}
+    {{- form_widget(form_submit, {'label': 'btn.show',
+        'attr': {'class': 'btn-outline-primary btn-lg btn-block'}}) -}}
 {%- endmacro show %}
 
 {% macro send(form_submit) -%}
-    {{- form_widget(form_submit, {'label': 'btn.send', 
+    {{- form_widget(form_submit, {'label': 'btn.send',
         'fa': 'paper-plane-o', 'span_attr': {'class': 'hidden-xs'},
-        'attr': {'class': 'btn-default btn-lg'}}) -}}
+        'attr': {'class': 'btn-outline-primary btn-lg'}}) -}}
 {%- endmacro send %}
 
 {% macro default(form_submit, label) -%}
-    {{- form_widget(form_submit, {'label': label, 
-        'attr': {'class': 'btn-default btn-lg'}}) -}}&nbsp;
+    {{- form_widget(form_submit, {'label': label,
+        'attr': {'class': 'btn-outline-primary btn-lg'}}) -}}&nbsp;
 {%- endmacro default %}
 
 {% macro approve_md(form_submit) -%}
-    {{- form_widget(form_submit, {'label': 'btn.approve', 
-        'fa': 'thumbs-o-up', 'span_attr': {'class': 'hidden-xs'}, 
+    {{- form_widget(form_submit, {'label': 'btn.approve',
+        'fa': 'thumbs-o-up', 'span_attr': {'class': 'hidden-xs'},
         'attr': {'class': 'btn-warning'}}) -}}&nbsp;
 {%- endmacro approve_md %}
