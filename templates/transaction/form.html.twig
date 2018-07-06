@@ -1,14 +1,14 @@
 {%- extends 'admin.html.twig' -%}
 
 {%- import 'macro/button.html.twig' as b -%}
-{%- import 'macro/panel.html.twig' as p -%}
+{%- import 'macro/card.html.twig' as c -%}
 
 {%- block heading -%}
     {{- 'transaction_add.title'|trans -}}
 {%- endblock heading -%}
 
 {%- block inner -%}
-    {{- p.form_start(form) -}}
+    {{- c.form_start(form) -}}
 
     {%- block form_fields -%}
         {%- block form_id_from -%}
@@ -28,5 +28,5 @@
         {{- b.add(form.submit) -}}
     {%- endblock -%}
 
-    {{- p.form_end(form) -}}
+    {{- c.form_end(form) -}}
 {%- endblock inner -%}

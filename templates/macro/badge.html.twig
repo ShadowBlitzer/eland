@@ -6,5 +6,5 @@
 		'service': 'service', 'good': 'good'
 	} -%}
 	{%- set class = ary[key] ?? 'default' -%}
-	<span class="badge-text label label-{{- class -}}">{{- ('badge.'~key)|trans -}}</span>
+	<span class="badge badge-{{- class -}}">{{- ('badge.'~key)|trans -}}</span>
 {%- endmacro badge -%}
