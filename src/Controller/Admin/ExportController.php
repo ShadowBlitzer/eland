@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Translation\TranslatorInterface;
+use Doctrine\DBAL\Connection as Db;
 
 use App\exception\FunctionNotAvailableException;
 
@@ -105,7 +106,8 @@ class ExportController extends AbstractController
 	 * @Route("/export", name="export")
 	 * @Method({"GET", "POST"})
 	 */
-	public function index(Request $request, string $schema):Response
+	public function index(Request $request, string $schema,
+		Db $db, TranslatorInterface $translator):Response
 	{
 		set_time_limit(60);
 
@@ -124,7 +126,7 @@ class ExportController extends AbstractController
 
 		$form = $form->getForm();
 		$form->handleRequest($request);
-		
+
 		if ($form->isSubmitted() && $form->isValid())
 		{
 			if ($form->get('elas_db')->isClicked())
@@ -132,35 +134,35 @@ class ExportController extends AbstractController
 				if (!function_exists('exec'))
 				{
 					throw new FunctionNotAvailableException(
-						sprintf('function "exec" does not exist 
+						sprintf('function "exec" does not exist
 							in class %s', __CLASS__));
 				}
-				
+
 				$filename = $schema . '-elas-db-' . gmdate('Y-m-d-H-i-s') . '-';
 				$filename .= substr(sha1(microtime()), 0, 8) . '.sql';
-				
-				exec('pg_dump --dbname=' . getenv('DATABASE_URL') . 
-					' --schema=' . $schema . 
+
+				exec('pg_dump --dbname=' . getenv('DATABASE_URL') .
+					' --schema=' . $schema .
 					' --no-owner --no-acl > ' . $filename);
-				
+
 				$out = '';
-				
+
 				$handle = fopen($filename, 'rb');
-					
+
 				if (!$handle)
 				{
 					exit;
 				}
-		
+
 				while (!feof($handle))
 				{
 					$out .= fread($handle, 8192);
 				}
-					
+
 				fclose($handle);
-		
-				unlink($filename);	
-				
+
+				unlink($filename);
+
 				return New Response($out, Response::HTTP_OK, [
 					'Content-Type' 					=> 'application/force-download',
 					'Content-disposition'			=> 'attachment; filename=' . $filename,
@@ -169,19 +171,19 @@ class ExportController extends AbstractController
 					'Expires'						=> '0',
 				]);
 			}
-		
+
 			foreach ($csv_ary as $table)
 			{
 				if ($form->get($table)->isClicked())
 				{
 					$table_data = $this->elas_csv_ary[$table];
-						
+
 					$query = str_replace('%schema%', $schema, $table_data['sql']);
-		
+
 					$sql_bind = $table_data['sql_bind'] ?? [];
 
 					$gmdate = gmdate('Y-m-d H:i:s');
-	
+
 					if (count($sql_bind))
 					{
 						foreach ($sql_bind as &$val)
@@ -189,32 +191,32 @@ class ExportController extends AbstractController
 							$val = str_replace('%gmdate', $gmdate, $val);
 						}
 					}
-	
-					$data = $app['db']->fetchAll($query, $sql_bind);
-				
+
+					$data = $db->fetchAll($query, $sql_bind);
+
 					$fields = $columns = [];
-	
+
 					foreach($table_data['columns'] as $column)
 					{
-						$translated = $app->trans('export.elas.csv.' . $table . '.column.' . $column);
-						$fields[] = strpos($translated, 'export.elas.csv.') === 0 ? $column : $translated;	
+						$translated = $translator->trans('export.elas.csv.' . $table . '.column.' . $column);
+						$fields[] = strpos($translated, 'export.elas.csv.') === 0 ? $column : $translated;
 						$columns[] = $column;
 					}
-				
+
 					$out = '"' . implode('","', $fields) . '"' . $this->r;
-			
+
 					foreach($data as $row)
 					{
 						$fields = [];
-			
+
 						foreach($columns as $c)
 						{
 							$fields[] = $row[$c] ?? '';
 						}
-			
+
 						$out .= '"' . implode('","', $fields) . '"' . $this->r;
 					}
-	
+
 					$filename = 'elas-' . $table . '-' . gmdate('Y-m-d-H-i-S').'.csv';
 
 					return new Response($out, Response::HTTP_OK, [
