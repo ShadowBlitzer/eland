@@ -1,8 +1,8 @@
 {%- import 'macro/badge.html.twig' as ba -%}
 {%- import 'macro/button.html.twig' as b -%}
 
-<div class="panel panel-info printview">
-<div class="panel-body{%- if not n.approved -%} bg-inactive{%- endif -%}">
+<div class="card card-info printview">
+<div class="card-body{%- if not n.approved -%} bg-inactive{%- endif -%}">
 
 <div class="media">
 <div class="media-body">
@@ -33,7 +33,7 @@
 </div>
 </div>
 
-<div class="panel-footer">
+<div class="card-footer">
 
 <p><i class="fa fa-user"></i>&nbsp;{{ n.id_user|user_format(schema)|raw -}}
 
