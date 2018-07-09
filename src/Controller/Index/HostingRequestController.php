@@ -5,8 +5,7 @@ namespace App\Controller\Index;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Form\Post\HostingRequestType;
@@ -18,10 +17,9 @@ use App\Mail\MailEnv;
 class HostingRequestController extends AbstractController
 {
 	/**
-	 * @Route("/hosting-request", name="hosting_request")
-	 * @Method({"GET", "POST"})
+	 * @Route("/hosting-request", name="hosting_request", methods={"GET", "POST"})
 	 */
-	public function form(MailQueueConfirmLink $mailQueueConfirmLink, 
+	public function form(MailQueueConfirmLink $mailQueueConfirmLink,
 		TranslatorInterface $translator,
 		Request $request):Response
 	{
@@ -31,7 +29,7 @@ class HostingRequestController extends AbstractController
 		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
-			
+
 			$mailQueueConfirmLink
 				->setTo([$data['email']])
 				->setData($data)
@@ -50,8 +48,7 @@ class HostingRequestController extends AbstractController
 	}
 
 	/**
-	 * @Route("/hosting-request/{token}", name="hosting_request_confirm")
-	 * @Method({"GET"})
+	 * @Route("/hosting-request/{token}", name="hosting_request_confirm", methods="GET")
 	 */
 	public function confirm(
 		TranslatorInterface $translator,
@@ -61,7 +58,7 @@ class HostingRequestController extends AbstractController
 		$data = $mailValidatedConfirmLink->get();
 
 		error_log(json_encode($data));
-		
+
 		if (!count($data))
 		{
 			$this->addFlash('error', $translator->trans('hosting_request.confirm_not_found'));
@@ -74,27 +71,6 @@ class HostingRequestController extends AbstractController
 			->setReplyTo([$data['email'] => $data['group_name']])
 			->setPriority(900000)
 			->put();
-
-/*		
-		$app['mail']->queue([
-			'to'		=> getenv('MAIL_ADDRESS_CONTACT'),
-			'template'	=> 'contact',
-			'subject'	=> $app->trans('contact.mail_subject'),
-			'message'	=> $data['message'],
-			'browser'	=> $_SERVER['HTTP_USER_AGENT'],
-			'ip'		=> $_SERVER['REMOTE_ADDR'],
-			'reply_to'	=> $email,
-		]);
-*/
-/*
-		$app[]->set_fail_message()
-			->set_fail_route()
-			->set_success_message()
-			->set_success_route()
-			->set_success_mail_template()
-			->set_success_mail_template();
-*/
-
 
 		$this->addFlash('success', $translator->trans('hosting_request.success'));
 

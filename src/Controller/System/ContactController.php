@@ -5,8 +5,7 @@ namespace App\Controller\System;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Form\Post\ContactType;
@@ -18,10 +17,9 @@ use App\Mail\MailQueue;
 class ContactController extends AbstractController
 {
 	/**
-	 * @Route("/contact", name="contact_form")
-	 * @Method({"GET", "POST"})
+	 * @Route("/contact", name="contact_form", methods={"GET", "POST"})
 	 */
-	public function form(MailQueueConfirmLink $mailQueueConfirmLink, 
+	public function form(MailQueueConfirmLink $mailQueueConfirmLink,
 		TranslatorInterface $translator, Request $request, string $schema):Response
 	{
 		$form = $this->createForm(ContactType::class)
@@ -49,8 +47,7 @@ class ContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact/{token}", name="contact_confirm")
-	 * @Method("GET")
+	 * @Route("/contact/{token}", name="contact_confirm", methods="GET")
 	 */
 	public function confirm(MailValidatedConfirmLink $mailValidatedConfirmLink, MailAdmin $mailAdmin,
 		MailQueue $mailQueue,
@@ -60,7 +57,7 @@ class ContactController extends AbstractController
 		$data = $mailValidatedConfirmLink->get();
 
 		error_log(json_encode($data));
-		
+
 		if (!count($data))
 		{
 			$this->addFlash('error', $translator->trans('contact.confirm_not_found'));
@@ -80,4 +77,3 @@ class ContactController extends AbstractController
 		return $this->redirectToRoute('login', ['schema' => $schema]);
 	}
 }
-

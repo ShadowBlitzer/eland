@@ -5,8 +5,7 @@ namespace App\Controller\System;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class PageController extends AbstractController
@@ -22,7 +21,7 @@ class PageController extends AbstractController
 		$response = $app->render('page/show.html.twig', [
 			'content'	=> $page,
 		]);
-	
+
         $response->setEtag(crc32($response->getContent()));
         $response->setPublic();
         $response->isNotModified($request);
@@ -30,8 +29,7 @@ class PageController extends AbstractController
 	}
 
 	/**
-	 * @Route("/{access}/pages", name="page_a_index", requirements={"access"="a"})
-	 * @Method("GET")
+	 * @Route("/{access}/pages", name="page_a_index", requirements={"access"="a"}, methods="GET")
 	 */
 	public function aIndex(Request $request, string $schema, string $access):Response
 	{
@@ -41,8 +39,7 @@ class PageController extends AbstractController
 	}
 
 	/**
-	 * @Route("/{access}/pages/add", name="page_a_add", requirements={"access"="a"})
-	 * @Method({"GET", "POST"})
+	 * @Route("/{access}/pages/add", name="page_a_add", requirements={"access"="a"}, methods={"GET", "POST"})
 	 */
 	public function aAdd(Request $request, string $schema, string $access):Response
 	{
@@ -56,17 +53,17 @@ class PageController extends AbstractController
 		if ($form->isSubmitted() && $form->isValid())
 		{
 			$data = $form->getData();
-	
+
 			$data['fullname'] = '';
 			$data['leafnote'] = 0;
 
 			if ($data['id_parent'])
 			{
 				$data['leafnote'] = 1;
-				$data['fullname'] = $app['db']->fetchColumn('select name 
-					from ' . $schema . '.categories 
-					where id = ?', [(int) $data['id_parent']]);	
-				$data['fullname'] .= ' - ';	
+				$data['fullname'] = $app['db']->fetchColumn('select name
+					from ' . $schema . '.categories
+					where id = ?', [(int) $data['id_parent']]);
+				$data['fullname'] .= ' - ';
 			}
 			$data['fullname'] .= $data['name'];
 
@@ -77,7 +74,7 @@ class PageController extends AbstractController
 			return $app->redirect($app->path('page_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]));				
+			]));
 		}
 
 		return $this->render('page/a_add.html.twig', [
@@ -88,7 +85,7 @@ class PageController extends AbstractController
 	public function aEdit(Request $request, string $schema, string $access, $page):Response
 	{
 		$data = [
-			
+
 		];
 
 		$form = $this->createForm('page_type', $data)
@@ -115,4 +112,3 @@ class PageController extends AbstractController
 	}
 
 }
-

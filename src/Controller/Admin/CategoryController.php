@@ -5,8 +5,7 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -18,8 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class CategoryController extends AbstractController
 {
 	/**
-	 * @Route("/categories", name="category_index")
-	 * @Method("GET")
+	 * @Route("/categories", name="category_index", methods="GET")
 	 */
 	public function index(CategoryRepository $categoryRepository, Request $request, string $schema, string $access):Response
 	{
@@ -29,11 +27,10 @@ class CategoryController extends AbstractController
 	}
 
 	/**
-	 * @Route("/categories/add", name="category_add")
-	 * @Method({"GET", "POST"})
+	 * @Route("/categories/add", name="category_add", methods={"GET", "POST"})
 	 */
-	public function add(CategoryRepository $categoryRepository, 
-		TranslatorInterface $translator,	
+	public function add(CategoryRepository $categoryRepository,
+		TranslatorInterface $translator,
 		Request $request, string $schema, string $access, int $parentCategory = null):Response
 	{
 		$data = [
@@ -55,21 +52,21 @@ class CategoryController extends AbstractController
 			if ($data['id_parent'])
 			{
 				$data['leafnote'] = 1;
-				$data['fullname'] = $categoryRepository->getName($data['id_parent'], $schema);	
-				$data['fullname'] .= ' - ';	
+				$data['fullname'] = $categoryRepository->getName($data['id_parent'], $schema);
+				$data['fullname'] .= ' - ';
 			}
-		
+
 			$data['fullname'] .= $data['name'];
 
 			$categoryRepository->insert($schema, $data);
 
-			$this->addFlash('success', 
+			$this->addFlash('success',
 				$translator->trans('category_add.success', ['%name%'  => $data['name']]));
 
 			return $this->redirectToRoute('category_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]);				
+			]);
 		}
 
 		return $this->render('category/a_add.html.twig', [
@@ -78,10 +75,9 @@ class CategoryController extends AbstractController
 	}
 
 	/**
-	 * @Route("/categories/{id}/edit", name="category_edit")
-	 * @Method({"GET", "POST"})
+	 * @Route("/categories/{id}/edit", name="category_edit", methods={"GET", "POST"})
 	 */
-	public function edit(CategoryRepository $categoryRepository, 
+	public function edit(CategoryRepository $categoryRepository,
 		TranslatorInterface $translator,
 		Request $request, string $schema, string $access, int $id):Response
 	{
@@ -105,10 +101,10 @@ class CategoryController extends AbstractController
 			if ($data['id_parent'])
 			{
 				$data['leafnote'] = 1;
-				$data['fullname'] = $categoryRepository->getName($data['id_parent'], $schema);	
-				$data['fullname'] .= ' - ';	
+				$data['fullname'] = $categoryRepository->getName($data['id_parent'], $schema);
+				$data['fullname'] .= ' - ';
 			}
-	
+
 			$data['fullname'] .= $data['name'];
 
 			$categoryRepository->update($id, $schema, $data);
@@ -118,7 +114,7 @@ class CategoryController extends AbstractController
 			return $this->redirectToRoute('category_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]);				
+			]);
 		}
 
 		return $this->render('category/a_edit.html.twig', [
@@ -127,10 +123,9 @@ class CategoryController extends AbstractController
 	}
 
 	/**
-	 * @Route("/categories/{id}/del", name="category_del")
-	 * @Method({"GET", "POST"})
+	 * @Route("/categories/{id}/del", name="category_del", methods={"GET", "POST"})
 	 */
-	public function del(CategoryRepository $categoryRepository, 
+	public function del(CategoryRepository $categoryRepository,
 		TranslatorInterface $translator,
 		Request $request, string $schema, string $access, int $id):Response
 	{
@@ -147,7 +142,7 @@ class CategoryController extends AbstractController
 		{
 			throw new ConflictHttpException(
 				'The category has messages and thus cannot be deleted.'
-			);			
+			);
 		}
 
 		$form = $this->createFormBuilder()

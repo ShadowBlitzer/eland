@@ -5,8 +5,7 @@ namespace App\Controller\System;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Form\Post\RegisterType;
@@ -17,10 +16,9 @@ use App\Mail\MailAdmin;
 class RegisterController extends AbstractController
 {
 	/**
-	 * @Route("/register", name="register")
-	 * @Method({"GET", "POST"})
+	 * @Route("/register", name="register", methods={"GET", "POST"})
 	 */
-	public function form(MailQueueConfirmLink $mailQueueConfirmLink, 
+	public function form(MailQueueConfirmLink $mailQueueConfirmLink,
 		TranslatorInterface $translator,
 		Request $request, string $schema):Response
 	{
@@ -47,17 +45,16 @@ class RegisterController extends AbstractController
 	}
 
 	/**
-	 * @Route("/register/{token}", name="register_confirm")
-	 * @Method("GET")
+	 * @Route("/register/{token}", name="register_confirm", methods="GET")
 	 */
-	public function confirm(MailValidatedConfirmLink $mailValidatedConfirmLink, 
+	public function confirm(MailValidatedConfirmLink $mailValidatedConfirmLink,
 		TranslatorInterface $translator,
 		Request $request, string $schema, string $token):Response
 	{
 		$data = $mailValidatedConfirmLink->get();
-	
+
 		error_log(json_encode($data));
-		
+
 		if (!count($data))
 		{
 			$this->addFlash('error', $translator->trans('register.confirm_not_found'));
@@ -125,4 +122,3 @@ class RegisterController extends AbstractController
 		]);
 	}
 }
-

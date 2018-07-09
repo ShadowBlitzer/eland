@@ -5,8 +5,7 @@ namespace App\Controller\Guest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Repository\DocRepository;
@@ -14,10 +13,9 @@ use App\Repository\DocRepository;
 class DocController extends AbstractController
 {
 	/**
-	 * @Route("/docs", name="doc_index")
-	 * @Method("GET")
+	 * @Route("/docs", name="doc_index", methods="GET")
 	 */
-	public function index(DocRepository $docRepository, 
+	public function index(DocRepository $docRepository,
 		Request $request, string $schema, string $access):Response
 	{
 		$maps = $docRepository->getAllMaps($schema, $access);
@@ -30,10 +28,9 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/map/{mapId}", name="doc_map")
-	 * @Method("GET")
+	 * @Route("/docs/map/{mapId}", name="doc_map", methods="GET")
 	 */
-	public function map(DocRepository $docRepository, 
+	public function map(DocRepository $docRepository,
 		Request $request, string $schema, string $access, string $mapId):Response
 	{
 		$mapName = $docRepository->getMapName($mapId, $schema);
@@ -47,10 +44,9 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/map/{mapId}/edit", name="doc_map_edit")
-	 * @Method("GET|POST")
+	 * @Route("/docs/map/{mapId}/edit", name="doc_map_edit", methods={"GET","POST"})
 	 */
-	public function mapEdit(TranslatorInterface $translator, 
+	public function mapEdit(TranslatorInterface $translator,
 		DocRepository $docRepository,
 		Request $request, string $schema, string $access, string $mapId):Response
 	{
@@ -62,10 +58,9 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/{id}/del", name="doc_del")
-	 * @Method("GET|POST")
+	 * @Route("/docs/{id}/del", name="doc_del", methods={"GET","POST"})
 	 */
-	public function del(TranslatorInterface $translator, 
+	public function del(TranslatorInterface $translator,
 		Request $request, string $schema, string $access, string $id):Response
 	{
 		$doc = $docRepository->get($id, $schema);
@@ -75,13 +70,12 @@ class DocController extends AbstractController
 		return $this->render('doc/' . $access . '_del.html.twig', [
 			'form'		=> $form->createView(),
 		]);
-	}	
+	}
 
 	/**
-	 * @Route("/docs/{id}/edit", name="doc_edit")
-	 * @Method("GET|POST")
+	 * @Route("/docs/{id}/edit", name="doc_edit", methods={"GET","POST"})
 	 */
-	public function edit(TranslatorInterface $translator, 
+	public function edit(TranslatorInterface $translator,
 		Request $request, string $schema, string $access, string $id):Response
 	{
 
@@ -89,13 +83,12 @@ class DocController extends AbstractController
 		return $this->render('doc/' . $access . '_edit.html.twig', [
 			'form'		=> $form->createView(),
 		]);
-	}	
+	}
 
 	/**
-	 * @Route("/docs/add/{mapId}", name="doc_add", defaults={"mapId"=""})
-	 * @Method("GET|POST")
+	 * @Route("/docs/add/{mapId}", name="doc_add", defaults={"mapId"=""}, methods={"GET", "POST"})
 	 */
-	public function add(TranslatorInterface $translator, 
+	public function add(TranslatorInterface $translator,
 		Request $request, string $schema, string $access, string $mapId):Response
 	{
 
@@ -103,7 +96,7 @@ class DocController extends AbstractController
 		return $this->render('doc/' . $access . '_add.html.twig', [
 			'form'		=> $form->createView(),
 		]);
-	}	
+	}
 }
 
 
@@ -454,7 +447,7 @@ if ($del)
 
 
  * add
- 
+
 if ($submit)
 {
 	$tmpfile = $_FILES['file']['tmp_name'];

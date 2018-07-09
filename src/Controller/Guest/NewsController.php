@@ -5,8 +5,7 @@ namespace App\Controller\Guest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -21,15 +20,14 @@ use App\Util\Sort;
 use App\Util\Pagination;
 
 use Doctrine\DBAL\Connection as Db;
-use App\Service\Xdb; 
+use App\Service\Xdb;
 
 use App\Form\Post\NewsType;
 
-class NewsController extends AbstractController 
+class NewsController extends AbstractController
 {
 	/**
-	 * @Route("/news", name="news_no_view")
-	 * @Method("GET")
+	 * @Route("/news", name="news_no_view", methods="GET")
 	 */
 	public function noView(SessionView $sessionView, Request $request, string $schema, string $access):Response
 	{
@@ -41,19 +39,18 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/{view}", name="news_index", requirements={"view" = "list|extended"})
-	 * @Method("GET|POST")
+	 * @Route("/news/{view}", name="news_index", requirements={"view" = "list|extended"}, methods={"GET", "POST"})
 	 */
 	public function index(FormFactoryInterface $formFactory, NewsRepository $newsRepository,
 		TranslatorInterface $translator,
 		Db $db, Xdb $xdb,
-		SessionView $sessionView, Request $request, 
+		SessionView $sessionView, Request $request,
 		string $schema, string $access, string $view):Response
 	{
 		$s_admin = $access === 'a';
 
 		$sessionView->set('news', $schema, $access, $view);
-		
+
 		$where = $params = [];
 
 		$filtered = count($where) ? true : false;
@@ -78,28 +75,28 @@ class NewsController extends AbstractController
 		$query .= $pagination->query();
 
 		$news = $db->fetchAll($query, $params);
-		
+
 		$newsAccessAry = $toApproveAry = $approveHeadlineAry = [];
-		
+
 		$rows = $xdb->getFiltered(['agg_schema' => $schema, 'agg_type' => 'news_access']);
-		
+
 		foreach ($rows as $row)
 		{
 			$acc = $row['data']['access'];
 			$newsAccessAry[$row['eland_id']] = $acc;
 		}
-		
+
 		foreach ($news as $k => $n)
 		{
 			$newsId = $n['id'];
-		
+
 			if (!isset($newsAccessAry[$newsId]))
 			{
 				$xdb->set('news_access', $newsId, ['access' => 'interlets'], $schema);
 				$news[$k]['access'] = 'interlets';
 				continue;
 			}
-		
+
 			$news[$k]['access'] = $newsAccessAry[$newsId];
 
 			if (!$n['approved'] && $s_admin)
@@ -111,7 +108,7 @@ class NewsController extends AbstractController
 				$approveHeadlineAry[$n['id']] = $n['headline'];
 			}
 
-/*		
+/*
 			if (!$app['access_control']->is_visible($news[$k]['access']))
 			{
 				unset($news[$k]);
@@ -123,7 +120,7 @@ class NewsController extends AbstractController
 			'news'			=> $news,
 //			'filter'		=> $filter->createView(),
 			'filtered'		=> $filtered,
-			'pagination'	=> $pagination->get($rowCount),		
+			'pagination'	=> $pagination->get($rowCount),
 			'sort'			=> $sort->get(),
 		];
 
@@ -146,7 +143,7 @@ class NewsController extends AbstractController
 					if ($approveForm->get($key)->isClicked())
 					{
 						list($approveStr, $id) = explode('_', $key);
-						$name = $approveHeadlineAry[$id];				
+						$name = $approveHeadlineAry[$id];
 
 						$newsRepository->approve($id, $schema);
 
@@ -157,7 +154,7 @@ class NewsController extends AbstractController
 
 				if (!isset($approveStr))
 				{
-					$this->addFlash('error', $translator->trans('news.approve.error'));					
+					$this->addFlash('error', $translator->trans('news.approve.error'));
 				}
 
 				$params = $request->attributes->all();
@@ -172,10 +169,9 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/{id}", name="news_show", requirements={"id"="\d+"})
-	 * @Method("GET")
+	 * @Route("/news/{id}", name="news_show", requirements={"id"="\d+"}, methods="GET")
 	 */
-	public function show(NewsRepository $newsRepository, TranslatorInterface $translator, 
+	public function show(NewsRepository $newsRepository, TranslatorInterface $translator,
 		Request $request, string $schema, string $access, int $id):Response
 	{
 		$news = $newsRepository->get($id, $schema);
@@ -187,11 +183,11 @@ class NewsController extends AbstractController
 			$approveForm = $this->createFormBuilder()
 				->add('approve', SubmitType::class)
 				->getForm();
-			
+
 			$approveForm->handleRequest($request);
 
-			if ($approveForm->isSubmitted() 
-				&& $approveForm->isValid() 
+			if ($approveForm->isSubmitted()
+				&& $approveForm->isValid()
 				&& $approveForm->get('approve')->isClicked())
 			{
 				$newsRepository->approve($news['id'], $schema);
@@ -214,10 +210,9 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/add", name="news_add")
-	 * @Method({"GET", "POST"})
+	 * @Route("/news/add", name="news_add", methods={"GET", "POST"})
 	 */
-	public function add(TranslatorInterface $translator, NewsRepository $newsRepository, 
+	public function add(TranslatorInterface $translator, NewsRepository $newsRepository,
 		SessionView $seesionView,
 		Request $request, string $schema, string $access):Response
 	{
@@ -247,7 +242,7 @@ class NewsController extends AbstractController
 					'schema' 	=> $schema,
 					'access'	=> $access,
 					'view'		=> $sessionView->get('news', $schema, $access),
-				]);					
+				]);
 			}
 
 			$this->addFlash('success', $translator->trans('news_add.success', ['%name%'  => $data['headline']]));
@@ -256,7 +251,7 @@ class NewsController extends AbstractController
 				'schema' 	=> $schema,
 				'access'	=> $access,
 				'news'		=> $data['id'],
-			]);				
+			]);
 		}
 
 		return $this->render('news/' . $access . '_add.html.twig', [
@@ -265,10 +260,9 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/{id}/edit", name="news_edit")
-	 * @Method({"GET", "POST"})
+	 * @Route("/news/{id}/edit", name="news_edit", methods={"GET", "POST"})
 	 */
-	public function edit(NewsRepository $newsRepository, TranslatorInterface $translator, 
+	public function edit(NewsRepository $newsRepository, TranslatorInterface $translator,
 		Request $request, string $schema, string $access, int $id):Responnse
 	{
 		$news = $newsRepository->get($id, $schema);
@@ -288,24 +282,23 @@ class NewsController extends AbstractController
 				'schema' 	=> $schema,
 				'access'	=> $access,
 				'id'		=> $id,
-			]);				
+			]);
 		}
-	
+
 		return $this->render('news/' . $access . '_edit.html.twig', [
 			'form' => $form->createView(),
 		]);
 	}
 
 	/**
-	 * @Route("/news/{id}/del", name="news_del")
-	 * @Method({"GET", "POST"})
+	 * @Route("/news/{id}/del", name="news_del", methods={"GET", "POST"})
 	 */
-	public function del(NewsRepository $newsRepository, SessionView $sessionView, 
+	public function del(NewsRepository $newsRepository, SessionView $sessionView,
 		TranslatorInterface $translator,
 		Request $request, string $schema, string $access, int $id):Response
 	{
 		$news = $newsRepository->get($id, $schema);
-	
+
 		$form = $this->createFormBuilder()
 			->add('submit', SubmitType::class)
 			->getForm()
@@ -321,14 +314,14 @@ class NewsController extends AbstractController
 				'schema' 	=> $schema,
 				'access'	=> $access,
 				'view'		=> $sessionView->get('news', $schema, $access),
-			]);				
+			]);
 		}
 
 		return $this->render('news/' . $access . '_del.html.twig', [
 			'form' => $form->createView(),
 			'news'	=> $news,
 		]);
-	}	
+	}
 }
 
 /*
@@ -707,7 +700,7 @@ if ($del)
  * show a newsitem
  */
 
-/* 
+/*
 
 if ($id)
 {

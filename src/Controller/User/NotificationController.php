@@ -5,8 +5,7 @@ namespace App\Controller\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -19,8 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class NotificationController extends AbstractController
 {
 	/**
-	 * @Route("/notifications", name="notification_index")
-	 * @Method("GET")
+	 * @Route("/notifications", name="notification_index", methods="GET")
 	 */
 	public function index(Request $request, string $schema, string $access):Response
 	{

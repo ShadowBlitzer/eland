@@ -5,15 +5,13 @@ namespace App\Controller\Guest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class AccountController extends AbstractController
 {
 	/**
-	 * @Route("/accounts/{account_type}", name="account_index")
-	 * @Method({"GET", "POST"})
+	 * @Route("/accounts/{account_type}", name="account_index", methods={"GET", "POST"})
 	 */
 	public function index(Request $request, string $schema, string $access, string $account_type):Response
 	{
@@ -21,8 +19,7 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/accounts/{account_type}/map", name="account_map")
-	 * @Method("GET")
+	 * @Route("/accounts/{account_type}/map", name="account_map", methods="GET")
 	 */
 	public function map(Request $request, string $schema, string $access, string $account_type):Response
 	{
@@ -30,8 +27,7 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/accounts/{account_type}/tile", name="account_tile")
-	 * @Method("GET")
+	 * @Route("/accounts/{account_type}/tile", name="account_tile", methods="GET")
 	 */
 	public function tile(Request $request, string $schema, string $access, string $account_type):Response
 	{
@@ -39,8 +35,7 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/accounts/{account_type}/{id}", name="account_show")
-	 * @Method("GET")
+	 * @Route("/accounts/{account_type}/{id}", name="account_show", methods="GET")
 	 */
 	public function show(Request $request, string $schema, string $access, string $account_type):Response
 	{
@@ -48,12 +43,10 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/accounts/self", name="account_self")
-	 * @Method("GET")
+	 * @Route("/accounts/self", name="account_self", methods="GET")
 	 */
 	public function show_self(Request $request, string $schema, string $access):Response
 	{
 		return $this->render('account/' . $access . '_show_self.html.twig', []);
 	}
 }
-

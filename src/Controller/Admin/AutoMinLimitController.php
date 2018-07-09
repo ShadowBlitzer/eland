@@ -5,8 +5,7 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -20,13 +19,14 @@ use App\Repository\ConfigRepository;
 class AutoMinLimitController extends AbstractController
 {
 	/**
-	 * @Route("/auto-min-limit", name="auto_min_limit")
-	 * @Method({"GET", "POST"})
+	 * @Route("/auto-min-limit",
+	 * 	name="auto_min_limit",
+	 * 	methods={"GET", "POST"})
 	 */
 	public function form(Request $request, string $schema):Response
 	{
 		$row = $app['xdb']->get('setting', 'autominlimit', $schema);
-		
+
 		if ($row)
 		{
 			$data = $row['data'];
@@ -54,7 +54,7 @@ class AutoMinLimitController extends AbstractController
 		$form = $this->createFormBuilder($data)
 			->add('enabled', CheckboxType::class)
 			->add('trans_percentage', PercentType::class, [
-				'type'			=> 'integer',				
+				'type'			=> 'integer',
 			])
 			->add('exclusive', CollectionType::class, [
 				'entry_type'	=> TextType::class,
@@ -93,7 +93,7 @@ class AutoMinLimitController extends AbstractController
 
 			return $this->redirectToRoute('auto_min_limit', [
 				'schema' => $schema,
-			]);				
+			]);
 		}
 
 		return $this->render('auto_min_limit/a_form.html.twig', [

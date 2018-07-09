@@ -5,8 +5,7 @@ namespace App\Controller\Guest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -21,10 +20,9 @@ class TypeContactController extends AbstractController
 	];
 
 	/**
-	 * @Route("/contact-types", name="type_contact_index")
-	 * @Method("GET")
+	 * @Route("/contact-types", name="type_contact_index", methods="GET")
 	 */
-	public function index(TypeContactRepository $typeContactRepository, 
+	public function index(TypeContactRepository $typeContactRepository,
 		Request $request, string $schema, string $access):Response
 	{
 		$contactTypes = $typeContactRepository->getAllWithCount($schema);
@@ -38,10 +36,9 @@ class TypeContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact-types/add", name="type_contact_add")
-	 * @Method({"GET", "POST"})
+	 * @Route("/contact-types/add", name="type_contact_add", methods={"GET", "POST"})
 	 */
-	public function add(TypeContactRepository $typeContactRepository, 
+	public function add(TypeContactRepository $typeContactRepository,
 		TranslatorInterface $translator,
 		Request $request, string $schema, string $access):Response
 	{
@@ -65,7 +62,7 @@ class TypeContactController extends AbstractController
 			return $this->redirectToRoute('typecontact_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]);				
+			]);
 		}
 
 		return $this->render('type_contact/a_add.html.twig', [
@@ -74,8 +71,7 @@ class TypeContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact-types/{id}/edit", name="type_contact_edit")
-	 * @Method({"GET", "POST"})
+	 * @Route("/contact-types/{id}/edit", name="type_contact_edit", methods={"GET", "POST"})
 	 */
 	public function edit(
 		TypeContactRepository $typeContactRepository,
@@ -87,9 +83,9 @@ class TypeContactController extends AbstractController
 		if (in_array($typeContact['abbrev'], $this->protectedTypes))
 		{
 			throw new ConflictHttpException(
-				'This contact type is protected 
+				'This contact type is protected
 					and cannot be edited.'
-			);			
+			);
 		}
 
 		$form = $this->createForm(TypeContactType::class, $typeContact, [
@@ -109,7 +105,7 @@ class TypeContactController extends AbstractController
 			return $this->redirectToRoute('typecontact_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]);				
+			]);
 		}
 
 		return $this->render('type_contact/a_edit.html.twig', [
@@ -118,10 +114,10 @@ class TypeContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact-types/{id}/del", name="type_contact_del")
-	 * @Method({"GET", "POST"})
+	 * @Route("/contact-types/{id}/del", name="type_contact_del", methods={"GET", "POST"})
+	 * )
 	 */
-	public function del(TypeContactRepository $typeContactRepository, 
+	public function del(TypeContactRepository $typeContactRepository,
 		TranslatorInterface $translator,
 		Request $request, string $schema, string $access, int $id):Response
 	{
@@ -130,21 +126,21 @@ class TypeContactController extends AbstractController
 		if (in_array($typeContact['abbrev'], $this->protectedTypes))
 		{
 			throw new ConflictHttpException(
-				'This contact type is protected 
+				'This contact type is protected
 					and cannot be deleted.'
-			);			
+			);
 		}
 
 		if ($typeContactRepository->getContactCount($id, $schema) !== 0)
 		{
 			throw new ConflictHttpException(
-				'The contact type cannot be deleted 
+				'The contact type cannot be deleted
 					because contacts of this type exist.'
-			);			
+			);
 		}
 /*
 		if ($app['db']->fetchColumn('select count(*)
-			from ' . $schema . '.contact 
+			from ' . $schema . '.contact
 			where id_type_contact = ?', [$id]))
 		{
 
@@ -166,7 +162,7 @@ class TypeContactController extends AbstractController
 			return $this->redirectToRoute('typecontact_index', [
 				'schema' 	=> $schema,
 				'access'	=> $access,
-			]);				
+			]);
 		}
 
 		return $this->render('type_contact/a_del.html.twig', [

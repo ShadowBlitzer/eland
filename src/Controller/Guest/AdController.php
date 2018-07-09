@@ -5,8 +5,7 @@ namespace App\Controller\Guest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Service\SessionView;
@@ -14,8 +13,7 @@ use App\Service\SessionView;
 class AdController extends AbstractController
 {
 	/**
-	 * @Route("/ads", name="ad_no_view")
-	 * @Method("GET")
+	 * @Route("/ads", name="ad_no_view", methods="GET")
 	 */
 	public function noView(SessionView $sessionView, Request $request, string $schema, string $access):Response
 	{
@@ -27,10 +25,9 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/{view}", name="ad_index")
-	 * @Method("GET")
+	 * @Route("/ads/{view}", name="ad_index", methods="GET")
 	 */
-	public function index(SessionView $sessionView, 
+	public function index(SessionView $sessionView,
 		Request $request, string $schema, string $access, string $view):Response
 	{
 		$sessionView->set('ad', $schema, $access, $view);
@@ -39,8 +36,7 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/self", name="ad_self_no_view")
-	 * @Method("GET")
+	 * @Route("/ads/self", name="ad_self_no_view", methods="GET")
 	 */
 	public function showSelfNoView(SessionView $sessionView, Request $request, string $schema, string $access):Response
 	{
@@ -48,12 +44,11 @@ class AdController extends AbstractController
 			'schema'	=> $schema,
 			'access'	=> $access,
 			'view'		=> $sessionView->get('ad', $schema, $access),
-		]);		
+		]);
 	}
 
 	/**
-	 * @Route("/ads/self/{view}", name="ad_self")
-	 * @Method("GET")
+	 * @Route("/ads/self/{view}", name="ad_self", methods="GET")
 	 */
 	public function showSelf(Request $request, string $schema, string $access):Response
 	{
@@ -61,8 +56,7 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/{id}", name="ad_show")
-	 * @Method("GET")
+	 * @Route("/ads/{id}", name="ad_show", methods="GET")
 	 */
 	public function show(Request $request, string $schema, string $access, int $id):Response
 	{
@@ -72,8 +66,7 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/add", name="ad_add")
-	 * @Method("GET|POST")
+	 * @Route("/ads/add", name="ad_add", methods={"GET","POST"})
 	 */
 	public function add(Request $request, string $schema, string $access):Response
 	{
@@ -83,8 +76,7 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/{id}/edit", name="ad_edit")
-	 * @Method("GET|POST")
+	 * @Route("/ads/{id}/edit", name="ad_edit", methods={"GET","POST"})
 	 */
 	public function edit(Request $request, string $schema, string $access, int $id):Response
 	{
@@ -94,15 +86,12 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/{id}/del", name="ad_del")
-	 * @Method("GET|POST")
+	 * @Route("/ads/{id}/del", name="ad_del", methods={"GET","POST"})
 	 */
 	public function del(Request $request, string $schema, string $access, int $id):Response
 	{
 		return $this->render('ad/' . $access . '_edit.html.twig', [
 			'ad'	=> $ad,
 		]);
-	}	
-
+	}
 }
-

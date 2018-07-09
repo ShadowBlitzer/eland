@@ -5,8 +5,7 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\FormFactoryInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -21,8 +20,7 @@ class LogController extends AbstractController
 {
 
 	/**
-	 * @Route("/logs", name="log")
-	 * @Method("GET")
+	 * @Route("/logs", name="log", methods="GET")
 	 */
 	public function index(FormFactoryInterface $formFactory, Request $request, string $schema, string $access):Response
 	{

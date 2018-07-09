@@ -5,8 +5,7 @@ namespace App\Controller\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Form\Post\SupportType;
@@ -16,15 +15,14 @@ use App\Mail\MailAdmin;
 class SupportController extends AbstractController
 {
 	/**
-	 * @Route("/support", name="support")
-	 * @Method({"GET", "POST"})
+	 * @Route("/support", name="support", methods={"GET", "POST"})
 	 */
-	public function form(MailQueue $mailQueue, MailAdmin $mailAdmin, 
-		TranslatorInterface $translator,	
+	public function form(MailQueue $mailQueue, MailAdmin $mailAdmin,
+		TranslatorInterface $translator,
 		Request $request, string $schema, string $access):Response
 	{
 		$form = $this->createForm(SupportType::class);
-		$form->handleRequest($request);		
+		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid())
 		{
@@ -48,4 +46,3 @@ class SupportController extends AbstractController
 		]);
 	}
 }
-

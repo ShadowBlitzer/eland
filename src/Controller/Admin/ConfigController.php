@@ -5,8 +5,7 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Repository\ConfigRepository;
@@ -14,8 +13,7 @@ use App\Repository\ConfigRepository;
 class ConfigController extends AbstractController
 {
 	/**
-	 * @Route("/config", name="config_index")
-	 * @Method("GET")
+	 * @Route("/config", name="config_index", methods="GET")
 	 */
 	public function index(Request $request, string $schema, string $access):Reponse
 	{
@@ -23,19 +21,17 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/balance-limits", name="config_balance_limits")
-	 * @Method({"GET", "POST"})
+	 * @Route("/config/balance-limits", name="config_balance_limits", methods={"GET", "POST"})
 	 */
 	public function balance_limits(Request $request, string $schema, string $access)
-	{	
+	{
 		return $this->render('config/a_balance_limits.html.twig', [
 
 		]);
 	}
 
 	/**
-	 * @Route("/config/ads", name="config_ads")
-	 * @Method({"GET", "POST"})
+	 * @Route("/config/ads", name="config_ads", methods={"GET", "POST"})
 	 */
 	public function ads(Request $request, string $schema, string $access)
 	{
@@ -45,8 +41,7 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/naming", name="config_naming")
-	 * @Method({"GET", "POST"})
+	 * @Route("/config/naming", name="config_naming", methods={"GET", "POST"})
 	 */
 	public function naming(Request $request, string $schema, string $access)
 	{
@@ -57,8 +52,7 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/mail-addresses", name="config_mail_addresses")
-	 * @Method({"GET", "POST"})
+	 * @Route("/config/mail-addresses", name="config_mail_addresses", methods={"GET", "POST"})
 	 */
 	public function mail_addresses(Request $request, string $schema, string $access)
 	{
@@ -68,8 +62,7 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/periodic-mail", name="config_periodic_mail")
-	 * @Method({"GET", "POST"})
+	 * @Route("/config/periodic-mail", name="config_periodic_mail", methods={"GET", "POST"})
 	 */
 	public function periodic_mail(Request $request, string $schema, string $access)
 	{
@@ -79,8 +72,7 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/contact-form", name="config_contact_form")
-	 * @Method({"GET", "POST"})
+	 * @Route("/config/contact-form", name="config_contact_form", methods={"GET", "POST"})
 	 */
 	public function contact_form(Request $request, string $schema, string $access)
 	{
@@ -90,8 +82,7 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/registration-form", name="config_registration_form")
-	 * @Method({"GET", "POST"})
+	 * @Route("/config/registration-form", name="config_registration_form", methods={"GET", "POST"})
 	 */
 	public function registration_form(Request $request, string $schema, string $access)
 	{
@@ -101,8 +92,8 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/forum", name="config_forum")
-	 * @Method({"GET", "POST"})
+	 * @Route("/config/forum", name="config_forum", methods={"GET", "POST"})
+	 * )
 	 */
 	public function forum(Request $request, string $schema, string $access)
 	{
@@ -112,8 +103,7 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/members", name="config_members")
-	 * @Method({"GET", "POST"})
+	 * @Route("/config/members", name="config_members", methods={"GET", "POST"})
 	 */
 	public function members(Request $request, string $schema, string $access)
 	{
@@ -123,8 +113,7 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/system", name="config_system")
-	 * @Method({"GET", "POST"})
+	 * @Route("/config/system", name="config_system", methods={"GET", "POST"})
 	 */
 	public function system(Request $request, string $schema, string $access)
 	{

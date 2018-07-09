@@ -5,8 +5,7 @@ namespace App\Controller\Guest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Util\Sort;
@@ -29,10 +28,9 @@ class TransactionController extends AbstractController
 {
 
 	/**
-	 * @Route("/transactions", name="transaction_index")
-	 * @Method("GET")
+	 * @Route("/transactions", name="transaction_index", methods="GET")
 	 */
-	public function index(TransactionRepository $transactionRepository, 
+	public function index(TransactionRepository $transactionRepository,
 		TransactionFilter $transactionFilter,
 		Request $request, string $schema, string $access):Response
 	{
@@ -42,7 +40,7 @@ class TransactionController extends AbstractController
 		$filterQuery = new FilterQuery();
 		$filterQuery->add($transactionFilter);
 
-		$rowCount = $transactionRepository->getFilteredRowCount($schema, $filterQuery);		
+		$rowCount = $transactionRepository->getFilteredRowCount($schema, $filterQuery);
 		$pagination = new Pagination($request, $rowCount);
 
 		$sort = new Sort($request);
@@ -60,16 +58,15 @@ class TransactionController extends AbstractController
 			'transactions'	=> $transactions,
 			'filter'		=> $transactionFilter->createView(),
 			'filtered'		=> $transactionFilter->isFiltered(),
-			'pagination'	=> $pagination->get(),		
+			'pagination'	=> $pagination->get(),
 			'sort'			=> $sort->get(),
 		]);
 	}
 
 	/**
-	 * @Route("/transactions/{id}", name="transaction_show", requirements={"id"="\d+"})
-	 * @Method("GET")
+	 * @Route("/transactions/{id}", name="transaction_show", requirements={"id"="\d+"}, methods="GET")
 	 */
-	public function show(TransactionRepository $transactionRepository, 
+	public function show(TransactionRepository $transactionRepository,
 		Request $request, string $schema, string $access, int $id):Response
 	{
 		$transaction = $transactionRepository->get($id, $schema);
@@ -82,18 +79,16 @@ class TransactionController extends AbstractController
 	}
 
 	/**
-	 * @Route("/transactions/self", name="transaction_show_self")
-	 * @Method("GET")
+	 * @Route("/transactions/self", name="transaction_show_self", methods="GET")
 	 */
-	public function showSelf(TransactionRepository $transactionRepository, 
+	public function showSelf(TransactionRepository $transactionRepository,
 		Request $request, string $schema, string $access):Response
 	{
 		return $this->render('transaction/' . $access . '_show_self.html.twig', []);
 	}
 
 	/**
-	 * @Route("/transactions/add", name="transaction_add")
-	 * @Method({"GET", "POST"})
+	 * @Route("/transactions/add", name="transaction_add", methods={"GET", "POST"})
 	 */
 	public function add(TransactionRepository $transactionRepository,
 		TranslatorInterface $translator,
@@ -116,10 +111,9 @@ class TransactionController extends AbstractController
 	}
 
 	/**
-	 * @Route("/transactions/{id}/edit", name="transaction_edit")
-	 * @Method({"GET", "POST"})
+	 * @Route("/transactions/{id}/edit", name="transaction_edit", methods={"GET", "POST"})
 	 */
-	public function edit(TransactionRepository $transactionRepository, 
+	public function edit(TransactionRepository $transactionRepository,
 		TranslatorInterFace $translator,
 		Request $request, string $schema, string $access, int $id):Response
 	{
@@ -137,7 +131,7 @@ class TransactionController extends AbstractController
 				$transaction['id'], $data['description'], $schema);
 
 			$this->addFlash('success', $translator->trans('transaction_edit.success'));
-			
+
 			return $this->redirectToRoute('transaction_show', [
 				'schema'		=> $schema,
 				'access'		=> $access,
@@ -150,4 +144,3 @@ class TransactionController extends AbstractController
 		]);
 	}
 }
-

@@ -5,14 +5,12 @@ namespace App\Controller\Guest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 
 class UserTypeaheadController extends AbstractController
 {
 	/**
-	 * @Route("/users/typeahead/{user_type}", name="user_typeahead")
-	 * @Method("GET")
+	 * @Route("/users/typeahead/{user_type}", name="user_typeahead", methods="GET")
 	 */
 	public function getLocal(Request $request,
 		string $schema, string $access, string $user_type):Response
@@ -66,9 +64,9 @@ class UserTypeaheadController extends AbstractController
 			where ' . $where_sql . '
 			order by letscode asc'
 		);
-		
+
 		$users = [];
-	
+
 		foreach ($fetched_users as $user)
 		{
 			unset($t);
@@ -103,12 +101,12 @@ class UserTypeaheadController extends AbstractController
 			}
 
 			unset($user['status'], $user['accountrole']);
-	
+
 			if ($user['max'] === 999999999)
 			{
 				unset($user['max']);
 			}
-	
+
 			if ($user['min'] === -999999999)
 			{
 				unset($user['min']);
@@ -120,7 +118,7 @@ class UserTypeaheadController extends AbstractController
 			{
 				unset($user['a']);
 			}
-	
+
 			$users[] = $user;
 		}
 
@@ -129,16 +127,15 @@ class UserTypeaheadController extends AbstractController
 		$app['thumbprint']->set($request->getPathInfo(), $out);
 
 		$response = new Response($out);
-		$response->headers->set('Content-Type', 'application/json');		
+		$response->headers->set('Content-Type', 'application/json');
 
 		return $response;
 	}
 
 	/**
-	 * @Route("/users/interlets-typeahead/{id}", name="user_interlets_typeahead")
-	 * @Method("GET")
+	 * @Route("/users/interlets-typeahead/{id}", name="user_interlets_typeahead", methods="GET")
 	 */
-	public function getInterlets(Request $request, 
+	public function getInterlets(Request $request,
 		string $schema, string $access, int $user):Response
 	{
 		if (!in_array($access, ['a', 'u']))
@@ -171,15 +168,15 @@ class UserTypeaheadController extends AbstractController
 
 		if ($user['interlets.schema'])
 		{
-			
+
 		}
 
 		$active_users = $app['cache']->get_string($group['domain'] . '_typeahead_data');
-		
+
 		if ($active_users)
 		{
 			$app['thumbprint']->invalidate_thumbprint('users_active', $group['domain'], crc32($active_users));
-		
+
 			header('Content-type: application/json');
 			echo $active_users;
 			exit;

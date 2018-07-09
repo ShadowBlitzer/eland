@@ -5,15 +5,13 @@ namespace App\Controller\Guest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class ForumController extends AbstractController
 {
 	/**
-	 * @Route("/forum", name="forum_index")
-	 * @Method("GET")
+	 * @Route("/forum", name="forum_index", methods="GET")
 	 */
 	public function index(Request $request, string $schema, string $access):Response
 	{
@@ -23,9 +21,8 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * @Route("/forum/map/{mapId}", name="forum_show")
-	 * @Method("GET")
-	 */	
+	 * @Route("/forum/map/{mapId}", name="forum_show", methods="GET")
+	 */
 	public function map(Request $request, string $schema, string $access, string $mapId):Response
 	{
 
@@ -34,9 +31,8 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * @Route("/forum/{id}", name="forum_show")
-	 * @Method("GET")
-	 */	
+	 * @Route("/forum/{id}", name="forum_show", methods="GET")
+	 */
 	public function show(Request $request, string $schema, string $access, string $id):Response
 	{
 		return $this->render('forum/' . $access . '_show.html.twig', [
@@ -44,4 +40,3 @@ class ForumController extends AbstractController
 		]);
 	}
 }
-

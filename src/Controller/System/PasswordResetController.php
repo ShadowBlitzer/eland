@@ -5,8 +5,7 @@ namespace App\Controller\System;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use App\Repository\UserRepository;
@@ -19,8 +18,7 @@ use App\Mail\MailValidatedConfirmLink;
 class PasswordResetController extends AbstractController
 {
 	/**
-	 * @Route("/password-reset", name="password_reset")
-	 * @Method({"GET", "POST"})
+	 * @Route("/password-reset", name="password_reset", methods={"GET", "POST"})
 	 */
 	public function form(
 		MailQueueConfirmLink $mailQueueConfirmLink, TranslatorInterface $translator,
@@ -61,20 +59,19 @@ class PasswordResetController extends AbstractController
 	}
 
 	/**
-	 * @Route("/password-reset/{token}", name="password_reset_new_password")
-	 * @Method({"GET", "POST"})
+	 * @Route("/password-reset/{token}", name="password_reset_new_password", methods={"GET", "POST"})
 	 */
 	public function newPassword(
-		TranslatorInterface $translator, 
+		TranslatorInterface $translator,
 		MailValidatedConfirmLink $mailValidatedConfirmLink,
 		Request $request, string $schema, string $token):Response
 	{
 		if ($request->getMethod() === 'GET')
 		{
 			$data = $mailValidatedConfirmLink->get();
-			
+
 			error_log(json_encode($data));
-			
+
 			if (!count($data))
 			{
 				$this->addFlash('error', $translator->trans('password_reset.confirm_not_found'));
@@ -82,7 +79,7 @@ class PasswordResetController extends AbstractController
 			}
 		}
 
-		// note: unwanted access is protected by _etoken 
+		// note: unwanted access is protected by _etoken
 
 		$form = $this->createForm(PasswordResetFormType::class)
 			->handleRequest($request);
@@ -99,4 +96,3 @@ class PasswordResetController extends AbstractController
 		return $this->render('password_reset/new_password.html.twig', ['form' => $form->createView()]);
 	}
 }
-

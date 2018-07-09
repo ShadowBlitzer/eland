@@ -5,8 +5,7 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\DBAL\Connection as Db;
@@ -103,8 +102,7 @@ class ExportController extends AbstractController
 	private $r = "\r\n";
 
 	/**
-	 * @Route("/export", name="export")
-	 * @Method({"GET", "POST"})
+	 * @Route("/export", name="export", methods={"GET", "POST"})
 	 */
 	public function index(Request $request, string $schema,
 		Db $db, TranslatorInterface $translator):Response

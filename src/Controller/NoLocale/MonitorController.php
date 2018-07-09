@@ -5,8 +5,7 @@ namespace App\Controller\NoLocale;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Psr\Log\LoggerInterface;
 use Doctrine\DBAL\Connection as Db;
@@ -15,8 +14,7 @@ use Predis\Client as Predis;
 class MonitorController extends AbstractController
 {
 	/**
-	* @Route("/monitor", name="monitor")
-	* @Method("GET")
+	* @Route("/monitor", name="monitor", methods="GET")
 	*/
 	public function status(LoggerInterface $logger, Db $db, Predis $predis, Request $request):Response
 	{
@@ -36,7 +34,7 @@ class MonitorController extends AbstractController
 		}
 		catch(\Exception $e)
 		{
-			throw new ServiceUnavailableHttpException('redis fail: ' . $e->getMessage());			
+			throw new ServiceUnavailableHttpException('redis fail: ' . $e->getMessage());
 		}
 
 		$monitorCount = $predis->get('eland_monitor');
@@ -47,10 +45,10 @@ class MonitorController extends AbstractController
 
 			if (!$monitorServiceWorker)
 			{
-				throw new ServiceUnavailableHttpException('service worker is down');					
-			}		
+				throw new ServiceUnavailableHttpException('service worker is down');
+			}
 		}
 
-        return new Response('<html><body>Ok</body></html>');		
+        return new Response('<html><body>Ok</body></html>');
 	}
 }

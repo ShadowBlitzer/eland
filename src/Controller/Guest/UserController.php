@@ -5,8 +5,7 @@ namespace App\Controller\Guest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -29,10 +28,9 @@ class UserController extends AbstractController
 {
 
 	/**
-	 * @Route("/users", name="user_no_view")
-	 * @Method("GET")
+	 * @Route("/users", name="user_no_view", methods="GET")
 	 */
-	public function noView(SessionView $sessionView, 
+	public function noView(SessionView $sessionView,
 		Request $request, string $schema, string $access, string $userType):Response
 	{
 		return $this->redirectToRoute('user_index', [
@@ -44,25 +42,25 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/{view}/{userType}", name="user_index", defaults={"userType"="active"})
-	 * @Method({"GET", "POST"})
+	 * @Route("/users/{view}/{userType}", name="user_index", defaults={"userType"="active"}, methods={"GET", "POST"})
+	 * )
 	 */
-	public function index(FormFactoryInterface $formFactory, 
+	public function index(FormFactoryInterface $formFactory,
 		ConfigRepository $configRepository,
 		UserRepository $userRepository,
 		UserFilter $userFilter,
 		UserTypeFilter $userTypeFilter,
 		UserColumnSelect $userColumnSelect,
-		SessionView $sessionView, SessionColumns $sessionColumns, 
+		SessionView $sessionView, SessionColumns $sessionColumns,
 		Request $request,
 		string $schema, string $access, string $view, string $userType):Response
-	{		
+	{
 		$s_admin = $access === 'a';
 
 		$sessionView->set('user', $schema, $access, $view);
 
 		$newUserTreshold = gmdate('Y-m-d H:i:s', time() - ($configRepository->get('newuserdays', $schema) * 84600));
-		
+
 		$columns = [
 			'base'	=> [
 				'letscode'		=> true,
@@ -85,7 +83,7 @@ class UserController extends AbstractController
 			],
 			'c'	=> [
 
-			], 
+			],
 			'm'	=> [
 				'wants'			=> false,
 				'offers'		=> false,
@@ -135,7 +133,7 @@ class UserController extends AbstractController
 		$sort->addColumns([
 			'letscode'		=> 'asc',
 			'name'			=> 'asc',
-			'fullname'		=> 'asc', 
+			'fullname'		=> 'asc',
 			'postcode'		=> 'asc',
 			'saldo'			=> 'asc',
 			'adate'			=> 'desc',
@@ -192,7 +190,7 @@ class UserController extends AbstractController
 			'user_type'		=> $userType,
 			'filter'		=> $userFilter->createView(),
 			'filtered'		=> $userFilter->isFiltered(),
-			'pagination'	=> $pagination->get($rowCount),		
+			'pagination'	=> $pagination->get($rowCount),
 			'sort'			=> $sort->get(),
 			'columns'		=> $cols,
 			'column_select'	=> $columnSelect->createView(),
@@ -204,8 +202,7 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/{id}", name="user_show", requirements={"id"="\d+"})
-	 * @Method("GET")
+	 * @Route("/users/{id}", name="user_show", requirements={"id"="\d+"}, methods="GET")
 	 */
 	public function show(Request $request, string $schema, string $access, array $user):Response
 	{
@@ -213,8 +210,7 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/self", name="user_show_self")
-	 * @Method("GET")
+	 * @Route("/users/self", name="user_show_self", methods="GET")
 	 */
 	public function showSelf(Request $request, string $schema, string $access):Response
 	{
@@ -222,8 +218,7 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/add", name="user_add")
-	 * @Method("GET|POST")
+	 * @Route("/users/add", name="user_add", methods={"GET", "POST"})
 	 */
 	public function add(Request $request, string $schema, string $access):Response
 	{
@@ -277,7 +272,7 @@ require_once __DIR__ . '/include/web.php';
  * selectors for bulk actions
  */
 
-/* 
+/*
 
 $bulk_field_submit = $bulk_submit = false;
 
@@ -4175,4 +4170,3 @@ function send_activation_mail($password, $user)
 }
 
 */
-
