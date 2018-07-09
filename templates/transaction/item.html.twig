@@ -3,33 +3,26 @@
 
 {%- set interlets = real_from is defined or real_to is defined -%}
 
-<div class="panel panel-info printview">
-<div class="panel-body{%- if interlets -%} bg-warning{%- endif -%}">
+<div class="card card-info printview">
+	<div class="card-body{%- if interlets -%} bg-warning{%- endif -%}">
+		<dl>
+			<dt>{{- 'label.time'|trans -}}</dt>
+			<dd>{{- t.cdate|date_format('min') -}}</dd>
 
-<div class="media">
-<div class="media-body">
+			<dt>{{- 'label.amount'|trans -}}</dt>
+			<dd>{{- t.amount -}}&nbsp;{{- config('currency', schema) -}}</dd>
 
-<dl>
-	<dt>{{- 'label.time'|trans -}}</dt>
-	<dd>{{- t.cdate|date_format('min') -}}</dd>
+			<dt>{{- 'label.from'|trans -}}</dt>
+			<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_from|user_format(schema)|raw -}}</dd>
 
-	<dt>{{- 'label.amount'|trans -}}</dt>
-	<dd>{{- t.amount -}}&nbsp;{{- config('currency', schema) -}}</dd>
+			<dt>{{- 'label.to'|trans -}}</dt>
+			<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_to|user_format(schema)|raw -}}</dd>
 
-	<dt>{{- 'label.from'|trans -}}</dt>
-	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_from|user_format(schema)|raw -}}</dd>
+			<dt>{{- 'label.description'|trans -}}</dt>
+			<dd>{{- t.description -}}</dd>
 
-	<dt>{{- 'label.to'|trans -}}</dt>
-	<dd><i class="fa fa-user"></i>&nbsp;{{- t.id_to|user_format(schema)|raw -}}</dd>
-
-	<dt>{{- 'label.description'|trans -}}</dt>
-	<dd>{{- t.description -}}</dd>
-
-	<dt>{{- 'label.transaction_id'|trans -}}</dt>
-	<dd>{{- t.transid -}}</dd>
-<dl>
-
-</div>
-</div>
-</div>
+			<dt>{{- 'label.transaction_id'|trans -}}</dt>
+			<dd>{{- t.transid -}}</dd>
+		<dl>
+	</div>
 </div>
