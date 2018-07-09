@@ -34,7 +34,7 @@
 	{%- set nav = {
 		'active': {
 			'label': 'user_type.active',
-			'class': '', 
+			'class': '',
 		},
 		'new': {
 			'label': 'user_type.new',
@@ -64,14 +64,15 @@
 	-%}
 
     <ul class="nav nav-tabs">
-    {%- for key, rec in nav -%}
-        <li{%- if key == user_type %} class="active"{%- endif -%}>
-            <a href="{{- path('user_index', acc_sch|merge({'view': 'list', 'userType': key})) -}}" class="{{- rec.class -}}">
-               {{- (rec.label)|trans -}} 
-            </a>
-        </li>
-    {%- endfor -%}
+		{%- for key, rec in nav -%}
+			<li class="nav-item{%- if key == user_type %} active{%- endif -%}">
+				<a href="{{- path('user_index', acc_sch|merge({'view': 'list', 'userType': key})) -}}" class="nav-link{%- if rec.class %} {{ rec.class -}}{%- endif -%}{%- if key == user_type %} active{%- endif -%}">
+					{{- (rec.label)|trans -}}
+				</a>
+			</li>
+		{%- endfor -%}
     </ul>
+
 {%- endblock pre_inner -%}
 
 {%- block in_pagination -%}
@@ -147,7 +148,6 @@
 	}
 	-%}
 
-
 	{%- set table_forms = {
 		'sel':	{
 			'form': sel_form,
@@ -168,6 +168,3 @@
 		<span>{{- 'label.balance_sum'|trans({'%balance_sum%': balance_sum}) -}}</span>
 	</div>
 {%- endblock post_inner -%}
-
-
-

@@ -15,14 +15,14 @@
 
 {%- macro approve(form_submit, title) -%}
     {{- form_widget(form_submit, {'label': 'btn.approve',
-        'fa': 'thumbs-o-up', 'span_attr': {'class': 'hidden-xs hidden-sm'},
+        'fa': 'thumbs-o-up', 'span_attr': {'class': 'd-none d-md-inline'},
         'attr': {'class': 'btn-warning', 'title': title}}) -}}&nbsp;
 {%- endmacro approve -%}
 
 {%- macro button(href, title, label, class, fa) -%}
     <a href="{{- href -}}" class="btn btn-{{- class -}}" title="{{- title|trans -}}">
     <i class="fa fa-{{- fa -}}"></i>
-    <span class="hidden-xs hidden-sm">&nbsp;
+    <span class="d-none d-md-inline">&nbsp;
     {{- label|trans -}}
     </span></a>
 {%- endmacro button -%}
