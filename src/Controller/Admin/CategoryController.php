@@ -79,7 +79,7 @@ class CategoryController extends AbstractController
 	}
 
 	/**
-	 * @Route("/categories/{id}/edit",
+	 * @Route("/categories/edit/{id}",
 	 * name="category_edit",
 	 * methods={"GET", "POST"})
 	 */
@@ -129,7 +129,7 @@ class CategoryController extends AbstractController
 	}
 
 	/**
-	 * @Route("/categories/{id}/del",
+	 * @Route("/categories/del/{id}",
 	 * name="category_del",
 	 * methods={"GET", "POST"})
 	 */

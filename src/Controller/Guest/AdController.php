@@ -88,7 +88,7 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/{id}/edit",
+	 * @Route("/ads/edit/{id}",
 	 * name="ad_edit",
 	 * methods={"GET","POST"})
 	 */
@@ -100,7 +100,7 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/{id}/del",
+	 * @Route("/ads/del/{id}",
 	 * name="ad_del",
 	 * methods={"GET","POST"})
 	 */

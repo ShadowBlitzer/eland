@@ -21,9 +21,9 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/accounts/{account_type}/map",
-	 * 	name="account_map",
-	 * 	methods="GET")
+	 * @Route("/accounts/map/{account_type}",
+	 * name="account_map",
+	 * methods="GET")
 	 */
 	public function map(Request $request, string $schema, string $access, string $account_type):Response
 	{
@@ -31,9 +31,9 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/accounts/{account_type}/tile",
-	 * 	name="account_tile",
-	 * 	methods="GET")
+	 * @Route("/accounts/tile/{account_type}",
+	 * name="account_tile",
+	 * methods="GET")
 	 */
 	public function tile(Request $request, string $schema, string $access, string $account_type):Response
 	{

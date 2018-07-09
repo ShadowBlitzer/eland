@@ -66,9 +66,8 @@ class TransactionController extends AbstractController
 	}
 
 	/**
-	 * @Route("/transactions/{id}",
+	 * @Route("/transactions/{id<\d+>}",
 	 * name="transaction_show",
-	 * requirements={"id"="\d+"},
 	 * methods="GET")
 	 */
 	public function show(TransactionRepository $transactionRepository,
@@ -120,7 +119,7 @@ class TransactionController extends AbstractController
 	}
 
 	/**
-	 * @Route("/transactions/{id}/edit",
+	 * @Route("/transactions/edit/{id}",
 	 * name="transaction_edit",
 	 * methods={"GET", "POST"})
 	 */

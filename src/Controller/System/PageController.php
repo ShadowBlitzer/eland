@@ -29,9 +29,8 @@ class PageController extends AbstractController
 	}
 
 	/**
-	 * @Route("/{access}/pages",
+	 * @Route("/{access<a>}/pages",
 	 * name="page_a_index",
-	 * requirements={"access"="a"},
 	 * methods="GET")
 	 */
 	public function aIndex(Request $request, string $schema, string $access):Response
@@ -42,9 +41,8 @@ class PageController extends AbstractController
 	}
 
 	/**
-	 * @Route("/{access}/pages/add",
+	 * @Route("/{access<a>}/pages/add",
 	 * name="page_a_add",
-	 * requirements={"access"="a"},
 	 * methods={"GET", "POST"})
 	 */
 	public function aAdd(Request $request, string $schema, string $access):Response

@@ -48,7 +48,7 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/map/{mapId}/edit",
+	 * @Route("/docs/map/edit/{mapId}",
 	 * name="doc_map_edit",
 	 * methods={"GET","POST"})
 	 */
@@ -64,7 +64,7 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/{id}/del",
+	 * @Route("/docs/del/{id}",
 	 * name="doc_del",
 	 * methods={"GET","POST"})
 	 */
@@ -81,7 +81,7 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/{id}/edit",
+	 * @Route("/docs/edit/{id}",
 	 * name="doc_edit",
 	 * methods={"GET","POST"})
 	 */
@@ -98,11 +98,10 @@ class DocController extends AbstractController
 	/**
 	 * @Route("/docs/add/{mapId}",
 	 * name="doc_add",
-	 * defaults={"mapId"=""},
 	 * methods={"GET", "POST"})
 	 */
 	public function add(TranslatorInterface $translator,
-		Request $request, string $schema, string $access, string $mapId):Response
+		Request $request, string $schema, string $access, string $mapId = ''):Response
 	{
 
 

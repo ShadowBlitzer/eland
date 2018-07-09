@@ -75,7 +75,7 @@ class TypeContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact-types/{id}/edit",
+	 * @Route("/contact-types/edit/{id}",
 	 * name="type_contact_edit",
 	 * methods={"GET", "POST"})
 	 */
@@ -120,7 +120,7 @@ class TypeContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact-types/{id}/del",
+	 * @Route("/contact-types/del/{id}",
 	 * name="type_contact_del",
 	 * methods={"GET", "POST"})
 	 */

@@ -29,10 +29,10 @@ class UserController extends AbstractController
 
 	/**
 	 * @Route("/users",
-	 * name="user_no_view",
+	 * name="user_index_no_view",
 	 * methods="GET")
 	 */
-	public function noView(SessionView $sessionView,
+	public function indexNoView(SessionView $sessionView,
 		Request $request, string $schema, string $access, string $userType):Response
 	{
 		return $this->redirectToRoute('user_index', [
@@ -46,7 +46,6 @@ class UserController extends AbstractController
 	/**
 	 * @Route("/users/{view}/{userType}",
 	 * name="user_index",
-	 * defaults={"userType"="active"},
 	 * methods={"GET", "POST"})
 	 */
 	public function index(FormFactoryInterface $formFactory,
@@ -57,7 +56,7 @@ class UserController extends AbstractController
 		UserColumnSelect $userColumnSelect,
 		SessionView $sessionView, SessionColumns $sessionColumns,
 		Request $request,
-		string $schema, string $access, string $view, string $userType):Response
+		string $schema, string $access, string $view, string $userType = 'active'):Response
 	{
 		$s_admin = $access === 'a';
 
@@ -206,9 +205,8 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/{id}",
+	 * @Route("/users/{id<\d+>}",
 	 * name="user_show",
-	 * requirements={"id"="\d+"},
 	 * methods="GET")
 	 */
 	public function show(Request $request, string $schema, string $access, array $user):Response
@@ -228,6 +226,7 @@ class UserController extends AbstractController
 
 	/**
 	 * @Route("/users/add",
+	 * requirements={"access"="a"},
 	 * name="user_add",
 	 * methods={"GET", "POST"})
 	 */
