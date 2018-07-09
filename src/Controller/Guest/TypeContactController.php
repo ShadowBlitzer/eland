@@ -20,7 +20,9 @@ class TypeContactController extends AbstractController
 	];
 
 	/**
-	 * @Route("/contact-types", name="type_contact_index", methods="GET")
+	 * @Route("/contact-types",
+	 * name="type_contact_index",
+	 * methods="GET")
 	 */
 	public function index(TypeContactRepository $typeContactRepository,
 		Request $request, string $schema, string $access):Response
@@ -36,7 +38,9 @@ class TypeContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact-types/add", name="type_contact_add", methods={"GET", "POST"})
+	 * @Route("/contact-types/add",
+	 * name="type_contact_add",
+	 * methods={"GET", "POST"})
 	 */
 	public function add(TypeContactRepository $typeContactRepository,
 		TranslatorInterface $translator,
@@ -71,7 +75,9 @@ class TypeContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact-types/{id}/edit", name="type_contact_edit", methods={"GET", "POST"})
+	 * @Route("/contact-types/{id}/edit",
+	 * name="type_contact_edit",
+	 * methods={"GET", "POST"})
 	 */
 	public function edit(
 		TypeContactRepository $typeContactRepository,
@@ -114,8 +120,9 @@ class TypeContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact-types/{id}/del", name="type_contact_del", methods={"GET", "POST"})
-	 * )
+	 * @Route("/contact-types/{id}/del",
+	 * name="type_contact_del",
+	 * methods={"GET", "POST"})
 	 */
 	public function del(TypeContactRepository $typeContactRepository,
 		TranslatorInterface $translator,

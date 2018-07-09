@@ -11,7 +11,9 @@ use Symfony\Component\Translation\TranslatorInterface;
 class ForumController extends AbstractController
 {
 	/**
-	 * @Route("/forum", name="forum_index", methods="GET")
+	 * @Route("/forum",
+	 * name="forum_index",
+	 * methods="GET")
 	 */
 	public function index(Request $request, string $schema, string $access):Response
 	{
@@ -21,7 +23,9 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * @Route("/forum/map/{mapId}", name="forum_show", methods="GET")
+	 * @Route("/forum/map/{mapId}",
+	 * name="forum_show",
+	 * methods="GET")
 	 */
 	public function map(Request $request, string $schema, string $access, string $mapId):Response
 	{
@@ -31,7 +35,9 @@ class ForumController extends AbstractController
 	}
 
 	/**
-	 * @Route("/forum/{id}", name="forum_show", methods="GET")
+	 * @Route("/forum/{id}",
+	 * name="forum_show",
+	 * methods="GET")
 	 */
 	public function show(Request $request, string $schema, string $access, string $id):Response
 	{

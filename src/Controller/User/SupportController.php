@@ -15,7 +15,9 @@ use App\Mail\MailAdmin;
 class SupportController extends AbstractController
 {
 	/**
-	 * @Route("/support", name="support", methods={"GET", "POST"})
+	 * @Route("/support",
+	 * name="support",
+	 * methods={"GET", "POST"})
 	 */
 	public function form(MailQueue $mailQueue, MailAdmin $mailAdmin,
 		TranslatorInterface $translator,

@@ -28,7 +28,9 @@ class TransactionController extends AbstractController
 {
 
 	/**
-	 * @Route("/transactions", name="transaction_index", methods="GET")
+	 * @Route("/transactions",
+	 * name="transaction_index",
+	 * methods="GET")
 	 */
 	public function index(TransactionRepository $transactionRepository,
 		TransactionFilter $transactionFilter,
@@ -64,7 +66,10 @@ class TransactionController extends AbstractController
 	}
 
 	/**
-	 * @Route("/transactions/{id}", name="transaction_show", requirements={"id"="\d+"}, methods="GET")
+	 * @Route("/transactions/{id}",
+	 * name="transaction_show",
+	 * requirements={"id"="\d+"},
+	 * methods="GET")
 	 */
 	public function show(TransactionRepository $transactionRepository,
 		Request $request, string $schema, string $access, int $id):Response
@@ -79,7 +84,9 @@ class TransactionController extends AbstractController
 	}
 
 	/**
-	 * @Route("/transactions/self", name="transaction_show_self", methods="GET")
+	 * @Route("/transactions/self",
+	 * name="transaction_show_self",
+	 * methods="GET")
 	 */
 	public function showSelf(TransactionRepository $transactionRepository,
 		Request $request, string $schema, string $access):Response
@@ -88,7 +95,9 @@ class TransactionController extends AbstractController
 	}
 
 	/**
-	 * @Route("/transactions/add", name="transaction_add", methods={"GET", "POST"})
+	 * @Route("/transactions/add",
+	 * name="transaction_add",
+	 * methods={"GET", "POST"})
 	 */
 	public function add(TransactionRepository $transactionRepository,
 		TranslatorInterface $translator,
@@ -111,7 +120,9 @@ class TransactionController extends AbstractController
 	}
 
 	/**
-	 * @Route("/transactions/{id}/edit", name="transaction_edit", methods={"GET", "POST"})
+	 * @Route("/transactions/{id}/edit",
+	 * name="transaction_edit",
+	 * methods={"GET", "POST"})
 	 */
 	public function edit(TransactionRepository $transactionRepository,
 		TranslatorInterFace $translator,

@@ -18,7 +18,9 @@ use App\Mail\MailValidatedConfirmLink;
 class PasswordResetController extends AbstractController
 {
 	/**
-	 * @Route("/password-reset", name="password_reset", methods={"GET", "POST"})
+	 * @Route("/password-reset",
+	 * name="password_reset",
+	 * methods={"GET", "POST"})
 	 */
 	public function form(
 		MailQueueConfirmLink $mailQueueConfirmLink, TranslatorInterface $translator,
@@ -59,7 +61,9 @@ class PasswordResetController extends AbstractController
 	}
 
 	/**
-	 * @Route("/password-reset/{token}", name="password_reset_new_password", methods={"GET", "POST"})
+	 * @Route("/password-reset/{token}",
+	 * name="password_reset_new_password",
+	 * methods={"GET", "POST"})
 	 */
 	public function newPassword(
 		TranslatorInterface $translator,

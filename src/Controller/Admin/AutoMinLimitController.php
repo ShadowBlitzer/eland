@@ -20,8 +20,8 @@ class AutoMinLimitController extends AbstractController
 {
 	/**
 	 * @Route("/auto-min-limit",
-	 * 	name="auto_min_limit",
-	 * 	methods={"GET", "POST"})
+	 * name="auto_min_limit",
+	 * methods={"GET", "POST"})
 	 */
 	public function form(Request $request, string $schema):Response
 	{

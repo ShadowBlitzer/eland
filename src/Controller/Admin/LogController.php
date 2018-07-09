@@ -20,7 +20,9 @@ class LogController extends AbstractController
 {
 
 	/**
-	 * @Route("/logs", name="log", methods="GET")
+	 * @Route("/logs",
+	 * name="log",
+	 * methods="GET")
 	 */
 	public function index(FormFactoryInterface $formFactory, Request $request, string $schema, string $access):Response
 	{

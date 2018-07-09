@@ -13,7 +13,9 @@ use App\Repository\ConfigRepository;
 class ConfigController extends AbstractController
 {
 	/**
-	 * @Route("/config", name="config_index", methods="GET")
+	 * @Route("/config",
+	 * name="config_index",
+	 * methods="GET")
 	 */
 	public function index(Request $request, string $schema, string $access):Reponse
 	{
@@ -21,7 +23,9 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/balance-limits", name="config_balance_limits", methods={"GET", "POST"})
+	 * @Route("/config/balance-limits",
+	 * name="config_balance_limits",
+	 * methods={"GET", "POST"})
 	 */
 	public function balance_limits(Request $request, string $schema, string $access)
 	{
@@ -31,7 +35,9 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/ads", name="config_ads", methods={"GET", "POST"})
+	 * @Route("/config/ads",
+	 * name="config_ads",
+	 * methods={"GET", "POST"})
 	 */
 	public function ads(Request $request, string $schema, string $access)
 	{
@@ -41,7 +47,9 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/naming", name="config_naming", methods={"GET", "POST"})
+	 * @Route("/config/naming",
+	 * name="config_naming",
+	 * methods={"GET", "POST"})
 	 */
 	public function naming(Request $request, string $schema, string $access)
 	{
@@ -52,7 +60,9 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/mail-addresses", name="config_mail_addresses", methods={"GET", "POST"})
+	 * @Route("/config/mail-addresses",
+	 * name="config_mail_addresses",
+	 * methods={"GET", "POST"})
 	 */
 	public function mail_addresses(Request $request, string $schema, string $access)
 	{
@@ -62,7 +72,9 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/periodic-mail", name="config_periodic_mail", methods={"GET", "POST"})
+	 * @Route("/config/periodic-mail",
+	 * name="config_periodic_mail",
+	 * methods={"GET", "POST"})
 	 */
 	public function periodic_mail(Request $request, string $schema, string $access)
 	{
@@ -72,7 +84,9 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/contact-form", name="config_contact_form", methods={"GET", "POST"})
+	 * @Route("/config/contact-form",
+	 * name="config_contact_form",
+	 * methods={"GET", "POST"})
 	 */
 	public function contact_form(Request $request, string $schema, string $access)
 	{
@@ -82,7 +96,9 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/registration-form", name="config_registration_form", methods={"GET", "POST"})
+	 * @Route("/config/registration-form",
+	 * name="config_registration_form",
+	 * methods={"GET", "POST"})
 	 */
 	public function registration_form(Request $request, string $schema, string $access)
 	{
@@ -92,8 +108,9 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/forum", name="config_forum", methods={"GET", "POST"})
-	 * )
+	 * @Route("/config/forum",
+	 * name="config_forum",
+	 * methods={"GET", "POST"})
 	 */
 	public function forum(Request $request, string $schema, string $access)
 	{
@@ -103,7 +120,9 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/members", name="config_members", methods={"GET", "POST"})
+	 * @Route("/config/members",
+	 * name="config_members",
+	 * methods={"GET", "POST"})
 	 */
 	public function members(Request $request, string $schema, string $access)
 	{
@@ -113,7 +132,9 @@ class ConfigController extends AbstractController
 	}
 
 	/**
-	 * @Route("/config/system", name="config_system", methods={"GET", "POST"})
+	 * @Route("/config/system",
+	 * name="config_system",
+	 * methods={"GET", "POST"})
 	 */
 	public function system(Request $request, string $schema, string $access)
 	{

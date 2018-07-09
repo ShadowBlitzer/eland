@@ -13,7 +13,9 @@ use App\Service\SessionView;
 class AdController extends AbstractController
 {
 	/**
-	 * @Route("/ads", name="ad_no_view", methods="GET")
+	 * @Route("/ads",
+	 * name="ad_no_view",
+	 * methods="GET")
 	 */
 	public function noView(SessionView $sessionView, Request $request, string $schema, string $access):Response
 	{
@@ -25,7 +27,9 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/{view}", name="ad_index", methods="GET")
+	 * @Route("/ads/{view}",
+	 * name="ad_index",
+	 * methods="GET")
 	 */
 	public function index(SessionView $sessionView,
 		Request $request, string $schema, string $access, string $view):Response
@@ -36,7 +40,9 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/self", name="ad_self_no_view", methods="GET")
+	 * @Route("/ads/self",
+	 * name="ad_self_no_view",
+	 * methods="GET")
 	 */
 	public function showSelfNoView(SessionView $sessionView, Request $request, string $schema, string $access):Response
 	{
@@ -48,7 +54,9 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/self/{view}", name="ad_self", methods="GET")
+	 * @Route("/ads/self/{view}",
+	 * name="ad_self",
+	 * methods="GET")
 	 */
 	public function showSelf(Request $request, string $schema, string $access):Response
 	{
@@ -56,7 +64,9 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/{id}", name="ad_show", methods="GET")
+	 * @Route("/ads/{id}",
+	 * name="ad_show",
+	 * methods="GET")
 	 */
 	public function show(Request $request, string $schema, string $access, int $id):Response
 	{
@@ -66,7 +76,9 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/add", name="ad_add", methods={"GET","POST"})
+	 * @Route("/ads/add",
+	 * name="ad_add",
+	 * methods={"GET","POST"})
 	 */
 	public function add(Request $request, string $schema, string $access):Response
 	{
@@ -76,7 +88,9 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/{id}/edit", name="ad_edit", methods={"GET","POST"})
+	 * @Route("/ads/{id}/edit",
+	 * name="ad_edit",
+	 * methods={"GET","POST"})
 	 */
 	public function edit(Request $request, string $schema, string $access, int $id):Response
 	{
@@ -86,7 +100,9 @@ class AdController extends AbstractController
 	}
 
 	/**
-	 * @Route("/ads/{id}/del", name="ad_del", methods={"GET","POST"})
+	 * @Route("/ads/{id}/del",
+	 * name="ad_del",
+	 * methods={"GET","POST"})
 	 */
 	public function del(Request $request, string $schema, string $access, int $id):Response
 	{

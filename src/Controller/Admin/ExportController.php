@@ -102,7 +102,9 @@ class ExportController extends AbstractController
 	private $r = "\r\n";
 
 	/**
-	 * @Route("/export", name="export", methods={"GET", "POST"})
+	 * @Route("/export",
+	 * name="export",
+	 * methods={"GET", "POST"})
 	 */
 	public function index(Request $request, string $schema,
 		Db $db, TranslatorInterface $translator):Response

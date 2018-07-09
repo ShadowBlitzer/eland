@@ -11,7 +11,9 @@ use Symfony\Component\Translation\TranslatorInterface;
 class ContactDetailController extends AbstractController
 {
 	/**
-	 * @Route("/contact-details", name="contact_detail_index", methods={"GET", "POST"})
+	 * @Route("/contact-details",
+	 * name="contact_detail_index",
+	 * methods={"GET", "POST"})
 	 */
 	public function index(Request $request, string $schema):Response
 	{

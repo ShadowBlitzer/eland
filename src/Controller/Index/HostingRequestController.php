@@ -17,7 +17,9 @@ use App\Mail\MailEnv;
 class HostingRequestController extends AbstractController
 {
 	/**
-	 * @Route("/hosting-request", name="hosting_request", methods={"GET", "POST"})
+	 * @Route("/hosting-request",
+	 * name="hosting_request",
+	 * methods={"GET", "POST"})
 	 */
 	public function form(MailQueueConfirmLink $mailQueueConfirmLink,
 		TranslatorInterface $translator,
@@ -48,7 +50,9 @@ class HostingRequestController extends AbstractController
 	}
 
 	/**
-	 * @Route("/hosting-request/{token}", name="hosting_request_confirm", methods="GET")
+	 * @Route("/hosting-request/{token}",
+	 * name="hosting_request_confirm",
+	 * methods="GET")
 	 */
 	public function confirm(
 		TranslatorInterface $translator,

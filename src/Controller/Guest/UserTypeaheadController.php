@@ -10,7 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserTypeaheadController extends AbstractController
 {
 	/**
-	 * @Route("/users/typeahead/{user_type}", name="user_typeahead", methods="GET")
+	 * @Route("/users/typeahead/{user_type}",
+	 * name="user_typeahead",
+	 * methods="GET")
 	 */
 	public function getLocal(Request $request,
 		string $schema, string $access, string $user_type):Response
@@ -133,7 +135,9 @@ class UserTypeaheadController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/interlets-typeahead/{id}", name="user_interlets_typeahead", methods="GET")
+	 * @Route("/users/interlets-typeahead/{id}",
+	 * name="user_interlets_typeahead",
+	 * methods="GET")
 	 */
 	public function getInterlets(Request $request,
 		string $schema, string $access, int $user):Response

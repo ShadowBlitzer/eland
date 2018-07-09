@@ -14,7 +14,9 @@ use Predis\Client as Predis;
 class MonitorController extends AbstractController
 {
 	/**
-	* @Route("/monitor", name="monitor", methods="GET")
+	* @Route("/monitor",
+	* name="monitor",
+	* methods="GET")
 	*/
 	public function status(LoggerInterface $logger, Db $db, Predis $predis, Request $request):Response
 	{

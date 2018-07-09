@@ -11,7 +11,9 @@ use Symfony\Component\Translation\TranslatorInterface;
 class PermissionController extends AbstractController
 {
 	/**
-	 * @Route("/permissions", name="permission_index", methods={"GET", "POST"})
+	 * @Route("/permissions",
+	 * name="permission_index",
+	 * methods={"GET", "POST"})
 	 */
 	public function index(Request $request, string $schema, string $access):Response
 	{

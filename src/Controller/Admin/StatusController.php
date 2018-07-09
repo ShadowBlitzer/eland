@@ -10,7 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class StatusController extends AbstractController
 {
 	/**
-	 * @Route("/status", name="status", methods="GET")
+	 * @Route("/status",
+	 * name="status",
+	 * methods="GET")
 	 */
 	public function index(Request $request, string $schema, string $access):Response
 	{

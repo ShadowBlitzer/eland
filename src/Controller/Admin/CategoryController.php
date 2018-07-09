@@ -17,7 +17,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class CategoryController extends AbstractController
 {
 	/**
-	 * @Route("/categories", name="category_index", methods="GET")
+	 * @Route("/categories",
+	 * name="category_index",
+	 * methods="GET")
 	 */
 	public function index(CategoryRepository $categoryRepository, Request $request, string $schema, string $access):Response
 	{
@@ -27,7 +29,9 @@ class CategoryController extends AbstractController
 	}
 
 	/**
-	 * @Route("/categories/add", name="category_add", methods={"GET", "POST"})
+	 * @Route("/categories/add",
+	 * name="category_add",
+	 * methods={"GET", "POST"})
 	 */
 	public function add(CategoryRepository $categoryRepository,
 		TranslatorInterface $translator,
@@ -75,7 +79,9 @@ class CategoryController extends AbstractController
 	}
 
 	/**
-	 * @Route("/categories/{id}/edit", name="category_edit", methods={"GET", "POST"})
+	 * @Route("/categories/{id}/edit",
+	 * name="category_edit",
+	 * methods={"GET", "POST"})
 	 */
 	public function edit(CategoryRepository $categoryRepository,
 		TranslatorInterface $translator,
@@ -123,7 +129,9 @@ class CategoryController extends AbstractController
 	}
 
 	/**
-	 * @Route("/categories/{id}/del", name="category_del", methods={"GET", "POST"})
+	 * @Route("/categories/{id}/del",
+	 * name="category_del",
+	 * methods={"GET", "POST"})
 	 */
 	public function del(CategoryRepository $categoryRepository,
 		TranslatorInterface $translator,

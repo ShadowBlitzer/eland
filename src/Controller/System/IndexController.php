@@ -20,10 +20,6 @@ class IndexController extends AbstractController
 
 	}
 
-	/**
-	 *
-	 */
-
 	public function token(Request $request, $token):Response
 	{
 		$ticket = json_decode($app['xdb']->get('ticket_' . $token), true);

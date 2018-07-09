@@ -27,7 +27,9 @@ use App\Form\Post\NewsType;
 class NewsController extends AbstractController
 {
 	/**
-	 * @Route("/news", name="news_no_view", methods="GET")
+	 * @Route("/news",
+	 * name="news_no_view",
+	 * methods="GET")
 	 */
 	public function noView(SessionView $sessionView, Request $request, string $schema, string $access):Response
 	{
@@ -39,7 +41,10 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/{view}", name="news_index", requirements={"view" = "list|extended"}, methods={"GET", "POST"})
+	 * @Route("/news/{view}",
+	 * name="news_index",
+	 * requirements={"view" = "list|extended"},
+	 * methods={"GET", "POST"})
 	 */
 	public function index(FormFactoryInterface $formFactory, NewsRepository $newsRepository,
 		TranslatorInterface $translator,
@@ -169,7 +174,10 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/{id}", name="news_show", requirements={"id"="\d+"}, methods="GET")
+	 * @Route("/news/{id}",
+	 * 	name="news_show",
+	 * 	requirements={"id"="\d+"},
+	 * 	methods="GET")
 	 */
 	public function show(NewsRepository $newsRepository, TranslatorInterface $translator,
 		Request $request, string $schema, string $access, int $id):Response
@@ -210,7 +218,9 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/add", name="news_add", methods={"GET", "POST"})
+	 * @Route("/news/add",
+	 * 	name="news_add",
+	 * 	methods={"GET", "POST"})
 	 */
 	public function add(TranslatorInterface $translator, NewsRepository $newsRepository,
 		SessionView $seesionView,
@@ -260,7 +270,9 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/{id}/edit", name="news_edit", methods={"GET", "POST"})
+	 * @Route("/news/{id}/edit",
+	 * 	name="news_edit",
+	 * 	methods={"GET", "POST"})
 	 */
 	public function edit(NewsRepository $newsRepository, TranslatorInterface $translator,
 		Request $request, string $schema, string $access, int $id):Responnse
@@ -291,7 +303,9 @@ class NewsController extends AbstractController
 	}
 
 	/**
-	 * @Route("/news/{id}/del", name="news_del", methods={"GET", "POST"})
+	 * @Route("/news/{id}/del",
+	 * 	name="news_del",
+	 * 	methods={"GET", "POST"})
 	 */
 	public function del(NewsRepository $newsRepository, SessionView $sessionView,
 		TranslatorInterface $translator,

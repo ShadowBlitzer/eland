@@ -11,7 +11,9 @@ use Symfony\Component\Translation\TranslatorInterface;
 class AccountController extends AbstractController
 {
 	/**
-	 * @Route("/accounts/{account_type}", name="account_index", methods={"GET", "POST"})
+	 * @Route("/accounts/{account_type}",
+	 * name="account_index",
+	 * methods={"GET", "POST"})
 	 */
 	public function index(Request $request, string $schema, string $access, string $account_type):Response
 	{
@@ -19,7 +21,9 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/accounts/{account_type}/map", name="account_map", methods="GET")
+	 * @Route("/accounts/{account_type}/map",
+	 * 	name="account_map",
+	 * 	methods="GET")
 	 */
 	public function map(Request $request, string $schema, string $access, string $account_type):Response
 	{
@@ -27,7 +31,9 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/accounts/{account_type}/tile", name="account_tile", methods="GET")
+	 * @Route("/accounts/{account_type}/tile",
+	 * 	name="account_tile",
+	 * 	methods="GET")
 	 */
 	public function tile(Request $request, string $schema, string $access, string $account_type):Response
 	{
@@ -35,7 +41,9 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/accounts/{account_type}/{id}", name="account_show", methods="GET")
+	 * @Route("/accounts/{account_type}/{id}",
+	 * 	name="account_show",
+	 * 	methods="GET")
 	 */
 	public function show(Request $request, string $schema, string $access, string $account_type):Response
 	{
@@ -43,7 +51,9 @@ class AccountController extends AbstractController
 	}
 
 	/**
-	 * @Route("/accounts/self", name="account_self", methods="GET")
+	 * @Route("/accounts/self",
+	 * 	name="account_self",
+	 * 	methods="GET")
 	 */
 	public function show_self(Request $request, string $schema, string $access):Response
 	{

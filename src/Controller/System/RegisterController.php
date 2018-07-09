@@ -16,7 +16,9 @@ use App\Mail\MailAdmin;
 class RegisterController extends AbstractController
 {
 	/**
-	 * @Route("/register", name="register", methods={"GET", "POST"})
+	 * @Route("/register",
+	 * name="register",
+	 * methods={"GET", "POST"})
 	 */
 	public function form(MailQueueConfirmLink $mailQueueConfirmLink,
 		TranslatorInterface $translator,
@@ -45,7 +47,9 @@ class RegisterController extends AbstractController
 	}
 
 	/**
-	 * @Route("/register/{token}", name="register_confirm", methods="GET")
+	 * @Route("/register/{token}",
+	 * name="register_confirm",
+	 * methods="GET")
 	 */
 	public function confirm(MailValidatedConfirmLink $mailValidatedConfirmLink,
 		TranslatorInterface $translator,

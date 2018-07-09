@@ -28,7 +28,9 @@ class UserController extends AbstractController
 {
 
 	/**
-	 * @Route("/users", name="user_no_view", methods="GET")
+	 * @Route("/users",
+	 * name="user_no_view",
+	 * methods="GET")
 	 */
 	public function noView(SessionView $sessionView,
 		Request $request, string $schema, string $access, string $userType):Response
@@ -42,8 +44,10 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/{view}/{userType}", name="user_index", defaults={"userType"="active"}, methods={"GET", "POST"})
-	 * )
+	 * @Route("/users/{view}/{userType}",
+	 * name="user_index",
+	 * defaults={"userType"="active"},
+	 * methods={"GET", "POST"})
 	 */
 	public function index(FormFactoryInterface $formFactory,
 		ConfigRepository $configRepository,
@@ -202,7 +206,10 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/{id}", name="user_show", requirements={"id"="\d+"}, methods="GET")
+	 * @Route("/users/{id}",
+	 * name="user_show",
+	 * requirements={"id"="\d+"},
+	 * methods="GET")
 	 */
 	public function show(Request $request, string $schema, string $access, array $user):Response
 	{
@@ -210,7 +217,9 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/self", name="user_show_self", methods="GET")
+	 * @Route("/users/self",
+	 * name="user_show_self",
+	 * methods="GET")
 	 */
 	public function showSelf(Request $request, string $schema, string $access):Response
 	{
@@ -218,7 +227,9 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/users/add", name="user_add", methods={"GET", "POST"})
+	 * @Route("/users/add",
+	 * name="user_add",
+	 * methods={"GET", "POST"})
 	 */
 	public function add(Request $request, string $schema, string $access):Response
 	{

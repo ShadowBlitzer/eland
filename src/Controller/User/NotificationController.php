@@ -18,7 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class NotificationController extends AbstractController
 {
 	/**
-	 * @Route("/notifications", name="notification_index", methods="GET")
+	 * @Route("/notifications",
+	 * name="notification_index",
+	 * methods="GET")
 	 */
 	public function index(Request $request, string $schema, string $access):Response
 	{

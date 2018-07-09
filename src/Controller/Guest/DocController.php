@@ -13,7 +13,9 @@ use App\Repository\DocRepository;
 class DocController extends AbstractController
 {
 	/**
-	 * @Route("/docs", name="doc_index", methods="GET")
+	 * @Route("/docs",
+	 * name="doc_index",
+	 * methods="GET")
 	 */
 	public function index(DocRepository $docRepository,
 		Request $request, string $schema, string $access):Response
@@ -28,7 +30,9 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/map/{mapId}", name="doc_map", methods="GET")
+	 * @Route("/docs/map/{mapId}",
+	 * name="doc_map",
+	 * methods="GET")
 	 */
 	public function map(DocRepository $docRepository,
 		Request $request, string $schema, string $access, string $mapId):Response
@@ -44,7 +48,9 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/map/{mapId}/edit", name="doc_map_edit", methods={"GET","POST"})
+	 * @Route("/docs/map/{mapId}/edit",
+	 * name="doc_map_edit",
+	 * methods={"GET","POST"})
 	 */
 	public function mapEdit(TranslatorInterface $translator,
 		DocRepository $docRepository,
@@ -58,7 +64,9 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/{id}/del", name="doc_del", methods={"GET","POST"})
+	 * @Route("/docs/{id}/del",
+	 * name="doc_del",
+	 * methods={"GET","POST"})
 	 */
 	public function del(TranslatorInterface $translator,
 		Request $request, string $schema, string $access, string $id):Response
@@ -73,7 +81,9 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/{id}/edit", name="doc_edit", methods={"GET","POST"})
+	 * @Route("/docs/{id}/edit",
+	 * name="doc_edit",
+	 * methods={"GET","POST"})
 	 */
 	public function edit(TranslatorInterface $translator,
 		Request $request, string $schema, string $access, string $id):Response
@@ -86,7 +96,10 @@ class DocController extends AbstractController
 	}
 
 	/**
-	 * @Route("/docs/add/{mapId}", name="doc_add", defaults={"mapId"=""}, methods={"GET", "POST"})
+	 * @Route("/docs/add/{mapId}",
+	 * name="doc_add",
+	 * defaults={"mapId"=""},
+	 * methods={"GET", "POST"})
 	 */
 	public function add(TranslatorInterface $translator,
 		Request $request, string $schema, string $access, string $mapId):Response

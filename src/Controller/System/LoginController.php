@@ -13,7 +13,9 @@ use App\Form\Post\LoginType;
 class LoginController extends AbstractController
 {
 	/**
-	 * @Route("/login", name="login", methods={"GET", "POST"})
+	 * @Route("/login",
+	 * name="login",
+	 * methods={"GET", "POST"})
 	 */
 	public function form(TranslatorInterface $translator, Request $request, string $schema):Response
 	{

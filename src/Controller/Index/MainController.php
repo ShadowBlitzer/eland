@@ -17,7 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class MainController extends AbstractController
 {
 	/**
-	 * @Route("/", name="main_index", methods="GET")
+	 * @Route("/",
+	 * name="main_index",
+	 * methods="GET")
 	 */
 	public function index(Request $request):Response
 	{

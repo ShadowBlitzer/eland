@@ -17,7 +17,9 @@ use App\Mail\MailQueue;
 class ContactController extends AbstractController
 {
 	/**
-	 * @Route("/contact", name="contact_form", methods={"GET", "POST"})
+	 * @Route("/contact",
+	 * name="contact_form",
+	 * methods={"GET", "POST"})
 	 */
 	public function form(MailQueueConfirmLink $mailQueueConfirmLink,
 		TranslatorInterface $translator, Request $request, string $schema):Response
@@ -47,7 +49,9 @@ class ContactController extends AbstractController
 	}
 
 	/**
-	 * @Route("/contact/{token}", name="contact_confirm", methods="GET")
+	 * @Route("/contact/{token}",
+	 * name="contact_confirm",
+	 * methods="GET")
 	 */
 	public function confirm(MailValidatedConfirmLink $mailValidatedConfirmLink, MailAdmin $mailAdmin,
 		MailQueue $mailQueue,

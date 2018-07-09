@@ -12,7 +12,9 @@ class MassTransactionController extends AbstractController
 {
 
 	/**
-	 * @Route("/mass-transaction", name="mass_transaction", methods={"GET", "POST"})
+	 * @Route("/mass-transaction",
+	 * name="mass_transaction",
+	 * methods={"GET", "POST"})
 	 */
 	public function form(Request $request, string $schema):Response
 	{
