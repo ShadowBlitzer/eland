@@ -1,7 +1,7 @@
 {%- extends 'anon.html.twig' -%}
 
 {%- import 'macro/button.html.twig' as b -%}
-{%- import 'macro/panel.html.twig' as p -%}
+{%- import 'macro/card.html.twig' as c -%}
 
 {%- block fa -%}key{%- endblock -%}
 {%- block heading -%}
@@ -11,9 +11,9 @@
 {%- block inner -%}
 
     <p>{{- 'password_reset.explain'|trans -}}</p>
-    {{- p.form_start(form) -}}
+    {{- c.form_start(form) -}}
     {{- form_row(form.email, {'label': 'label.your_email'}) -}}
     {{- b.default(form.submit, 'btn.password_reset') -}}
-    {{- p.form_end(form) -}}
+    {{- c.form_end(form) -}}
 
 {%- endblock inner -%}
