@@ -25,14 +25,6 @@
 	{{- p.end() -}}
 {%- endmacro form_end -%}
 
-{%- macro csv() -%}
-	<div class="pull-right">
-	<a href="#" class="csv">
-	<i class="fa fa-file"></i> {{ 'link.csv'|trans -}}
-	</a>
-	</div>
-{%- endmacro csv -%}
-
 {%- macro filter_toggle_btn() -%}
     <button class="btn btn-default hidden-xs" title="{{- 'btn.filter'|trans -}}" data-toggle="collapse" data-target="#filter">
     <i class="fa fa-caret-down"></i>

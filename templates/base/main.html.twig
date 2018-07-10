@@ -18,12 +18,11 @@
 
                 {%- block top_buttons -%}{%- endblock -%}
                 {%- block top_buttons_right -%}{%- endblock -%}
-
+                {%- block columns -%}{%- endblock -%}
             </div>
         </div>
 
         {%- block top_buttons_after -%}{%- endblock -%}
-        {%- block csv -%}{%- endblock -%}
 
         {%- block heading_container -%}
             <h1>
@@ -34,8 +33,10 @@
                 {%- block heading -%}
                     {{- menu_el['title']|trans -}}
                 {%- endblock heading -%}
-                {%- if filtered is defined and filtered %} <span class="small">
-                    {{- 'tag.filtered'|trans -}}
+                {%- if filtered is defined and filtered -%}
+                    &nbsp;
+                    <span class="small text-secondary">
+                        {{- 'tag.filtered'|trans -}}
                     </span>
                 {%- endif -%}
                 {%- block heading_post -%}{%- endblock -%}

@@ -2,8 +2,8 @@
 
 {%- import 'macro/asset.html.twig' as a -%}
 {%- import 'macro/panel.html.twig' as p -%}
-{%- import 'macro/button.html.twig' as b -%}
 {%- import 'macro/top_button.html.twig' as tb -%}
+{%- import 'macro/button_group.html.twig' as bg -%}
 {%- import 'macro/table.html.twig' as t -%}
 {%- import 'macro/pagination.html.twig' as pg -%}
 
@@ -21,13 +21,13 @@
 	{{- tb.add(path('transaction_add', acc_sch), 'transaction.title_top_btn.add') -}}
 {%- endblock top_buttons -%}
 
-{%- block csv -%}
-	{{- p.csv() -}}
-{%- endblock csv -%}
+{%- block columns -%}
+	{{- bg.columns(true, true) -}}
+{%- endblock columns -%}
 
 {%- block heading_right -%}
 	<span class="pull-right">
-	{{- p.filter_toggle_btn() -}}
+		{{- p.filter_toggle_btn() -}}
 	</span>
 {%- endblock heading_right -%}
 

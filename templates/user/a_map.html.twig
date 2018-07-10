@@ -2,8 +2,7 @@
 
 {% import 'macro/asset.html.twig' as a %}
 {% import 'macro/table.html.twig' as t %}
-{% import 'macro/panel.html.twig' as p %}
-{% import 'macro/top_button.html.twig' as tb %}
+{% import 'macro/button.html.twig' as b %}
 
 {% set view = 'map' %}
 
@@ -15,14 +14,6 @@
 	{%- include 'asset/datepicker_js.html.twig' -%}
 	{{- a.js('csv.js') -}}
 {%- endblock js -%}
-
-{%- block csv -%}
-	{{- p.csv() -}}
-{%- endblock csv -%}
-
-{%- block heading_right -%}
-	{{- tb.show_columns() -}}
-{%- endblock heading_right -%}
 
 {%- block pre_inner -%}
 	{%- embed 'user/column_select.html.twig' -%}
@@ -138,6 +129,3 @@
 {{- t.end() -}}
 
 {%- endblock in_pagination -%}
-
-
-

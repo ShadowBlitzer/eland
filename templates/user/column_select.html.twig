@@ -33,7 +33,7 @@
 
     <h3>{{- 'label.balance_on_date'|trans -}}</h3>
     {{- form_row(column_select.balance_on_date.enable, {'label': 'label.balance_on_date'}) -}}
-    {{- form_row(column_select.balance_on_date.date, {'label': false}) -}}    
+    {{- form_row(column_select.balance_on_date.date, {'label': false}) -}}
 </div>
 
 <div class="col-xs-4">
@@ -45,7 +45,7 @@
 
     <h3>{{- 'label.parsed_address'|trans -}}</h3>
     {{- form_row(column_select.parsed_address.enable, {'label': 'label.parsed_address'}) -}}
-    {{- form_row(column_select.parsed_address.char, {'label': 'label.split_by_char', 
+    {{- form_row(column_select.parsed_address.char, {'label': 'label.split_by_char',
         'addon_fa': 'pencil-square'}) -}}
 
     <h3>{{- 'label.offers_and_wants'|trans -}}</h3>
@@ -62,7 +62,7 @@
     }) -}}
     <h4>{{- 'label.exclude_counterparties'|trans -}}</h4>
     {{- form_row(column_select.activity.exclude, {'label': false}) -}}
-    {{- form_row(column_select.activity.new_exclude, 
+    {{- form_row(column_select.activity.new_exclude,
         {'label': false, 'fa': 'plus',
         'attr': {'class': 'btn-default btn-lg', 'title': 'btn.add'}}) -}}
 
@@ -84,11 +84,10 @@
 </div>
 
 <div class="row">
-<div class="col-sm-12">
-    {{- b.default(column_select.submit, 'btn.show_columns') -}}
-</div>
+    <div class="col-sm-12">
+        {{- b.default(column_select.submit, 'btn.show_columns') -}}
+    </div>
 </div>
 
 {{- fi.context(all_params) -}}
 {{- p.form_end(column_select) -}}
-

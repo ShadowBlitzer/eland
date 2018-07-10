@@ -2,13 +2,14 @@
 
 {%- import 'macro/asset.html.twig' as a -%}
 {%- import 'macro/table.html.twig' as t -%}
-{%- import 'macro/panel.html.twig' as p -%}
+{%- import 'macro/top_button.html.twig' as tb -%}
+{%- import 'macro/button_group.html.twig' as bg -%}
 
 {%- set view = 'list' -%}
 
-{%- block csv -%}
-	{{- p.csv() -}}
-{%- endblock csv -%}
+{%- block columns -%}
+	{{- bg.columns(true, true) -}}
+{%- endblock columns -%}
 
 {%- block js -%}
 	{{- a.js('csv.js') -}}

@@ -36,7 +36,7 @@ $(document).ready(function () {
 		});
 	}
 
-	$('a.csv').click(function (event) {
+	$('a[data-csv]').click(function (event) {
 		exportTableToCSV.apply(this, [$('table.csv'), 'export.csv']);
 	});
 });

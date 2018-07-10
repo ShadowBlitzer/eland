@@ -7,7 +7,9 @@ use App\Entity\DateTimeUTC;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AggRepository")
- * @ORM\Table(name="agg", schema="c", indexes={@ORM\Index(name="agg_type_system_idx", columns={"agg_type", "system_id"})})
+ * @ORM\Table(name="agg",
+ * schema="c",
+ * indexes={@ORM\Index(name="agg_type_system_idx", columns={"agg_type", "system_id"})})
  */
 class Agg
 {
@@ -30,7 +32,7 @@ class Agg
     /**
      * @ORM\Column(name="agg_type", type="string", nullable=true)
      */
-    private $type;    
+    private $type;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -40,7 +42,7 @@ class Agg
     /**
      * @ORM\Column(name="updated_at", type="datetime")
      */
-    private $updatedAt;    
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="json_array", options={"jsonb":true})
@@ -50,5 +52,5 @@ class Agg
     /**
      * @ORM\Column(type="json_array", options={"jsonb":true})
      */
-    private $meta; 
+    private $meta;
 }

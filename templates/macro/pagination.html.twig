@@ -71,11 +71,12 @@
 		{%- set params = params|merge({'view': all_params.view}) -%}
 	{%- endif -%}
 
-
 	<form class="form-inline">
 		<div class="form-group">
-			<span>{{- 'pagination.items_per_page'|trans }} </span>
-
+			<span>
+				{{- 'pagination.items_per_page'|trans -}}
+			</span>
+			&nbsp;
 			<select name="p[limit]" onchange="this.form.submit();" class="form-control">
 				{%- for o in pagination.limit_options -%}
 					<option value="{{- o -}}"{%- if o == pagination.limit %} selected="selected"{%- endif -%}>

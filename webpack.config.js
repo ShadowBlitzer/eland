@@ -15,7 +15,8 @@ Encore
         'font-awesome/scss/font-awesome.scss',
         'bootstrap/scss/bootstrap.scss',
         './assets/css/offcanvas.scss',
-        './assets/js/base.js'
+        './assets/js/base.js',
+        './assets/js/csv.js'
     ])
     .enablePostCssLoader()
 ;
