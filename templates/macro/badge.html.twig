@@ -1,8 +1,8 @@
 {%- macro badge(key) -%}
 	{%- set ary = {
 		'public': 'success', 'interlets': 'warning',
-		'users': 'default', 'admin': 'info',
-		'offer': 'default', 'want': 'primary',
+		'users': 'secondary', 'admin': 'dark',
+		'offer': 'secondary', 'want': 'primary',
 		'service': 'service', 'good': 'good'
 	} -%}
 	{%- set class = ary[key] ?? 'default' -%}

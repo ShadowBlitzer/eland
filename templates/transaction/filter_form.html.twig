@@ -7,62 +7,61 @@
 {{- c.form_filter_start(filter, not filtered) -}}
 
 <div class="row">
-<div class="col-sm-12">
-    {{- form_row(filter.q, {
-        'label': false,
-        'addon_fa': 'search',
-        'attr': {
-            'placeholder': 'keyword',
-        }
-    }) -}}
-</div>
-</div>
-
-<div class="row">
-<div class="col-sm-5">
-    {{- form_row(filter.from_user, {
-        'label': false,
-        'addon_label': 'label.from',
-        'attr': {
-            'placeholder': placeholder_code,
-        }
-    }) -}}
-</div>
-
-<div class="col-sm-2">
-    {{- form_row(filter.andor, {'label': false}) -}}
-</div>
-
-<div class="col-sm-5">
-    {{- form_row(filter.to_user, {
-        'label': false,
-        'addon_label': 'label.to',
-        'attr': {
-            'placeholder': placeholder_code,
-        }
-    }) -}}
-</div>
+    <div class="col-sm-12">
+        {{- form_row(filter.q, {
+            'label': false,
+            'addon_fa': 'search',
+            'attr': {
+                'placeholder': 'keyword',
+            }
+        }) -}}
+    </div>
 </div>
 
 <div class="row">
-<div class="col-sm-5">
-    {{- form_row(filter.from_date, {
-        'label': false,
-        'addon_label': 'label.from_date'
-    }) -}}
+    <div class="col-sm-5">
+        {{- form_row(filter.from_user, {
+            'label': false,
+            'addon_label': 'label.from',
+            'attr': {
+                'placeholder': placeholder_code,
+            }
+        }) -}}
+    </div>
+
+    <div class="col-sm-2">
+        {{- form_row(filter.andor, {'label': false}) -}}
+    </div>
+
+    <div class="col-sm-5">
+        {{- form_row(filter.to_user, {
+            'label': false,
+            'addon_label': 'label.to',
+            'attr': {
+                'placeholder': placeholder_code,
+            }
+        }) -}}
+    </div>
 </div>
 
-<div class="col-sm-5">
-    {{- form_row(filter.to_date, {
-        'label': false,
-        'addon_label': 'label.to_date'
-    }) -}}
-</div>
+<div class="row">
+    <div class="col-sm-5">
+        {{- form_row(filter.from_date, {
+            'label': false,
+            'addon_label': 'label.from_date'
+        }) -}}
+    </div>
 
-<div class="col-sm-2">
-    {{- b.show(filter.submit) -}}
-</div>
+    <div class="col-sm-5">
+        {{- form_row(filter.to_date, {
+            'label': false,
+            'addon_label': 'label.to_date'
+        }) -}}
+    </div>
 
+    <div class="col-sm-2">
+        {{- b.show(filter.submit) -}}
+    </div>
 </div>
 
 {{- fi.context(all_params) -}}

@@ -22,7 +22,7 @@
     "@symfony/webpack-encore": "^0.20.1",
     "autoprefixer": "^8.6.4",
     "bootstrap": "^4.1.1",
-    "font-awesome": "^4.7.0",
+    "font-awesome": "^4",
     "font-awesome-loader": "^1.0.2",
     "fontawesome": "^4.7.2",
     "gitbook-cli": "^2.3.2",

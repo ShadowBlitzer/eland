@@ -1,23 +1,23 @@
-{% import 'macro/panel.html.twig' as p %}
+{% import 'macro/card.html.twig' as c %}
 {% import 'macro/button.html.twig' as b %}
 {% import 'macro/filter.html.twig' as fi %}
 
-{{- p.form_filter_start(filter) -}}
+{{- c.form_filter_start(filter) -}}
 
 <div class="row">
-<div class="col-md-10 col-sm-12">
-    {{- form_row(filter.q, {
-        'label': false,
-        'addon_fa': 'search',
-        'attr': {
-            'placeholder': 'keyword', 
-        }  
-    }) -}}
-</div>
-<div class="col-md-2 hidden-sm hidden-xs">
-    {{- b.show(filter.submit) -}}
-</div>
+    <div class="col-md-10 col-sm-12">
+        {{- form_row(filter.q, {
+            'label': false,
+            'addon_fa': 'search',
+            'attr': {
+                'placeholder': 'keyword',
+            }
+        }) -}}
+    </div>
+    <div class="col-md-2 hidden-sm hidden-xs">
+        {{- b.show(filter.submit) -}}
+    </div>
 </div>
 
 {{- fi.context(all_params) -}}
-{{- p.form_end(filter) -}}
+{{- c.form_end(filter) -}}

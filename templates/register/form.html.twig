@@ -1,7 +1,7 @@
 {%- extends 'anon.html.twig' -%}
 
 {%- import 'macro/asset.html.twig' as a -%}
-{%- import 'macro/panel.html.twig' as p -%}
+{%- import 'macro/card.html.twig' as c -%}
 {%- import 'macro/button.html.twig' as b -%}
 
 {%- form_theme form _self -%}
@@ -36,7 +36,7 @@
 
     {{- config('registration_top_text', schema) -}}
 
-    {{- p.form_start(form) -}}
+    {{- c.form_start(form) -}}
 
     {{- form_row(form.first_name, {'label': 'label.first_name', 'addon_fa': 'user'}) -}}
     {{- form_row(form.last_name, {'label': 'label.last_name', 'addon_fa': 'user'}) -}}
@@ -52,7 +52,7 @@
 
     {{- b.default(form.submit, 'btn.register') -}}
 
-    {{- p.form_end(form) -}}
+    {{- c.form_end(form) -}}
 
     {{- config('registration_bottom_text', schema) -}}
 

@@ -38,7 +38,7 @@ class TransactionRepository
 		{
 			if ($row['real_to'] || $row['real_from'])
 			{
-				$row['class'] = 'warning';			
+				$row['class'] = 'table-warning';
 			}
 
 			$transactions[] = $row;
@@ -74,7 +74,7 @@ class TransactionRepository
 					$transactions[$key]['inter_transaction'] = $inter_transaction;
 				}
 			}
-		}		
+		}
 
 		return $transactions;
 	}
@@ -94,7 +94,7 @@ class TransactionRepository
 
 		if (!$data)
 		{
-			throw new NotFoundHttpException(sprintf('Transaction %d does not exist in %s', 
+			throw new NotFoundHttpException(sprintf('Transaction %d does not exist in %s',
 				$id, __CLASS__));
 		}
 
@@ -103,10 +103,10 @@ class TransactionRepository
 
 	public function getNext(int $id, string $schema)
 	{
-		return $this->db->fetchColumn('select id 
-			from ' . $schema . '.transactions 
-			where id > ? 
-			order by id asc 
+		return $this->db->fetchColumn('select id
+			from ' . $schema . '.transactions
+			where id > ?
+			order by id asc
 			limit 1', [$id]) ?? null;
 	}
 

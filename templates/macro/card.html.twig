@@ -14,9 +14,9 @@
 
 {%- macro form_column_select_start(form) -%}
 	<div class="card card-info collapse" id="show_columns">
-	<div class="card-heading">
-	{{- form_start(form) -}}
-	{{- form_errors(form) -}}
+		<div class="card-heading">
+			{{- form_start(form) -}}
+			{{- form_errors(form) -}}
 {%- endmacro form_column_select_start -%}
 
 {%- macro form_end(form) -%}
@@ -24,14 +24,6 @@
 	{{- form_end(form) -}}
 	{{- c.end() -}}
 {%- endmacro form_end -%}
-
-{%- macro csv() -%}
-	<div class="pull-right">
-	<a href="#" class="csv">
-	<i class="fa fa-file"></i> {{ 'link.csv'|trans -}}
-	</a>
-	</div>
-{%- endmacro csv -%}
 
 {%- macro filter_toggle_btn() -%}
     <button class="btn btn-default hidden-xs" title="{{- 'btn.filter'|trans -}}" data-toggle="collapse" data-target="#filter">
@@ -49,47 +41,47 @@
 
 {%- macro filter(collapse) -%}
 	<div class="card bg-info{%- if collapse|default(false) %} collapse{%- endif -%}" id="filter">
-	<div class="card-heading">
+		<div class="card-body pb-0">
 {%- endmacro filter -%}
 
 {%- macro post() -%}
-	<div class="card card-info">
-	<div class="card-heading">
+	<div class="card bg-info">
+		<div class="card-body">
 {%- endmacro post %}
 
 {%- macro edit() -%}
 	<div class="card card-info">
-	<div class="card-heading">
+		<div class="card-body">
 {%- endmacro edit -%}
 
 {%- macro add() -%}
 	<div class="card card-success">
-	<div class="card-heading">
+		<div class="card-body">
 {%- endmacro add %}
 
 {%- macro del() -%}
 	<div class="card card-danger">
-	<div class="card-heading">
+		<div class="card-body">
 {%- endmacro del -%}
 
 {%- macro mail() -%}
 	<div class="card card-success">
-	<div class="card-heading">
+		<div class="card-heading">
 {%- endmacro mail -%}
 
 {%- macro help() -%}
 	<div class="card card-warning">
-	<div class="card-heading">
+		<div class="card-heading">
 {%- endmacro help -%}
 
 {%- macro default() -%}
 	<div class="card card-default">
-	<div class="card-heading">
+		<div class="card-heading">
 {%- endmacro default -%}
 
 {%- macro warning() -%}
 	<div class="card card-default">
-	<div class="card-heading">
+		<div class="card-heading">
 {%- endmacro warning -%}
 
 {%- macro body() -%}
@@ -98,6 +90,6 @@
 {%- endmacro body -%}
 
 {%- macro end() -%}
-	</div>
+		</div>
 	</div>
 {%- endmacro -%}

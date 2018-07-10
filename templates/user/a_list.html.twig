@@ -13,7 +13,6 @@
 
 {%- block js -%}
 	{%- include 'asset/datepicker_js.html.twig' -%}
-	{{- a.js('csv.js') -}}
 {%- endblock js -%}
 
 {%- block columns -%}
@@ -34,23 +33,23 @@
 		},
 		'new': {
 			'label': 'user_type.new',
-			'class': 'bg-success',
+			'class': 'table-success',
 		},
 		'leaving': {
 			'label': 'user_type.leaving',
-			'class': 'bg-danger',
+			'class': 'table-danger',
 		},
 		'interlets': {
 			'label': 'user_type.interlets',
-			'class': 'bg-warning',
+			'class': 'table-warning',
 		},
 		'pre-active': {
 			'label': 'user_type.pre_active',
-			'class': 'bg-info',
+			'class': 'table-secondary',
 		},
 		'post-active': {
 			'label': 'user_type.post_active',
-			'class': 'bg-inactive',
+			'class': 'table-secondary',
 		},
 		'all': {
 			'label': 'user_type.all',
