@@ -32,10 +32,6 @@
     </button>
 {%- endmacro filter_toggle_btn -%}
 
-{%- macro filter_indicator() -%}
-	&nbsp;<small>{{- 'filtered'|trans -}}</small>
-{%- endmacro filter_indicator -%}
-
 {%- macro filter(collapse) -%}
 	<div class="panel panel-info{%- if collapse|default(false) %} collapse{%- endif -%}" id="filter">
 	<div class="panel-heading">

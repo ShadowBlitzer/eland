@@ -1,4 +1,4 @@
-{%- macro view(route, all_params, view_ary, current_view) -%}
+{%- macro view(route, all_params, view_ary, current_view, admin) -%}
     {%- import _self as bg -%}
     <span class="pull-right">
         <span class="btn-group" role="group">
@@ -7,6 +7,11 @@
                     {{- bg.fa_view(view) -}}
                 </a>
             {%- endfor -%}
+            {%- if admin|default(false) -%}
+                <a href="#" title="{{- 'btn.admin'|trans -}}" class="btn btn-dark" data-admin>
+                    <i class="fa fa-cog"></i>
+                </a>
+            {%- endif -%}
         </span>
     </span>
 {%- endmacro view -%}
@@ -45,9 +50,14 @@
     <i class="fa fa-{{- fa[view] -}}"></i>
 {%- endmacro fa_view -%}
 
-{%- macro columns(show, csv) -%}
+{%- macro columns(filter, show, csv, admin) -%}
     <span class="pull-right">
         <span class="btn-group" role="group">
+            {%- if filter|default(false) -%}
+                <button class="btn btn-outline-secondary" title="{{- 'btn.filter'|trans -}}" data-toggle="collapse" data-target="#filter">
+                    <i class="fa fa-filter"></i>
+                </button>
+            {%- endif -%}
             {%- if show|default(false) -%}
                 <button class="btn btn-outline-secondary" title="{{- 'btn.show_columns'|trans -}}" data-toggle="collapse" data-target="#show_columns">
                     <i class="fa fa-columns"></i>
@@ -56,6 +66,11 @@
             {%- if csv|default(false) -%}
                 <a href="#" title="{{- 'link.csv'|trans -}}" class="btn btn-outline-secondary" data-csv>
                     <i class="fa fa-file-excel-o"></i>
+                </a>
+            {%- endif -%}
+            {%- if admin|default(false) -%}
+                <a href="#" title="{{- 'btn.admin'|trans -}}" class="btn btn-dark" data-admin>
+                    <i class="fa fa-cog"></i>
                 </a>
             {%- endif -%}
         </span>

@@ -10,7 +10,7 @@
 {%- endblock top_buttons -%}
 
 {%- block top_buttons_right -%}
-	{{- bg.view(route, all_params, {'list': 'view.list', 'tiles': 'view.tiles', 'map': 'view.map'}, view) -}}
+	{{- bg.view(route, all_params, {'list': 'view.list', 'tiles': 'view.tiles', 'map': 'view.map'}, view, true) -}}
 {%- endblock top_buttons_right -%}
 
 {%- block inner -%}
@@ -18,5 +18,3 @@
 	{% block in_pagination -%}{% endblock -%}
 	{{- pg.pagination(route, all_params, pagination) -}}
 {%- endblock inner -%}
-
-
