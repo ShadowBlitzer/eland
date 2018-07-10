@@ -1,86 +1,86 @@
-{% import 'macro/panel.html.twig' as p %}
+{% import 'macro/card.html.twig' as c %}
 {% import 'macro/button.html.twig' as b %}
 {% import 'macro/filter.html.twig' as fi %}
 
 {%- set label_code = config('template_lets', schema) ? 'label.letscode' : 'label.code' -%}
 
-{{- p.form_column_select_start(column_select) -}}
+{{- c.form_column_select_start(column_select) -}}
 
 <div class="row">
-<div class="col-md-12">
-    <h2>{{- 'label.columns'|trans -}}</h2>
-</div>
-</div>
-
-<div class="row">
-<div class="col-xs-4">
-    {{- form_row(column_select.base.letscode, {'label': label_code}) -}}
-    {{- form_row(column_select.base.name, {'label': 'label.username'}) -}}
-    {{- form_row(column_select.base.fullname, {'label': 'label.full_name'}) -}}
-    {{- form_row(column_select.base.postcode, {'label': 'label.postcode'}) -}}
-    {{- form_row(column_select.base.accountrole, {'label': 'label.role'}) -}}
-    {{- form_row(column_select.base.saldo, {'label': 'label.balance'}) -}}
-    {{- form_row(column_select.base.minlimit, {'label': 'label.minimum_limit'}) -}}
-    {{- form_row(column_select.base.maxlimit, {'label': 'label.maximum_limit'}) -}}
-    {{- form_row(column_select.base.comments, {'label': 'label.comment'}) -}}
-    {{- form_row(column_select.base.admincomment, {'label': 'label.admin_comment'}) -}}
-    {{- form_row(column_select.base.hobbies, {'label': 'label.hobbies_interests'}) -}}
-    {{- form_row(column_select.base.cdate, {'label': 'label.created'}) -}}
-    {{- form_row(column_select.base.mdate, {'label': 'label.modified'}) -}}
-    {{- form_row(column_select.base.adate, {'label': 'label.activated'}) -}}
-    {{- form_row(column_select.base.lastlogin, {'label': 'label.last_login'}) -}}
-    {{- form_row(column_select.base.saldomail, {'label': 'label.periodic_mail'}) -}}
-
-    <h3>{{- 'label.balance_on_date'|trans -}}</h3>
-    {{- form_row(column_select.balance_on_date.enable, {'label': 'label.balance_on_date'}) -}}
-    {{- form_row(column_select.balance_on_date.date, {'label': false}) -}}
-</div>
-
-<div class="col-xs-4">
-    <h3>{{- 'label.contact_details'|trans -}}</h3>
-
-    {%- for key, val in column_select.contact_detail -%}
-        {{- form_row(val, {'label': key, 'translation_domain': false}) -}}
-    {%- endfor -%}
-
-    <h3>{{- 'label.parsed_address'|trans -}}</h3>
-    {{- form_row(column_select.parsed_address.enable, {'label': 'label.parsed_address'}) -}}
-    {{- form_row(column_select.parsed_address.char, {'label': 'label.split_by_char',
-        'addon_fa': 'pencil-square'}) -}}
-
-    <h3>{{- 'label.offers_and_wants'|trans -}}</h3>
-    {{- form_row(column_select.ad.want, {'label': 'label.wants'}) -}}
-    {{- form_row(column_select.ad.offer, {'label': 'label.offers'}) -}}
-    {{- form_row(column_select.ad.total, {'label': 'label.offers_and_wants'}) -}}
-</div>
-
-<div class="col-xs-4">
-    <h3>{{- 'label.activity'|trans -}}</h3>
-    {{- form_row(column_select.activity.period_days, {
-        'label': 'label.period_days',
-        'addon_fa': 'calendar-check-o'
-    }) -}}
-    <h4>{{- 'label.exclude_counterparties'|trans -}}</h4>
-    {{- form_row(column_select.activity.exclude, {'label': false}) -}}
-    {{- form_row(column_select.activity.new_exclude,
-        {'label': false, 'fa': 'plus',
-        'attr': {'class': 'btn-default btn-lg', 'title': 'btn.add'}}) -}}
-
-    <div class="row">
-        <div class="col-xs-6">
-            <h4>{{- 'label.transactions'|trans -}}</h4>
-            {{- form_row(column_select.activity.transaction.in, {'label': 'label.in'}) -}}
-            {{- form_row(column_select.activity.transaction.out, {'label': 'label.out'}) -}}
-            {{- form_row(column_select.activity.transaction.total, {'label': 'label.total'}) -}}
-        </div>
-        <div class="col-xs-6">
-            <h4>{{- 'var'|trans({'%var%': config('currency', schema)}) -}}</h4>
-            {{- form_row(column_select.activity.amount.in, {'label': 'label.in'}) -}}
-            {{- form_row(column_select.activity.amount.out, {'label': 'label.out'}) -}}
-            {{- form_row(column_select.activity.amount.total, {'label': 'label.total'}) -}}
-        </div>
+    <div class="col-md-12">
+        <h2>{{- 'label.columns'|trans -}}</h2>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-xs-4">
+        {{- form_row(column_select.base.letscode, {'label': label_code}) -}}
+        {{- form_row(column_select.base.name, {'label': 'label.username'}) -}}
+        {{- form_row(column_select.base.fullname, {'label': 'label.full_name'}) -}}
+        {{- form_row(column_select.base.postcode, {'label': 'label.postcode'}) -}}
+        {{- form_row(column_select.base.accountrole, {'label': 'label.role'}) -}}
+        {{- form_row(column_select.base.saldo, {'label': 'label.balance'}) -}}
+        {{- form_row(column_select.base.minlimit, {'label': 'label.minimum_limit'}) -}}
+        {{- form_row(column_select.base.maxlimit, {'label': 'label.maximum_limit'}) -}}
+        {{- form_row(column_select.base.comments, {'label': 'label.comment'}) -}}
+        {{- form_row(column_select.base.admincomment, {'label': 'label.admin_comment'}) -}}
+        {{- form_row(column_select.base.hobbies, {'label': 'label.hobbies_interests'}) -}}
+        {{- form_row(column_select.base.cdate, {'label': 'label.created'}) -}}
+        {{- form_row(column_select.base.mdate, {'label': 'label.modified'}) -}}
+        {{- form_row(column_select.base.adate, {'label': 'label.activated'}) -}}
+        {{- form_row(column_select.base.lastlogin, {'label': 'label.last_login'}) -}}
+        {{- form_row(column_select.base.saldomail, {'label': 'label.periodic_mail'}) -}}
+
+        <h3>{{- 'label.balance_on_date'|trans -}}</h3>
+        {{- form_row(column_select.balance_on_date.enable, {'label': 'label.balance_on_date'}) -}}
+        {{- form_row(column_select.balance_on_date.date, {'label': false}) -}}
+    </div>
+
+    <div class="col-xs-4">
+        <h3>{{- 'label.contact_details'|trans -}}</h3>
+
+        {%- for key, val in column_select.contact_detail -%}
+            {{- form_row(val, {'label': key, 'translation_domain': false}) -}}
+        {%- endfor -%}
+
+        <h3>{{- 'label.parsed_address'|trans -}}</h3>
+        {{- form_row(column_select.parsed_address.enable, {'label': 'label.parsed_address'}) -}}
+        {{- form_row(column_select.parsed_address.char, {'label': 'label.split_by_char',
+            'addon_fa': 'pencil-square'}) -}}
+
+        <h3>{{- 'label.offers_and_wants'|trans -}}</h3>
+        {{- form_row(column_select.ad.want, {'label': 'label.wants'}) -}}
+        {{- form_row(column_select.ad.offer, {'label': 'label.offers'}) -}}
+        {{- form_row(column_select.ad.total, {'label': 'label.offers_and_wants'}) -}}
+    </div>
+
+    <div class="col-xs-4">
+        <h3>{{- 'label.activity'|trans -}}</h3>
+        {{- form_row(column_select.activity.period_days, {
+            'label': 'label.period_days',
+            'addon_fa': 'calendar-check-o'
+        }) -}}
+        <h4>{{- 'label.exclude_counterparties'|trans -}}</h4>
+        {{- form_row(column_select.activity.exclude, {'label': false}) -}}
+        {{- form_row(column_select.activity.new_exclude,
+            {'label': false, 'fa': 'plus',
+            'attr': {'class': 'btn-default btn-lg', 'title': 'btn.add'}}) -}}
+
+        <div class="row">
+            <div class="col-xs-6">
+                <h4>{{- 'label.transactions'|trans -}}</h4>
+                {{- form_row(column_select.activity.transaction.in, {'label': 'label.in'}) -}}
+                {{- form_row(column_select.activity.transaction.out, {'label': 'label.out'}) -}}
+                {{- form_row(column_select.activity.transaction.total, {'label': 'label.total'}) -}}
+            </div>
+            <div class="col-xs-6">
+                <h4>{{- 'var'|trans({'%var%': config('currency', schema)}) -}}</h4>
+                {{- form_row(column_select.activity.amount.in, {'label': 'label.in'}) -}}
+                {{- form_row(column_select.activity.amount.out, {'label': 'label.out'}) -}}
+                {{- form_row(column_select.activity.amount.total, {'label': 'label.total'}) -}}
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -90,4 +90,4 @@
 </div>
 
 {{- fi.context(all_params) -}}
-{{- p.form_end(column_select) -}}
+{{- c.form_end(column_select) -}}
