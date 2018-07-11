@@ -6,9 +6,10 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * schema "migration" needs to be created manually beforehand.
  */
-final class Version20180711110020 extends AbstractMigration
+
+final class Version20180711143155 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
@@ -43,7 +44,6 @@ final class Version20180711110020 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        // Create schemas removed (these were schemas in dev)
         $this->addSql('DROP SEQUENCE e.event_sequence_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE c.queue_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE c.log_id_seq CASCADE');

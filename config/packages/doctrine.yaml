@@ -7,7 +7,7 @@ parameters:
 
 doctrine:
     dbal:
-        schema_filter: ~^(event|log|cache|queue|agg)~ #selecting postgres schemas doesn't seem to be supported
+        schema_filter: ~^(event|log|cache|queue|agg)$~ #selecting postgres schemas doesn't seem to be supported
         driver: pdo_pgsql
         url: '%env(DATABASE_URL)%'
 
