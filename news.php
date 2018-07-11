@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 $approve = $_GET['approve'] ?? false;
 $edit = $_GET['edit'] ?? false;

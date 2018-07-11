@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Repository;
 
@@ -21,16 +21,16 @@ class AdRepository
 
 	public function get(int $id, string $schema):array
 	{
-		$data = $this->db->fetchAssoc('select * 
-			from ' . $schema . '.messages 
+		$data = $this->db->fetchAssoc('select *
+			from ' . $schema . '.messages
 			where id = ?', [$id]);
-	
+
 		if (!$data)
 		{
-			throw new NotFoundHttpException(sprintf('Ad %d does not exist in %s', 
+			throw new NotFoundHttpException(sprintf('Ad %d does not exist in %s',
 				$id, __CLASS__));
         }
-		
+
 		return $data;
 	}
 }

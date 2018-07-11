@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 $uid = $_GET['uid'] ?? false;
 $abbrev = $_GET['abbrev'] ?? '';

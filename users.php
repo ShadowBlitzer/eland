@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 $q = $_GET['q'] ?? '';
 $status = $_GET['status'] ?? false;

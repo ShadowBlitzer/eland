@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace App\Form\ColumnSelect;
 
 use Symfony\Component\Form\AbstractType;
@@ -28,7 +29,7 @@ class UserActivityColumnSelectType extends AbstractType
                     'source_params' => [
                         'user_type'     => 'direct',
                     ],
-                    'required'  => false,                  
+                    'required'  => false,
                 ],
                 'allow_add'    => true,
             ])

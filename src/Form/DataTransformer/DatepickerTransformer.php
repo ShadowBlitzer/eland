@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace App\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
@@ -19,7 +20,7 @@ class DatepickerTransformer implements DataTransformerInterface
 
     public function transform($date)
     {
-        if (null === $date) 
+        if (null === $date)
         {
             return '';
         }
@@ -29,7 +30,7 @@ class DatepickerTransformer implements DataTransformerInterface
 
     public function reverseTransform($inputDate)
     {
-        if (!$inputDate) 
+        if (!$inputDate)
         {
             return;
         }
@@ -41,7 +42,7 @@ class DatepickerTransformer implements DataTransformerInterface
             throw new TransformationFailedException(sprintf(
                 'User input "%s" could not be parsed to a date',
                 $input_date
-            ));            
+            ));
         }
 
         $year = $parsed['tm_year'] + 1900;

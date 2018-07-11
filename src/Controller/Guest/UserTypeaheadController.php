@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Controller\Guest;
 
@@ -198,7 +198,7 @@ class UserTypeaheadController extends AbstractController
 /*
 
 
-<?php
+<?php declare(strict_types=1);
 $rootpath = '../';
 $page_access = 'guest';
 require_once __DIR__ . '/../include/web.php';

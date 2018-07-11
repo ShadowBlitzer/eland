@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace App\Form\ColumnSelect;
 
 use Symfony\Component\Form\AbstractType;
@@ -23,7 +24,7 @@ class PeriodColumnSelectType extends AbstractType
             ->add('to', DatepickerType::class, [
                 'required'  => false,
                 'attr'      => [
-                    'data-date-end-date'    => '0d',                    
+                    'data-date-end-date'    => '0d',
                 ],
             ]);
     }

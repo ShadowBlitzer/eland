@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Controller\Guest;
 
@@ -338,7 +338,7 @@ class NewsController extends AbstractController
 
 /*
 
-<?php
+<?php declare(strict_types=1);
 
 $approve = $_GET['approve'] ?? false;
 $edit = $_GET['edit'] ?? false;

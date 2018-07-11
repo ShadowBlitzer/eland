@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 $rootpath = '../';
 $page_access = 'admin';
 require_once __DIR__ . '/../include/web.php';

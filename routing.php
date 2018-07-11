@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 // interlets, user & admin
 $app->mount('/{_locale}/{schema}/{access}/ads', new provider\ad_controller_provider());
