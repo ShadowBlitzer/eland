@@ -155,19 +155,19 @@ class UserController extends AbstractController
 		{
 			if (!in_array($user['status'], [1, 2, 7]))
 			{
-				$users[$key]['class'] = isset($user['adate']) ? 'inactive' : 'info';
+				$users[$key]['class'] = isset($user['adate']) ? 'table-secondary' : 'table-info';
 			}
 			else if ($user['accountrole'] === 'interlets')
 			{
-				$users[$key]['class'] = 'warning';
+				$users[$key]['class'] = 'table-warning';
 			}
 			else if ($user['status'] === 2)
 			{
-				$users[$key]['class'] = 'danger';
+				$users[$key]['class'] = 'table-danger';
 			}
 			else if ($user['adate'] > $newUserTreshold  && $user['status'] === 1)
 			{
-				$users[$key]['class'] = 'success';
+				$users[$key]['class'] = 'table-success';
 			}
 
 			$selectForm->add($user['id'], CheckboxType::class, [

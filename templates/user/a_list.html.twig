@@ -4,6 +4,7 @@
 {% import 'macro/table.html.twig' as t %}
 {% import 'macro/top_button.html.twig' as tb %}
 {% import 'macro/button_group.html.twig' as bg %}
+{% import 'macro/button.html.twig' as b %}
 
 {% set view = 'list' %}
 
@@ -45,7 +46,7 @@
 		},
 		'pre-active': {
 			'label': 'user_type.pre_active',
-			'class': 'table-secondary',
+			'class': 'table-info',
 		},
 		'post-active': {
 			'label': 'user_type.post_active',
@@ -66,7 +67,14 @@
 				</a>
 			</li>
 		{%- endfor -%}
+		<li class="nav-item{%- if user_type == 'admin_tab' %} active{%- endif -%}">
+			<a href="#" class="nav-link nav-dark{%- if user_type == 'admin_tab' %} active{%- endif -%}">
+				<i class="fa fa-cog"></i>
+			</a>
+		</li>
     </ul>
+
+	{{- b.admin_text_edit('user_tabs') -}}
 
 {%- endblock pre_inner -%}
 
