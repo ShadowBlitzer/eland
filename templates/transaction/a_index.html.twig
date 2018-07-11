@@ -24,12 +24,6 @@
 	{{- bg.columns(true, true, true, true) -}}
 {%- endblock columns -%}
 
-{%- block heading_right -%}
-	<span class="pull-right">
-		{{- p.filter_toggle_btn() -}}
-	</span>
-{%- endblock heading_right -%}
-
 {%- block inner -%}
 
 	{%- include 'transaction/filter_form.html.twig' -%}

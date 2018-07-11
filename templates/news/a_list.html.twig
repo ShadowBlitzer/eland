@@ -8,12 +8,8 @@
 {%- set view = 'list' -%}
 
 {%- block columns -%}
-	{{- bg.columns(true, true) -}}
+	{{- bg.columns(true, true, true, true) -}}
 {%- endblock columns -%}
-
-{%- block js -%}
-	{{- a.js('csv.js') -}}
-{%- endblock js -%}
 
 {%- block in_pagination -%}
 
