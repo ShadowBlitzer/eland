@@ -34,4 +34,45 @@ class Event
      * @ORM\Column(type="json_array", options={"jsonb":true})
      */
     private $data;
+
+    public function getSequenceId(): ?int
+    {
+        return $this->sequenceId;
+    }
+
+    public function getAggId(): ?string
+    {
+        return $this->aggId;
+    }
+
+    public function setAggId(string $aggId): self
+    {
+        $this->aggId = $aggId;
+
+        return $this;
+    }
+
+    public function getAggVersion(): ?int
+    {
+        return $this->aggVersion;
+    }
+
+    public function setAggVersion(int $aggVersion): self
+    {
+        $this->aggVersion = $aggVersion;
+
+        return $this;
+    }
+
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    public function setData($data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
 }

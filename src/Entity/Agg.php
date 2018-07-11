@@ -53,4 +53,93 @@ class Agg
      * @ORM\Column(type="json_array", options={"jsonb":true})
      */
     private $meta;
+
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    public function getVersion(): ?int
+    {
+        return $this->version;
+    }
+
+    public function setVersion(int $version): self
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function getSystem(): ?string
+    {
+        return $this->system;
+    }
+
+    public function setSystem(?string $system): self
+    {
+        $this->system = $system;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    public function setData($data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    public function getMeta()
+    {
+        return $this->meta;
+    }
+
+    public function setMeta($meta): self
+    {
+        $this->meta = $meta;
+
+        return $this;
+    }
 }

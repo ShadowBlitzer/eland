@@ -46,4 +46,57 @@ class Queue
     {
         $this->ts = new PostgresNowUTC();
     }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getTopic(): ?string
+    {
+        return $this->topic;
+    }
+
+    public function setTopic(string $topic): self
+    {
+        $this->topic = $topic;
+
+        return $this;
+    }
+
+    public function getTs(): ?\DateTimeInterface
+    {
+        return $this->ts;
+    }
+
+    public function setTs(\DateTimeInterface $ts): self
+    {
+        $this->ts = $ts;
+
+        return $this;
+    }
+
+    public function getPriority(): ?int
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(int $priority): self
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    public function setData($data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
 }

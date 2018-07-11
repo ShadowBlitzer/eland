@@ -41,4 +41,45 @@ class Log
     {
         $this->ts = new PostgresNowUTC();
     }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getTs(): ?\DateTimeInterface
+    {
+        return $this->ts;
+    }
+
+    public function setTs(\DateTimeInterface $ts): self
+    {
+        $this->ts = $ts;
+
+        return $this;
+    }
+
+    public function getSystem(): ?string
+    {
+        return $this->system;
+    }
+
+    public function setSystem(?string $system): self
+    {
+        $this->system = $system;
+
+        return $this;
+    }
+
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    public function setData($data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
 }
