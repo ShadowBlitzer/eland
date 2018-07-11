@@ -2,6 +2,7 @@
 
 {% import 'macro/menu.html.twig' as m %}
 {% import 'macro/asset.html.twig' as a %}
+{% import 'macro/button.html.twig' as b %}
 
 {% set access = 'a' %}
 
@@ -52,3 +53,19 @@
   {{- m.nav_dropdown_end() -}}
 
 {%- endblock navbar_admin -%}
+
+{%- block text_left -%}
+  {{- b.admin_text_edit('left') -}}
+{%- endblock text_left -%}
+
+{%- block text_top -%}
+  {{- b.admin_text_edit('top') -}}
+{%- endblock text_top -%}
+
+{%- block text_bottom -%}
+  {{- b.admin_text_edit('bottom') -}}
+{%- endblock text_bottom -%}
+
+{%- block text_footer -%}
+  {{- b.admin_text_edit('footer') -}}
+{%- endblock text_footer -%}

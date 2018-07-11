@@ -69,3 +69,10 @@
         </i> {{ item['title']|trans -}}
     </a>
 {%- endmacro item -%}
+
+{%- macro item_anon(key, item, active_menu, schema) -%}
+    <a class="list-group-item{%- if active_menu == key %} active{%- endif -%}" href="{{- path(item['route'], {'schema': schema}) -}}">
+        <i class="fa fa-{{- item['fa'] -}}">
+        </i> {{ item['title']|trans -}}
+    </a>
+{%- endmacro item_anon -%}

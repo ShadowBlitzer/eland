@@ -20,7 +20,7 @@
 
   {%- for key in menu_left_en -%}
     {%- if menu_ary[key] is defined -%}
-		{{- m.li_anon(key, menu_ary[key], active_menu, schema) -}}
+		  {{- m.item_anon(key, menu_ary[key], active_menu, schema) -}}
     {%- endif -%}
   {%- endfor -%}
 

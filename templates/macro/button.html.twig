@@ -70,3 +70,9 @@
         'fa': 'thumbs-o-up', 'span_attr': {'class': 'hidden-xs'},
         'attr': {'class': 'btn-warning'}}) -}}&nbsp;
 {%- endmacro approve_md %}
+
+{%- macro admin_text_edit(location) -%}
+    <a href="#" class="btn btn-dark btn-sm" title="" data-admin-text="{{- location -}}">
+        <i class="fa fa-pencil"></i>
+    </a>
+{%- endmacro admin_text_edit -%}

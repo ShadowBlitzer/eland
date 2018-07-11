@@ -78,7 +78,7 @@
 
   {%- for key in menu_en -%}
     {%- if menu_ary[key] is defined -%}
-		{{- m.item(key, menu_ary[key], active_menu, acc_sch|view(key)) -}}
+		  {{- m.item(key, menu_ary[key], active_menu, acc_sch|view(key)) -}}
     {%- endif -%}
   {%- endfor -%}
 
