@@ -5,13 +5,13 @@
 <table class="table table-bordered table-striped table-hover footable" data-filter="#q" data-filter-minimum="1">
     <thead>
         <tr>
-        <th data-sort-initial="true">{{- 'label.map'|trans -}}</th>
-        {%- block table_head_extra -%}{%- endblock -%}
+            <th data-sort-initial="true">{{- 'label.map'|trans -}}</th>
+            {%- block table_head_extra -%}{%- endblock -%}
         </tr>
     </thead>
     <tbody>
         {%- for m in maps -%}
-            <tr class="info">
+            <tr class="table-info">
                 <td>
                     <a href="{{- path('doc_map', acc_sch|merge({'mapId': m.id})) -}}">
                         {{- m.map_name -}}

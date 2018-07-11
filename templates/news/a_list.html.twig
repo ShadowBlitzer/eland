@@ -17,34 +17,34 @@
 
 {%- block in_pagination -%}
 
-{%- set col_format = {
-	'headline': {
-		'lbl': 'label.description',
-		'route': 'news_show',
-		'route_key': 'id',
-		'route_col_id': 'id'
-	},
-	'itemdate': {
-		'lbl': 'label.date',
-        'render': 'date',
-        'date_precision': 'day'
-	},
-	'approved': {
-		'lbl': 'label.approved',
-		'hide': 'phone',
-		'render': 'yes_no'
-	},
-	'access': {
-		'lbl': 'label.access',
-		'hide':'phone',
-        'render': 'badge'
+	{%- set col_format = {
+		'headline': {
+			'lbl': 'label.description',
+			'route': 'news_show',
+			'route_key': 'id',
+			'route_col_id': 'id'
+		},
+		'itemdate': {
+			'lbl': 'label.date',
+			'render': 'date',
+			'date_precision': 'day'
+		},
+		'approved': {
+			'lbl': 'label.approved',
+			'hide': 'phone',
+			'render': 'yes_no'
+		},
+		'access': {
+			'lbl': 'label.access',
+			'hide':'phone',
+			'render': 'badge'
+		}
 	}
-}
--%}
+	-%}
 
-{{- t.start() -}}
-{{- t.head(col_format|keys, col_format, route, all_params, sort) -}}
-{{- t.body(news, col_format|keys, col_format, acc_sch) -}}
-{{- t.end() -}}
+	{{- t.start() -}}
+	{{- t.head(col_format|keys, col_format, route, all_params, sort) -}}
+	{{- t.body(news, col_format|keys, col_format, acc_sch) -}}
+	{{- t.end() -}}
 
 {%- endblock in_pagination -%}
