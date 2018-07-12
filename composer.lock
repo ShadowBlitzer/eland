@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "724cd31c8ea0d1aa833ed8a087184387",
+    "content-hash": "d8599a50ff5672c642412a94d7b62ba8",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2241,6 +2241,34 @@
             "time": "2018-07-04T11:12:44+00:00"
         },
         {
+            "name": "symfony/amqp-pack",
+            "version": "v1.0.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/amqp-pack.git",
+                "reference": "bcbd6fcf2593ebae823e1be6bfc08fdf1e391179"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/amqp-pack/zipball/bcbd6fcf2593ebae823e1be6bfc08fdf1e391179",
+                "reference": "bcbd6fcf2593ebae823e1be6bfc08fdf1e391179",
+                "shasum": ""
+            },
+            "require": {
+                "ext-amqp": "*",
+                "php": "^7.1",
+                "symfony/messenger": "^4.1",
+                "symfony/serializer-pack": "*"
+            },
+            "type": "symfony-pack",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A pack for using the AMQP transport with Symfony Messenger",
+            "time": "2018-05-22T18:03:46+00:00"
+        },
+        {
             "name": "symfony/asset",
             "version": "v4.1.1",
             "source": {
@@ -2867,7 +2895,7 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.80",
+            "version": "v1.0.82",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
@@ -5897,6 +5925,7 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^7.2",
+        "ext-amqp": "*",
         "ext-exif": "*",
         "ext-imagick": "*",
         "ext-intl": "*",
