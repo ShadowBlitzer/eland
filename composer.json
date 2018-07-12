@@ -9,6 +9,7 @@
 		"ext-imagick": "*",
 		"ext-intl": "*",
 		"ext-mbstring": "*",
+		"ext-amqp": "*",
 		"doctrine/doctrine-fixtures-bundle": "^3.0",
 		"predis/predis": "^1.1",
 		"ramsey/uuid": "^3.7",
