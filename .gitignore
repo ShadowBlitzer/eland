@@ -14,6 +14,7 @@ node_modules
 *.mobi
 *.pdf
 .env
+.env_m
 _.env
 .local
 cache
