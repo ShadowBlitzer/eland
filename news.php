@@ -67,6 +67,10 @@ if ($add || $edit)
 				$news['itemdate'] = '';
 			}
 		}
+		else
+		{
+			$errors[] = 'Geef een agendadatum op.';
+		}
 
 		if (!isset($news['headline']) || (trim($news['headline']) == ''))
 		{
@@ -97,9 +101,9 @@ if ($add || $edit)
 
 if ($add && $submit && !count($errors))
 {
-	$news['approved'] = ($s_admin) ? 't' : 'f';
-	$news['published'] = ($s_admin) ? 't' : 'f';
-	$news['id_user'] = ($s_master) ? 0 : $s_id;
+	$news['approved'] = $s_admin ? 't' : 'f';
+	$news['published'] = $s_admin ? 't' : 'f';
+	$news['id_user'] = $s_master ? 0 : $s_id;
 	$news['cdate'] = gmdate('Y-m-d H:i:s');
 
 	if ($app['db']->insert('news', $news))
@@ -161,7 +165,7 @@ if ($edit)
 	$news_access = $app['xdb']->get('news_access', $edit)['data']['access'];
 }
 
-if ($add)
+if ($add && !$submit)
 {
 	$news['itemdate'] = gmdate('Y-m-d');
 }
@@ -192,7 +196,8 @@ if ($add || $edit)
 	echo 'data-date-autoclose="true" ';
 	echo 'data-date-orientation="bottom" ';
 	echo 'value="' . $app['date_format']->get($news['itemdate'], 'day') . '" ';
-	echo 'placeholder="' . $app['date_format']->datepicker_placeholder() . '">';
+	echo 'placeholder="' . $app['date_format']->datepicker_placeholder() . '" ';
+	echo 'required>';
 	echo '<p><small>Wanneer gaat dit door?</small></p>';
 	echo '</div>';
 	echo '</div>';
@@ -534,7 +539,8 @@ if(!$s_admin)
 	$query .= ' where approved = \'t\'';
 }
 
-$query .= ' order by itemdate desc';
+$query .= ' order by itemdate ';
+$query .= $app['config']->get('news_order_asc') === '1' ? 'asc' : 'desc';
 
 $news = $app['db']->fetchAll($query);
 
