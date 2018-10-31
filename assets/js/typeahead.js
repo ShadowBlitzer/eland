@@ -1,21 +1,16 @@
 $(document).ready(function(){
-
 	var now = Math.floor(new Date().getTime() / 1000);
-
 	var $data_text_inputs = $('form input[type="text"][data-typeahead]');
 	var $data_options = $('form select option[data-typeahead]');
 	var $target_text_inputs = $('form input[type="text"][data-typeahead-source-id]');
 
 	var session_params = $('body').data('session-params');
-
 	var $data_sources = $data_text_inputs.add($data_options);
 
 	$data_sources.each(function(){
 
 		var datasets = [];
-
 		var data = $(this).data('typeahead');
-
 		var newuserdays = $(this).data('newuserdays');
 		var process = $(this).data('typeahead-process');
 
@@ -51,7 +46,7 @@ $(document).ready(function(){
 								break;
 						}
 
-						return { 
+						return {
 							value: user.c + ' ' + user.n,
 							tokens : [ user.c, user.n ],
 							letscode: user.c,
@@ -66,8 +61,8 @@ $(document).ready(function(){
 					});
 				}
 
-				var tokenizer = function(d) { 
-					return Bloodhound.tokenizers.whitespace(d.value); 
+				var tokenizer = function(d) {
+					return Bloodhound.tokenizers.whitespace(d.value);
 				};
 
 				var templates = {
@@ -77,7 +72,7 @@ $(document).ready(function(){
 					}
 				};
 
-				var displayKey =  function(user){ 
+				var displayKey =  function(user){
 					return user.value;
 				};
 
@@ -120,26 +115,7 @@ $(document).ready(function(){
 		$(this).data('typeahead-args', args);
 
 		if ($(this).prop('tagName').toLowerCase() == 'input'){
-
 			$(this).typeahead.apply($(this), args);
-
-
-/*
-			$(this).bind('typeahead:select', function(ev, suggestion){
-
-
-				console.log('selection: ' + JSON.stringify(suggestion));
-				console.log(suggestion.balance);
-
-				var $account_info = $(this).next('ul.account-info');
-
-				var $balance = $account_info.find('li.info-balance');
-
-				var $num = $balance.find('span.num');
-
-				$num.text(suggestion.balance);
-			});
-*/
 		}
 	});
 
@@ -148,9 +124,7 @@ $(document).ready(function(){
 		args = $data_sources.filter('#' + $(this).data('typeahead-source-id')).data('typeahead-args');
 
 		if (args){
-
 			$(this).typeahead.apply($(this), args);
-
 		} else {
 
 			$select = $('form select').filter('#' + $(this).data('typeahead-source-id'));
@@ -171,38 +145,5 @@ $(document).ready(function(){
 				});
 			}
 		}
-/*
-		$(this).bind('typeahead:select', function(ev, suggestion){
-			console.log('selection: ' + JSON.stringify(suggestion));
-
-			var $account_info = $(this).parent().next('ul.account-info');
-
-			var $balance = $account_info.find('li.info-balance');
-
-			var $balance_num = $balance.find('span.num');
-
-			$balance_num.text(suggestion.balance);
-
-			var $equilibrium = $account_info.find('li.info-equilibrium');
-			var $minlimit = $account_info.find('li.info-minlimit');
-			var $minlimit_num = $minlimit.find('span.num');
-			var $group_minlimit = $account_info.find('li.info-group-minlimit');
-
-			$minlimit_num.text(suggestion.min);
-
-			if (suggestion.leaving){
-				$equilibrium.show();
-				$minlimit.hide();
-				$group_minlimit.hide();
-			} else {
-				$equilibrium.hide();
-				$minlimit.show();
-			}
-
-
-		});
-*/
 	});
-
-	
 });

@@ -24,9 +24,7 @@ $(document).ready(function() {
 	$('.sort-by').on( 'click', 'button', function() {
 
 		var $prev_active = $(this).parent().find('.active');
-
 		var sortBy = $(this).attr('data-sort-by');
-
 		var $prev_i = $prev_active.find('i');
 		var $this_i = $(this).find('i');
 

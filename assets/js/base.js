@@ -13,25 +13,6 @@ $(document).ready(function() {
 		});
 	});
 
-/*
-	var slideout = new Slideout({
-        'panel': $('#panel'),
-        'menu': $('#menu'),
-        'padding': 256,
-        'tolerance': 70
-	  });
-
-	$('[data-toggle=offcanvas]').click(function() {
-		slideout.toggle();
-	});
-
-      // Toggle button
-      document.querySelector('.toggle-button').addEventListener('click', function() {
-        slideout.toggle();
-    });
-*/
-//	$('.footable').footable();
-
 	$('a[data-elas-group-id]').click(function() {
 
 		var ajax_loader = $('img.ajax-loader');
@@ -39,7 +20,6 @@ $(document).ready(function() {
 
 		var group_id = $(this).data('elas-group-id');
 		var session_params = $('body').data('session-params');
-
 		var params = {"group_id": group_id};
 
 		$.extend(params, session_params);

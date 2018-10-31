@@ -24,17 +24,14 @@ $app['page_access'] = $page_access;
 $header_allow_origin = $app['s3_protocol'] . $app['s3_img'] . ', ';
 $header_allow_origin .= $app['s3_protocol'] . $app['s3_doc'];
 
-if (!isset($no_headers))
-{
-	ob_start('etag_buffer');
-	header('Access-Control-Allow-Origin: ' . $header_allow_origin);
-}
+header('Cache-Control: private, no-cache');
+header('Access-Control-Allow-Origin: ' . $header_allow_origin);
 
 $app['assets'] = function($app){
 	return new service\assets($app['rootpath']);
 };
 
-$app['assets']->add(['jquery', 'bootstrap', 'fontawesome', 'footable', 'swiper', 'base.css', 'print.css', 'base.js']);
+$app['assets']->add(['jquery', 'bootstrap', 'fontawesome', 'footable', 'autocomplete', 'base.css', 'print.css', 'base.js']);
 
 $app['script_name'] = str_replace('.php', '', ltrim($_SERVER['SCRIPT_NAME'], '/'));
 
@@ -700,40 +697,3 @@ function render_select_options($option_ary, $selected, $print = true)
 
 	return $str;
 }
-
-/**
- *
- */
-function etag_buffer($content)
-{
-	global $post;
-
-	if ($post)
-	{
-		return $content;
-	}
-
-	$etag = crc32($content);
-
-	header('Cache-Control: private, no-cache');
-	header('Expires:');
-	header('Vary: If-None-Match',false);
-	if ($content != '')
-	{
-		header('Etag: "' . $etag . '"');
-	}
-
-    $if_none_match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ?
-        trim(stripslashes($_SERVER['HTTP_IF_NONE_MATCH']), '"') :
-        false ;
-
-	if ($if_none_match == $etag && $content)
-	{
-		http_response_code(304);
-		return '';
-	}
-
-	return $content;
-}
-
-
