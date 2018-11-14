@@ -1,24 +1,26 @@
-info.php
-vendor
-composer.phar
-components
-.sass-cache
-.jekyll-metadata
-_site
-_posts
-_pages
 _book
 node_modules
-.grunt
-*.epub
-*.mobi
-*.pdf
-assets
+
 .env
 .env_m
+.env_silex
 cache
 .local
 .dist
-public
-var
-symfony.lock
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.*.local
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###
