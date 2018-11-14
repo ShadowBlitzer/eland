@@ -1,0 +1,9 @@
+schema:
+    resource: routes_system.yaml
+    prefix: /{system}
+    requirements:
+        schema: '[a-z][a-z0-9]*'
+
+annotation_main_index:
+    resource: ../src/Controller/NoSystem/
+    type: annotation

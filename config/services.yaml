@@ -1,5 +1,19 @@
 parameters:
-    locale: 'en'
+    router.request_context.host: '%env(APP_HOST)%'
+    router.request_context.scheme: '%env(APP_SCHEME)%'
+    site_name: '%env(SITE_NAME)%'
+    app.default_locale: nl
+    app.locales: en|nl
+    app.user.types: active|new|leaving|direct|interlets|pre-active|post-active|all
+    app.user.views: list|tiles|map
+    app.news.views: list|extended
+    app.ad.views: list|extended
+    app.page: '[a-z0-9-]{3,}'
+    app.id: '\d++'
+    app.token: '[a-z0-9-]{16}'
+    app.uuid: '[0-9a-f-]{36}'
+    app.doc: '[0-9a-f]{20}'
+    locale: en
 
 services:
     _defaults:

@@ -1,3 +1,9 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+root_locale:
+    resource: routes_locale.yaml
+    prefix: /{_locale}
+    requirements:
+        _locale: '%app.locales%'
+
+root_no_locale:
+    resource: ../src/Controller/NoLocale/
+    type: annotation
