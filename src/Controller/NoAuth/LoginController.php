@@ -12,6 +12,11 @@ class LoginController extends AbstractController
      */
     public function index()
     {
+        ob_start();
+
+        include '../login.php';
+
+        return new Response(ob_get_clean());
         return $this->render('login/index.html.twig', [
             'controller_name' => 'LoginController',
         ]);
