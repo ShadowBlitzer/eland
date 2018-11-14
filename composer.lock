@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2ab91377ce6ff1683df0670d5a2b2d1",
+    "content-hash": "06b1e7c0530d3b70934a6221e7429dcb",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -2786,6 +2786,53 @@
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
             "time": "2018-10-03T08:46:40+00:00"
+        },
+        {
+            "name": "symfony/flex",
+            "version": "v1.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/flex.git",
+                "reference": "803c49664ddc7cbc4be02f41491766be32c90a7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/803c49664ddc7cbc4be02f41491766be32c90a7f",
+                "reference": "803c49664ddc7cbc4be02f41491766be32c90a7f",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "composer/composer": "^1.0.2",
+                "symfony/phpunit-bridge": "^3.2.8"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                },
+                "class": "Symfony\\Flex\\Flex"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Flex\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien.potencier@gmail.com"
+                }
+            ],
+            "description": "Composer plugin for Symfony",
+            "time": "2018-11-12T12:25:13+00:00"
         },
         {
             "name": "symfony/form",
