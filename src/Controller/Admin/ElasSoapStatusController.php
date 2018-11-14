@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Controller\Guest;
+namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends AbstractController
+class ElasSoapStatusController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/elas-soap-status", name="elas_soap_status")
      */
     public function index(Request $request, string $system, string $access):Response
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('elas_soap_status/index.html.twig', [
+            'controller_name' => 'ElasSoapStatusController',
         ]);
     }
 }

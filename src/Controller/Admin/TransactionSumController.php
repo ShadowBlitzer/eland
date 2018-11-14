@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Controller\Guest;
+namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends AbstractController
+class TransactionSumController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/transaction-sum", name="transaction_sum")
      */
     public function index(Request $request, string $system, string $access):Response
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('transactions_sum/index.html.twig', [
+            'controller_name' => 'TransactionsSumController',
         ]);
     }
 }

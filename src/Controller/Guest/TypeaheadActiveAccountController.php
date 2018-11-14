@@ -7,15 +7,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends AbstractController
+class TypeaheadActiveAccountController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/typeahead-active-accounts", name="typeahead_active_account")
      */
     public function index(Request $request, string $system, string $access):Response
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('typeahead_active_accounts/index.html.twig', [
+            'controller_name' => 'TypeaheadActiveAccountsController',
         ]);
     }
 }

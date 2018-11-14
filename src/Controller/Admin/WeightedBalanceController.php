@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Controller\Guest;
+namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends AbstractController
+class WeightedBalanceController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/weighted-balances", name="weighted_balance")
      */
     public function index(Request $request, string $system, string $access):Response
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('weighted_balances/index.html.twig', [
+            'controller_name' => 'WeightedBalancesController',
         ]);
     }
 }

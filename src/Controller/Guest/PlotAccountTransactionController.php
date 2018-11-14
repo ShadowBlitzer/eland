@@ -7,15 +7,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends AbstractController
+class PlotAccountTransactionController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/plot-account-transactions", name="plot_account_transaction")
      */
     public function index(Request $request, string $system, string $access):Response
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('plot_account_transactions/index.html.twig', [
+            'controller_name' => 'PlotAccountTransactionsController',
         ]);
     }
 }

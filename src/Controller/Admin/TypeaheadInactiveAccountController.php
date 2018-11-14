@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Controller\Guest;
+namespace App\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends AbstractController
+class TypeaheadInactiveAccountController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/typeahead-inactive-accounts", name="typeahead_inactive_account")
      */
     public function index(Request $request, string $system, string $access):Response
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('typeahead_in_active_accounts/index.html.twig', [
+            'controller_name' => 'TypeaheadInActiveAccountsController',
         ]);
     }
 }

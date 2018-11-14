@@ -7,15 +7,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends AbstractController
+class ElasSystemLoginController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/elas-system-login", name="elas_system_login")
      */
     public function index(Request $request, string $system, string $access):Response
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('elas_system_login/index.html.twig', [
+            'controller_name' => 'ElasSystemLoginController',
         ]);
     }
 }
