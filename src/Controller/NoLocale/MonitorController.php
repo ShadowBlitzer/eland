@@ -9,25 +9,29 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Predis\Client as Predis;
 use Doctrine\DBAL\Driver\Connection as Db;
+use Psr\Log\LoggerInterface;
 
 class MonitorController extends AbstractController
 {
     /**
      * @Route("/monitor", name="monitor")
      */
-    public function index(Request $request, Db $db, Predis $predis):Response
+    public function index(
+        Request $request,
+        Db $db,
+        Predis $predis,
+        LoggerInterface $logger):Response
     {
         try
         {
-            $db->fetchColumn('select min(id) from users');
+            $tablename = $db->fetchColumn('select tablename from pg_catalog.pg_tables');
         }
         catch(Exception $e)
         {
-            echo 'db fail';
-            error_log('db_fail: ' . $e->getMessage());
-            throw $e;
-            exit;
+            $logger->error('Database down: ' . $e->getMessage());
+            return New Response('Database down', 503);
         }
+
         try
         {
             $predis->incr('eland_monitor');
@@ -40,26 +44,21 @@ class MonitorController extends AbstractController
 
                 if ($monitor_service_worker)
                 {
-                    error_log('monitor worker: ' . $monitor_service_worker);
+                    $logger->debug('monitor worker: ' . $monitor_service_worker);
                 }
                 else
                 {
-                    http_response_code(503);
-                    echo 'web service is up but service worker is down';
-                    exit;
+                    $logger->error('Web service is up, but worker is down.');
+                    return new Response('web service is up but service worker is down', 503);
                 }
             }
         }
         catch(Exception $e)
         {
-            echo 'redis fail';
-            error_log('redis_fail: ' . $e->getMessage());
-            throw $e;
-            exit;
+            $logger->error('Redis is down.');
+            return new Response('Redis is down', 503);
         }
 
-        return $this->render('monitor/index.html.twig', [
-            'controller_name' => 'MonitorController',
-        ]);
+        return new Response('Ok (' . $tablename . ')');
     }
 }
