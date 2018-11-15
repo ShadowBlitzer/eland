@@ -31,3 +31,23 @@ services:
 
     Predis\Client:
         arguments: ['%env(REDIS_URL)']
+
+#    Twig_Extensions_Extension_Intl:
+#        class: Twig_Extensions_Extension_Intl
+#        tags: [twig.extension]
+
+    App\Form\Extension\FormTypeEtokenExtension:
+        tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
+    App\Form\Extension\FormTypeExtraVarExtension:
+        tags:
+            - { name: form.type.extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
+
+    App\Mail\MailEnv:
+        arguments:
+            $noreplyAddress: '%env(MAIL_NOREPLY_ADDRESS)%'
+            $fromAddress: '%env(MAIL_FROM_ADDRESS)%'
+            $hosterAddress: '%env(MAIL_HOSTER_ADDRESS)%'
+    App\Mail\MailFrom:
+        arguments:
+            $siteName: '%site_name%'
