@@ -2,17 +2,18 @@
 
 namespace App\Legacy\queue;
 
-use model\queue as queue_model;
-use model\queue_interface;
 use League\HTMLToMarkdown\HtmlConverter;
-use service\queue;
-use Monolog\Logger;
-use service\this_group;
-use service\mailaddr;
 use Twig_Environment as Twig;
-use service\config;
-use service\token;
-use service\email_validate;
+use Psr\Log\LoggerInterface;
+
+use App\Legacy\model\queue as queue_model;
+use App\Legacy\model\queue_interface;
+use App\Legacy\service\queue;
+use App\Legacy\service\this_group;
+use App\Legacy\service\mailaddr;
+use App\Legacy\service\config;
+use App\Legacy\service\token;
+use App\Legacy\service\email_validate;
 
 class mail extends queue_model implements queue_interface
 {
@@ -25,9 +26,15 @@ class mail extends queue_model implements queue_interface
 	private $twig;
 	private $email_validate;
 
-	public function __construct(queue $queue, Logger $monolog,
-		this_group $this_group, mailaddr $mailaddr, Twig $twig, config $config,
-		email_validate $email_validate)
+	public function __construct(
+		queue $queue,
+		LoggerInterface $monolog,
+		this_group $this_group,
+		mailaddr $mailaddr,
+		Twig $twig,
+		config $config,
+		email_validate $email_validate
+	)
 	{
 		$this->queue = $queue;
 		$this->monolog = $monolog;

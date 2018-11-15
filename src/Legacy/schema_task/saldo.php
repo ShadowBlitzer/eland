@@ -2,21 +2,21 @@
 
 namespace App\Legacy\schema_task;
 
-use model\schema_task;
-use Doctrine\DBAL\Connection as db;
-use Predis\Client as Redis;
-use service\xdb;
-use service\cache;
-use Monolog\Logger;
-use queue\mail;
-use service\date_format;
-use service\distance;
+use App\Legacy\Doctrine\DBAL\Connection as db;
+use Predis\Client as Predis;
+use Psr\Log\LoggerInterface;
 
-use service\schedule;
-use service\groups;
-use service\this_group;
-use service\interlets_groups;
-use service\config;
+use App\Legacy\model\schema_task;
+use App\Legacy\service\xdb;
+use App\Legacy\service\cache;
+use App\Legacy\queue\mail;
+use App\Legacy\service\date_format;
+use App\Legacy\service\distance;
+use App\Legacy\service\schedule;
+use App\Legacy\service\groups;
+use App\Legacy\service\this_group;
+use App\Legacy\service\interlets_groups;
+use App\Legacy\service\config;
 
 class saldo extends schema_task
 {
@@ -34,13 +34,24 @@ class saldo extends schema_task
 	private $interlets_groups;
 	private $config;
 
-	public function __construct(db $db, xdb $xdb, Redis $redis, cache $cache,
-		Logger $monolog, mail $mail,
-		string $s3_img_url, string $s3_doc_url, string $protocol,
-		date_format $date_format, distance $distance, schedule $schedule,
-		groups $groups, this_group $this_group,
+	public function __construct(
+		db $db,
+		xdb $xdb,
+		Predis $redis,
+		cache $cache,
+		LoggerInterface $monolog,
+		mail $mail,
+		string $s3_img_url,
+		string $s3_doc_url,
+		string $protocol,
+		date_format $date_format,
+		distance $distance,
+		schedule $schedule,
+		groups $groups,
+		this_group $this_group,
 		interlets_groups $interlets_groups,
-		config $config)
+		config $config
+	)
 	{
 		parent::__construct($schedule, $groups, $this_group);
 		$this->db = $db;

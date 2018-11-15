@@ -2,14 +2,15 @@
 
 namespace App\Legacy\schema_task;
 
-use model\schema_task;
 use Doctrine\DBAL\Connection as db;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
-use service\schedule;
-use service\groups;
-use service\this_group;
-use service\config;
+
+use App\Legacy\model\schema_task;
+use App\Legacy\service\schedule;
+use App\Legacy\service\groups;
+use App\Legacy\service\this_group;
+use App\Legacy\service\config;
 
 class cleanup_messages extends schema_task
 {
@@ -17,8 +18,14 @@ class cleanup_messages extends schema_task
 	private $monolog;
 	private $config;
 
-	public function __construct(db $db, Logger $monolog, schedule $schedule,
-		groups $groups, this_group $this_group, config $config)
+	public function __construct(
+		db $db,
+		LoggerInterface $monolog,
+		schedule $schedule,
+		groups $groups,
+		this_group $this_group,
+		config $config
+	)
 	{
 		parent::__construct($schedule, $groups, $this_group);
 		$this->db = $db;

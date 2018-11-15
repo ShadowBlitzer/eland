@@ -2,21 +2,26 @@
 
 namespace App\Legacy\schema_task;
 
-use model\schema_task;
 use Doctrine\DBAL\Connection as db;
-use service\user_cache;
 
-use service\schedule;
-use service\groups;
-use service\this_group;
+use App\Legacy\service\user_cache;
+use App\Legacy\model\schema_task;
+use App\Legacy\service\schedule;
+use App\Legacy\service\groups;
+use App\Legacy\service\this_group;
 
 class sync_user_cache extends schema_task
 {
 	private $db;
 	private $user_cache;
 
-	public function __construct(db $db, user_cache $user_cache,
-		schedule $schedule, groups $groups, this_group $this_group)
+	public function __construct(
+		db $db,
+		user_cache $user_cache,
+		schedule $schedule,
+		groups $groups,
+		this_group $this_group
+	)
 	{
 		parent::__construct($schedule, $groups, $this_group);
 		$this->db = $db;

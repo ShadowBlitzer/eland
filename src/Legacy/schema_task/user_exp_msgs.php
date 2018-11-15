@@ -2,16 +2,16 @@
 
 namespace App\Legacy\schema_task;
 
-use model\schema_task;
 use Doctrine\DBAL\Connection as db;
-use queue\mail;
 
-use service\schedule;
-use service\groups;
-use service\this_group;
-use service\config;
-use service\template_vars;
-use service\user_cache;
+use App\Legacy\queue\mail;
+use App\Legacy\model\schema_task;
+use App\Legacy\service\schedule;
+use App\Legacy\service\groups;
+use App\Legacy\service\this_group;
+use App\Legacy\service\config;
+use App\Legacy\service\template_vars;
+use App\Legacy\service\user_cache;
 
 class user_exp_msgs extends schema_task
 {
@@ -21,9 +21,17 @@ class user_exp_msgs extends schema_task
 	private $config;
 	private $user_cache;
 
-	public function __construct(db $db, mail $mail, string $protocol,
-		schedule $schedule, groups $groups, this_group $this_group, config $config,
-		template_vars $template_vars, user_cache $user_cache)
+	public function __construct(
+		db $db,
+		mail $mail,
+		string $protocol,
+		schedule $schedule,
+		groups $groups,
+		this_group $this_group,
+		config $config,
+		template_vars $template_vars,
+		user_cache $user_cache
+	)
 	{
 		parent::__construct($schedule, $groups, $this_group);
 		$this->db = $db;

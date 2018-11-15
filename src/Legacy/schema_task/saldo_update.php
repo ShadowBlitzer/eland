@@ -2,20 +2,26 @@
 
 namespace App\Legacy\schema_task;
 
-use model\schema_task;
 use Doctrine\DBAL\Connection as db;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
-use service\schedule;
-use service\groups;
-use service\this_group;
+use App\Legacy\model\schema_task;
+use App\Legacy\service\schedule;
+use App\Legacy\service\groups;
+use App\Legacy\service\this_group;
 
 class saldo_update extends schema_task
 {
 	private $db;
 	private $monolog;
 
-	public function __construct(db $db, Logger $monolog, schedule $schedule, groups $groups, this_group $this_group)
+	public function __construct(
+		db $db,
+		LoggerInterface $monolog,
+		schedule $schedule,
+		groups $groups,
+		this_group $this_group
+	)
 	{
 		parent::__construct($schedule, $groups, $this_group);
 		$this->db = $db;

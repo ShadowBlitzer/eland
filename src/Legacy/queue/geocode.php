@@ -2,14 +2,15 @@
 
 namespace App\Legacy\queue;
 
-use model\queue as queue_model;
-use model\queue_interface;
 use Doctrine\DBAL\Connection as db;
-use service\cache;
-use service\queue;
-use service\user_cache;
-use Monolog\Logger;
-use service\geocode as geocode_service;
+use Psr\Log\LoggerInterface;
+
+use App\Legacy\model\queue as queue_model;
+use App\Legacy\model\queue_interface;
+use App\Legacy\service\cache;
+use App\Legacy\service\queue;
+use App\Legacy\service\user_cache;
+use App\Legacy\service\geocode as geocode_service;
 
 class geocode extends queue_model implements queue_interface
 {
@@ -21,8 +22,14 @@ class geocode extends queue_model implements queue_interface
 
 	private $geocode_service;
 
-	public function __construct(db $db, cache $cache, queue $queue,
-		Logger $monolog, user_cache $user_cache, geocode_service $geocode_service)
+	public function __construct(
+		db $db,
+		cache $cache,
+		queue $queue,
+		LoggerInterface $monolog,
+		user_cache $user_cache,
+		geocode_service $geocode_service
+	)
 	{
 		$this->queue = $queue;
 		$this->monolog = $monolog;
@@ -119,7 +126,7 @@ class geocode extends queue_model implements queue_interface
 		$this->queue->set('geocode', $data);
 	}
 
-	public function run($schema)
+	public function run(string $schema)
 	{
 		$log_ary = [];
 
