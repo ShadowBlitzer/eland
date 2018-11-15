@@ -2,10 +2,11 @@
 
 namespace App\Legacy\service;
 
-use service\this_group;
-use service\xdb;
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as predis;
+
+use App\Legacy\service\this_group;
+use App\Legacy\service\xdb;
 
 class user_cache
 {
@@ -18,7 +19,12 @@ class user_cache
 
 	private $local;
 
-	public function __construct(db $db, xdb $xdb, predis $predis, this_group $this_group)
+	public function __construct(
+		db $db,
+		xdb $xdb,
+		predis $predis,
+		this_group $this_group
+	)
 	{
 		$this->db = $db;
 		$this->xdb = $xdb;

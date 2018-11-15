@@ -60,7 +60,10 @@ class s3
 	 *
 	 */
 
-	public function __construct(string $img_bucket, string $doc_bucket)
+	public function __construct(
+		string $img_bucket,
+		string $doc_bucket
+	)
 	{
 		$this->img_bucket = $img_bucket;
 		$this->doc_bucket = $doc_bucket;

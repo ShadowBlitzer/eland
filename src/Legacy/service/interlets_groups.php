@@ -4,8 +4,9 @@ namespace App\Legacy\service;
 
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as redis;
-use service\groups;
-use service\config;
+
+use App\Legacy\service\groups;
+use App\Legacy\service\config;
 
 class interlets_groups
 {

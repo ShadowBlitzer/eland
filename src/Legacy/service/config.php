@@ -2,11 +2,13 @@
 
 namespace App\Legacy\service;
 
-use service\xdb;
-use service\this_group;
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as predis;
-use Monolog\Logger as monolog;
+use Psr\Log\LoggerInterface;
+
+use App\Legacy\service\xdb;
+use App\Legacy\service\this_group;
+
 
 class config
 {
@@ -47,8 +49,13 @@ class config
 		'interlets_en'						=> '1',
 	];
 
-	public function __construct(monolog $monolog, db $db, xdb $xdb,
-		predis $predis, this_group $this_group)
+	public function __construct(
+		LoggerInterface $monolog,
+		db $db,
+		xdb $xdb,
+		predis $predis,
+		this_group $this_group
+	)
 	{
 		$this->this_group = $this_group;
 		$this->monolog = $monolog;

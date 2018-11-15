@@ -3,7 +3,7 @@
 namespace App\Legacy\service;
 
 use Predis\Client as Redis;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class typeahead
 {
@@ -12,7 +12,10 @@ class typeahead
 	private $version;
 	private $ttl = 5184000; // 60 days
 
-	public function __construct(Redis $redis, Logger $monolog)
+	public function __construct(
+		Redis $redis,
+		LoggerInterface $monolog
+	)
 	{
 		$this->redis = $redis;
 		$this->monolog = $monolog;

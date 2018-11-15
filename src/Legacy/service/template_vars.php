@@ -2,7 +2,7 @@
 
 namespace App\Legacy\service;
 
-use service\config;
+use App\Legacy\service\config;
 
 class template_vars
 {

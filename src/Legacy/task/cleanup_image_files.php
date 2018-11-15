@@ -2,15 +2,15 @@
 
 namespace App\Legacy\task;
 
-use model\task;
 use Predis\Client as Redis;
-use service\cache;
 use Doctrine\DBAL\Connection as db;
-use Monolog\Logger;
-use service\s3;
-use service\groups;
+use Psr\Log\LoggerInterface;
 
-use service\schedule;
+use App\Legacy\model\task;
+use App\Legacy\service\cache;
+use App\Legacy\service\s3;
+use App\Legacy\service\groups;
+use App\Legacy\service\schedule;
 
 class cleanup_image_files extends task
 {
@@ -21,7 +21,14 @@ class cleanup_image_files extends task
 	private $s3;
 	private $groups;
 
-	public function __construct(cache $cache, db $db, Logger $monolog, s3 $s3, groups $groups, schedule $schedule)
+	public function __construct(
+		cache $cache,
+		db $db,
+		LoggerInterface $monolog,
+		s3 $s3,
+		groups $groups,
+		schedule $schedule
+	)
 	{
 		parent::__construct($schedule);
 		$this->cache = $cache;

@@ -2,10 +2,11 @@
 
 namespace App\Legacy\service;
 
-use service\xdb;
-use service\cache;
-use service\token;
-use Monolog\Logger as monolog;
+use Psr\Log\LoggerInterface;
+
+use App\Legacy\service\xdb;
+use App\Legacy\service\cache;
+use App\Legacy\service\token;
 
 class email_validate
 {
@@ -15,7 +16,12 @@ class email_validate
 	private $cache;
 	private $monolog;
 
-	public function __construct(cache $cache, xdb $xdb, token $token, monolog $monolog)
+	public function __construct(
+		cache $cache,
+		xdb $xdb,
+		token $token,
+		LoggerInterface $monolog
+	)
 	{
 		$this->cache = $cache;
 		$this->xdb = $xdb;

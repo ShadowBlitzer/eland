@@ -2,9 +2,9 @@
 
 namespace App\Legacy\service;
 
-use service\this_group;
-use service\groups;
-use service\alert;
+use App\Legacy\service\this_group;
+use App\Legacy\service\groups;
+use App\Legacy\service\alert;
 
 class url
 {
@@ -13,9 +13,16 @@ class url
 	private $alert;
 	private $rootpath;
 
-	public function __construct(this_group $this_group, groups $groups, alert $alert,
-		string $rootpath, string $protocol, array $s_user_params_own_group, string $s_id,
-		string $s_schema)
+	public function __construct(
+		this_group $this_group,
+		groups $groups,
+		alert $alert,
+		string $rootpath,
+		string $protocol,
+		array $s_user_params_own_group,
+		string $s_id,
+		string $s_schema
+	)
 	{
 		$this->this_group = $this_group;
 		$this->groups = $groups;

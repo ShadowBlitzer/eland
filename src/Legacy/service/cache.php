@@ -4,7 +4,7 @@ namespace App\Legacy\service;
 
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as Redis;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 /*
                           Table "xdb.cache"
@@ -24,7 +24,11 @@ class cache
 	private $redis;
 	private $monolog;
 
-	public function __construct(db $db, Redis $redis, Logger $monolog)
+	public function __construct(
+		db $db,
+		Redis $redis,
+		LoggerInterface $monolog
+	)
 	{
 		$this->db = $db;
 		$this->redis = $redis;

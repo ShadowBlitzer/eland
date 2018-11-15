@@ -3,7 +3,7 @@
 namespace App\Legacy\service;
 
 use Doctrine\DBAL\Connection as db;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 /*
                                         Table "xdb.queue"
@@ -25,7 +25,10 @@ class queue
 	private $db;
 	private $monolog;
 
-	public function __construct(db $db, Logger $monolog)
+	public function __construct(
+		db $db,
+		LoggerInterface $monolog
+	)
 	{
 		$this->db = $db;
 		$this->monolog = $monolog;

@@ -2,7 +2,7 @@
 
 namespace App\Legacy\service;
 
-use service\config;
+use Legacy\service\config;
 
 class type_template
 {

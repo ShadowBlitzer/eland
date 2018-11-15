@@ -2,7 +2,7 @@
 
 namespace App\Legacy\service;
 
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class alert
@@ -12,7 +12,10 @@ class alert
 	private $session;
 	private $flashbag;
 
-	public function __construct(Logger $monolog, Session $session)
+	public function __construct(
+		LoggerInterface $monolog,
+		Session $session
+	)
 	{
 		$this->monolog = $monolog;
 		$this->session = $session;

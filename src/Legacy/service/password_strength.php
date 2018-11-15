@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Legacy\service;
 
 class password_strength

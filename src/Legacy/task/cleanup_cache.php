@@ -2,10 +2,9 @@
 
 namespace App\Legacy\task;
 
-use service\cache;
-use model\task;
-
-use service\schedule;
+use App\Legacy\service\cache;
+use App\Legacy\model\task;
+use App\Legacy\service\schedule;
 
 class cleanup_cache extends task
 {

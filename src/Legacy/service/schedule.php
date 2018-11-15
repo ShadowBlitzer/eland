@@ -2,8 +2,9 @@
 
 namespace App\Legacy\service;
 
-use service\cache;
 use Predis\Client as Redis;
+
+use App\Legacy\service\cache;
 
 class schedule
 {
@@ -16,7 +17,10 @@ class schedule
 	private $interval;
 	private $id;
 
-	public function __construct(cache $cache, Redis $redis)
+	public function __construct(
+		cache $cache,
+		Redis $redis
+	)
 	{
 		$this->cache = $cache;
 		$this->redis = $redis;

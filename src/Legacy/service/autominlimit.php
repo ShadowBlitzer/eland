@@ -2,12 +2,13 @@
 
 namespace App\Legacy\service;
 
-use service\xdb;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Doctrine\DBAL\Connection as db;
-use service\this_group;
-use service\config;
-use service\user_cache;
+
+use App\Legacy\service\xdb;
+use App\Legacy\service\this_group;
+use App\Legacy\service\config;
+use App\Legacy\service\user_cache;
 
 class autominlimit
 {
@@ -25,8 +26,14 @@ class autominlimit
 	private $group_minlimit;
 	private $schema;
 
-	public function __construct(Logger $monolog, xdb $xdb, db $db,
-		this_group $this_group, config $config, user_cache $user_cache)
+	public function __construct(
+		LoggerInterface $monolog,
+		xdb $xdb,
+		db $db,
+		this_group $this_group,
+		config $config,
+		user_cache $user_cache
+	)
 	{
 		$this->monolog = $monolog;
 		$this->xdb = $xdb;

@@ -17,7 +17,6 @@ class elas_db_upgrade
 		$this->db->beginTransaction();
 
 		try{
-
 			switch($version)
 			{
 				case 30000:

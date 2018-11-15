@@ -4,7 +4,8 @@ namespace App\Legacy\service;
 
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as Redis;
-use service\groups;
+
+use App\Legacy\service\groups;
 
 class this_group
 {

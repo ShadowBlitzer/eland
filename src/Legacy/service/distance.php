@@ -3,7 +3,7 @@
 namespace App\Legacy\service;
 
 use Doctrine\DBAL\Connection as db;
-use service\cache;
+use App\Legacy\service\cache;
 
 class distance
 {
@@ -19,7 +19,10 @@ class distance
 	private $to;
 	private $dist;
 
-	public function __construct(db $db, cache $cache)
+	public function __construct(
+		db $db,
+		cache $cache
+	)
 	{
 		$this->db = $db;
 		$this->cache = $cache;

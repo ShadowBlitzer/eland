@@ -5,10 +5,11 @@ namespace App\Legacy\service;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as redis;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
-use service\this_group;
-use service\user_cache;
+
+use App\Legacy\service\this_group;
+use App\Legacy\service\user_cache;
 
 class user implements UserInterface
 {
@@ -34,8 +35,13 @@ class user implements UserInterface
 		'ROLE_ADMIN'		=> 'admin',
 	];
 
-	public function __construct(this_group $this_group, Logger $monolog,
-		Session $session, user_cache $user_cache, string $page_access)
+	public function __construct(
+		this_group $this_group,
+		LoggerInterface $monolog,
+		Session $session,
+		user_cache $user_cache,
+		string $page_access
+	)
 	{
 		$this->this_group = $this_group;
 		$this->monolog = $monolog;

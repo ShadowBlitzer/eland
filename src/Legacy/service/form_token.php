@@ -3,7 +3,7 @@
 namespace App\Legacy\service;
 
 use Predis\Client as Redis;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class form_token
 {
@@ -13,7 +13,11 @@ class form_token
 	private $monolog;
 	private $script_name;
 
-	public function __construct(Redis $redis, Logger $monolog, string $script_name)
+	public function __construct(
+		Redis $redis,
+		LoggerInterface $monolog,
+		string $script_name
+	)
 	{
 		$this->redis = $redis;
 		$this->monolog = $monolog;

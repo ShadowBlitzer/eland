@@ -2,8 +2,8 @@
 
 namespace App\Legacy\service;
 
-use service\this_group;
-use service\config;
+use App\Legacy\service\this_group;
+use App\Legacy\service\config;
 
 class access_control
 {
@@ -50,7 +50,10 @@ class access_control
 	 *
 	 */
 
-	public function __construct(this_group $this_group, config $config)
+	public function __construct(
+		this_group $this_group,
+		config $config
+	)
 	{
 		$this->this_group = $this_group;
 		$this->config = $config;
@@ -62,10 +65,6 @@ class access_control
 		}
 	}
 
-	/*
-	 *
-	 */
-
 	public function is_visible($role_or_level)
 	{
 		global $access_level;
@@ -74,10 +73,6 @@ class access_control
 
 		return $level >= $access_level;
 	}
-
-	/**
-	 *
-	 */
 
 	public function get_visible_ary()
 	{
@@ -96,10 +91,6 @@ class access_control
 		return $ary;
 	}
 
-	/*
-	 *
-	 */
-
 	public function get_role($access)
 	{
 		if (isset($this->acc_ary_search[$access]))
@@ -110,10 +101,6 @@ class access_control
 		return $access;
 	}
 
-	/*
-	 *
-	 */
-
 	public function get_level($access)
 	{
 		if (isset($this->acc_ary[$access]))
@@ -123,10 +110,6 @@ class access_control
 
 		return $access;
 	}
-
-	/*
-	 *
-	 */
 
 	public function get_label($access = 'admin', $size = 'xs')
 	{
@@ -139,10 +122,6 @@ class access_control
 
 		return '<span class="label label-' . $acc['class'] . ' label-' . $size . '">' . $acc['label'] . '</span>';
 	}
-
-	/*
-	 *
-	 */
 
 	public function get_post_value($name = 'access')
 	{
@@ -159,10 +138,6 @@ class access_control
 		return false;
 	}
 
-	/**
-	 *
-	 */
-
 	public function get_post_error($name = 'access')
 	{
 		if ($this->acc_ary[$_POST[$name]])
@@ -172,10 +147,6 @@ class access_control
 
 		return 'Kies een zichtbaarheid.';
 	}
-
-	/*
-	 *
-	 */
 
 	public function get_radio_buttons($access_cache_id = false, $value = false, $omit_access = false, $name = 'access', $size = 'xs', $label = 'Zichtbaarheid')
 	{

@@ -3,11 +3,11 @@
 namespace App\Legacy\task;
 
 use Doctrine\DBAL\Connection as db;
-use service\cache;
-use model\task;
-use service\groups;
 
-use service\schedule;
+use App\Legacy\service\cache;
+use App\Legacy\model\task;
+use App\Legacy\service\groups;
+use App\Legacy\service\schedule;
 
 class get_elas_interlets_domains extends task
 {

@@ -3,10 +3,10 @@
 namespace App\Legacy\service;
 
 use Doctrine\DBAL\Connection as db;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
-use service\this_group;
-use service\config;
+use App\Legacy\service\this_group;
+use App\Legacy\service\config;
 
 class mailaddr
 {
@@ -16,7 +16,12 @@ class mailaddr
 	private $this_group;
 	private $config;
 
-	public function __construct(db $db, Logger $monolog, this_group $this_group, config $config)
+	public function __construct(
+		db $db,
+		LoggerInterface $monolog,
+		this_group $this_group,
+		config $config
+	)
 	{
 		$this->db = $db;
 		$this->monolog = $monolog;

@@ -2,16 +2,19 @@
 
 namespace App\Legacy\task;
 
-use model\task;
 use Doctrine\DBAL\Connection as db;
 
-use service\schedule;
+use App\Legacy\model\task;
+use App\Legacy\service\schedule;
 
 class cleanup_logs extends task
 {
 	private $db;
 
-	public function __construct(db $db, schedule $schedule)
+	public function __construct(
+		db $db,
+		schedule $schedule
+	)
 	{
 		parent::__construct($schedule);
 		$this->db = $db;

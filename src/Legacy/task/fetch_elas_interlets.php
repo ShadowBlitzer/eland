@@ -2,13 +2,13 @@
 
 namespace App\Legacy\task;
 
-use service\cache;
+use Psr\Log\LoggerInterface;
 use Predis\Client as redis;
-use model\task;
-use service\typeahead;
-use Monolog\Logger;
 
-use service\schedule;
+use App\Legacy\service\cache;
+use App\Legacy\model\task;
+use App\Legacy\service\typeahead;
+use App\Legacy\service\schedule;
 
 class fetch_elas_interlets extends task
 {
@@ -25,7 +25,13 @@ class fetch_elas_interlets extends task
 	private $apikeys_fails;
 
 
-	public function __construct(cache $cache, redis $redis, typeahead $typeahead, Logger $monolog, schedule $schedule)
+	public function __construct(
+		cache $cache,
+		redis $redis,
+		typeahead $typeahead,
+		LoggerInterface $monolog,
+		schedule $schedule
+	)
 	{
 		parent::__construct($schedule);
 		$this->cache = $cache;
