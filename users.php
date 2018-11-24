@@ -11,7 +11,7 @@ $link = $_GET['link'] ?? false;
 $pw = $_GET['pw'] ?? false;
 $img = isset($_GET['img']) ? true : false;
 $img_del = isset($_GET['img_del']) ? true : false;
-$interlets = $_GET['interlets'] ?? false;
+$intersystem_code = $_GET['intersystem_code'] ?? false;
 $password = $_POST['password'] ?? false;
 $submit = isset($_POST['zend']) ? true : false;
 $user_mail_submit = isset($_POST['user_mail_submit']) ? true : false;
@@ -39,7 +39,7 @@ if ($s_admin)
 {
 	$edit_fields_tabs = [
 		'fullname_access'	=> [
-			'lbl'				=> 'Zichtbaarheid volledige naam',
+			'lbl'				=> 'Zichtbaarheid Volledige Naam',
 			'access_control'	=> true,
 		],
 		'adr_access'		=> [
@@ -47,7 +47,7 @@ if ($s_admin)
 			'access_control'	=> true,
 		],
 		'mail_access'		=> [
-			'lbl'		=> 'Zichtbaarheid email adres',
+			'lbl'		=> 'Zichtbaarheid E-mail adres',
 			'access_control'	=> true,
 		],
 		'tel_access'		=> [
@@ -55,7 +55,7 @@ if ($s_admin)
 			'access_control'	=> true,
 		],
 		'gsm_access'		=> [
-			'lbl'		=> 'Zichtbaarheid gsmnummer',
+			'lbl'		=> 'Zichtbaarheid GSM-nummer',
 			'access_control'	=> true,
 		],
 		'comments'			=> [
@@ -73,20 +73,20 @@ if ($s_admin)
 			'options'	=> 'status_ary',
 		],
 		'admincomment'		=> [
-			'lbl'		=> 'Commentaar van de admin',
+			'lbl'		=> 'Commentaar van de Admin',
 			'type'		=> 'text',
 			'string'	=> true,
 		],
 		'minlimit'			=> [
-			'lbl'		=> 'Minimum limiet saldo',
+			'lbl'		=> 'Minimum Account Limiet',
 			'type'		=> 'number',
 		],
 		'maxlimit'			=> [
-			'lbl'		=> 'Maximum limiet saldo',
+			'lbl'		=> 'Maximum Account Limiet',
 			'type'		=> 'number',
 		],
 		'cron_saldo'		=> [
-			'lbl'	=> 'Periodieke mail met recent vraag en aanbod (aan/uit)',
+			'lbl'	=> 'Periodieke Overzichts E-mail (aan/uit)',
 			'type'	=> 'checkbox',
 		],
 	];
@@ -115,25 +115,25 @@ if ($user_mail_submit && $id && $post)
 
 	if (!$s_admin && !in_array($user['status'], [1, 2]))
 	{
-		$app['alert']->error('Je hebt geen rechten om een bericht naar een niet-actieve gebruiker te sturen');
+		$app['alert']->error('Je hebt geen rechten om een E-mail bericht naar een niet-actieve gebruiker te sturen');
 		cancel($id);
 	}
 
 	if ($s_master)
 	{
-		$app['alert']->error('Het master account kan geen berichten versturen.');
+		$app['alert']->error('Het master account kan geen E-mail berichten versturen.');
 		cancel($id);
 	}
 
 	if (!$s_schema)
 	{
-		$app['alert']->error('Je hebt onvoldoende rechten om een bericht te versturen.');
+		$app['alert']->error('Je hebt onvoldoende rechten om een E-mail bericht te versturen.');
 		cancel($id);
 	}
 
 	if (!$user_mail_content)
 	{
-		$app['alert']->error('Fout: leeg bericht. Mail niet verzonden.');
+		$app['alert']->error('Fout: leeg bericht. E-mail niet verzonden.');
 		cancel($id);
 	}
 
@@ -175,7 +175,7 @@ if ($user_mail_submit && $id && $post)
 		], 600);
 	}
 
-	$app['alert']->success('Mail verzonden.');
+	$app['alert']->success('E-mail verzonden.');
 
 	cancel($id);
 }
@@ -388,22 +388,22 @@ if ($bulk_submit && $post && $s_admin)
 
 		if (!$bulk_mail_subject)
 		{
-			$errors[] = 'Gelieve een onderwerp in te vullen voor je mail.';
+			$errors[] = 'Gelieve een onderwerp in te vullen voor je E-mail.';
 		}
 
 		if (!$bulk_mail_content)
 		{
-			$errors[] = 'Het mail bericht is leeg.';
+			$errors[] = 'Het E-mail bericht is leeg.';
 		}
 
 		if (!$app['config']->get('mailenabled'))
 		{
-			$errors[] = 'Mail functies zijn niet ingeschakeld. Zie instellingen.';
+			$errors[] = 'De E-mail functies zijn niet ingeschakeld. Zie instellingen.';
 		}
 
 		if ($s_master)
 		{
-			$errors[] = 'Het master account kan geen berichten verzenden.';
+			$errors[] = 'Het master account kan geen E-mail berichten verzenden.';
 		}
 	}
 
@@ -514,9 +514,13 @@ if ($s_admin && !count($errors) && $bulk_field_submit && $post)
 	{
 		[$abbrev] = explode('_', $bulk_field);
 
-		$id_type_contact = $app['db']->fetchColumn('select id from type_contact where abbrev = ?', [$abbrev]);
+		$id_type_contact = $app['db']->fetchColumn('select id
+			from type_contact
+			where abbrev = ?', [$abbrev]);
 
-		$app['db']->executeUpdate('update contact set flag_public = ? where id_user in (?) and id_type_contact = ?',
+		$app['db']->executeUpdate('update contact
+		set flag_public = ?
+		where id_user in (?) and id_type_contact = ?',
 			[$access_value, $user_ids, $id_type_contact],
 			[\PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY, \PDO::PARAM_INT]);
 
@@ -530,7 +534,9 @@ if ($s_admin && !count($errors) && $bulk_field_submit && $post)
 	{
 		$value = $value ? true : false;
 
-		$app['db']->executeUpdate('update users set cron_saldo = ? where id in (?)',
+		$app['db']->executeUpdate('update users
+			set cron_saldo = ?
+			where id in (?)',
 			[$value, $user_ids],
 			[\PDO::PARAM_BOOL, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]);
 
@@ -557,15 +563,12 @@ if ($s_admin && !count($errors) && $bulk_field_submit && $post)
 if ($s_admin)
 {
 	$map_template_vars = [
-		'naam' 				=> 'name',
-		'volledige_naam'	=> 'fullname',
-		'saldo'				=> 'saldo',
-		$app['type_template']->get('code')	=> 'letscode',
-		'postcode'			=> 'postcode',
-		'id'				=> 'id',
-		'status'			=> 'status',
-		'min_limiet'		=> 'minlimit',
-		'max_limiet'		=> 'maxlimit',
+		'naam' 					=> 'name',
+		'volledige_naam'		=> 'fullname',
+		'saldo'					=> 'saldo',
+		'account_code'			=> 'letscode',
+		'min_account_limiet'	=> 'minlimit',
+		'max_account_limiet'	=> 'maxlimit',
 	];
 }
 
@@ -624,7 +627,7 @@ if ($s_admin && !count($errors) && ($bulk_mail_submit || $bulk_mail_test) && $po
 		}
 		catch (Exception $e)
 		{
-			$app['alert']->error('Fout in mail template: ' . $e->getMessage());
+			$app['alert']->error('Fout in E-mail template: ' . $e->getMessage());
 			$sel_ary = [];
 
 			break;
@@ -644,7 +647,7 @@ if ($s_admin && !count($errors) && ($bulk_mail_submit || $bulk_mail_test) && $po
 
 	if ($count)
 	{
-		$alert_msg = 'Mail verzonden naar ' . $count . ' ';
+		$alert_msg = 'E-mail verzonden naar ' . $count . ' ';
 		$alert_msg .= $count > 1 ? 'accounts' : 'account';
 		$alert_msg .= '<br>';
 		$alert_msg .= implode('<br>', $alert_msg_users);
@@ -653,7 +656,7 @@ if ($s_admin && !count($errors) && ($bulk_mail_submit || $bulk_mail_test) && $po
 	}
 	else
 	{
-		$app['alert']->warning('Geen mails verzonden.');
+		$app['alert']->warning('Geen E-mails verzonden.');
 	}
 
 	if (count($sel_ary))
@@ -665,7 +668,7 @@ if ($s_admin && !count($errors) && ($bulk_mail_submit || $bulk_mail_test) && $po
 			$missing_users .= link_user($warning_user_id) . '<br>';
 		}
 
-		$alert_warning = 'Naar volgende gebruikers werd geen mail verzonden wegens ontbreken van mailadres: <br>' . $missing_users;
+		$alert_warning = 'Naar volgende gebruikers werd geen E-mail verzonden wegens ontbreken van E-mail adres: <br>' . $missing_users;
 
 		$app['alert']->warning($alert_warning);
 	}
@@ -808,7 +811,7 @@ if ($pw)
 	$app['assets']->add('generate_password.js');
 
 	$h1 = 'Paswoord aanpassen';
-	$h1 .= ($s_owner) ? '' : ' voor ' . link_user($user);
+	$h1 .= $s_owner ? '' : ' voor ' . link_user($user);
 	$fa = 'key';
 
 	include __DIR__ . '/include/header.php';
@@ -823,7 +826,9 @@ if ($pw)
 	echo '<div class="col-sm-10 controls">';
 	echo '<div class="input-group">';
 	echo '<input type="text" class="form-control" id="password" name="password" ';
-	echo 'value="' . $password . '" required>';
+	echo 'value="';
+	echo $password;
+	echo '" required>';
 	echo '<span class="input-group-btn">';
 	echo '<button class="btn btn-default" type="button" id="generate">Genereer</button>';
 	echo '</span>';
@@ -835,9 +840,9 @@ if ($pw)
 	echo '<label for="notify" class="col-sm-2 control-label">Notificatie-mail</label>';
 	echo '<div class="col-sm-10">';
 	echo '<input type="checkbox" name="notify" id="notify"';
-	echo ($user['status'] == 1 || $user['status'] == 2) ? ' checked="checked"' : ' readonly';
+	echo $user['status'] == 1 || $user['status'] == 2 ? ' checked="checked"' : ' readonly';
 	echo '>';
-	echo '<p><small>Notificatie is enkel mogelijk wanneer status actief is en mailadres ingesteld.</small></p>';
+	echo '<p><small>Notificatie is enkel mogelijk wanneer de Status actief is en E-mail adres ingesteld.</small></p>';
 	echo '</div>';
 	echo '</div>';
 
@@ -882,7 +887,7 @@ if ($del)
 
 	if (!$user)
 	{
-		$app['alert']->error('Gebruiker bestaat niet.');
+		$app['alert']->error('De gebruiker bestaat niet.');
 		cancel();
 	}
 
@@ -904,9 +909,9 @@ if ($del)
 
 		$usr = $user['letscode'] . ' ' . $user['name'] . ' [id:' . $del . ']';
 		$msgs = '';
-		$st = $app['db']->prepare('SELECT id, content, id_category, msg_type
-			FROM messages
-			WHERE id_user = ?');
+		$st = $app['db']->prepare('select id, content, id_category, msg_type
+			from messages
+			where id_user = ?');
 
 		$st->bindValue(1, $del);
 		$st->execute();
@@ -970,9 +975,9 @@ if ($del)
 			$want_count[$row['id_category']] = $row['count'];
 		}
 
-		$all_cat = $app['db']->fetchAll('SELECT id, stat_msgs_offers, stat_msgs_wanted
-			FROM categories
-			WHERE id_parent IS NOT NULL');
+		$all_cat = $app['db']->fetchAll('select id, stat_msgs_offers, stat_msgs_wanted
+			from categories
+			where id_parent is not null');
 
 		foreach ($all_cat as $val)
 		{
@@ -1027,7 +1032,9 @@ if ($del)
 
 	include __DIR__ . '/include/header.php';
 
-	echo '<p><font color="red">Alle gegevens, Vraag en aanbod, contacten en afbeeldingen van ' . $user['letscode'] . ' ' . $user['name'];
+	echo '<p><font color="red">Alle Gegevens, Vraag en aanbod, ';
+	echo 'Contacten en Afbeeldingen van ';
+	echo $user['letscode'] . ' ' . $user['name'];
 	echo ' worden verwijderd.</font></p>';
 
 	echo '<div class="panel panel-info">';
@@ -1180,20 +1187,23 @@ if ($add || $edit)
 
 						$row = $st->fetch();
 
-						$warning = 'Omdat deze gebruikers niet meer een uniek email adres hebben zullen zij ';
+						$warning = 'Omdat deze gebruikers niet meer een uniek E-mail adres hebben zullen zij ';
 						$warning .= 'niet meer zelf hun paswoord kunnnen resetten of kunnen inloggen met ';
-						$warning .= 'email adres. Zie ' . aphp('status', [], 'Status');
+						$warning .= 'E-mail adres. Zie ' . aphp('status', [], 'Status');
 
 						if ($row['count'] == 1)
 						{
-							$warning = 'Waarschuwing: email adres ' . $mailadr . ' bestaat al onder de actieve gebruikers. ' . $warning;
-							$app['alert']->warning($warning);
+							$warning_2 = 'Waarschuwing: E-mail adres ' . $mailadr;
+							$warning_2 .= ' bestaat al onder de actieve gebruikers.';
 						}
 						else if ($row['count'] > 1)
 						{
-							$warning = 'Waarschuwing: email adres ' . $mailadr . ' bestaat al ' . $row['count'] . ' maal onder de actieve gebruikers. ' . $warning;
-							$app['alert']->warning($warning);
+							$warning_2 = 'Waarschuwing: E-mail adres ' . $mailadr;
+							$warning_2 .= ' bestaat al ' . $row['count'];
+							$warning_2 .= ' maal onder de actieve gebruikers.';
 						}
+
+						$app['alert']->warning($warning_2 . ' ' . $warning);
 					}
 				}
 			}
@@ -1202,7 +1212,10 @@ if ($add || $edit)
 			{
 				if (!$mailadr)
 				{
-					$app['alert']->warning('Waarschuwing: Geen mailadres ingevuld. De gebruiker kan geen berichten en notificaties ontvangen en zijn/haar paswoord niet resetten.');
+					$err = 'Waarschuwing: Geen E-mail adres ingevuld. ';
+					$err .= 'De gebruiker kan geen berichten en notificaties ';
+					$err .= 'ontvangen en zijn/haar paswoord niet resetten.';
+					$app['alert']->warning($err);
 				}
 			}
 
@@ -1273,17 +1286,17 @@ if ($add || $edit)
 		{
 			if (!$user['fullname'])
 			{
-				$errors[] = 'Vul de volledige naam in!';
+				$errors[] = 'Vul de Volledige Naam in!';
 			}
 
 			if ($app['db']->fetchColumn($fullname_sql, $fullname_sql_params))
 			{
-				$errors[] = 'De volledige naam is al in gebruik!';
+				$errors[] = 'Deze Volledige Naam is al in gebruik!';
 			}
 
 			if (strlen($user['fullname']) > 100)
 			{
-				$errors[] = 'De volledige naam mag maximaal 100 tekens lang zijn.';
+				$errors[] = 'De Volledige Naam mag maximaal 100 tekens lang zijn.';
 			}
 		}
 
@@ -1291,35 +1304,35 @@ if ($add || $edit)
 		{
 			if (!$user['letscode'])
 			{
-				$errors[] = 'Vul een ' . $app['type_template']->get('code') . ' in!';
+				$errors[] = 'Vul een Account Code in!';
 			}
 			else if ($app['db']->fetchColumn($letscode_sql, $letscode_sql_params))
 			{
-				$errors[] = 'De ' . $app['type_template']->get('code') . ' bestaat al!';
+				$errors[] = 'De Account Code bestaat al!';
 			}
 			else if (strlen($user['letscode']) > 20)
 			{
-				$errors[] = 'De ' . $app['type_template']->get('code') . ' mag maximaal 20 tekens lang zijn.';
+				$errors[] = 'De Account Code mag maximaal 20 tekens lang zijn.';
 			}
 
 			if (!preg_match("/^[A-Za-z0-9-]+$/", $user['letscode']))
 			{
-				$errors[] = 'De ' . $app['type_template']->get('code') . ' kan enkel uit letters, cijfers en koppeltekens bestaan.';
+				$errors[] = 'De Account Code kan enkel uit letters, cijfers en koppeltekens bestaan.';
 			}
 
 			if (filter_var($user['minlimit'], FILTER_VALIDATE_INT) === false)
 			{
-				$errors[] = 'Geef getal of niets op voor de minimum limiet.';
+				$errors[] = 'Geef getal of niets op voor de Minimum Account Limiet.';
 			}
 
 			if (filter_var($user['maxlimit'], FILTER_VALIDATE_INT) === false)
 			{
-				$errors[] = 'Geef getal of niets op voor de maximum limiet.';
+				$errors[] = 'Geef getal of niets op voor de Maximum Account Limiet.';
 			}
 
 			if (strlen($user['presharedkey']) > 80)
 			{
-				$errors[] = 'De preshared key mag maximaal 80 tekens lang zijn.';
+				$errors[] = 'De Preshared Key mag maximaal 80 tekens lang zijn.';
 			}
 		}
 
@@ -1336,7 +1349,7 @@ if ($add || $edit)
 
 		if (strlen($user['comments']) > 100)
 		{
-			$errors[] = 'Commentaar mag maximaal 100 tekens lang zijn.';
+			$errors[] = 'Het veld Commentaar mag maximaal 100 tekens lang zijn.';
 		}
 
 		if (strlen($user['postcode']) > 6)
@@ -1353,11 +1366,11 @@ if ($add || $edit)
 		{
 			if (!$password)
 			{
-				$errors[] = 'Gelieve een paswoord in te vullen.';
+				$errors[] = 'Gelieve een Paswoord in te vullen.';
 			}
 			else if (!$app['password_strength']->get($password))
 			{
-				$errors[] = 'Het paswoord is niet sterk genoeg.';
+				$errors[] = 'Het Paswoord is niet sterk genoeg.';
 			}
 		}
 
@@ -1435,16 +1448,16 @@ if ($add || $edit)
 							{
 								send_activation_mail($password, $user);
 
-								$app['alert']->success('Mail met paswoord naar de gebruiker verstuurd.');
+								$app['alert']->success('Een E-mail met paswoord is naar de gebruiker verstuurd.');
 							}
 							else
 							{
-								$app['alert']->warning('Mailfuncties zijn uitgeschakeld. Geen mail met paswoord naar de gebruiker verstuurd.');
+								$app['alert']->warning('De E-mail functies zijn uitgeschakeld. Geen E-mail met paswoord naar de gebruiker verstuurd.');
 							}
 						}
 						else
 						{
-							$app['alert']->warning('Geen mail met paswoord naar de gebruiker verstuurd.');
+							$app['alert']->warning('Geen E-mail met paswoord naar de gebruiker verstuurd.');
 						}
 					}
 
@@ -1564,16 +1577,16 @@ if ($add || $edit)
 
 									send_activation_mail($password, $user);
 
-									$app['alert']->success('Mail met paswoord naar de gebruiker verstuurd.');
+									$app['alert']->success('E-mail met paswoord naar de gebruiker verstuurd.');
 								}
 								else
 								{
-									$app['alert']->warning('De mailfuncties zijn uitgeschakeld. Geen mail met paswoord naar de gebruiker verstuurd.');
+									$app['alert']->warning('De E-mail functies zijn uitgeschakeld. Geen E-mail met paswoord naar de gebruiker verstuurd.');
 								}
 							}
 							else
 							{
-								$app['alert']->warning('Geen mail met paswoord naar de gebruiker verstuurd.');
+								$app['alert']->warning('Geen E-mail met paswoord naar de gebruiker verstuurd.');
 							}
 						}
 
@@ -1638,10 +1651,10 @@ if ($add || $edit)
 				$contact_keys[$c['abbrev']] = $key;
 			}
 
-			$st = $app['db']->prepare('SELECT tc.abbrev, c.value, tc.name, c.flag_public, c.id
-				FROM type_contact tc, contact c
-				WHERE tc.id = c.id_type_contact
-					AND c.id_user = ?');
+			$st = $app['db']->prepare('select tc.abbrev, c.value, tc.name, c.flag_public, c.id
+				from type_contact tc, contact c
+				where tc.id = c.id_type_contact
+					and c.id_user = ?');
 
 			$st->bindValue(1, $edit);
 			$st->execute();
@@ -1668,12 +1681,12 @@ if ($add || $edit)
 				'cron_saldo'	=> 1,
 			];
 
-			if ($interlets)
+			if ($intersystem_code)
 			{
 				if ($group = $app['db']->fetchAssoc('select *
 					from letsgroups
 					where localletscode = ?
-						and apimethod <> \'internal\'', [$interlets]))
+						and apimethod <> \'internal\'', [$intersystem_code]))
 				{
 					$user['name'] = $user['fullname'] = $group['groupname'];
 
@@ -1705,7 +1718,7 @@ if ($add || $edit)
 				$user['cron_saldo'] = 0;
 				$user['status'] = '7';
 				$user['accountrole'] = 'interlets';
-				$user['letscode'] = $interlets;
+				$user['letscode'] = $intersystem_code;
 			}
 			else
 			{
@@ -1722,7 +1735,8 @@ if ($add || $edit)
 	$app['assets']->add(['datepicker', 'generate_password.js',
 		'generate_password_onload.js', 'user_edit.js', 'access_input_cache.js']);
 
-	$h1 = 'Gebruiker ' . (($edit) ? 'aanpassen: ' . link_user($user) : 'toevoegen');
+	$h1 = 'Gebruiker ';
+	$h1 .= $edit ? 'aanpassen: ' . link_user($user) : 'toevoegen';
 	$h1 = ($s_owner && !$s_admin && $edit) ? 'Je profiel aanpassen' : $h1;
 	$fa = 'user';
 
@@ -1737,7 +1751,7 @@ if ($add || $edit)
 	{
 		echo '<div class="form-group">';
 		echo '<label for="letscode" class="col-sm-2 control-label">';
-		echo $app['type_template']->get('code');
+		echo 'Account Code';
 		echo '</label>';
 		echo '<div class="col-sm-10">';
 		echo '<input type="text" class="form-control" id="letscode" name="letscode" ';
@@ -1764,19 +1778,22 @@ if ($add || $edit)
 	if ($fullname_edit)
 	{
 		echo '<div class="form-group">';
-		echo '<label for="fullname" class="col-sm-2 control-label">Volledige naam (Voornaam en Achternaam)</label>';
+		echo '<label for="fullname" class="col-sm-2 control-label">Volledige Naam</label>';
 		echo '<div class="col-sm-10">';
 		echo '<input type="text" class="form-control" id="fullname" name="fullname" ';
 		echo 'value="';
 		echo $user['fullname'] ?? '';
 		echo '" maxlength="100">';
+		echo '<p>';
+		echo 'Voornaam en Achternaam';
+		echo '</p>';
 		echo '</div>';
 		echo '</div>';
 	}
 
 	if (!isset($fullname_access))
 	{
-		$fullname_access = $add && !$interlets ? false : 'admin';
+		$fullname_access = $add && !$intersystem_code ? false : 'admin';
 	}
 
 	echo $app['access_control']->get_radio_buttons('users_fullname', $fullname_access, false, 'fullname_access', 'xs', 'Zichtbaarheid volledige naam');
@@ -1851,13 +1868,14 @@ if ($add || $edit)
 		echo '<div class="bg-danger pan-sub" id="presharedkey_panel">';
 		echo '<div class="form-group" id="presharedkey_formgroup">';
 		echo '<label for="presharedkey" class="col-sm-2 control-label">';
-		echo 'Preshared key</label>';
+		echo 'Preshared Key</label>';
 		echo '<div class="col-sm-10">';
 		echo '<input type="text" class="form-control" id="presharedkey" name="presharedkey" ';
 		echo 'value="';
 		echo $user['presharedkey'] ?? '';
 		echo '" maxlength="80">';
-		echo '<p>Vul dit enkel in voor een interletsaccount van een eLAS-installatie.</p>';
+		echo '<p>Vul dit enkel in voor een interSysteem Account ';
+		echo 'van een Systeem op een eLAS-server.</p>';
 		echo '</div>';
 		echo '</div>';
 		echo '</div>';
@@ -1884,25 +1902,32 @@ if ($add || $edit)
 			echo $password ?? '';
 			echo '" required>';
 			echo '<span class="input-group-btn">';
-			echo '<button class="btn btn-default" type="button" id="generate">Genereer</button>';
+			echo '<button class="btn btn-default" type="button" id="generate">';
+			echo 'Genereer</button>';
 			echo '</span>';
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
 
 			echo '<div class="form-group">';
-			echo '<label for="notify" class="col-sm-2 control-label">Zend mail met paswoord naar gebruiker (enkel wanneer account actief is.)</label>';
+			echo '<label for="notify" class="col-sm-2 control-label">';
+			echo 'Notificatie Paswoord</label>';
 			echo '<div class="col-sm-10">';
 			echo '<input type="checkbox" name="notify" id="notify"';
 			echo ' checked="checked"';
 			echo '>';
+			echo '<p>';
+			echo 'Verstuur een E-mail met het paswoord naar de gebruiker, ';
+			echo 'enkel wanneer het account actief is.';
+			echo '</p>';
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
 		}
 
 		echo '<div class="form-group">';
-		echo '<label for="admincomment" class="col-sm-2 control-label">Commentaar van de admin</label>';
+		echo '<label for="admincomment" class="col-sm-2 control-label">';
+		echo 'Commentaar van de admin</label>';
 		echo '<div class="col-sm-10">';
 		echo '<textarea name="admincomment" id="admincomment" class="form-control" maxlength="200">';
 		echo $user['admincomment'] ?? '';
@@ -1931,7 +1956,7 @@ if ($add || $edit)
 
 		echo '>';
 		echo '<div class="form-group">';
-		echo '<label for="minlimit" class="col-sm-2 control-label">Minimum limiet saldo</label>';
+		echo '<label for="minlimit" class="col-sm-2 control-label">Minimum Account Limiet</label>';
 		echo '<div class="col-sm-10">';
 		echo '<input type="number" class="form-control" id="minlimit" name="minlimit" ';
 		echo 'value="';
@@ -1939,29 +1964,29 @@ if ($add || $edit)
 		echo '">';
 
 		echo '<p>Vul enkel in wanneer je een individueel afwijkende minimum limiet wil instellen ';
-		echo 'voor dit account. ls dit veld leeg is, dan is de algemeen geldende ';
-		echo aphp('config', ['active_tab' => 'balance'], 'minimum groepslimiet') . ' ';
+		echo 'voor dit account. Als dit veld leeg is, dan is de algemeen geldende ';
+		echo aphp('config', ['active_tab' => 'balance'], 'Minimum Systeemslimiet') . ' ';
 		echo 'van toepassing. ';
 
 		if ($app['config']->get('minlimit') === '')
 		{
-			echo 'Er is momenteel <strong>geen</strong> algemeen geledende minimum groepslimiet ingesteld.';
+			echo 'Er is momenteel <strong>geen</strong> algemeen geledende Minimum Systeemslimiet ingesteld.';
 		}
 		else
 		{
-			echo 'De algemeen geldende minimum groepslimiet bedraagt <strong>';
+			echo 'De algemeen geldende Minimum Systeemslimiet bedraagt <strong>';
 			echo $app['config']->get('minlimit') . ' ' . $app['config']->get('currency') . '</strong>.';
 		}
 
 		echo '</p>';
 
-		echo '<p>Dit veld wordt vooraf ingevuld bij aanmaak gebruiker wanneer "';
-		echo aphp('config', ['active_tab' => 'balance'], 'preset individuele minimum limiet') . '" ';
-		echo 'is ingevuld in de instellingen.';
+		echo '<p>Dit veld wordt bij aanmaak gebruiker vooraf ingevuld met de "';
+		echo aphp('config', ['active_tab' => 'balance'], 'Preset Individuele Minimum Account Limiet') . '" ';
+		echo 'die gedefiniëerd is in de instellingen.';
 
 		if ($app['config']->get('preset_minlimit') !== '')
 		{
-			echo ' De preset bedraagt momenteel <strong>' . $app['config']->get('preset_minlimit') . '</strong>.';
+			echo ' De Preset bedraagt momenteel <strong>' . $app['config']->get('preset_minlimit') . '</strong>.';
 		}
 
 		echo '</p>';
@@ -1969,7 +1994,7 @@ if ($add || $edit)
 		echo '</div>';
 
 		echo '<div class="form-group">';
-		echo '<label for="maxlimit" class="col-sm-2 control-label">Maximum limiet saldo</label>';
+		echo '<label for="maxlimit" class="col-sm-2 control-label">Maximum Account Limiet</label>';
 		echo '<div class="col-sm-10">';
 		echo '<input type="number" class="form-control" id="maxlimit" name="maxlimit" ';
 		echo 'value="';
@@ -1978,28 +2003,28 @@ if ($add || $edit)
 
 		echo '<p>Vul enkel in wanneer je een individueel afwijkende maximum limiet wil instellen ';
 		echo 'voor dit account. Als dit veld leeg is, dan is de algemeen geldende ';
-		echo aphp('config', ['active_tab' => 'balance'], 'maximum groepslimiet') . ' ';
+		echo aphp('config', ['active_tab' => 'balance'], 'Maximum Systeemslimiet') . ' ';
 		echo 'van toepassing. ';
 
 		if ($app['config']->get('maxlimit') === '')
 		{
-			echo 'Er is momenteel <strong>geen</strong> algemeen geledende maximum groepslimiet ingesteld.';
+			echo 'Er is momenteel <strong>geen</strong> algemeen geledende Maximum Systeemslimiet ingesteld.';
 		}
 		else
 		{
-			echo 'De algemeen geldende maximum groepslimiet bedraagt <strong>';
+			echo 'De algemeen geldende Maximum Systeemslimiet bedraagt <strong>';
 			echo $app['config']->get('maxlimit') . ' ' . $app['config']->get('currency') . '</strong>.';
 		}
 
 		echo '</p>';
 
-		echo '<p>Dit veld wordt vooraf ingevuld bij aanmaak gebruiker wanneer "';
-		echo aphp('config', ['active_tab' => 'balance'], 'preset individuele maximum limiet') . '" ';
+		echo '<p>Dit veld wordt bij aanmaak gebruiker vooraf ingevuld wanneer "';
+		echo aphp('config', ['active_tab' => 'balance'], 'Preset Individuele Maximum Account Limiet') . '" ';
 		echo 'is ingevuld in de instellingen.';
 
 		if ($app['config']->get('preset_maxlimit') !== '')
 		{
-			echo ' De preset bedraagt momenteel <strong>' . $app['config']->get('preset_maxlimit') . '</strong>.';
+			echo ' De Preset bedraagt momenteel <strong>' . $app['config']->get('preset_maxlimit') . '</strong>.';
 		}
 
 		echo '</p>';
@@ -2012,7 +2037,8 @@ if ($add || $edit)
 	echo '</div>';
 
 	echo '<div class="form-group">';
-	echo '<label for="cron_saldo" class="col-sm-2 control-label">Periodieke mail met recent vraag en aanbod</label>';
+	echo '<label for="cron_saldo" class="col-sm-2 control-label">';
+	echo 'Periodieke Overzichts E-mail</label>';
 	echo '<div class="col-sm-10">';
 	echo '<input type="checkbox" name="cron_saldo" id="cron_saldo"';
 	echo $user['cron_saldo'] ? ' checked="checked"' : '';
@@ -2022,23 +2048,78 @@ if ($add || $edit)
 
 	if ($s_admin)
 	{
+		$contacts_format = [
+			'adr'	=> [
+				'fa'		=> 'map-marker',
+				'lbl'		=> 'Adres',
+				'explain'	=> 'Voorbeeldstraat 23, 4520 Voorbeeldgemeente',
+			],
+			'gsm'	=> [
+				'fa'		=> 'mobile',
+				'lbl'		=> 'GSM',
+			],
+			'tel'	=> [
+				'fa'		=> 'phone',
+				'lbl'		=> 'Telefoon',
+			],
+			'mail'	=> [
+				'fa'		=> 'envelope-o',
+				'lbl'		=> 'E-mail',
+				'type'		=> 'email',
+				'disabled'	=> true,     // Prevent browser fill-in, removed by js.
+			],
+			'web'	=> [
+				'fa'		=> 'link',
+				'lbl'		=> 'Website',
+				'type'		=> 'url',
+			],
+		];
+
 		echo '<div class="bg-warning pan-sub">';
 		echo '<h2><i class="fa fa-map-marker"></i> Contacten</h2>';
+
+		echo '<p><small>Meer contacten kunnen toegevoegd worden vanuit de profielpagina met de knop ';
+		echo 'Toevoegen bij de contactinfo ';
+		echo $add ? 'nadat de gebruiker gecreëerd is' : '';
+		echo '.</small></p>';
+
+		echo '<ul class="list-group">';
 
 		foreach ($contact as $key => $c)
 		{
 			$name = 'contact[' . $key . '][value]';
 
+			echo '<li class="list-group-item">';
+
 			echo '<div class="form-group">';
-			echo '<label for="' . $name . '" class="col-sm-2 control-label">' . $c['abbrev'] . '</label>';
+			echo '<label for="';
+			echo $name;
+			echo '" class="col-sm-2 control-label">';
+			echo $contacts_format[$c['abbrev']]['lbl'] ?? $c['abbrev'];
+			echo '</label>';
 			echo '<div class="col-sm-10">';
-			echo '<input class="form-control" id="' . $name . '" name="' . $name . '" ';
+			echo '<div class="input-group">';
+			echo '<span class="input-group-addon">';
+			echo '<i class="fa fa-';
+			echo $contacts_format[$c['abbrev']]['fa'] ?? 'question-mark';
+			echo '"></i>';
+			echo '</span>';
+			echo '<input class="form-control" id="';
+			echo $name;
+			echo '" name="';
+			echo $name;
+			echo '" ';
 			echo 'value="';
 			echo $c['value'] ?? '';
-			echo '"';
-			// The disabled property gets removed with a delay by js to prevent population by the browser.
-			echo $c['abbrev'] === 'mail' ? ' type="email" disabled' : ' type="text"';
-			echo ' data-access="contact_access_' . $key . '">';
+			echo '" type="';
+			echo $contacts_format[$c['abbrev']]['type'] ?? 'text';
+			echo '" ';
+			echo isset($contacts_format[$c['abbrev']]['disabled']) ? 'disabled ' : '';
+			echo 'data-access="contact_access_' . $key . '">';
+			echo '</div>';
+			echo '<p>';
+			echo $contacts_format[$c['abbrev']]['explain'] ?? '';
+			echo '</p>';
 			echo '</div>';
 			echo '</div>';
 
@@ -2053,13 +2134,10 @@ if ($add || $edit)
 			echo '<input type="hidden" name="contact['. $key . '][name]" value="' . $c['name'] . '">';
 			echo '<input type="hidden" name="contact['. $key . '][abbrev]" value="' . $c['abbrev'] . '">';
 
-			echo '<hr>';
+			echo '</li>';
 		}
 
-		echo '<p><small>Meer contacten kunnen toegevoegd worden vanuit de profielpagina met de knop ';
-		echo 'Toevoegen bij de contactinfo ';
-		echo $add ? 'nadat de gebruiker gecreëerd is' : '';
-		echo '.</small></p>';
+		echo '</ul>';
 		echo '</div>';
 	}
 
@@ -2173,7 +2251,7 @@ if ($id)
 	}
 
 	$mail_to = $app['mailaddr']->get($user['id']);
-	$mail_from = ($s_schema && !$s_master && !$s_elas_guest) ? $app['mailaddr']->get($s_schema . '.' . $s_id) : [];
+	$mail_from = $s_schema && !$s_master && !$s_elas_guest ? $app['mailaddr']->get($s_schema . '.' . $s_id) : [];
 
 	$sql_bind = [$user['letscode']];
 
@@ -2310,11 +2388,11 @@ if ($id)
 		if ($interlets_group_missing)
 		{
 			$h1 .= ' <span class="label label-warning label-sm"><i class="fa fa-exclamation-triangle"></i> ';
-			$h1 .= 'Gekoppelde Interlets groep ontbreekt</span>';
+			$h1 .= 'De interSysteem-verbinding ontbreekt</span>';
 		}
 		else if ($interlets_group_id)
 		{
-			$h1 .= ' ' . aphp('interlets', ['id' => $interlets_group_id], 'Gekoppelde groep', 'btn btn-default', 'Gekoppelde groep');
+			$h1 .= ' ' . aphp('intersystem', ['id' => $interlets_group_id], 'Gekoppeld interSysteem', 'btn btn-default', 'Gekoppelde interSysteem');
 		}
 	}
 
@@ -2395,7 +2473,7 @@ if ($id)
 
 	if ($s_admin)
 	{
-		echo '<dt>Zichtbaarheid volledige naam</dt>';
+		echo '<dt>Zichtbaarheid Volledige Naam</dt>';
 		echo '<dd>';
 		echo $app['access_control']->get_label($fullname_access);
 		echo '</dd>';
@@ -2515,7 +2593,7 @@ if ($id)
 	if ($s_admin || $s_owner)
 	{
 		echo '<dt>';
-		echo 'Periodieke mail met recent vraag en aanbod';
+		echo 'Periodieke Overzichts E-mail';
 		echo '</dt>';
 		echo (($user['cron_saldo']) ? 'Aan' : 'Uit');
 		echo '</dl>';
@@ -2531,19 +2609,19 @@ if ($id)
 
 	if ($s_elas_guest)
 	{
-		$placeholder = 'Als eLAS gast kan je niet het mail formulier gebruiken.';
+		$placeholder = 'Als eLAS gast kan je niet het E-mail formulier gebruiken.';
 	}
 	else if ($s_owner)
 	{
-		$placeholder = 'Je kan geen berichten naar jezelf mailen.';
+		$placeholder = 'Je kan geen E-mail berichten naar jezelf verzenden.';
 	}
 	else if (!count($mail_to))
 	{
-		$placeholder = 'Er is geen email adres bekend van deze gebruiker.';
+		$placeholder = 'Er is geen E-mail adres bekend van deze gebruiker.';
 	}
 	else if (!count($mail_from))
 	{
-		$placeholder = 'Om het mail formulier te gebruiken moet een mail adres ingesteld zijn voor je eigen account.';
+		$placeholder = 'Om het E-mail formulier te gebruiken moet een E-mail adres ingesteld zijn voor je eigen Account.';
 	}
 	else
 	{
@@ -2561,7 +2639,8 @@ if ($id)
 
 	echo '<div class="form-group">';
 	echo '<div class="col-sm-12">';
-	echo '<textarea name="user_mail_content" rows="6" placeholder="' . $placeholder . '" ';
+	echo '<textarea name="user_mail_content" rows="6" placeholder="';
+	echo $placeholder . '" ';
 	echo 'class="form-control" required';
 	echo $disabled ? ' disabled' : '';
 	echo '>';
@@ -2682,7 +2761,7 @@ if ($v_list)
 	{
 		$columns['u'] += [
 			'admincomment'	=> 'Admin commentaar',
-			'cron_saldo'	=> 'Periodieke mail',
+			'cron_saldo'	=> 'Periodieke Overzichts E-mail',
 			'cdate'			=> 'Gecreëerd',
 			'mdate'			=> 'Aangepast',
 			'adate'			=> 'Geactiveerd',
@@ -2810,7 +2889,7 @@ if ($v_list)
 	{
 		$columns['u'] += [
 			'admincomment'	=> 'Admin commentaar',
-			'cron_saldo'	=> 'Periodieke mail',
+			'cron_saldo'	=> 'Periodieke Overzichts E-mail',
 			'cdate'			=> 'Gecreëerd',
 			'mdate'			=> 'Aangepast',
 			'adate'			=> 'Geactiveerd',
@@ -3317,6 +3396,11 @@ if ($v_list)
 
 	foreach ($columns as $group => $ary)
 	{
+		if ($group === 'm' || $group === 'c')
+		{
+			echo '</div>';
+		}
+
 		if ($group === 'u' || $group === 'c' || $group === 'm')
 		{
 			echo '<div class="col-md-4">';
@@ -3343,7 +3427,8 @@ if ($v_list)
 			echo 'In periode (dagen)';
 			echo '</label>';
 			echo '<div class="col-sm-9">';
-			echo '<input type="number" name="sh[p][activity_days]" value="' . $activity_days . '" ';
+			echo '<input type="number" name="sh[p][activity_days]" value="';
+			echo $activity_days . '" ';
 			echo 'size="4" min="1" class="form-control">';
 			echo '</div></div>';
 
@@ -3425,15 +3510,14 @@ if ($v_list)
 			echo '</label>';
 			echo '</div>';
 		}
-
-		if ($group === 'u' || $group === 'd')
-		{
-			echo '</div>';
-		}
 	}
 
 	echo '</div>';
+	echo '<div class="row">';
+	echo '<div class="col-md-12">';
 	echo '<input type="submit" name="show" class="btn btn-default" value="Pas weergave kolommen aan">';
+	echo '</div>';
+	echo '</div>';
 	echo '</div>';
 	echo '</div>';
 }
@@ -3844,7 +3928,7 @@ if ($v_list)
 		echo '<div class="tab-content">';
 
 		echo '<div role="tabpanel" class="tab-pane active" id="mail_tab">';
-		echo '<h3>Mail verzenden naar geselecteerde gebruikers</h3>';
+		echo '<h3>E-Mail verzenden naar geselecteerde gebruikers</h3>';
 
 		echo '<form method="post" class="form-horizontal">';
 
@@ -3885,7 +3969,7 @@ if ($v_list)
 		echo '</div>';
 		echo '</div>';
 
-		echo '<input type="submit" value="Zend test mail naar jezelf" name="bulk_mail_test" class="btn btn-default">&nbsp;';
+		echo '<input type="submit" value="Zend test E-mail naar jezelf" name="bulk_mail_test" class="btn btn-default">&nbsp;';
 		echo '<input type="submit" value="Verzend" name="bulk_mail_submit" class="btn btn-default">';
 
 		echo '</div>';
@@ -3895,7 +3979,7 @@ if ($v_list)
 		foreach($edit_fields_tabs as $k => $t)
 		{
 			echo '<div role="tabpanel" class="tab-pane" id="' . $k . '_tab"';
-			echo (isset($t['access_control'])) ? ' data-access-control="true"' : '';
+			echo isset($t['access_control']) ? ' data-access-control="true"' : '';
 			echo '>';
 			echo '<h3>Veld aanpassen: ' . $t['lbl'] . '</h3>';
 
@@ -3959,7 +4043,9 @@ else if ($v_extended)
 		if ($u['PictureFile'])
 		{
 			echo '<div class="media-left">';
-			echo '<a href="' . generate_url('users', ['id' => $u['id']]) . '">';
+			echo '<a href="';
+			echo generate_url('users', ['id' => $u['id']]);
+			echo '">';
 			echo '<img class="media-object" src="' . $app['s3_img_url'] . $u['PictureFile'] . '" width="150">';
 			echo '</a>';
 			echo '</div>';
@@ -4000,11 +4086,13 @@ else if ($v_tiles)
 	echo '<p>';
 	echo '<span class="btn-group sort-by" role="group">';
 	echo '<button class="btn btn-default active" data-sort-by="letscode">';
-	echo $app['type_template']->get('code') . ' ';
+	echo 'Account Code ';
 	echo '<i class="fa fa-sort-asc"></i></button>';
-	echo '<button class="btn btn-default" data-sort-by="name">naam ';
+	echo '<button class="btn btn-default" data-sort-by="name">';
+	echo 'Naam ';
 	echo '<i class="fa fa-sort"></i></button>';
-	echo '<button class="btn btn-default" data-sort-by="postcode">postcode ';
+	echo '<button class="btn btn-default" data-sort-by="postcode">';
+	echo 'Postcode ';
 	echo '<i class="fa fa-sort"></i></button>';
 	echo '</span>';
 	echo '</p>';

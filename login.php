@@ -96,7 +96,7 @@ if ($token)
 	}
 	else
 	{
-		$app['alert']->error('De interlets login is mislukt.');
+		$app['alert']->error('De interSysteem login is mislukt.');
 	}
 }
 
@@ -107,7 +107,7 @@ if ($submit)
 
 	if (!($login && $password))
 	{
-		$errors[] = 'Login gefaald. Vul login en paswoord in.';
+		$errors[] = 'Login gefaald. Vul Login en Paswoord in.';
 	}
 
 	$master_password = getenv('MASTER_PASSWORD');
@@ -148,8 +148,8 @@ if ($submit)
 		}
 		else
 		{
-			$err = 'Je kan dit email adres niet gebruiken om in te loggen want het is niet ';
-			$err .= 'uniek aanwezig in deze installatie. Gebruik je letscode of gebruikersnaam.';
+			$err = 'Je kan dit E-mail adres niet gebruiken om in te loggen want het is niet ';
+			$err .= 'uniek aanwezig in dit Systeem. Gebruik je Account Code of Gebruikersnaam.';
 			$errors[] = $err;
 		}
 	}
@@ -162,8 +162,8 @@ if ($submit)
 
 		if ($count_letscode > 1)
 		{
-			$err = 'Je kan deze letscode niet gebruiken om in te loggen want deze is niet ';
-			$err .= 'uniek aanwezig in deze installatie. Gebruik je mailadres of gebruikersnaam.';
+			$err = 'Je kan deze Account Code niet gebruiken om in te loggen want deze is niet ';
+			$err .= 'uniek aanwezig in dit Systeem. Gebruik je E-mail adres of gebruikersnaam.';
 			$errors[] = $err;
 		}
 		else if ($count_letscode == 1)
@@ -181,7 +181,7 @@ if ($submit)
 		if ($count_name > 1)
 		{
 			$err = 'Je kan deze gebruikersnaam niet gebruiken om in te loggen want deze is niet ';
-			$err .= 'uniek aanwezig in deze installatie. Gebruik je mailadres of letscode.';
+			$err .= 'uniek aanwezig in dit Systeem. Gebruik je E-mail adres of Account Code.';
 			$errors[] = $err;
 		}
 		else if ($count_name == 1)
@@ -263,8 +263,6 @@ if ($submit)
 
 		$glue = (strpos($location, '?') === false) ? '?' : '&';
 
-		//$accountrole = ($user['accountrole'] == 'interlets') ? 'guest' : $user['accountrole'];
-
 		header('Location: ' . $location . $glue . 'a=1&r=' . $user['accountrole'] . '&' . 'u=' .  $user['id']);
 		exit;
 	}
@@ -274,7 +272,7 @@ if ($submit)
 
 if($app['config']->get('maintenance'))
 {
-	$app['alert']->warning('De website is niet beschikbaar wegens onderhoudswerken.  Enkel admin gebruikers kunnen inloggen');
+	$app['alert']->warning('De website is niet beschikbaar wegens onderhoudswerken.  Enkel admins kunnen inloggen');
 }
 
 $h1 = 'Login';
@@ -290,10 +288,17 @@ if(empty($token))
 	echo '<form method="post" class="form-horizontal">';
 
 	echo '<div class="form-group">';
-    echo '<label for="login" class="col-sm-2 control-label">Email, code of gebruikersnaam</label>';
+	echo '<label for="login" class="col-sm-2 control-label">';
+	echo 'Login</label>';
     echo '<div class="col-sm-10">';
     echo '<input type="text" class="form-control" id="login" name="login" ';
-    echo 'value="' . $login . '" required>';
+	echo 'value="';
+	echo $login;
+	echo '" required>';
+
+	echo '<p>';
+	echo 'E-mail, Account Code of Gebruikersnaam';
+	echo '</p>';
     echo '</div>';
 	echo '</div>';
 
@@ -301,7 +306,11 @@ if(empty($token))
     echo '<label for="password" class="col-sm-2 control-label">Paswoord</label>';
     echo '<div class="col-sm-10">';
     echo '<input type="password" class="form-control" id="password" name="password" ';
-    echo 'value="" required>';
+	echo 'value="" required>';
+
+	echo '<p>';
+	echo aphp('pwreset', [], 'Klik hier als je je paswoord vergeten bent.');
+	echo '</p>';
     echo '</div>';
 	echo '</div>';
 
@@ -311,8 +320,6 @@ if(empty($token))
 
 	echo '</div>';
 	echo '</div>';
-
-	echo aphp('pwreset', [], 'Ik ben mijn paswoord vergeten');
 }
 
 include __DIR__ . '/include/footer.php';

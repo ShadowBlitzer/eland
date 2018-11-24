@@ -162,14 +162,14 @@ if ($status_msgs)
 
 		if (count($non_unique_mail) == 1)
 		{
-			echo 'Een mailadres komt meer dan eens voor onder de actieve gebruikers ';
-			echo 'in de installatie. ';
-			echo 'Gebruikers met dit mailadres kunnen niet inloggen met mailadres. ';
+			echo 'Een E-mail adres komt meer dan eens voor onder de actieve accounts ';
+			echo 'in dit Systeem. ';
+			echo 'Gebruikers met dit E-mail adres kunnen niet inloggen met E-mail adres. ';
 		}
 		else
 		{
-			echo 'Meerdere mailadressen komen meer dan eens voor onder de actieve gebruikers in de installatie. ';
-			echo 'Gebruikers met een mailadres dat meer dan eens voorkomt, kunnen niet inloggen met mailadres.';
+			echo 'Meerdere E-mail adressen komen meer dan eens voor onder de actieve Accounts in dit Systeem. ';
+			echo 'Gebruikers met een E-mail adres dat meer dan eens voorkomt, kunnen niet inloggen met E-mail adres.';
 		}
 
 		echo '<ul>';
@@ -200,14 +200,14 @@ if ($status_msgs)
 
 		if (count($non_unique_letscode) == 1)
 		{
-			echo 'Een letscode komt meer dan eens voor in de installatie. ';
-			echo 'Actieve gebruikers met deze letscode kunnen niet inloggen met letscode ';
+			echo 'Een Account Code komt meer dan eens voor in dit Systeem. ';
+			echo 'Actieve gebruikers met deze accounts kunnen niet inloggen met Account Code ';
 			echo 'en kunnen geen transacties doen of transacties ontvangen. ';
 		}
 		else
 		{
-			echo 'Meerdere letscodes komen meer dan eens voor in de installatie. ';
-			echo 'Gebruikers met een letscode die meer dan eens voorkomt, kunnen niet inloggen met letscode ';
+			echo 'Meerdere Account Codes komen meer dan eens voor in dit Systeem. ';
+			echo 'Gebruikers met deze accounts kunnen niet inloggen met de Account Code ';
 			echo 'en kunnen geen transacties doen of transacties ontvangen.';
 		}
 
@@ -237,12 +237,12 @@ if ($status_msgs)
 
 		if (count($non_unique_name) == 1)
 		{
-			echo 'Een gebruikersnaam komt meer dan eens voor in de installatie. ';
+			echo 'Een gebruikersnaam komt meer dan eens voor in dit Systeem. ';
 			echo 'Actieve gebruikers met deze gebruikersnaam kunnen niet inloggen met gebruikersnaam. ';
 		}
 		else
 		{
-			echo 'Meerdere gebruikersnamen komen meer dan eens voor in de installatie. ';
+			echo 'Meerdere gebruikersnamen komen meer dan eens voor in dit Systeem.';
 			echo 'Actieve gebruikers met een gebruikersnaam die meer dan eens voorkomt, kunnen niet inloggen met gebruikersnaam.';
 		}
 
@@ -271,11 +271,11 @@ if ($status_msgs)
 		echo '<li class="list-group-item">';
 		if (count($unvalid_mail) == 1)
 		{
-			echo 'Deze installatie bevat een fout geformateerd email adres. Pas het aan of verwijder het!';
+			echo 'Dit Systeem bevat een fout geformateerd E-mail adres. Pas het aan of verwijder het!';
 		}
 		else
 		{
-			echo 'Deze installatie bevat fout geformateerde emails. Verwijder deze of pas deze aan!';
+			echo 'Dit Systeem bevat fout geformateerde E-mail adressen. Verwijder deze of pas deze aan!';
 		}
 
 		echo '<ul>';
@@ -298,11 +298,11 @@ if ($status_msgs)
 		echo '<li class="list-group-item">';
 		if (count($no_mail) == 1)
 		{
-			echo 'Eén actieve gebruiker heeft geen emailadres.';
+			echo 'Eén actieve gebruiker heeft geen E-mail adres.';
 		}
 		else
 		{
-			echo count($no_mail) . ' actieve gebruikers hebben geen mailadres.';
+			echo count($no_mail) . ' actieve gebruikers hebben geen E-mail adres.';
 		}
 
 		echo '<ul>';
@@ -346,11 +346,11 @@ if ($status_msgs)
 		echo '<li class="list-group-item">';
 		if (count($empty_letscode) == 1)
 		{
-			echo 'Eén actieve gebruiker heeft geen letscode.';
+			echo 'Eén actieve gebruiker heeft geen Account Code.';
 		}
 		else
 		{
-			echo count($empty_letscode) . ' actieve gebruikers hebben geen letscode.';
+			echo count($empty_letscode) . ' actieve gebruikers hebben geen Account Code.';
 		}
 
 		echo '<ul>';

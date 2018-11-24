@@ -70,7 +70,7 @@ class mail extends queue_model implements queue_interface
 	{
 		if (!isset($data['schema']))
 		{
-			$app->monolog->error('mail error: mail in queue without schema');
+			$app->monolog->error('mail error: email in queue without schema');
 			return;
 		}
 
@@ -79,16 +79,16 @@ class mail extends queue_model implements queue_interface
 
 		if (!$this->config->get('mailenabled', $sch))
 		{
-			$m = 'Mail functions are not enabled. ' . "\n";
+			$m = 'E-mail functions are not enabled. ' . "\n";
 			echo $m;
-			$this->monolog->error('mail: ' . $m, ['schema' => $sch]);
+			$this->monolog->error('E-mail: ' . $m, ['schema' => $sch]);
 			return ;
 		}
 
 		if ($data['template'] === 'periodic_overview_messages_top'
 			|| $data['template'] === 'periodic_overview_news_top')
 		{
-			$this->monolog->error('mail error: template not found ' . $data['template'],
+			$this->monolog->error('E-mail error: template not found ' . $data['template'],
 				['schema' => $sch]);
 			return;
 		}
@@ -125,7 +125,7 @@ class mail extends queue_model implements queue_interface
 			}
 			catch (Exception $e)
 			{
-				$this->monolog->error('Fout in mail template: ' . $e->getMessage(), ['schema' => $sch]);
+				$this->monolog->error('Error in E-mail template: ' . $e->getMessage(), ['schema' => $sch]);
 				return;
 			}
 		}
@@ -208,7 +208,7 @@ class mail extends queue_model implements queue_interface
 
 	public function queue(array $data, int $priority = 100)
 	{
-		// only the interlets transactions receiving side has a different schema
+		// only the interSystem transactions receiving side has a different schema
 		// always set schema in cron
 
 		$data['schema'] = $data['schema'] ?? $this->this_group->get_schema();

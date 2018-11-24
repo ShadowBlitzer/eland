@@ -13,7 +13,7 @@
 {% if msg.addr %}<a href="https://www.google.be/maps/place/{{ msg.addr }}">adres</a>
 {% if msg.geo is defined and user.geo is defined %}{{ distance_p(user.geo, msg.geo) }}{% endif %} | {% endif %}
 {% if msg.postcode %}postcode: {{ msg.postcode }} | {% endif %}
-{% for mail in msg.mail %}<a href="mailto:{{ mail }}?subject={{ msg.content|url_encode }}">email</a>
+{% for mail in msg.mail %}<a href="mailto:{{ mail }}?subject={{ msg.content|url_encode }}">E-mail</a>
 {% if not loop.last %}|{% endif %} {% endfor %}
 </li><br>
 
@@ -31,12 +31,12 @@
 {% macro interlets(interlets, url_login, validate_param) %}
 
 {% if interlets %}
-<h4>Recent interLETS vraag en aanbod</h4>
+<h4>Recent interSysteem vraag en aanbod</h4>
 
-<p><a href="{{ url_login }}{{ validate_param }}">Log in</a> en ga via 'Groep' in de navigatiebalk naar de betreffende interLETS groep voor meer informatie.</p>
+<p><a href="{{ url_login }}{{ validate_param }}">Log in</a> en ga via 'Systeem' in de navigatiebalk naar het betreffende interSysteem voor meer informatie.</p>
 
 {% for grp in interlets %}
-<h5>Groep: {{ grp.group }}</h5>
+<h5>Systeem: {{ grp.group }}</h5>
 <ul>
 	{% for msg in grp.messages %}
 		<li>{% if msg.offer %}Aanbod{% else %}Vraag{% endif %}: {{ msg.content }} <br>
@@ -181,7 +181,6 @@ naar
 
 {% macro unsubscribe(account_edit_url, validate_param) %}
 
-<p>Je ontvangt deze mail omdat de optie 'Periodieke mail met recent vraag en aanbod' aangevinkt staat in je instellingen.
+<p>Je ontvangt deze E-mail omdat de optie 'Periodieke Overzichts E-mail' aangevinkt staat in je instellingen.
 Klik <a href="{{ account_edit_url }}{{ validate_param }}">hier</a> om aan te passen</p>
 {% endmacro unsubscribe %}
-

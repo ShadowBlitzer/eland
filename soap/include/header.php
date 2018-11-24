@@ -60,11 +60,15 @@ if (!$homepage_url)
 	$homepage_url = get_default_page();
 }
 
-echo '<a href="' . $homepage_url . '" class="pull-left hidden-xs">';
+echo '<a href="';
+echo $homepage_url;
+echo '" class="pull-left hidden-xs">';
 echo '<div class="logo"></div>';
 echo '</a>';
 
-echo '<a href="' . $homepage_url . '" class="navbar-brand">';
+echo '<a href="';
+echo $homepage_url;
+echo '" class="navbar-brand">';
 echo $app['config']->get('systemname');
 echo '</a>';
 echo '</div>';
@@ -77,9 +81,21 @@ if (!$s_anonymous && ($count_interlets_groups + count($logins)) > 1)
 	echo '<li class="dropdown">';
 	echo '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">';
 	echo '<span class="fa fa-share-alt"></span> ';
-	echo 'Groep';
+	echo 'Systeem';
 	echo '<span class="caret"></span></a>';
 	echo '<ul class="dropdown-menu" role="menu">';
+	echo '<li class="dropdown-header">';
+
+	if (count($logins) === 1 && current($logins) === 'eLAS')
+	{
+		echo 'eLAS Gast Login';
+	}
+	else
+	{
+		echo count($logins) > 1 ? 'Eigen Systemen' : 'Eigen Systeem';
+	}
+
+	echo '</li>';
 
 	foreach ($logins as $login_schema => $login_id)
 	{
@@ -92,20 +108,21 @@ if (!$s_anonymous && ($count_interlets_groups + count($logins)) > 1)
 
 		echo '<a href="';
 		echo $app['protocol'] . $app['groups']->get_host($login_schema) . '/' . $app['script_name'] . '.php?r=';
-		echo ($login_id == 'elas') ? 'guest' : $app['session']->get('role.' . $login_schema);
+		echo $login_id == 'elas' ? 'guest' : $app['session']->get('role.' . $login_schema);
 		echo '&u=' . $login_id;
 		echo '">';
 
 		echo $app['config']->get('systemname', $login_schema);
-		echo ($login_id == 'elas') ? ' (eLAS gast login)' : ' (eigen groep)';
 		echo '</a>';
 		echo '</li>';
-
 	}
 
 	if ($count_interlets_groups)
 	{
 		echo '<li class="divider"></li>';
+		echo '<li class="dropdown-header">';
+		echo $count_interlets_groups > 1 ? 'Gekoppelde interSystemen' : 'Gekoppeld interSysteem';
+		echo '</li>';
 
 		if (count($eland_interlets_groups))
 		{
@@ -128,7 +145,9 @@ if (!$s_anonymous && ($count_interlets_groups + count($logins)) > 1)
 			foreach ($elas_interlets_groups as $grp_id => $grp)
 			{
 				echo '<li>';
-				echo '<a href="#" data-elas-group-id="' . $grp_id . '">';
+				echo '<a href="#" data-elas-group-id="';
+				echo $grp_id;
+				echo '">';
 				echo $grp['groupname'] . '</a>';
 				echo '</li>';
 			}
@@ -190,20 +209,20 @@ if (!$s_anonymous)
 		$menu = [
 			'status'						=> ['exclamation-triangle', 'Status'],
 			'categories'	 				=> ['clone', 'Categorieën'],
-			'type_contact'					=> ['circle-o-notch', 'Contact types'],
+			'type_contact'					=> ['circle-o-notch', 'Contact Types'],
 			'contacts'						=> ['map-marker', 'Contacten'],
 			'config'						=> ['gears', 'Instellingen'],
-			'interlets'						=> ['share-alt', 'InterLETS'],
+			'intersystem'					=> ['share-alt', 'InterSysteem'],
 			'apikeys'						=> ['key', 'Apikeys'],
 			'export'						=> ['download', 'Export'],
-			'autominlimit'					=> ['arrows-v', 'Auto min limiet'],
+			'autominlimit'					=> ['arrows-v', 'Auto Min Limiet'],
 			'mass_transaction'				=> ['exchange', 'Massa-Transactie'],
 			'logs'							=> ['history', 'Logs'],
 		];
 
 		if (!$app['config']->get('template_lets') || !$app['config']->get('interlets_en'))
 		{
-			unset($menu['interlets'], $menu['apikeys']);
+			unset($menu['intersystem'], $menu['apikeys']);
 		}
 
 		echo '<li class="dropdown">';
@@ -216,7 +235,7 @@ if (!$s_anonymous)
 
 		foreach ($menu as $link => $item)
 		{
-			$active = ($app['script_name'] == $link) ? ' class="active"' : '';
+			$active = $app['script_name'] === $link ? ' class="active"' : '';
 			echo '<li' . $active . '>';
 			echo aphp($link, [], $item[1], false, false, $item[0]);
 			echo '</li>';

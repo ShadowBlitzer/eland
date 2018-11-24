@@ -17,7 +17,7 @@ $register_link_explain .= '<br>Bij inschrijving wordt een nieuwe gebruiker zonde
 $register_link_explain .= '<br>De admin krijgt een notificatie-email bij elke inschrijving.';
 
 $register_success_explain = 'Hier kan je aan de gebruiker uitleggen wat er verder gaat gebeuren. <br>';
-$register_success_explain .= 'Als je groep een website heeft, is het nuttig om een link op te nemen ';
+$register_success_explain .= 'Als je Systeem een website heeft, is het nuttig om een link op te nemen ';
 $register_success_explain .= 'om de gebruiker terug te voeren.';
 
 $contact_link = $app['base_url'] . '/contact.php';
@@ -36,11 +36,6 @@ $periodic_mail_item_show_options = $periodic_mail_item_show_options_not_all = [
 	'none'		=> 'Geen',
 ];
 
-$periodic_mail_template = [
-	'messages_top'	=> 'Vraag en aanbod bovenaan',
-	'news_top'		=> 'Nieuws bovenaan',
-];
-
 $landing_page_options = [
 	'messages'		=> 'Vraag en aanbod',
 	'users'			=> 'Leden',
@@ -55,7 +50,7 @@ $periodic_mail_block_ary = [
 		'recent'	=> 'Recent vraag en aanbod',
 	],
 	'interlets'		=> [
-		'recent'	=> 'Recent interLETS vraag en aanbod',
+		'recent'	=> 'Recent interSysteem vraag en aanbod',
 	],
 	'forum'			=> [
 		'recent'	=> 'Recente forumberichten',
@@ -99,27 +94,27 @@ $tab_panes = [
 		'inputs'	=> [
 			'minlimit'	=> [
 				'addon'	=> $currency,
-				'lbl'	=> 'Minimum groepslimiet',
+				'lbl'	=> 'Minimum Systeemslimiet',
 				'type'	=> 'number',
-				'explain'	=> 'Minimum limiet die geldt voor alle accounts, behalve voor die accounts waarbij een individuele minimum limiet ingesteld is. Kan leeg gelaten worden.',
+				'explain'	=> 'Minimum Limiet die geldt voor alle Accounts, behalve voor die Accounts waarbij een Minimum Account Limiet ingesteld is. Kan leeg gelaten worden.',
 			],
 			'maxlimit'	=> [
 				'addon'	=> $currency,
-				'lbl'	=> 'Maximum groepslimiet',
+				'lbl'	=> 'Maximum Systeemslimiet',
 				'type'	=> 'number',
-				'explain'	=> 'Maximum limiet die geldt voor alle accounts, behalve voor die accounts waarbij een individuele maximum limiet ingesteld is. Kan leeg gelaten worden.',
+				'explain'	=> 'Maximum Limiet die geldt voor alle Accounts, behalve voor die Accounts waarbij een Maximum Account Limiet ingesteld is. Kan leeg gelaten worden.',
 			],
 			'preset_minlimit'	=> [
 				'addon'	=> $currency,
-				'lbl'	=> 'Preset individuele minimum limiet',
+				'lbl'	=> 'Preset Minimum Account Limiet',
 				'type'	=> 'number',
-				'explain'	=> 'Bij aanmaak van een nieuwe gebruiker wordt deze individuele minimum limiet vooraf ingevuld in het aanmaakformulier. Dit heeft enkel zin wanneer instappende leden een afwijkende individuele minimum limiet hebben van de minimum groepslimiet. Deze instelling is ook nuttig wanneer de automatische minimum limiet gebruikt wordt. Dit veld kan leeg gelaten worden.',
+				'explain'	=> 'Bij aanmaak van een nieuw Account wordt deze Minimum Account Limiet vooraf ingevuld in het aanmaakformulier. Dit heeft enkel zin wanneer instappende leden een afwijkende Minimum Account Limiet hebben van de Minimum Systeemslimiet. Deze instelling is ook nuttig wanneer de Automatische Minimum Limiet gebruikt wordt. Dit veld kan leeg gelaten worden.',
 			],
 			'preset_maxlimit'	=> [
 				'addon'	=> $currency,
-				'lbl'	=> 'Preset individuele maximum limiet',
+				'lbl'	=> 'Preset Maximum Account Limiet',
 				'type'	=> 'number',
-				'explain'	=> 'Bij aanmaak van een nieuwe gebruiker wordt deze individuele maximum limiet vooraf ingevuld in het aanmaakformulier. Dit heeft enkel zin wanneer instappende leden een afwijkende individuele maximum limiet hebben van de maximum groepslimiet. Dit veld kan leeg gelaten worden.',
+				'explain'	=> 'Bij aanmaak van een nieuw Account wordt deze Maximum Account Limiet vooraf ingevuld in het aanmaakformulier. Dit heeft enkel zin wanneer instappende leden een afwijkende Maximum Account Limiet hebben van de Maximum Systeemslimiet. Dit veld kan leeg gelaten worden.',
 
 			],
 			'balance_equilibrium'	=> [
@@ -170,14 +165,15 @@ $tab_panes = [
 	],
 
 	'systemname'	=> [
-		'lbl'	=> 'Groepsnaam',
+		'lbl'	=> 'Systeemsnaam',
 		'inputs' => [
 			'systemname' => [
-				'lbl'		=> 'Groepsnaam',
+				'lbl'		=> 'Systeemsnaam',
 				'required'	=> true,
 			],
 			'systemtag' => [
-				'lbl'		=> 'Tag (hoofding voor emails)',
+				'lbl'		=> 'Tag',
+				'explain'	=> 'Prefix tussen haken [tag] in onderwerp van alle E-mail-berichten',
 				'required'	=> true,
 				'attr'		=> ['maxlength' => 30],
 			],
@@ -191,48 +187,50 @@ $tab_panes = [
 				'lbl'		=> 'Naam van Munt (meervoud)',
 				'required'	=> true,
 			],
+
 			'currencyratio'	=> [
+				'cond'		=> $app['config']->get('template_lets') ? true : false,
 				'lbl'		=> 'Aantal per uur',
 				'attr'		=> ['max' => 240, 'min' => 1],
 				'type'		=> 'number',
-				'explain'	=> 'Deze instelling heeft enkel betrekking op en is vereist voor eLAS/eLAND interLETS',
+				'explain'	=> 'Deze instelling heeft enkel betrekking op Tijdsbanken. Zij is vereist voor eLAS/eLAND interSysteem-verbindingen zodat zij een gemeenschappelijke tijdsbasis kunnen hebben.',
 			],
 		],
 	],
 
 	'mailaddresses'	=> [
-		'lbl'		=> 'Mailadressen',
+		'lbl'		=> 'E-Mail Adressen',
 		'inputs'	=> [
 			'admin'	=> [
 				'lbl'	=> 'Algemeen admin/beheerder',
 				'attr' 	=> ['minlength' => 7],
 				'type'	=> 'email',
 				'max_inputs'	=> 5,
-				'add_btn_text' => 'Extra mailadres',
+				'add_btn_text' => 'Extra E-mail Adres',
 			],
 			'newsadmin'	=> [
 				'lbl'	=> 'Nieuwsbeheerder',
 				'attr'	=> ['minlength' => 7],
 				'type'	=> 'email',
 				'max_inputs'	=> 5,
-				'add_btn_text'	=> 'Extra mailadres',
+				'add_btn_text'	=> 'Extra E-mail Adres',
 			],
 			'support'	=> [
 				'lbl'	=> 'Support / Helpdesk',
 				'attr'	=> ['minlength' => 7],
 				'type'	=> 'email',
 				'max_inputs'	=> 5,
-				'add_btn_text'	=> 'Extra mailadres',
+				'add_btn_text'	=> 'Extra E-mail Adres',
 			],
 		]
 	],
 
 	'saldomail'		=> [
-		'lbl'	=> 'Overzichtsmail',
-		'lbl_pane'	=> 'Periodieke overzichtsmail',
+		'lbl'	=> 'Overzichts E-mail',
+		'lbl_pane'	=> 'Periodieke Overzichts E-mail',
 		'inputs' => [
 			'li_1'	=> [
-				'inline' => 'Verstuur de overzichtsmail met recent vraag en aanbod om de %1$s dagen',
+				'inline' => 'Verstuur de Periodieke Overzichts E-mail om de %1$s dagen',
 				'inputs' => [
 					'saldofreqdays'	=> [
 						'type'		=> 'number',
@@ -240,11 +238,11 @@ $tab_panes = [
 						'required'	=> true,
 					],
 				],
-				'explain' => 'Noot: Leden kunnen steeds ontvangst van de overzichtsmail aan- of afzetten in hun profielinstellingen.',
+				'explain' => 'Noot: Leden kunnen steeds ontvangst van de Periodieke Overzichts E-mail aan- of afzetten in hun profielinstellingen.',
 			],
 
 			'periodic_mail_block_ary' => [
-				'lbl'				=> 'Mail opmaak (versleep blokken)',
+				'lbl'				=> 'E-mail opmaak (versleep blokken)',
 				'type'				=> 'sortable',
 				'explain_top'		=> 'Verslepen gaat met
 					muis of touchpad, maar misschien niet met touch-screen.
@@ -259,10 +257,10 @@ $tab_panes = [
 
 	'contact'	=> [
 		'lbl'	=> 'Contact',
-		'lbl_pane'	=> 'Contactformulier',
+		'lbl_pane'	=> 'Contact Formulier',
 		'inputs'	=> [
 			'li_1'	=> [
-				'inline' => '%1$s contactformulier aan.',
+				'inline' => '%1$s contact formulier aan.',
 				'inputs' => [
 					'contact_form_en' => [
 						'type' => 'checkbox',
@@ -271,12 +269,12 @@ $tab_panes = [
 				'explain' => $contact_link_explain,
 			],
 			'contact_form_top_text' => [
-				'lbl'	=> 'Tekst boven het contactformulier',
+				'lbl'	=> 'Tekst boven het contact formulier',
 				'type'	=> 'textarea',
 				'rich_edit'	=> true,
 			],
 			'contact_form_bottom_text' => [
-				'lbl'		=> 'Tekst onder het contactformulier',
+				'lbl'		=> 'Tekst onder het contact formulier',
 				'type'		=> 'textarea',
 				'rich_edit'	=> true,
 			],
@@ -319,7 +317,7 @@ $tab_panes = [
 			],
 
 			'registration_success_mail'	=> [
-				'lbl'		=> 'Mail naar gebruiker bij succesvol indienen formulier',
+				'lbl'		=> 'Verstuur E-mail naar gebruiker bij succesvol indienen formulier',
 				'type'		=> 'textarea',
 				'rich_edit'	=> true,
 				'attr'		=> ['data-template-vars' => implode(',', array_keys($map_template_vars))],
@@ -367,7 +365,7 @@ $tab_panes = [
 			],
 
 			'li_2' => [
-				'inline' => '%1$s Leden kunnen zelf hun gebruikersnaam aanpassen.',
+				'inline' => '%1$s Leden kunnen zelf de Gebruikersnaam aanpassen.',
 				'inputs' => [
 					'users_can_edit_username' => [
 						'type'	=> 'checkbox',
@@ -376,7 +374,7 @@ $tab_panes = [
 			],
 
 			'li_3' => [
-				'inline' => '%1$s Leden kunnen zelf hun volledige naam aanpassen.',
+				'inline' => '%1$s Leden kunnen zelf het veld Volledige Naam aanpassen.',
 				'inputs' => [
 					'users_can_edit_fullname' => [
 						'type'	=> 'checkbox',
@@ -391,7 +389,7 @@ $tab_panes = [
 		'inputs'	=> [
 
 			'li_1'	=> [
-				'inline'	=> '%1$s Mail functionaliteit aan: het systeem verstuurt mails.',
+				'inline'	=> '%1$s E-mail functionaliteit aan: het systeem verstuurt E-mails.',
 				'inputs'	=> [
 					'mailenabled'	=> [
 						'type'	=> 'checkbox',
@@ -409,7 +407,7 @@ $tab_panes = [
 			],
 
 			'li_3' => [
-				'inline'	=> '%1$s Dit is een "LETS" groep',
+				'inline'	=> '%1$s Dit Systeem is een Tijdsbank (munt met tijdsbasis).',
 				'inputs'	=> [
 					'template_lets'	=> [
 						'type'	=> 'checkbox',
@@ -419,7 +417,9 @@ $tab_panes = [
 			],
 
 			'li_4'	=> [
-				'inline'	=> '%1$s Gebruik eLAS/eLAND "interlets" (enkel geldig wanneer hierboven "LETS" groep geselecteerd is)',
+				'inline'	=> '%1$s Gebruik eLAS/eLAND interSysteem. Deze instelling is enkel geldig wanneer hierboven
+					"Tijdsbank" geselecteerd is. eLAS/eLAND interSysteem is enkel mogelijk met
+					munten met gemeenschappelijke tijdsbasis.',
 				'inputs'	=> [
 					'interlets_en'	=> [
 						'type'	=> 'checkbox',
@@ -450,7 +450,7 @@ $tab_panes = [
 			'css'	=> [
 				'lbl'		=> 'Stijl (css)',
 				'type' 		=> 'url',
-				'explain'	=> 'Url van extra stijlblad (css-bestand)',
+				'explain'	=> 'Url van extra stijlblad (css-bestand). Laat leeg wanneer niet gebruikt.',
 				'attr'		=> ['maxlength'	=> 100],
 			],
 		],
@@ -496,6 +496,11 @@ if ($post)
 
 	foreach ($tab_panes[$active_tab]['inputs'] as $name => $input)
 	{
+		if (isset($input['cond']) && !$input['cond'])
+		{
+			continue;
+		}
+
 		if (isset($input['inputs']))
 		{
 			foreach ($input['inputs'] as $sub_name => $sub_input)
@@ -625,7 +630,7 @@ if ($post)
 
 				if (count($mail_ary) > $validator['max_inputs'])
 				{
-					$errors[] = 'Maximaal ' . $validator['max_inputs'] . ' mailadressen mogen ingegeven worden.' . $err_n;
+					$errors[] = 'Maximaal ' . $validator['max_inputs'] . ' E-mail adressen mogen ingegeven worden.' . $err_n;
 				}
 
 				foreach ($mail_ary as $m)
@@ -634,7 +639,7 @@ if ($post)
 
 					if (!filter_var($m, FILTER_VALIDATE_EMAIL))
 					{
-						$errors[] =  $m . ' is geen geldig email adres.' . $err_n;
+						$errors[] =  $m . ' is geen geldig E-mail adres.' . $err_n;
 					}
 				}
 
@@ -643,7 +648,7 @@ if ($post)
 
 			if (!filter_var($value, FILTER_VALIDATE_EMAIL))
 			{
-				$errors[] =  $value . ' is geen geldig email adres.' . $err_n;
+				$errors[] =  $value . ' is geen geldig E-mail adres.' . $err_n;
 			}
 
 			continue;
@@ -753,7 +758,7 @@ echo '<ul class="nav nav-pills" role="tablist">';
 foreach ($tab_panes as $id => $pane)
 {
 	echo '<li role="presentation"';
-	echo ($id == $active_tab) ? ' class="active"' : '';
+	echo $id === $active_tab ? ' class="active"' : '';
 	echo '>';
 	echo '<a href="#' . $id . '" aria-controls="' . $id . '" role="tab" data-toggle="tab">';
 	echo $pane['lbl'];
@@ -769,9 +774,10 @@ echo '<div class="tab-content">';
 
 foreach ($tab_panes as $id => $pane)
 {
-	$active = ($id == $active_tab) ? ' active' : '';
+	$active = $id === $active_tab ? ' active' : '';
 
-	echo '<div role="tabpanel" class="tab-pane' . $active . '" id="' . $id . '">';
+	echo '<div role="tabpanel" ';
+	echo 'class="tab-pane' . $active . '" id="' . $id . '">';
 
 	echo '<form method="post" class="form form-horizontal">';
 
@@ -784,6 +790,11 @@ foreach ($tab_panes as $id => $pane)
 
 	foreach ($pane['inputs'] as $name => $input)
 	{
+		if (isset($input['cond']) && !$input['cond'])
+		{
+			continue;
+		}
+
 		echo '<li class="list-group-item">';
 
 		if (isset($input['max_inputs']) && $input['max_inputs'] > 1)

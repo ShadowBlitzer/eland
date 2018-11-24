@@ -8,7 +8,7 @@ if (isset($hosting_form))
 	if (isset($_POST['zend']))
 	{
 		$mail = $_POST['mail'];
-		$group_name = $_POST['group_name'];
+		$system_name = $_POST['system_name'];
 		$message = $_POST['message'];
 		$browser = $_SERVER['HTTP_USER_AGENT'];
 		$token = $_POST['token'];
@@ -20,12 +20,12 @@ if (isset($hosting_form))
 
 		if (!filter_var($mail, FILTER_VALIDATE_EMAIL))
 		{
-			$errors[] = 'Geen geldig mail adres ingevuld.';
+			$errors[] = 'Geen geldig E-mail adres ingevuld.';
 		}
 
-		if (!$group_name)
+		if (!$system_name)
 		{
-			$errors[] = 'De naam van de groep is niet ingevuld.';
+			$errors[] = 'De Naam van het Systeem is niet ingevuld.';
 		}
 
 		if (!$message)
@@ -43,7 +43,7 @@ if (isset($hosting_form))
 
 		if (!count($errors))
 		{
-			$subject = 'Aanvraag hosting: ' . $group_name;
+			$subject = 'Aanvraag hosting: ' . $system_name;
 			$text = $message . "\r\n\r\n\r\n" . 'browser: ' . $browser . "\n" . 'token: ' . $token;
 
 			$enc = getenv('SMTP_ENC') ?: 'tls';
@@ -133,18 +133,22 @@ if (isset($hosting_form))
 		echo '<form method="post" class="form-horizontal">';
 
 		echo '<div class="form-group">';
-		echo '<label for="subject" class="col-sm-2 control-label">Naam groep</label>';
+		echo '<label for="subject" class="col-sm-2 control-label">Naam Systeem</label>';
 		echo '<div class="col-sm-10">';
-		echo '<input type="text" class="form-control" name="group_name" ';
-		echo 'value="' . $group_name . '" required>';
+		echo '<input type="text" class="form-control" name="system_name" ';
+		echo 'value="';
+		echo $system_name;
+		echo '" required>';
 		echo '</div>';
 		echo '</div>';
 
 		echo '<div class="form-group">';
-		echo '<label for="mail" class="col-sm-2 control-label">Email*</label>';
+		echo '<label for="mail" class="col-sm-2 control-label">E-mail*</label>';
 		echo '<div class="col-sm-10">';
 		echo '<input type="email" class="form-control" id="mail" name="mail" ';
-		echo 'value="' . $mail . '" required>';
+		echo 'value="';
+		echo $mail;
+		echo '" required>';
 		echo '</div>';
 		echo '</div>';
 
@@ -165,7 +169,8 @@ if (isset($hosting_form))
 		echo '</div>';
 
 		echo '<br>';
-		echo '<p>*Privacy: uw email adres wordt voor geen enkel ander doel gebruikt dan u terug te kunnen ';
+		echo '<p>*Privacy: uw E-mail adres wordt voor ';
+		echo 'geen enkel ander doel gebruikt dan u terug te kunnen ';
 		echo 'contacteren.</p>';
 
 	}
@@ -176,7 +181,7 @@ if (isset($hosting_form))
 	echo '<br><br><br><br><br><br>';
 	echo '<footer class="footer">';
 
-	echo '<p><a href="http://letsa.net">eLAND';
+	echo '<p><a href="https://eland.letsa.net">eLAND';
 	echo '</a>&nbsp; web app voor gemeenschapsmunten</p>';
 
 	echo '</footer>';

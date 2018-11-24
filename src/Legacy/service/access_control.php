@@ -19,12 +19,12 @@ class access_control
 		'users'	=> [
 			'level'	=> 1,
 			'label'	=> 'leden',
-			'class'	=> 'warning',
+			'class'	=> 'default',
 		],
 		'interlets'	=> [
 			'level'	=> 2,
-			'label'	=> 'interlets',
-			'class'	=> 'success',
+			'label'	=> 'interSysteem',
+			'class'	=> 'warning',
 		],
 	];
 
@@ -120,7 +120,12 @@ class access_control
 
 		$acc = $this->acc_ary[$this->label_ary[$access]];
 
-		return '<span class="label label-' . $acc['class'] . ' label-' . $size . '">' . $acc['label'] . '</span>';
+		$ret = '<span class="btn btn-';
+		$ret .= $acc['class'] . ' btn-xs';
+		$ret .= '">' . $acc['label'];
+		$ret .= '</span>';
+
+		return $ret;
 	}
 
 	public function get_post_value($name = 'access')
@@ -198,7 +203,8 @@ class access_control
 		}
 
 		$out = '<div class="form-group">';
-		$out .= '<label for="' . $name . '" class="col-sm-2 control-label">' . $label . '</label>';
+		$out .= '<label for="' . $name . '" class="col-sm-2 control-label">';
+		$out .= $label . '</label>';
 		$out .= '<div class="col-sm-10"';
 		$out .= $access_cache_id ? ' data-access-cache-id="' . $this->this_group->get_schema() . '_' . $access_cache_id . '"' : '';
 		$out .= ' id="' . $name . '">';
@@ -208,7 +214,8 @@ class access_control
 			$out .= '<label class="radio-inline">';
 			$out .= '<input type="radio" name="' . $name . '"';
 			$out .= $key === $selected ? ' checked="checked"' : '';
-			$out .= ' value="' . $key . '" required> ';
+			$out .= ' value="' . $key . '" ';
+			$out .= 'required> ';
 			$out .= '<span class="btn btn-' . $ary['class'] . ' btn-' . $size . '">';
 			$out .= $ary['label'];
 			$out .= '</span>';

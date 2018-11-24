@@ -135,7 +135,7 @@ class MailAddr
 
 					if (!filter_var($mail, FILTER_VALIDATE_EMAIL))
 					{
-						$this->monolog->error('mail error: invalid mail address from interlets: ' . $mail . ', user: ' . $user);
+						$this->monolog->error('mail error: invalid mail address from interSystem: ' . $mail . ', user: ' . $user);
 						continue;
 					}
 

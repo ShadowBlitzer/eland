@@ -1,14 +1,14 @@
 {% extends 'mail/base.text.twig' %}
 
-{% block pretext %}{% if copy %}Dit is een kopie van de notificatie die naar {{ to_letsgroup|raw }} verstuurd werd. mailadres: {{ to_mail }}{% endif %}{% endblock pretext %}
+{% block pretext %}{% if copy %}Dit is een kopie van de notificatie die naar {{ to_letsgroup|raw }} verstuurd werd. E-mail adres: {{ to_mail }}{% endif %}{% endblock pretext %}
 
 {% block body %}
 {% autoescape false %}
 
-Notificatie interlets transactie
---------------------------------
+Notificatie interSysteem transactie
+-----------------------------------
 
-Er werd een interlets transactie ingegeven op de installatie van {{ group.name }}
+Er werd een interSysteem transactie ingegeven in het Systeem van {{ group.name }}
 met de volgende gegevens:
 
 Van
@@ -20,7 +20,7 @@ Aan
 Aantal
 {{ amount }} {{ group.currency }}
 ofwel
-{{ amount_hours }} LETS uren ({{ group.currencyratio }} {{ group.currency }} = 1 uur)
+{{ amount_hours }} uren ({{ group.currencyratio }} {{ group.currency }} = 1 uur)
 
 Omschrijving
 {{ description }}
@@ -28,8 +28,8 @@ Omschrijving
 Transactie id
 {{ transid }}
 
-Je moet deze transactie in je eigen systeem verder verwerken.
-Als dit niet mogelijk is, moet je de kern van de andere groep 
+Je moet deze transactie in je eigen Systeem verder verwerken.
+Als dit niet mogelijk is, moet je het beheer van het andere Systeem
 verwittigen zodat ze de transactie aan hun kant annuleren.
 Je kan dit doen door een reply te sturen op dit bericht.
 
