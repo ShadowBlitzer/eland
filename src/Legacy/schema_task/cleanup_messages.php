@@ -5,7 +5,6 @@ namespace App\Legacy\schema_task;
 use Doctrine\DBAL\Connection as db;
 use Psr\Log\LoggerInterface;
 
-
 use App\Legacy\model\schema_task;
 use App\Legacy\service\schedule;
 use App\Legacy\service\groups;

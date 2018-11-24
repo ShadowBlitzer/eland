@@ -2,7 +2,7 @@
 
 namespace App\Legacy\model;
 
-use model\job;
+use App\Legacy\model\job;
 
 abstract class queue extends job
 {

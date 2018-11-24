@@ -2,7 +2,7 @@
 
 namespace App\Legacy\util;
 
-use util\job_container;
+use App\Legacy\util\job_container;
 
 class queue_container extends job_container
 {

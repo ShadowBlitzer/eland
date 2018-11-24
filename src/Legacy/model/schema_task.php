@@ -2,12 +2,12 @@
 
 namespace App\Legacy\model;
 
-use model\task_interface;
-use model\task;
+use App\Legacy\model\task_interface;
+use App\Legacy\model\task;
 
-use service\schedule;
-use service\groups;
-use service\this_group;
+use App\Legacy\service\schedule;
+use App\Legacy\service\groups;
+use App\Legacy\service\this_group;
 
 abstract class schema_task extends task implements task_interface
 {

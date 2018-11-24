@@ -2,9 +2,9 @@
 
 namespace App\Legacy\model;
 
-use model\job;
-use model\task_interface;
-use service\schedule;
+use App\Legacy\model\job;
+use App\Legacy\model\task_interface;
+use App\Legacy\service\schedule;
 
 abstract class task extends job implements task_interface
 {
