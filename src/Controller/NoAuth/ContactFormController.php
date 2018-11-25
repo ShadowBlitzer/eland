@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ContactFormController extends AbstractController
 {
     /**
-     * @Route("/contact-form", name="contact_form")
+     * Route("/contact-form", name="contact_form")
      */
     public function index(Request $request, string $system):Response
     {

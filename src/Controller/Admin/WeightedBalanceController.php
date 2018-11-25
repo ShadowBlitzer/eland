@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class WeightedBalanceController extends AbstractController
 {
     /**
-     * @Route("/weighted-balances", name="weighted_balance")
+     * Route("/weighted-balances", name="weighted_balance")
      */
     public function index(Request $request, string $system, string $access):Response
     {

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class LogController extends AbstractController
 {
     /**
-     * @Route("/log", name="log")
+     * Route("/log", name="log")
      */
     public function index(Request $request, string $system, string $access):Response
     {

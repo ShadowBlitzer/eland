@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class LoginController extends AbstractController
 {
     /**
-     * @Route("/login", name="login")
+     * Route("/login", name="login")
      */
     public function index(
         Request $request,
@@ -25,10 +25,6 @@ class LoginController extends AbstractController
 
 
 
-
-
-        return $this->render('login/index.html.twig', [
-            'controller_name' => 'LoginController',
-        ]);
+        return new Response($rsp);
     }
 }

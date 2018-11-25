@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AutoMinLimitController extends AbstractController
 {
     /**
-     * @Route("/auto-min-limit", name="auto_min_limit")
+     * Route("/auto-min-limit", name="auto_min_limit")
      */
     public function index(
         Request $request,

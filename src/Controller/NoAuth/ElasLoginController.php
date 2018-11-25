@@ -14,7 +14,7 @@ use App\Legacy\Service\Xdb;
 class ElasLoginController extends AbstractController
 {
     /**
-     * @Route("/elas-login/{token}", name="elas_login")
+     * Route("/elas-login/{token}", name="elas_login")
      */
     public function index(
         Request $request,

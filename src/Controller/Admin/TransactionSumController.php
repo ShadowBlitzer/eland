@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TransactionSumController extends AbstractController
 {
     /**
-     * @Route("/transaction-sum", name="transaction_sum")
+     * Route("/transaction-sum", name="transaction_sum")
      */
     public function index(Request $request, string $system, string $access):Response
     {

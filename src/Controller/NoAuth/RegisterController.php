@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RegisterController extends AbstractController
 {
     /**
-     * @Route("/register", name="register")
+     * Route("/register", name="register")
      */
     public function index(Request $request, string $system):Response
     {

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ElasSoapStatusController extends AbstractController
 {
     /**
-     * @Route("/elas-soap-status", name="elas_soap_status")
+     * Route("/elas-soap-status", name="elas_soap_status")
      */
     public function index(Request $request, string $system, string $access):Response
     {

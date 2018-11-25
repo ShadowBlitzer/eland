@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PlotAccountTransactionController extends AbstractController
 {
     /**
-     * @Route("/plot-account-transactions", name="plot_account_transaction")
+     * Route("/plot-account-transactions", name="plot_account_transaction")
      */
     public function index(Request $request, string $system, string $access):Response
     {

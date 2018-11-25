@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PasswordResetController extends AbstractController
 {
     /**
-     * @Route("/password-reset", name="password_reset")
+     * Route("/password-reset", name="password_reset")
      */
     public function index(Request $request, string $system):Response
     {

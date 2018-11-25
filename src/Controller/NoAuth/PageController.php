@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PageController extends AbstractController
 {
     /**
-     * @Route("/page", name="page")
+     * Route("/page", name="page")
      */
     public function index(Request $request, string $system):Response
     {

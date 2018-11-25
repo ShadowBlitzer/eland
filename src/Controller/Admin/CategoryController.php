@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CategoryController extends AbstractController
 {
     /**
-     * @Route("/category", name="category")
+     * Route("/category", name="category")
      */
     public function index(Request $request, string $system, string $access):Response
     {

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ConfigController extends AbstractController
 {
     /**
-     * @Route("/config", name="config")
+     * Route("/config", name="config")
      */
     public function index(Request $request, string $system, string $access):Response
     {

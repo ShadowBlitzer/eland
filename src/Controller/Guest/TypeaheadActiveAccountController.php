@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TypeaheadActiveAccountController extends AbstractController
 {
     /**
-     * @Route("/typeahead-active-accounts", name="typeahead_active_account")
+     * Route("/typeahead-active-accounts", name="typeahead_active_account")
      */
     public function index(Request $request, string $system, string $access):Response
     {

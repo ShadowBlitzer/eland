@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AdController extends AbstractController
 {
     /**
-     * @Route("/ad", name="ad")
+     * Route("/ad", name="ad")
      */
     public function index(Request $request, string $system, string $access):Response
     {

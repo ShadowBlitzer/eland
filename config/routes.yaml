@@ -7,3 +7,7 @@ root_locale:
 root_no_locale:
     resource: ../src/Controller/NoLocale/
     type: annotation
+
+root_legacy:
+    resource: ../src/Controller/Legacy/
+    type: annotation

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class LogoutController extends AbstractController
 {
     /**
-     * @Route("/logout", name="logout")
+     * Route("/logout", name="logout")
      */
     public function index(Request $request, string $system, string $access):Response
     {

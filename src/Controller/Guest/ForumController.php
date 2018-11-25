@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ForumController extends AbstractController
 {
     /**
-     * @Route("/forum", name="forum")
+     * Route("/forum", name="forum")
      */
     public function index(Request $request, string $system, string $access):Response
     {

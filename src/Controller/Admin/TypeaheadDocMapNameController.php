@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TypeaheadDocMapNameController extends AbstractController
 {
     /**
-     * @Route("/typeahead-doc-map-names", name="typeahead_doc_map_name")
+     * Route("/typeahead-doc-map-names", name="typeahead_doc_map_name")
      */
     public function index(Request $request, string $system, string $access):Response
     {

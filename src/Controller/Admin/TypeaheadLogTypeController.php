@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TypeaheadLogTypeController extends AbstractController
 {
     /**
-     * @Route("/typeahead-log-types", name="typeahead_log_type")
+     * Route("/typeahead-log-types", name="typeahead_log_type")
      */
     public function index(Request $request, string $system, string $access):Response
     {

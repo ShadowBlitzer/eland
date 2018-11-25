@@ -15,7 +15,7 @@ use App\Legacy\service\xdb;
 class NewsController extends AbstractController
 {
     /**
-     * @Route("/news", name="news")
+     * Route("/news", name="news")
      */
     public function index(Request $request, string $system, string $access):Response
     {

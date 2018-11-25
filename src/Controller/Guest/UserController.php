@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * Route("/user", name="user")
      */
     public function index(Request $request, string $system, string $access):Response
     {

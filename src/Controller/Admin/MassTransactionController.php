@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class MassTransactionController extends AbstractController
 {
     /**
-     * @Route("/mass-transaction", name="mass_transaction")
+     * Route("/mass-transaction", name="mass_transaction")
      */
     public function index(Request $request, string $system, string $access):Response
     {

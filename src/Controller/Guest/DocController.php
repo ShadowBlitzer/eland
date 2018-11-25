@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DocController extends AbstractController
 {
     /**
-     * @Route("/doc", name="doc")
+     * Route("/doc", name="doc")
      */
     public function index(Request $request, string $system, string $access):Response
     {

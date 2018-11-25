@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 class MonitorController extends AbstractController
 {
     /**
-     * @Route("/monitor", name="monitor")
+     * Route("/monitor", name="monitor")
      */
     public function index(
         Request $request,

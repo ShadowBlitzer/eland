@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class StatusController extends AbstractController
 {
     /**
-     * @Route("/status", name="status")
+     * Route("/status", name="status")
      */
     public function index(Request $request, string $system, string $access):Response
     {

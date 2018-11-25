@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ElasSystemLoginController extends AbstractController
 {
     /**
-     * @Route("/elas-system-login", name="elas_system_login")
+     * Route("/elas-system-login", name="elas_system_login")
      */
     public function index(Request $request, string $system, string $access):Response
     {

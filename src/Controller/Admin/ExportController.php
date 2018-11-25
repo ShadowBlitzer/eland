@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ExportController extends AbstractController
 {
     /**
-     * @Route("/export", name="export")
+     * Route("/export", name="export")
      */
     public function index(Request $request, string $system, string $access):Response
     {
