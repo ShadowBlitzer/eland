@@ -9,41 +9,28 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LegacyController extends AbstractController
 {
+
     /**
-     * @Route("/{_locale}/{system}/{route}", name="legacy_no_auth")
+     * @Route("/{_locale<nl>}/{system<[a-z][a-z0-9]*>}/{leg_route<[a-z_]{4,}>}",
+     *  name="legacy_no_auth")
      */
-    public function noAuthIndex():Response
+    public function noAuthIndex(string $system, string $leg_route):Response
     {
-        $rsp = '';
-
-
-
-
+        ob_start();
+        $rsp = '<html><head></head><body>login</body>';
+        include __DIR__ . '/../../Legacy/login.php';
+        $rsp = ob_get_clean();
         return new Response($rsp);
     }
 
     /**
-     * @Route("/{_locale}/{system}/{access}/{route}", name="legacy_guest")
+     * @Route("/{_locale<nl>}/{system<[a-z][a-z0-9]*>}/{access<[gua]>}/{leg_route<[a-z_]{4,}>}",
+     *  name="legacy")
      */
-    public function guestIndex():Response
+    public function index(string $system, string $access, string $leg_route):Response
     {
-        $rsp = '';
 
-
-
-
-        return new Response($rsp);
-    }
-
-    /**
-     * @Route("/{_locale}/{system}/{access}/{route}", name="legacy_user")
-     */
-    public function userIndex():Response
-    {
-        $rsp = '';
-
-
-
+        $rsp = '<html><head></head><body>oufti</body>';
 
         return new Response($rsp);
     }
