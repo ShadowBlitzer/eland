@@ -8,6 +8,9 @@ root_no_locale:
     resource: ../src/Controller/NoLocale/
     type: annotation
 
+app_logout:
+    path: /logout
+
 root_legacy:
     resource: ../src/Controller/Legacy/
     type: annotation

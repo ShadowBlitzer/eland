@@ -10,10 +10,12 @@ security:
             id: App\Security\UserProvider
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|images|js|gfx)/
             security: false
         main:
             anonymous: true
+            logout:
+                path: app_logout
 
             # activate different ways to authenticate
 
