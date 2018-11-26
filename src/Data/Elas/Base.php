@@ -1,10 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Data;
-
-use App\Entity\Event;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+namespace App\Data\Elas;
 
 abstract class BaseIntId
 {
@@ -12,7 +8,7 @@ abstract class BaseIntId
     protected $id;
     protected $data;
 
-    public function __construct(string $system, int $id, array $data)
+    public function __construct(string $system, $id, array $data)
     {
         $this->system = $system;
         $this->id = $id;
@@ -29,7 +25,7 @@ abstract class BaseIntId
         return $this->data;
     }
 
-    public function getId():int
+    public function getId()
     {
         return $id;
     }
