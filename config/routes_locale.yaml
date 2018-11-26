@@ -1,4 +1,4 @@
-schema:
+system:
     resource: routes_system.yaml
     prefix: /{system}
     requirements:

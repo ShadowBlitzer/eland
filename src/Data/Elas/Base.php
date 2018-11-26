@@ -2,7 +2,7 @@
 
 namespace App\Data\Elas;
 
-abstract class BaseIntId
+abstract class Base
 {
     protected $system;
     protected $id;

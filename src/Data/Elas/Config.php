@@ -4,6 +4,6 @@ namespace App\Data\Elas;
 
 use App\Data\Elas\BaseIntId;
 
-final class ContactDetail extends BaseIntId
+final class Config extends BaseIntId
 {
 }

@@ -7,14 +7,14 @@ use App\Data\Elas\Base;
 abstract class BaseStrId extends Base
 {
 
-    public function __construct(string $system, int $id, array $data)
+    public function __construct(string $system, string $id, array $data)
     {
         $this->system = $system;
         $this->id = $id;
         $this->data = $data;
     }
 
-    public function getId():int
+    public function getId():string
     {
         return $id;
     }

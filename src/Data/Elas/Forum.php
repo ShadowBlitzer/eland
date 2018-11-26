@@ -4,6 +4,6 @@ namespace App\Data\Elas;
 
 use App\Data\Elas\BaseStrId;
 
-final class Transaction extends BaseStrId
+final class Forum extends BaseStrId
 {
 }
