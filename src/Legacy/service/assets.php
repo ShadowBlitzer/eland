@@ -4,7 +4,7 @@ namespace App\Legacy\service;
 
 class assets
 {
-	private $version = '20';
+	private $version = '21';
 
 	private $asset_ary = [
 		'bootstrap' => [
