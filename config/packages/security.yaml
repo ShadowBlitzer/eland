@@ -1,7 +1,7 @@
 security:
     encoders:
         App\Security\User:
-            algorithm: argon2i
+            algorithm: sha512 # argon2i
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
@@ -16,6 +16,9 @@ security:
             anonymous: true
             logout:
                 path: app_logout
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
 
             # activate different ways to authenticate
 
