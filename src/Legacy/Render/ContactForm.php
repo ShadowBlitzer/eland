@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Controller\NoAuth;
+namespace App\Legacy\Render;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

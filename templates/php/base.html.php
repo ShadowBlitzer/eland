@@ -407,3 +407,5 @@ if (isset($h1))
 	echo isset($fa) ? '<i class="fa fa-' . $fa . '"></i> ' : '';
 	echo $h1 . '</h1>';
 }
+
+$view['slots']->output('_content');
