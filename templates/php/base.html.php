@@ -353,6 +353,7 @@ foreach ($menu as $link => $item)
 		$item[1], false, false, $item[0]);
 	echo '</li>';
 }
+
 echo '</ul>';
 
 echo '</div>';
