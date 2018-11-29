@@ -110,7 +110,9 @@ if ($add && $submit && !count($errors))
 	{
 		$id = $app['db']->lastInsertId('news_id_seq');
 
-		$app['xdb']->set('news_access', $id, ['access' => $_POST['access']]);
+		$app['xdb']->set('news_access', $id, [
+			'access' => $_POST['access']
+		], $app['this_group']->get_schema());
 
 		$app['alert']->success('Nieuwsbericht opgeslagen.');
 
@@ -118,8 +120,8 @@ if ($add && $submit && !count($errors))
 		{
 			$vars = [
 				'group'		=> [
-					'name'	=> $app['config']->get('systemname'),
-					'tag'	=> $app['config']->get('systemtag'),
+					'name'	=> $app['config']->get('systemname', $app['this_group']->get_schema()),
+					'tag'	=> $app['config']->get('systemtag', $app['this_group']->get_schema()),
 				],
 				'news'	=> $news,
 				'news_url'	=> $app['base_url'] . '/news.php?id=' . $id,
@@ -146,7 +148,9 @@ if ($edit && $submit && !count($errors))
 {
 	if($app['db']->update('news', $news, ['id' => $edit]))
 	{
-		$app['xdb']->set('news_access', $edit, ['access' => $_POST['access']]);
+		$app['xdb']->set('news_access', $edit, [
+			'access' => $_POST['access']
+		], $app['this_group']->get_schema());
 
 		$app['alert']->success('Nieuwsbericht aangepast.');
 		cancel($edit);
@@ -162,7 +166,8 @@ if ($edit)
 	$news = $app['db']->fetchAssoc('SELECT * FROM news WHERE id = ?', [$edit]);
 	[$news['itemdate']] = explode(' ', $news['itemdate']);
 
-	$news_access = $app['xdb']->get('news_access', $edit)['data']['access'];
+	$news_access = $app['xdb']->get('news_access', $edit,
+		$app['this_group']->get_schema())['data']['access'];
 }
 
 if ($add && !$submit)
@@ -291,7 +296,7 @@ if ($del)
 
 		if($app['db']->delete('news', ['id' => $del]))
 		{
-			$app['xdb']->del('news_access', $del);
+			$app['xdb']->del('news_access', $del, $app['this_group']->get_schema());
 
 			$app['alert']->success('Nieuwsbericht verwijderd.');
 			cancel();
@@ -304,7 +309,8 @@ if ($del)
 		FROM news n
 		WHERE n.id = ?', [$del]);
 
-	$news_access = $app['xdb']->get('news_access', $del)['data']['access'];
+	$news_access = $app['xdb']->get('news_access', $del,
+		$app['this_group']->get_schema())['data']['access'];
 
 	$h1 = 'Nieuwsbericht ' . $news['headline'] . ' verwijderen?';
 	$fa = 'calendar-o';
@@ -386,8 +392,10 @@ if ($del)
 $page_access = 'guest';
 require_once __DIR__ . '/include/web.php';
 
-$show_visibility = ($s_user && $app['config']->get('template_lets')
-	&& $app['config']->get('interlets_en')) || $s_admin ? true : false;
+$show_visibility = ($s_user
+	&& $app['config']->get('template_lets', $app['this_group']->get_schema())
+	&& $app['config']->get('interlets_en', $app['this_group']->get_schema()))
+	|| $s_admin ? true : false;
 
 $news_access_ary = $no_access_ary = [];
 
@@ -410,7 +418,7 @@ if(!$s_admin)
 }
 
 $query .= ' order by itemdate ';
-$query .= $app['config']->get('news_order_asc') === '1' ? 'asc' : 'desc';
+$query .= $app['config']->get('news_order_asc', $app['this_group']->get_schema()) === '1' ? 'asc' : 'desc';
 
 $st = $app['db']->prepare($query);
 $st->execute();
@@ -422,7 +430,9 @@ while ($row = $st->fetch())
 
 	if (!isset($news_access_ary[$news_id]))
 	{
-		$app['xdb']->set('news_access', $news_id, ['access' => 'interlets']);
+		$app['xdb']->set('news_access', $news_id, [
+			'access' => 'interlets',
+		], $app['this_group']->get_schema());
 		$news[$k]['access'] = 'interlets';
 	}
 	else

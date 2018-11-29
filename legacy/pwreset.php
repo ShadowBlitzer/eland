@@ -29,10 +29,10 @@ if ($token)
 
 				$vars = [
 					'group'		=> [
-						'name'		=> $app['config']->get('systemname'),
-						'tag'		=> $app['config']->get('systemtag'),
-						'currency'	=> $app['config']->get('currency'),
-						'support'	=> explode(',', $app['config']->get('support')),
+						'name'		=> $app['config']->get('systemname', $app['this_group']->get_schema()),
+						'tag'		=> $app['config']->get('systemtag', $app['this_group']->get_schema()),
+						'currency'	=> $app['config']->get('currency', $app['this_group']->get_schema()),
+						'support'	=> explode(',', $app['config']->get('support', $app['this_group']->get_schema())),
 					],
 					'password'	=> $password,
 					'user'		=> $user,
@@ -68,7 +68,7 @@ if ($token)
 			'email'			=> strtolower($email),
 		];
 
-		$app['xdb']->set('email_validated', $email, $ev_data);
+		$app['xdb']->set('email_validated', $email, $ev_data, $app['this_group']->get_schema());
 	}
 
 	$h1 = 'Nieuw paswoord ingeven.';
@@ -134,10 +134,10 @@ if (isset($_POST['zend']))
 
 				$vars = [
 					'group'		=> [
-						'name'		=> $app['config']->get('systemname'),
-						'tag'		=> $app['config']->get('systemtag'),
-						'currency'	=> $app['config']->get('currency'),
-						'support'	=> explode(',', $app['config']->get('support')),
+						'name'		=> $app['config']->get('systemname', $app['this_group']->get_schema()),
+						'tag'		=> $app['config']->get('systemtag', $app['this_group']->get_schema()),
+						'currency'	=> $app['config']->get('currency', $app['this_group']->get_schema()),
+						'support'	=> explode(',', $app['config']->get('support', $app['this_group']->get_schema())),
 					],
 					'token_url'	=> $app['base_url'] . '/pwreset.php?token=' . $token,
 					'user'		=> $user,

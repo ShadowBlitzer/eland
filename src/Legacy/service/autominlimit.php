@@ -149,7 +149,9 @@ class autominlimit
 			return;
 		}
 
-		$this->xdb->set('autominlimit', $to_id, ['minlimit' => $new_minlimit]);
+		$this->xdb->set('autominlimit', $to_id, [
+			'minlimit' => $new_minlimit,
+		], $this->schema);
 
 		$this->db->update($this->schema . '.users', ['minlimit' => $new_minlimit], ['id' => $to_id]);
 

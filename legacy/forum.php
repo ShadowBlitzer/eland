@@ -31,7 +31,7 @@ if (!($s_user || $s_admin))
 	}
 }
 
-if (!$app['config']->get('forum_en'))
+if (!$app['config']->get('forum_en', $app['this_group']->get_schema()))
 {
 	$app['alert']->warning('De forum pagina is niet ingeschakeld.');
 	redirect_default_page();
@@ -41,7 +41,7 @@ if ($del || $edit)
 {
 	$t = ($del) ? $del : $edit;
 
-	$row = $app['xdb']->get('forum', $t);
+	$row = $app['xdb']->get('forum', $t, $app['this_group']->get_schema());
 
 	if ($row)
 	{
@@ -87,7 +87,7 @@ if ($submit)
 			cancel();
 		}
 
-		$app['xdb']->del('forum', $del);
+		$app['xdb']->del('forum', $del, $app['this_group']->get_schema());
 
 		if (!isset($forum_post['parent_id']))
 		{
@@ -97,7 +97,7 @@ if ($submit)
 
 			foreach ($rows as $row)
 			{
-				$app['xdb']->del('forum', $row['eland_id']);
+				$app['xdb']->del('forum', $row['eland_id'], $app['this_group']->get_schema());
 			}
 
 			$app['alert']->success('Het forum onderwerp is verwijderd.');
@@ -170,7 +170,7 @@ if ($submit)
 	}
 	else if ($edit)
 	{
-		$app['xdb']->set('forum', $edit, $forum_post);
+		$app['xdb']->set('forum', $edit, $forum_post, $app['this_group']->get_schema());
 
 		$app['alert']->success((($topic) ? 'Reactie' : 'Onderwerp') . ' aangepast.');
 
@@ -180,9 +180,9 @@ if ($submit)
 	{
 		$new_id = substr(sha1(microtime() . $app['this_group']->get_schema()), 0, 24);
 
-		$app['xdb']->set('forum', $new_id, $forum_post);
+		$app['xdb']->set('forum', $new_id, $forum_post, $app['this_group']->get_schema());
 
-		$app['alert']->success((($topic) ? 'Reactie' : 'Onderwerp') . ' toegevoegd.');
+		$app['alert']->success(($topic ? 'Reactie' : 'Onderwerp') . ' toegevoegd.');
 
 		cancel($topic);
 	}
@@ -234,7 +234,7 @@ if ($add || $edit)
 
 	if ($topic)
 	{
-		$row = $app['xdb']->get('forum', $topic);
+		$row = $app['xdb']->get('forum', $topic, $app['this_group']->get_schema());
 
 		if ($row)
 		{
@@ -327,12 +327,14 @@ if ($add || $edit)
 
 if ($topic)
 {
-	$show_visibility = ($s_user && $app['config']->get('template_lets')
-		&& $app['config']->get('interlets_en')) || $s_admin ? true : false;
+	$show_visibility = ($s_user
+		&& $app['config']->get('template_lets', $app['this_group']->get_schema())
+		&& $app['config']->get('interlets_en', $app['this_group']->get_schema()))
+		|| $s_admin ? true : false;
 
 	$forum_posts = [];
 
-	$row = $app['xdb']->get('forum', $topic);
+	$row = $app['xdb']->get('forum', $topic, $app['this_group']->get_schema());
 
 	if ($row)
 	{
@@ -520,8 +522,10 @@ if ($s_admin || $s_user)
 
 $csv_en = $s_admin;
 
-$show_visibility = (!$s_guest && $app['config']->get('template_lets')
-	&& $app['config']->get('interlets_en')) || $s_admin ? true : false;
+$show_visibility = (!$s_guest
+	&& $app['config']->get('template_lets', $app['this_group']->get_schema())
+	&& $app['config']->get('interlets_en', $app['this_group']->get_schema()))
+	|| $s_admin ? true : false;
 
 $h1 = 'Forum';
 

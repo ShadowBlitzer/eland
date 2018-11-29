@@ -15,7 +15,7 @@ if (!$location
 	|| $location == ''
 	|| $location == '/')
 {
-	$location = $app['config']->get('default_landing_page');
+	$location = $app['config']->get('default_landing_page', $app['this_group']->get_schema());
 	$param = 'view_' . $location;
 	$param = in_array($location, ['messages', 'users', 'news']) ? ['view' => $$param] : [];
 	$location .= '.php?' . http_build_query($param);
@@ -85,7 +85,9 @@ if ($token)
 		{
 			// record logins to link the apikeys to domains and groups
 			$domain_referrer = strtolower(parse_url($referrer, PHP_URL_HOST));
-			$app['xdb']->set('apikey_login', $apikey, ['domain' => $domain_referrer]);
+			$app['xdb']->set('apikey_login', $apikey, [
+				'domain' => $domain_referrer
+			], $app['this_group']->get_schema());
 		}
 
 		$app['monolog']->info('eLAS guest login using token ' . $token . ' succeeded. referrer: ' . $referrer);
@@ -236,7 +238,9 @@ if ($submit)
 		$errors[] = 'Het account beschikt niet over de juiste rechten.';
 	}
 
-	if (!count($errors) && $app['config']->get('maintenance') && $user['accountrole'] != 'admin')
+	if (!count($errors)
+		&& $app['config']->get('maintenance', $app['this_group']->get_schema())
+		&& $user['accountrole'] != 'admin')
 	{
 		$errors[] = 'De website is in onderhoud, probeer later opnieuw';
 	}
@@ -257,7 +261,9 @@ if ($submit)
 		$app['db']->update('users', ['lastlogin' => gmdate('Y-m-d H:i:s')], ['id' => $user['id']]);
 		$app['user_cache']->clear($user['id']);
 
-		$app['xdb']->set('login', $user['id'], ['browser' => $browser, 'time' => time()], $s_schema);
+		$app['xdb']->set('login', $user['id'], [
+			'browser' => $browser, 'time' => time()
+		], $s_schema);
 
 		$app['alert']->success('Je bent ingelogd.');
 
@@ -270,7 +276,7 @@ if ($submit)
 	$app['alert']->error($errors);
 }
 
-if($app['config']->get('maintenance'))
+if($app['config']->get('maintenance', $app['this_group']->get_schema()))
 {
 	$app['alert']->warning('De website is niet beschikbaar wegens onderhoudswerken.  Enkel admins kunnen inloggen');
 }
