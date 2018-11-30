@@ -125,7 +125,8 @@ class mail extends queue_model implements queue_interface
 			}
 			catch (Exception $e)
 			{
-				$this->monolog->error('Error in E-mail template: ' . $e->getMessage(), ['schema' => $sch]);
+				$this->monolog->error('Error in E-mail template: ' . $e->getMessage(),
+					['schema' => $sch]);
 				return;
 			}
 		}
@@ -133,7 +134,8 @@ class mail extends queue_model implements queue_interface
 		{
 			if (!isset($data['subject']))
 			{
-				$this->monolog->error('mail error: mail without subject', ['schema' => $sch]);
+				$this->monolog->error('mail error: mail without subject',
+					['schema' => $sch]);
 				return;
 			}
 
@@ -145,7 +147,8 @@ class mail extends queue_model implements queue_interface
 				}
 				else
 				{
-					$this->monolog->error('mail error: mail without body content', ['schema' => $sch]);
+					$this->monolog->error('mail error: mail without body content',
+						['schema' => $sch]);
 					return;
 				}
 			}
@@ -153,13 +156,16 @@ class mail extends queue_model implements queue_interface
 
 		if (!$data['to'])
 		{
-			$this->monolog->error('mail error: mail without "to" | subject: ' . $data['subject'], ['schema' => $sch]);
+			$this->monolog->error('mail error: mail without "to" | subject: ' .
+				$data['subject'],
+				['schema' => $sch]);
 			return;
 		}
 
 		if (!$data['from'])
 		{
-			$this->monolog->error('mail error: mail without "from" | subject: ' . $data['subject'], ['schema' => $sch]);
+			$this->monolog->error('mail error: mail without "from" | subject: ' . $data['subject'],
+				['schema' => $sch]);
 			return;
 		}
 
@@ -188,19 +194,27 @@ class mail extends queue_model implements queue_interface
 		{
 			if ($this->mailer->send($message, $failed_recipients))
 			{
-				$this->monolog->info('mail: message send to ' . implode(', ', $data['to']) . ' subject: ' . $data['subject'], ['schema' => $sch]);
+				$this->monolog->info('mail: message send to ' .
+					implode(', ', $data['to']) . ' subject: ' . $data['subject'],
+					['schema' => $sch]);
 			}
 			else
 			{
-				$this->monolog->error('mail error: failed sending message to ' . implode(', ', $data['to']) . ' subject: ' . $data['subject'], ['schema' => $sch]);
-				$this->monolog->error('Failed recipients: ' . implode(', ', $failed_recipients), ['schema' => $sch]);
+				$this->monolog->error('mail error: failed sending message to ' .
+					implode(', ', $data['to']) . ' subject: ' . $data['subject'],
+					['schema' => $sch]);
+				$this->monolog->error('Failed recipients: ' .
+					implode(', ', $failed_recipients),
+					['schema' => $sch]);
 			}
 		}
 		catch (Exception $e)
 		{
 			$err = $e->getMessage();
 			error_log('mail queue: ' . $err);
-			$this->monolog->error('mail queue error: ' . $err . ' | subject: ' . $data['subject'] . ' ' . implode(', ', $data['to']), ['schema' => $sch]);
+			$this->monolog->error('mail queue error: ' . $err . ' | subject: ' .
+				$data['subject'] . ' ' . implode(', ', $data['to']),
+				['schema' => $sch]);
 		}
 
 		$this->mailer->getTransport()->stop();
@@ -284,7 +298,8 @@ class mail extends queue_model implements queue_interface
 
 			if (!count($data['reply_to']))
 			{
-				$this->monolog->error('mail: error: invalid "reply to" : ' . $data['subject']);
+				$this->monolog->error('mail: error: invalid "reply to" : ' .
+					$data['subject'], ['schema' => $data['schema']]);
 				unset($data['reply_to']);
 			}
 
@@ -298,7 +313,7 @@ class mail extends queue_model implements queue_interface
 		if (!count($data['from']))
 		{
 			$m = 'error: mail without "from" | subject: ' . $data['subject'];
-			$this->monolog->error('mail: ' . $m);
+			$this->monolog->error('mail: ' . $m, ['schema' => $data['schema']]);
 			return $m;
 		}
 
@@ -308,7 +323,8 @@ class mail extends queue_model implements queue_interface
 
 			if (!count($data['cc']))
 			{
-				$this->monolog->error('mail error: invalid "reply to" : ' . $data['subject']);
+				$this->monolog->error('mail error: invalid "reply to" : ' . $data['subject'],
+					['schema' => $data['schema']]);
 				unset($data['cc']);
 			}
 		}

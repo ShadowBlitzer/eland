@@ -29,6 +29,8 @@ chdir(__DIR__);
 $page_access = 'anonymous';
 require_once __DIR__ . '/include/web.php';
 
+$tschema = $app['this_group']->get_schema();
+
 if ($step == 2 || $step == 3)
 {
 	error_log(' -- Sync the image files. --');
@@ -43,7 +45,7 @@ if ($step == 1)
 	$schemaversion = 31000;
 
 	$currentversion = $dbversion = $app['db']->fetchColumn('select value
-		from parameters
+		from ' . $tschema . '.parameters
 		where parameter = \'schemaversion\'');
 
 	if ($currentversion >= $schemaversion)
@@ -66,7 +68,7 @@ if ($step == 1)
 
 		$m = 'Upgraded database from schema version ' . $dbversion . ' to ' . $currentversion;
 		error_log(' -- ' . $m . ' -- ');
-		$app['monolog']->info('DB: ' . $m);
+		$app['monolog']->info('DB: ' . $m, ['schema' => $tschema]);
 	}
 
 	header('Location: ' . $rootpath . 'init.php?step=2');
@@ -77,7 +79,7 @@ else if ($step == 2)
 	$found = false;
 
 	$rs = $app['db']->prepare('select id, "PictureFile"
-		from users
+		from ' . $tschema . '.users
 		where "PictureFile" is not null
 		order by id asc
 		limit 50 offset ' . $start);
@@ -110,26 +112,29 @@ else if ($step == 2)
 
 		if (!$found)
 		{
-			$app['db']->update('users', ['"PictureFile"' => null], ['id' => $user_id]);
+			$app['db']->update($tschema . '.users', ['"PictureFile"' => null], ['id' => $user_id]);
 			error_log(' -- Profile image not present, deleted in database: ' . $filename . ' -- ');
-			$app['monolog']->info('cron: Profile image file of user ' . $user_id . ' was not found in bucket: deleted from database. Deleted filename : ' . $filename);
+			$app['monolog']->info('cron: Profile image file of user ' .
+				$user_id . ' was not found in bucket: deleted from database. Deleted filename : ' .
+				$filename, ['schema' => $tschema]);
 		}
-		else if ($f_schema != $app['this_group']->get_schema())
+		else if ($f_schema != $tschema)
 		{
-			$new_filename = $app['this_group']->get_schema() . '_u_' . $user_id . '_' . sha1(time() . $filename) . '.jpg';
+			$new_filename = $tschema . '_u_' . $user_id . '_' . sha1(time() . $filename) . '.jpg';
 
 			$err = $app['s3']->img_copy($filename_bucket, $new_filename);
 
 			if ($err)
 			{
 				error_log(' -- error: ' . $err . ' -- ');
-				$app['monolog']->info('init: copy img error: ' . $err);
+				$app['monolog']->info('init: copy img error: ' . $err, ['schema' => $tschema]);
 				continue;
 			}
 
-			$app['db']->update('users', ['"PictureFile"' => $new_filename], ['id' => $user_id]);
+			$app['db']->update($tschema . '.users', ['"PictureFile"' => $new_filename], ['id' => $user_id]);
 			error_log(' -- Profile image renamed, old: ' . $filename . ' new: ' . $new_filename . ' -- ');
-			$app['monolog']->info('init: Profile image file renamed, Old: ' . $filename . ' New: ' . $new_filename);
+			$app['monolog']->info('init: Profile image file renamed, Old: ' .
+				$filename . ' New: ' . $new_filename, ['schema' => $tschema]);
 		}
 	}
 
@@ -148,7 +153,7 @@ else if ($step == 3)
 {
 
 	$message_images = $app['db']->fetchAll('select id, msgid, "PictureFile"
-		from msgpictures
+		from ' . $tschema . '.msgpictures
 		order by id asc
 		limit 50 offset ' . $start);
 
@@ -184,26 +189,30 @@ else if ($step == 3)
 
 		if (!$found)
 		{
-			$app['db']->delete('msgpictures', ['id' => $id]);
+			$app['db']->delete($tschema . '.msgpictures', ['id' => $id]);
 			error_log(' -- Message image not present, deleted in database: ' . $filename . ' -- ');
-			$app['monolog']->info('init: Image file of message ' . $msg_id . ' not found in bucket: deleted from database. Deleted : ' . $filename . ' id: ' . $id);
+			$app['monolog']->info('init: Image file of message ' . $msg_id .
+				' not found in bucket: deleted from database. Deleted : ' .
+				$filename . ' id: ' . $id, ['schema' => $tschema]);
 		}
-		else if ($f_schema != $app['this_group']->get_schema())
+		else if ($f_schema != $tschema)
 		{
-			$new_filename = $app['this_group']->get_schema() . '_m_' . $msg_id . '_' . sha1(time() . $filename) . '.jpg';
+			$new_filename = $tschema . '_m_' . $msg_id . '_' . sha1(time() . $filename) . '.jpg';
 
 			$err = $app['s3']->img_copy($filename_bucket, $new_filename);
 
 			if ($err)
 			{
 				error_log(' -- error: ' . $err . ' -- ');
-				$app['monolog']->info('init: copy img error: ' . $err);
+				$app['monolog']->info('init: copy img error: ' . $err,
+					['schema' => $tschema]);
 				continue;
 			}
 
-			$app['db']->update('msgpictures', ['"PictureFile"' => $new_filename], ['id' => $id]);
+			$app['db']->update($tschema . '.msgpictures', ['"PictureFile"' => $new_filename], ['id' => $id]);
 			error_log('Profile image renamed, old: ' . $filename . ' new: ' . $new_filename);
-			$app['monolog']->info('init: Message image file renamed, Old : ' . $filename . ' New: ' . $new_filename);
+			$app['monolog']->info('init: Message image file renamed, Old : ' .
+				$filename . ' New: ' . $new_filename, ['schema' => $tschema]);
 
 		}
 	}
@@ -220,11 +229,11 @@ else if ($step == 4)
 
 	error_log('*** clear users cache ***');
 
-	$users = $app['db']->fetchAll('select id from users');
+	$users = $app['db']->fetchAll('select id from ' . $tschema . '.users');
 
 	foreach ($users as $u)
 	{
-		$app['predis']->del($app['this_group']->get_schema() . '_user_' . $u['id']);
+		$app['predis']->del($tschema . '_user_' . $u['id']);
 	}
 
 	header('Location: ' . $rootpath . 'init.php?step=5');
@@ -232,7 +241,7 @@ else if ($step == 4)
 }
 else if ($step == 5)
 {
-	$app['db']->executeQuery('delete from tokens');
+	$app['db']->executeQuery('delete from ' . $tschema . '.tokens');
 
 	error_log('*** empty tokens table (is not used anymore) *** ');
 
@@ -241,10 +250,9 @@ else if ($step == 5)
 }
 else if ($step == 6)
 {
-	$app['db']->executeQuery('delete from city_distance');
+	$app['db']->executeQuery('delete from ' . $tschema . '.city_distance');
 
 	error_log('*** empty city_distance table (is not used anymore) *** ');
-
 	error_log('** init end **');
 
 	exit;

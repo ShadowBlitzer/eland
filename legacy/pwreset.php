@@ -6,9 +6,11 @@ require_once __DIR__ . '/include/web.php';
 
 $token = $_GET['token'] ?? false;
 
+$tschema = $app['this_group']->get_schema();
+
 if ($token)
 {
-	$data = $app['predis']->get($app['this_group']->get_schema() . '_token_' . $token);
+	$data = $app['predis']->get($tschema . '_token_' . $token);
 	$data = json_decode($data, true);
 
 	$user_id = $data['user_id'];
@@ -18,21 +20,25 @@ if ($token)
 	{
 		$password = $_POST['password'];
 
-		if (!($app['password_strength']->get($password) < 50))
+		if ($error_token = $app['form_token']->get_error())
+		{
+			$app['alert']->error($error_token);
+		}
+		else if (!($app['password_strength']->get($password) < 50))
 		{
 			if ($user_id)
 			{
-				$app['db']->update('users', ['password' => hash('sha512', $password)], ['id' => $user_id]);
-				$app['user_cache']->clear($user_id);
-				$user = $app['user_cache']->get($user_id);
+				$app['db']->update($tschema . '.users', ['password' => hash('sha512', $password)], ['id' => $user_id]);
+				$app['user_cache']->clear($user_id, $tschema);
+				$user = $app['user_cache']->get($user_id, $tschema);
 				$app['alert']->success('Paswoord opgeslagen.');
 
 				$vars = [
 					'group'		=> [
-						'name'		=> $app['config']->get('systemname', $app['this_group']->get_schema()),
-						'tag'		=> $app['config']->get('systemtag', $app['this_group']->get_schema()),
-						'currency'	=> $app['config']->get('currency', $app['this_group']->get_schema()),
-						'support'	=> explode(',', $app['config']->get('support', $app['this_group']->get_schema())),
+						'name'		=> $app['config']->get('systemname', $tschema),
+						'tag'		=> $app['config']->get('systemtag', $tschema),
+						'currency'	=> $app['config']->get('currency', $tschema),
+						'support'	=> explode(',', $app['config']->get('support', $tschema)),
 					],
 					'password'	=> $password,
 					'user'		=> $user,
@@ -68,7 +74,7 @@ if ($token)
 			'email'			=> strtolower($email),
 		];
 
-		$app['xdb']->set('email_validated', $email, $ev_data, $app['this_group']->get_schema());
+		$app['xdb']->set('email_validated', $email, $ev_data, $tschema);
 	}
 
 	$h1 = 'Nieuw paswoord ingeven.';
@@ -81,22 +87,26 @@ if ($token)
 	echo '<div class="panel panel-info">';
 	echo '<div class="panel-heading">';
 
-	echo '<form method="post" class="form-horizontal" role="form">';
+	echo '<form method="post" role="form">';
 
 	echo '<div class="form-group">';
-	echo '<label for="password" class="col-sm-2 control-label">Nieuw paswoord</label>';
-	echo '<div class="col-sm-10 controls">';
+	echo '<label for="password">Nieuw paswoord</label>';
 	echo '<div class="input-group">';
+	echo '<span class="input-group-addon">';
+	echo '<i class="fa fa-key"></i>';
+	echo '</span>';
 	echo '<input type="text" class="form-control" id="password" name="password" ';
-	echo 'value="' . $password . '" required>';
+	echo 'value="';
+	echo $password;
+	echo '" required>';
 	echo '<span class="input-group-btn">';
     echo '<button class="btn btn-default" type="button" id="generate">Genereer</button>';
     echo '</span>';
-    echo '</div>';
 	echo '</div>';
 	echo '</div>';
 
 	echo '<input type="submit" class="btn btn-default" value="Bewaar paswoord" name="zend">';
+	echo $app['form_token']->get_hidden_input();
 	echo '</form>';
 
 	echo '</div>';
@@ -110,10 +120,16 @@ if (isset($_POST['zend']))
 {
 	$email = trim($_POST['email']);
 
-	if($email)
+	if ($error_token = $app['form_token']->get_error())
+	{
+		$app['alert']->error($error_token);
+	}
+	else if($email)
 	{
 		$user = $app['db']->fetchAll('select u.*
-			from contact c, type_contact tc, users u
+			from ' . $tschema . '.contact c, ' .
+				$tschema . '.type_contact tc, ' .
+				$tschema . '.users u
 			where c. value = ?
 				and tc.id = c.id_type_contact
 				and tc.abbrev = \'mail\'
@@ -126,18 +142,18 @@ if (isset($_POST['zend']))
 
 			if ($user['id'])
 			{
-				$token = substr(hash('sha512', $user['id'] . $app['this_group']->get_schema() . time() . $email), 0, 12);
-				$key = $app['this_group']->get_schema() . '_token_' . $token;
+				$token = substr(hash('sha512', $user['id'] . $tschema . time() . $email), 0, 12);
+				$key = $tschema . '_token_' . $token;
 
 				$app['predis']->set($key, json_encode(['user_id' => $user['id'], 'email' => $email]));
 				$app['predis']->expire($key, 3600);
 
 				$vars = [
 					'group'		=> [
-						'name'		=> $app['config']->get('systemname', $app['this_group']->get_schema()),
-						'tag'		=> $app['config']->get('systemtag', $app['this_group']->get_schema()),
-						'currency'	=> $app['config']->get('currency', $app['this_group']->get_schema()),
-						'support'	=> explode(',', $app['config']->get('support', $app['this_group']->get_schema())),
+						'name'		=> $app['config']->get('systemname', $tschema),
+						'tag'		=> $app['config']->get('systemtag', $tschema),
+						'currency'	=> $app['config']->get('currency', $tschema),
+						'support'	=> explode(',', $app['config']->get('support', $tschema)),
 					],
 					'token_url'	=> $app['base_url'] . '/pwreset.php?token=' . $token,
 					'user'		=> $user,
@@ -175,24 +191,30 @@ $h1 = 'Paswoord vergeten';
 
 require_once __DIR__ . '/include/header.php';
 
-echo '<p>Met onderstaand formulier stuur je een link om je paswoord te resetten naar je E-mailbox. </p>';
-
 echo '<div class="panel panel-info">';
 echo '<div class="panel-heading">';
 
-echo '<form method="post" class="form-horizontal">';
+echo '<form method="post">';
 
 echo '<div class="form-group">';
-echo '<label for="email" class="col-sm-2 control-label">E-mail</label>';
-echo '<div class="col-sm-10">';
+echo '<label for="email" class="control-label">Je E-mail adres</label>';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo '<i class="fa fa-envelope-o"></i>';
+echo '</span>';
 echo '<input type="email" class="form-control" id="email" name="email" ';
 echo 'value="';
-echo $email;
+echo $email ?? '';
 echo '" required>';
 echo '</div>';
+echo '<p>';
+echo 'Vul hier het E-mail adres in waarmee je geregistreerd staat in het Systeem. ';
+echo 'Een link om je paswoord te resetten wordt naar je E-mailbox verstuurd.';
+echo '</p>';
 echo '</div>';
 
 echo '<input type="submit" class="btn btn-default" value="Reset paswoord" name="zend">';
+echo $app['form_token']->get_hidden_input();
 echo '</form>';
 
 echo '</div>';

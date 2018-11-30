@@ -3,6 +3,8 @@ $rootpath = '../';
 $page_access = 'guest';
 require_once __DIR__ . '/../include/web.php';
 
+$tschema = $app['this_group']->get_schema();
+
 $group_id = $_GET['group_id'] ?? false;
 
 header('Content-type: application/json');
@@ -25,7 +27,9 @@ if (!isset($elas_interlets_groups[$group_id]))
 	exit;
 }
 
-$group = $app['db']->fetchAssoc('SELECT * FROM ' . $s_schema . '.letsgroups WHERE id = ?', [$group_id]);
+$group = $app['db']->fetchAssoc('select *
+	from ' . $s_schema . '.letsgroups
+	where id = ?', [$group_id]);
 
 if (!$group)
 {
@@ -51,7 +55,7 @@ if (!$group['presharedkey'])
 	exit;
 }
 
-$soapurl = ($group['elassoapurl']) ? $group['elassoapurl'] : $group['url'] . '/soap';
+$soapurl = $group['elassoapurl'] ? $group['elassoapurl'] : $group['url'] . '/soap';
 $soapurl = $soapurl . '/wsdlelas.php?wsdl';
 
 $apikey = $group['remoteapikey'];
@@ -64,7 +68,7 @@ if ($err)
 {
 	$m = $err_group . ' Kan geen verbinding maken.';
 	echo json_encode(['error' => $m]);
-	$app['monolog']->error('elas-token: ' . $m . ' ' . $err);
+	$app['monolog']->error('elas-token: ' . $m . ' ' . $err, ['schema' => $tschema]);
 	exit;
 }
 
@@ -76,7 +80,7 @@ if ($err)
 {
 	$m = $err_group . ' Kan geen token krijgen voor dit interSysteem.';
 	echo json_encode(['error' => $m]);
-	$app['monolog']->error('elas-token: ' . $m . ' ' . $err);
+	$app['monolog']->error('elas-token: ' . $m . ' ' . $err, ['schema' => $tschema]);
 	exit;
 }
 

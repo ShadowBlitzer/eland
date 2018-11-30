@@ -7,12 +7,14 @@ require_once __DIR__ . '/include/web.php';
 $submit = isset($_POST['zend']) ? true : false;
 $token = $_GET['token'] ?? false;
 
+$tschema = $app['this_group']->get_schema();
+
 if ($s_id)
 {
 	redirect_default_page();
 }
 
-if (!$app['config']->get('registration_en', $app['this_group']->get_schema()))
+if (!$app['config']->get('registration_en', $tschema))
 {
 	$app['alert']->warning('De inschrijvingspagina is niet ingeschakeld.');
 	redirect_login();
@@ -20,7 +22,7 @@ if (!$app['config']->get('registration_en', $app['this_group']->get_schema()))
 
 if ($token)
 {
-	$key = $app['this_group']->get_schema();
+	$key = $tschema;
 	$key .= '_register_' . $token;
 
 	if ($data = $app['predis']->get($key))
@@ -42,20 +44,22 @@ if ($token)
 				}
 				else
 				{
-					$name .= substr(hash('sha512', $app['this_group']->get_schema() . time() . mt_rand(0, 100000), 0, 4));
+					$name .= substr(hash('sha512', $tschema . time() . mt_rand(0, 100000), 0, 4));
 				}
 			}
 
-			if (!$app['db']->fetchColumn('select name from users where name = ?', [$name]))
+			if (!$app['db']->fetchColumn('select name
+				from ' . $tschema . '.users
+				where name = ?', [$name]))
 			{
 				break;
 			}
 		}
 
-		$minlimit = $app['config']->get('preset_minlimit', $app['this_group']->get_schema());
+		$minlimit = $app['config']->get('preset_minlimit', $tschema);
 		$minlimit = $minlimit === '' ? -999999999 : $minlimit;
 
-		$maxlimit = $app['config']->get('preset_maxlimit', $app['this_group']->get_schema());
+		$maxlimit = $app['config']->get('preset_maxlimit', $tschema);
 		$maxlimit = $maxlimit === '' ? 999999999 : $maxlimit;
 
 		$user = [
@@ -78,13 +82,14 @@ if ($token)
 
 		try
 		{
-			$app['db']->insert('users', $user);
+			$app['db']->insert($tschema . '.users', $user);
 
-			$user_id = $app['db']->lastInsertId('users_id_seq');
+			$user_id = $app['db']->lastInsertId($tschema . '.users_id_seq');
 
 			$tc = [];
 
-			$rs = $app['db']->prepare('select abbrev, id from type_contact');
+			$rs = $app['db']->prepare('select abbrev, id
+				from ' . $tschema . '.type_contact');
 
 			$rs->execute();
 
@@ -102,7 +107,7 @@ if ($token)
 				'id_type_contact'	=> $tc['mail'],
 			];
 
-			$app['db']->insert('contact', $mail);
+			$app['db']->insert($tschema . '.contact', $mail);
 
 			$ev_data = [
 				'token'			=> $token,
@@ -111,7 +116,7 @@ if ($token)
 				'email'			=> $data['email'],
 			];
 
-			$app['xdb']->set('email_validated', $data['email'], $ev_data, $app['this_group']->get_schema());
+			$app['xdb']->set('email_validated', $data['email'], $ev_data, $tschema);
 
 			if ($data['gsm'] || $data['tel'])
 			{
@@ -124,7 +129,7 @@ if ($token)
 						'id_type_contact'	=> $tc['gsm'],
 					];
 
-					$app['db']->insert('contact', $gsm);
+					$app['db']->insert($tschema . '.contact', $gsm);
 				}
 
 				if ($data['tel'])
@@ -135,7 +140,7 @@ if ($token)
 						'value'				=> $data['tel'],
 						'id_type_contact'	=> $tc['tel'],
 					];
-					$app['db']->insert('contact', $tel);
+					$app['db']->insert($tschema . '.contact', $tel);
 				}
 			}
 			$app['db']->commit();
@@ -148,8 +153,8 @@ if ($token)
 
 		$vars = [
 			'group'	=> [
-				'name'	=> $app['config']->get('systemname', $app['this_group']->get_schema()),
-				'tag'	=> $app['config']->get('systemtag', $app['this_group']->get_schema()),
+				'name'	=> $app['config']->get('systemname', $tschema),
+				'tag'	=> $app['config']->get('systemtag', $tschema),
 			],
 			'user'	=> $user,
 			'email'	=> $data['email'],
@@ -184,7 +189,7 @@ if ($token)
 
 		require_once __DIR__ . '/include/header.php';
 
-		$registration_success_text = $app['config']->get('registration_success_text', $app['this_group']->get_schema());
+		$registration_success_text = $app['config']->get('registration_success_text', $tschema);
 
 		if ($registration_success_text)
 		{
@@ -228,7 +233,8 @@ if ($submit)
 		'gsm'			=> $_POST['gsm'],
 	];
 
-	$app['monolog']->info('Registration request for ' . $reg['email']);
+	$app['monolog']->info('Registration request for ' .
+		$reg['email'], ['schema' => $tschema]);
 
 	if(!$reg['email'])
 	{
@@ -239,7 +245,8 @@ if ($submit)
 		$app['alert']->error('Geen geldig E-mail adres.');
 	}
 	else if ($app['db']->fetchColumn('select c.id_user
-		from contact c, type_contact tc
+		from ' . $tschema . '.contact c, ' .
+			$tschema . '.type_contact tc
 		where c. value = ?
 			AND tc.id = c.id_type_contact
 			AND tc.abbrev = \'mail\'', [$reg['email']]))
@@ -264,18 +271,18 @@ if ($submit)
 	}
 	else
 	{
-		$token = substr(hash('sha512', $app['this_group']->get_schema() . microtime() . $reg['email'] . $reg['first_name']), 0, 10);
-		$key = $app['this_group']->get_schema() . '_register_' . $token;
+		$token = substr(hash('sha512', $tschema . microtime() . $reg['email'] . $reg['first_name']), 0, 10);
+		$key = $tschema . '_register_' . $token;
 		$app['predis']->set($key, json_encode($reg));
 		$app['predis']->expire($key, 604800); // 1 week
-		$key = $app['this_group']->get_schema() . '_register_email_' . $email;
+		$key = $tschema . '_register_email_' . $email;
 		$app['predis']->set($key, '1');
 		$app['predis']->expire($key, 604800);
 
 		$vars = [
 			'group'		=> [
-				'name'	=> $app['config']->get('systemname', $app['this_group']->get_schema()),
-				'tag'	=> $app['config']->get('systemtag', $app['this_group']->get_schema()),
+				'name'	=> $app['config']->get('systemname', $tschema),
+				'tag'	=> $app['config']->get('systemtag', $tschema),
 			],
 			'confirm_url'	=> $app['base_url'] . '/register.php?token=' . $token,
 		];
@@ -297,7 +304,7 @@ $fa = 'check-square-o';
 
 require_once __DIR__ . '/include/header.php';
 
-$top_text = $app['config']->get('registration_top_text', $app['this_group']->get_schema());
+$top_text = $app['config']->get('registration_top_text', $tschema);
 
 if ($top_text)
 {
@@ -307,11 +314,14 @@ if ($top_text)
 echo '<div class="panel panel-info">';
 echo '<div class="panel-heading">';
 
-echo '<form method="post" class="form-horizontal">';
+echo '<form method="post">';
 
 echo '<div class="form-group">';
-echo '<label for="first_name" class="col-sm-2 control-label">Voornaam*</label>';
-echo '<div class="col-sm-10">';
+echo '<label for="first_name" class="control-label">Voornaam*</label>';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo '<i class="fa fa-user"></i>';
+echo '</span>';
 echo '<input type="text" class="form-control" id="first_name" name="first_name" ';
 echo 'value="';
 echo $reg['first_name'] ?? '';
@@ -320,8 +330,11 @@ echo '</div>';
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<label for="last_name" class="col-sm-2 control-label">Achternaam*</label>';
-echo '<div class="col-sm-10">';
+echo '<label for="last_name" class="control-label">Achternaam*</label>';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo '<i class="fa fa-user"></i>';
+echo '</span>';
 echo '<input type="text" class="form-control" id="last_name" name="last_name" ';
 echo 'value="';
 echo $reg['last_name'] ?? '';
@@ -330,8 +343,11 @@ echo '</div>';
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<label for="email" class="col-sm-2 control-label">E-mail*</label>';
-echo '<div class="col-sm-10">';
+echo '<label for="email" class="control-label">E-mail*</label>';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo '<i class="fa fa-envelope-o"></i>';
+echo '</span>';
 echo '<input type="email" class="form-control" id="email" name="email" ';
 echo 'value="';
 echo $reg['email'] ?? '';
@@ -340,8 +356,11 @@ echo '</div>';
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<label for="postcode" class="col-sm-2 control-label">Postcode*</label>';
-echo '<div class="col-sm-10">';
+echo '<label for="postcode" class="control-label">Postcode*</label>';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo '<i class="fa fa-map-marker"></i>';
+echo '</span>';
 echo '<input type="text" class="form-control" id="postcode" name="postcode" ';
 echo 'value="';
 echo $reg['postcode'] ?? '';
@@ -350,8 +369,11 @@ echo '</div>';
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<label for="gsm" class="col-sm-2 control-label">Gsm</label>';
-echo '<div class="col-sm-10">';
+echo '<label for="gsm" class="control-label">Gsm</label>';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo '<i class="fa fa-mobile"></i>';
+echo '</span>';
 echo '<input type="text" class="form-control" id="gsm" name="gsm" ';
 echo 'value="';
 echo $reg['gsm'] ?? '';
@@ -360,8 +382,11 @@ echo '</div>';
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<label for="tel" class="col-sm-2 control-label">Telefoon</label>';
-echo '<div class="col-sm-10">';
+echo '<label for="tel" class="control-label">Telefoon</label>';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo '<i class="fa fa-phone"></i>';
+echo '</span>';
 echo '<input type="text" class="form-control" id="tel" name="tel" ';
 echo 'value="';
 echo $reg['tel'] ?? '';
@@ -377,7 +402,7 @@ echo '</form>';
 echo '</div>';
 echo '</div>';
 
-$bottom_text = $app['config']->get('registration_bottom_text');
+$bottom_text = $app['config']->get('registration_bottom_text', $tschema);
 
 if ($bottom_text)
 {

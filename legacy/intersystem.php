@@ -3,6 +3,8 @@
 $page_access = 'admin';
 require_once __DIR__ . '/include/web.php';
 
+$tschema = $app['this_group']->get_schema();
+
 $id = $_GET['id'] ?? false;
 $del = $_GET['del'] ?? false;
 $edit = $_GET['edit'] ?? false;
@@ -15,7 +17,9 @@ if ($id || $edit || $del)
 {
 	$id = ($id) ?: (($edit) ?: $del);
 
-	$group = $app['db']->fetchAssoc('SELECT * FROM letsgroups WHERE id = ?', [$id]);
+	$group = $app['db']->fetchAssoc('select *
+		from ' . $tschema . '.letsgroups
+		where id = ?', [$id]);
 
 	if (!$group)
 	{
@@ -24,12 +28,12 @@ if ($id || $edit || $del)
 	}
 }
 
-if (!$app['config']->get('template_lets', $app['this_group']->get_schema()))
+if (!$app['config']->get('template_lets', $tschema))
 {
 	redirect_default_page();
 }
 
-if (!$app['config']->get('interlets_en', $app['this_group']->get_schema()))
+if (!$app['config']->get('interlets_en', $tschema))
 {
 	redirect_default_page();
 }
@@ -44,12 +48,13 @@ if ($add || $edit)
 		$group = [
 			'url' 				=> $_POST['url'] ?? '',
 			'groupname' 		=> $_POST['groupname'] ?? '',
+			'apimethod' 		=> $_POST['apimethod'] ?? '',
 			'shortname' 		=> $_POST['shortname'] ?? '',
 			'prefix' 			=> $_POST['prefix'] ?? '',
 			'remoteapikey' 		=> $_POST['remoteapikey'] ?? '',
 			'localletscode' 	=> $_POST['localletscode'] ?? '',
 			'myremoteletscode'	=> $_POST['myremoteletscode'] ?? '',
-			'presharedkey' 		=> $_POST['localletscode'] ?? '',
+			'presharedkey' 		=> $_POST['presharedkey'] ?? '',
 		];
 
 		$group['elassoapurl'] = $group['url'] . '/soap';
@@ -91,7 +96,7 @@ if ($add || $edit)
 			$errors[] = 'De url mag maximaal 256 tekens lang zijn.';
 		}
 
-		if (strlen($group['soapurl']) > 256)
+		if (strlen($group['elassoapurl']) > 256)
 		{
 			$errors[] = 'De eLAS soap URL mag maximaal 256 tekens lang zijn.';
 		}
@@ -113,7 +118,7 @@ if ($add || $edit)
 		if ($edit)
 		{
 			if ($app['db']->fetchColumn('select id
-				from letsgroups
+				from ' . $tschema . '.letsgroups
 				where url = ?
 					and id <> ?', [$group['url'], $edit]))
 			{
@@ -121,7 +126,7 @@ if ($add || $edit)
 			}
 
 			if ($app['db']->fetchColumn('select id
-				from letsgroups
+				from ' . $tschema . '.letsgroups
 				where localletscode = ?
 					and id <> ?', [$group['localletscode'], $edit]))
 			{
@@ -130,11 +135,11 @@ if ($add || $edit)
 
 			if (!count($errors))
 			{
-				if ($app['db']->update('letsgroups', $group, ['id' => $id]))
+				if ($app['db']->update($tschema . '.letsgroups', $group, ['id' => $id]))
 				{
 					$app['alert']->success('InterSysteem aangepast.');
 
-					$app['interlets_groups']->clear_cache($s_schema);
+					$app['interlets_groups']->clear_cache($tschema);
 
 					cancel($edit);
 				}
@@ -144,25 +149,29 @@ if ($add || $edit)
 		}
 		else
 		{
-			if ($app['db']->fetchColumn('select id from letsgroups where url = ?', [$group['url']]))
+			if ($app['db']->fetchColumn('select id
+				from ' . $tschema . '.letsgroups
+				where url = ?', [$group['url']]))
 			{
 				$errors[] = 'Er bestaat al een interSysteem met deze URL.';
 			}
 
-			if ($app['db']->fetchColumn('select id from letsgroups where localletscode = ?', [$group['localletscode']]))
+			if ($app['db']->fetchColumn('select id
+				from ' . $tschema . '.letsgroups
+				where localletscode = ?', [$group['localletscode']]))
 			{
 				$errors[] = 'Er bestaat al een interSysteem met deze Lokale Account Code.';
 			}
 
 			if (!count($errors))
 			{
-				if ($app['db']->insert('groups', $group))
+				if ($app['db']->insert($tschema . '.letsgroups', $group))
 				{
 					$app['alert']->success('Intersysteem opgeslagen.');
 
-					$id = $app['db']->lastInsertId('groups_id_seq');
+					$id = $app['db']->lastInsertId($tschema . '.letsgroups_id_seq');
 
-					$app['inter_groups']->clear_cache($s_schema);
+					$app['interlets_groups']->clear_cache($tschema);
 
 					cancel($id);
 				}
@@ -351,11 +360,11 @@ if ($del)
 			cancel();
 		}
 
-		if($app['db']->delete('letsgroups', ['id' => $del]))
+		if($app['db']->delete($tschema . '.letsgroups', ['id' => $del]))
 		{
 			$app['alert']->success('InterSysteem verwijderd.');
 
-			$app['interlets_groups']->clear_cache($s_schema);
+			$app['interlets_groups']->clear_cache($tschema);
 
 			cancel();
 		}
@@ -406,7 +415,9 @@ if ($id)
 	}
 	else
 	{
-		$user = $app['db']->fetchAssoc('select * from users where letscode = ?', [$group['localletscode']]);
+		$user = $app['db']->fetchAssoc('select *
+			from ' . $tschema . '.users
+			where letscode = ?', [$group['localletscode']]);
 	}
 
 	$top_buttons .= aphp('intersystem', ['edit' => $id], 'Aanpassen', 'btn btn-primary', 'Intersysteem aanpassen', 'pencil', true);
@@ -536,7 +547,8 @@ if ($id)
  * list
  */
 
-$groups = $app['db']->fetchAll('select * from letsgroups');
+$groups = $app['db']->fetchAll('select *
+	from ' . $tschema . '.letsgroups');
 
 $letscodes = [];
 
@@ -560,7 +572,7 @@ foreach ($groups as $key => $g)
 	else if ($g['apimethod'] == 'internal')
 	{
 		$groups[$key]['user_count'] = $app['db']->fetchColumn('select count(*)
-			from users
+			from ' . $tschema . '.users
 			where status in (1, 2)');
 	}
 	else
@@ -572,7 +584,7 @@ foreach ($groups as $key => $g)
 $users_letscode = [];
 
 $interlets_users = $app['db']->executeQuery('select id, status, letscode, accountrole
-	from users
+	from ' . $tschema . '.users
 	where letscode in (?)',
 	[$letscodes],
 	[\Doctrine\DBAL\Connection::PARAM_INT_ARRAY]);
@@ -717,6 +729,8 @@ function get_schemas_groups():string
 {
 	global $app;
 
+	$tschema = $app['this_group']->get_schema();
+
 	$out = '<div class="panel panel-default"><div class="panel-heading">';
 	$out .= '<h3>Een interSysteem verbinding aanmaken met een Systeem dat draait op eLAS. ';
 	$out .= 'Zie <a href="https://eland.letsa.net/elas-intersysteem-koppeling-maken.html">hier</a> ';
@@ -777,7 +791,7 @@ function get_schemas_groups():string
 	$loc_letscode_ary = [];
 
 	$groups = $app['db']->executeQuery('select localletscode, url, id
-		from letsgroups
+		from ' . $tschema . '.letsgroups
 		where url in (?)',
 		[$url_ary],
 		[\Doctrine\DBAL\Connection::PARAM_STR_ARRAY]);
@@ -790,7 +804,7 @@ function get_schemas_groups():string
 	}
 
 	$interlets_accounts = $app['db']->executeQuery('select id, letscode, status, accountrole
-		from users
+		from ' . $tschema . '.users
 		where letscode in (?)',
 		[$loc_letscode_ary],
 		[\Doctrine\DBAL\Connection::PARAM_STR_ARRAY]);
@@ -888,7 +902,7 @@ function get_schemas_groups():string
 		$out .= $group_user_count_ary[$s];
 		$out .= '</td>';
 
-		if ($app['this_group']->get_schema() == $s)
+		if ($tschema == $s)
 		{
 			$out .= '<td colspan="4">';
 			$out .= 'Eigen Systeem';

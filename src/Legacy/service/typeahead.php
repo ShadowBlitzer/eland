@@ -88,7 +88,8 @@ class typeahead
 			{
 				$this->redis->set($key, $new_thumbprint);
 
-				$this->monolog->debug('typeahead: new typeahead thumbprint ' . $new_thumbprint . ' for ' . $group_domain . ' : ' . $name);
+				$this->monolog->debug('typeahead: new typeahead thumbprint ' . $new_thumbprint .
+					' for ' . $group_domain . ' : ' . $name);
 			}
 
 			$this->redis->expire($key, $this->ttl);
@@ -97,7 +98,8 @@ class typeahead
 		{
 			$this->redis->del($key);
 
-			$this->monolog->debug('typeahead: typeahead thumbprint deleted for ' . $group_domain . ' : ' . $name);
+			$this->monolog->debug('typeahead: typeahead thumbprint deleted for ' .
+				$group_domain . ' : ' . $name);
 		}
 	}
 }

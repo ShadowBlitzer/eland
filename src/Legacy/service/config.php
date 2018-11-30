@@ -4,15 +4,10 @@ namespace App\Legacy\service;
 
 use Doctrine\DBAL\Connection as db;
 use Predis\Client as predis;
-use Psr\Log\LoggerInterface;
-
 use App\Legacy\service\xdb;
-use App\Legacy\service\this_group;
-
 
 class config
 {
-	protected $monolog;
 	protected $db;
 	protected $xdb;
 	protected $predis;
@@ -42,13 +37,11 @@ class config
 	];
 
 	public function __construct(
-		LoggerInterface $monolog,
 		db $db,
 		xdb $xdb,
 		predis $predis
 	)
 	{
-		$this->monolog = $monolog;
 		$this->predis = $predis;
 		$this->db = $db;
 		$this->xdb = $xdb;

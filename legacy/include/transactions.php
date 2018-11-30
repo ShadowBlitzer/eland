@@ -1,52 +1,44 @@
 <?php
 
-/**
- *
- */
-
 function generate_transid()
 {
 	global $s_id;
 	return substr(sha1($s_id . microtime()), 0, 12) . '_' . $s_id . '@' . $_SERVER['SERVER_NAME'];
 }
 
-/*
- *
- */
-
 function sign_transaction($transaction, $sharedsecret)
 {
 	global $app;
+
+	$tschema = $app['this_group']->get_schema();
 
 	$amount = (float) $transaction['amount'];
 	$amount = $amount * 100;
 	$amount = round($amount);
 	$tosign = $sharedsecret . $transaction['transid'] . strtolower($transaction['letscode_to']) . $amount;
 	$signature = sha1($tosign);
-	$app['monolog']->debug('Signing ' . $tosign . ' : ' . $signature);
+	$app['monolog']->debug('Signing ' . $tosign . ' : ' . $signature, ['schema' => $tschema]);
 
 	return $signature;
 }
 
-/*
- *
- */
-
 function insert_transaction($transaction)
 {
-    global $app, $s_id, $s_master;
+	global $app, $s_id, $s_master;
 
-	$transaction['creator'] = ($s_master) ? 0 : (($s_id) ? $s_id : 0);
+	$tschema = $app['this_group']->get_schema();
+
+	$transaction['creator'] = $s_master ? 0 : ($s_id ? $s_id : 0);
     $transaction['cdate'] = gmdate('Y-m-d H:i:s');
 
 	$app['db']->beginTransaction();
 
 	try
 	{
-		$app['db']->insert('transactions', $transaction);
-		$id = $app['db']->lastInsertId('transactions_id_seq');
-		$app['db']->executeUpdate('update users set saldo = saldo + ? where id = ?', [$transaction['amount'], $transaction['id_to']]);
-		$app['db']->executeUpdate('update users set saldo = saldo - ? where id = ?', [$transaction['amount'], $transaction['id_from']]);
+		$app['db']->insert($tschema . '.transactions', $transaction);
+		$id = $app['db']->lastInsertId($tschema . '.transactions_id_seq');
+		$app['db']->executeUpdate('update ' . $tschema . '.users set saldo = saldo + ? where id = ?', [$transaction['amount'], $transaction['id_to']]);
+		$app['db']->executeUpdate('update ' . $tschema . '.users set saldo = saldo - ? where id = ?', [$transaction['amount'], $transaction['id_from']]);
 		$app['db']->commit();
 
 	}
@@ -57,18 +49,19 @@ function insert_transaction($transaction)
 		return false;
 	}
 
-	$app['user_cache']->clear($transaction['id_to']);
-	$app['user_cache']->clear($transaction['id_from']);
+	$app['user_cache']->clear($transaction['id_to'], $tschema);
+	$app['user_cache']->clear($transaction['id_from'], $tschema);
 
 	$app['autominlimit']->init()
 		->process($transaction['id_from'], $transaction['id_to'], $transaction['amount']);
 
 	$app['monolog']->info('Transaction ' . $transaction['transid'] . ' saved: ' .
 		$transaction['amount'] . ' ' .
-		$app['config']->get('currency', $app['this_group']->get_schema()) .
+		$app['config']->get('currency', $tschema) .
 		' from user ' .
-		link_user($transaction['id_from'], false, false, true) . ' to user ' .
-		link_user($transaction['id_to'], false, false, true));
+		link_user($transaction['id_from'], $tschema, false, true) . ' to user ' .
+		link_user($transaction['id_to'], $tschema, false, true),
+		['schema' => $tschema]);
 
 	return $id;
 }
@@ -80,8 +73,10 @@ function mail_mailtype_interlets_transaction($transaction)
 {
 	global $app;
 
-	$from_user = link_user($transaction['id_from'], false, false);
-	$to_group = link_user($transaction['id_to'], false, false);
+	$tschema = $app['this_group']->get_schema();
+
+	$from_user = link_user($transaction['id_from'], $tschema, false);
+	$to_group = link_user($transaction['id_to'], $tschema, false);
 
 	$to_user = $transaction['real_to'];
 
@@ -91,14 +86,14 @@ function mail_mailtype_interlets_transaction($transaction)
 		'to_user'	=> $to_user,
 		'to_group'	=> $to_group,
 		'amount'			=> $transaction['amount'],
-		'amount_hours'		=> round($transaction['amount'] / $app['config']->get('currencyratio', $app['this_group']->get_schema()), 4),
+		'amount_hours'		=> round($transaction['amount'] / $app['config']->get('currencyratio', $tschema), 4),
 		'transid'			=> $transaction['transid'],
 		'description'		=> $transaction['description'],
 		'group'				=> [
-			'name'			=> $app['config']->get('systemname', $app['this_group']->get_schema()),
-			'tag'			=> $app['config']->get('systemtag', $app['this_group']->get_schema()),
-			'currency'		=> $app['config']->get('currency', $app['this_group']->get_schema()),
-			'currencyratio'	=> $app['config']->get('currencyratio', $app['this_group']->get_schema()),
+			'name'			=> $app['config']->get('systemname', $tschema),
+			'tag'			=> $app['config']->get('systemtag', $tschema),
+			'currency'		=> $app['config']->get('currency', $tschema),
+			'currencyratio'	=> $app['config']->get('currencyratio', $tschema),
 		],
 	];
 
@@ -126,7 +121,9 @@ function mail_transaction($transaction, $remote_schema = null)
 {
 	global $app;
 
-	$sch = isset($remote_schema) ? $remote_schema : $app['this_group']->get_schema();
+	$tschema = $app['this_group']->get_schema();
+
+	$sch = isset($remote_schema) ? $remote_schema : $tschema;
 
 	$userfrom = $app['user_cache']->get($transaction['id_from'], $sch);
 	$userto = $app['user_cache']->get($transaction['id_to'], $sch);
@@ -136,8 +133,8 @@ function mail_transaction($transaction, $remote_schema = null)
 	$real_from = $transaction['real_from'] ?? '';
 	$real_to = $transaction['real_to'] ?? '';
 
-	$from_user = ($real_from) ? $real_from . ' [' . $userfrom['fullname'] . ']' : $userfrom['letscode'] . ' ' . $userfrom['name'];
-	$to_user = ($real_to) ? $real_to . ' [' . $userto['fullname'] . ']' : $userto['letscode'] . ' ' . $userto['name'];
+	$from_user = $real_from ? $real_from . ' [' . $userfrom['fullname'] . ']' : $userfrom['letscode'] . ' ' . $userfrom['name'];
+	$to_user = $real_to ? $real_to . ' [' . $userto['fullname'] . ']' : $userto['letscode'] . ' ' . $userto['name'];
 
 	$url = isset($remote_schema) ? $app['protocol'] . $app['groups']->get_host($sch) : $app['base_url'];
 
@@ -157,7 +154,7 @@ function mail_transaction($transaction, $remote_schema = null)
 		],
 	];
 
-	$t_schema = ($remote_schema) ? $remote_schema . '.' : '';
+	$t_schema = $remote_schema ? $remote_schema . '.' : '';
 
 	$base_url = $app['protocol'] . $app['groups']->get_host($sch);
 

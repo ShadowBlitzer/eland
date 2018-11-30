@@ -162,13 +162,13 @@ $app['distance'] = function ($app){
 };
 
 $app['config'] = function ($app){
-	return new service\config($app['monolog'], $app['db'], $app['xdb'],
+	return new service\config($app['db'], $app['xdb'],
 		$app['predis']);
 };
 
 $app['user_cache'] = function ($app){
 	return new service\user_cache($app['db'], $app['xdb'],
-		$app['predis'], $app['this_group']);
+		$app['predis']);
 };
 
 $app['token'] = function ($app){
@@ -285,7 +285,7 @@ $app['geocode'] = function($app){
  * functions
  */
 
-function link_user($user, string $sch = '', $link = true, $show_id = false, $field = '')
+function link_user($user, string $sch, $link = true, $show_id = false, $field = ''):string
 {
 	global $rootpath, $app;
 
@@ -316,7 +316,7 @@ function link_user($user, string $sch = '', $link = true, $show_id = false, $fie
 		$out = $str;
 	}
 
-	$out .= ($show_id) ? ' (id: ' . $user['id'] . ')' : '';
+	$out .= $show_id ? ' (id: ' . $user['id'] . ')' : '';
 
 	return $out;
 }
