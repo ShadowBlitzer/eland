@@ -46,7 +46,8 @@ if ($token)
 				];
 
 				$app['queue.mail']->queue([
-					'to' 		=> $user_id,
+					'schema'	=> $tschema,
+					'to' 		=> $app['mail_addr_user']->get($user_id, $tschema),
 					'template'	=> 'password_reset',
 					'vars'		=> $vars,
 				]);
@@ -161,7 +162,8 @@ if (isset($_POST['zend']))
 				];
 
 				$app['queue.mail']->queue([
-					'to' 		=> $email,
+					'schema'	=> $tschema,
+					'to' 		=> [$email],
 					'template'	=> 'password_reset_confirm',
 					'vars'		=> $vars,
 				], 1000);

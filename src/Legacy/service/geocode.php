@@ -9,7 +9,7 @@ use Geocoder\StatefulGeocoder;
 
 class geocode
 {
-    private $geocoder;
+    protected $geocoder;
 
     public function __construct()
     {

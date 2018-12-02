@@ -13,9 +13,9 @@ use App\Legacy\service\this_group;
 
 class cleanup_news extends schema_task
 {
-	private $db;
-	private $xdb;
-	private $monolog;
+	protected $db;
+	protected $xdb;
+	protected $monolog;
 
 	public function __construct(
 		db $db,

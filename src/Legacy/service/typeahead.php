@@ -7,10 +7,10 @@ use Psr\Log\LoggerInterface;
 
 class typeahead
 {
-	private $redis;
-	private $monolog;
-	private $version;
-	private $ttl = 5184000; // 60 days
+	protected $redis;
+	protected $monolog;
+	protected $version;
+	protected $ttl = 5184000; // 60 days
 
 	public function __construct(
 		Redis $redis,
@@ -60,7 +60,7 @@ class typeahead
 		return htmlspecialchars(json_encode($out));
 	}
 
-	private function get_thumbprint(string $name, $group_domain = false)
+	protected function get_thumbprint(string $name, $group_domain = false)
 	{
 		$group_domain = $group_domain ?: $_SERVER['SERVER_NAME'];
 

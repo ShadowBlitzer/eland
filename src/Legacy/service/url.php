@@ -8,10 +8,10 @@ use App\Legacy\service\alert;
 
 class url
 {
-	private $this_group;
-	private $groups;
-	private $alert;
-	private $rootpath;
+	protected $this_group;
+	protected $groups;
+	protected $alert;
+	protected $rootpath;
 
 	public function __construct(
 		this_group $this_group,

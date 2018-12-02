@@ -12,14 +12,16 @@ use App\Legacy\service\this_group;
 use App\Legacy\service\config;
 use App\Legacy\service\template_vars;
 use App\Legacy\service\user_cache;
+use App\Legacy\service\mail_addr_user;
 
 class user_exp_msgs extends schema_task
 {
-	private $db;
-	private $mail;
-	private $protocol;
-	private $config;
-	private $user_cache;
+	protected $db;
+	protected $mail;
+	protected $protocol;
+	protected $config;
+	protected $user_cache;
+	protected $mail_addr_user;
 
 	public function __construct(
 		db $db,
@@ -30,7 +32,8 @@ class user_exp_msgs extends schema_task
 		this_group $this_group,
 		config $config,
 		template_vars $template_vars,
-		user_cache $user_cache
+		user_cache $user_cache,
+		mail_addr_user $mail_addr_user
 	)
 	{
 		parent::__construct($schedule, $groups, $this_group);
@@ -40,6 +43,7 @@ class user_exp_msgs extends schema_task
 		$this->config = $config;
 		$this->template_vars = $template_vars;
 		$this->user_cache = $user_cache;
+		$this->mail_addr_user = $mail_addr_user;
 	}
 
 	function process()
@@ -85,13 +89,16 @@ class user_exp_msgs extends schema_task
 				'group'			=> $group_vars,
 			];
 
-			$this->mail->queue(['to' => $msg['id_user'],
+			$this->mail->queue([
+				'to' 		=> $this->mail_addr_user->get($msg['id_user'], $this->schema),
 				'schema' 	=> $this->schema,
 				'template' 	=> 'user_exp_msgs',
 				'vars' 		=> $vars]);
 		}
 
-		$this->db->executeUpdate('update ' . $this->schema . '.messages set exp_user_warn = \'t\' WHERE validity < ?', [$now]);
+		$this->db->executeUpdate('update ' . $this->schema . '.messages
+			set exp_user_warn = \'t\'
+			where validity < ?', [$now]);
 	}
 
 	public function is_enabled()

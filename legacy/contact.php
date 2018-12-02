@@ -46,16 +46,18 @@ if ($token)
 		];
 
 		$app['queue.mail']->queue([
+			'schema'	=> $tschema,
 			'template'	=> 'contact_copy',
 			'vars'		=> $vars,
-			'to'		=> $data['email'],
+			'to'		=> [$data['email']],
 		]);
 
 		$app['queue.mail']->queue([
+			'schema'	=> $tschema,
 			'template'	=> 'contact',
 			'vars'		=> $vars,
-			'to'		=> 'support',
-			'reply_to'	=> $data['email'],
+			'to'		=> $app['mail_addr_system']->get_support($tschema),
+			'reply_to'	=> [$data['email']],
 		]);
 
 		$app['alert']->success('Je bericht werd succesvol verzonden.');
@@ -141,20 +143,16 @@ if($post && isset($_POST['zend']))
 			'confirm_url'	=> $app['base_url'] . '/contact.php?token=' . $token,
 		];
 
-		$return_message =  $app['queue.mail']->queue([
-			'to' 		=> $email,
+		$app['queue.mail']->queue([
+			'schema'	=> $tschema,
+			'to' 		=> [$email],
 			'template'	=> 'contact_confirm',
 			'vars'		=> $vars,
 		]);
 
-		if (!$return_message)
-		{
-			$app['alert']->success('Open je E-mailbox en klik de link aan die we je zonden om je bericht te bevestigen.');
-			header('Location: ' . generate_url('contact'));
-			exit;
-		}
-
-		$app['alert']->error('E-mail niet verstuurd. ' . $return_message);
+		$app['alert']->success('Open je E-mailbox en klik de link aan die we je zonden om je bericht te bevestigen.');
+		header('Location: ' . generate_url('contact'));
+		exit;
 	}
 	else
 	{
@@ -231,8 +229,8 @@ if ($bottom_text)
 	echo $bottom_text;
 }
 
-echo '<p><small>Leden: indien mogelijk, login en gebruik het Support formulier. ';
+echo '<p>Leden: indien mogelijk, login en gebruik het Support formulier. ';
 echo '<i>Als je je paswoord kwijt bent kan je altijd zelf een nieuw paswoord ';
-echo 'aanvragen met je E-mail adres vanuit de login-pagina!</i></small></p>';
+echo 'aanvragen met je E-mail adres vanuit de login-pagina!</i></p>';
 
 include __DIR__ . '/include/footer.php';

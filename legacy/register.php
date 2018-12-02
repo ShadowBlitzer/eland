@@ -162,7 +162,8 @@ if ($token)
 		];
 
 		$app['queue.mail']->queue([
-			'to' 			=> 'admin',
+			'schema'		=> $tschema,
+			'to' 			=> $app['mail_addr_system']->get_admin($tschema),
 			'vars'			=> $vars,
 			'template'		=> 'admin_registration',
 		]);
@@ -179,8 +180,9 @@ if ($token)
 		}
 
 		$app['queue.mail']->queue([
-			'to' 					=> $data['email'],
-			'reply_to'				=> 'admin',
+			'schema'				=> $tschema,
+			'to' 					=> [$data['email']],
+			'reply_to'				=> $app['mail_addr_system']->get_admin($tschema),
 			'template_from_config'	=> 'registration_success_mail',
 			'vars'		=> $vars,
 		], 1000);
@@ -288,7 +290,8 @@ if ($submit)
 		];
 
 		$app['queue.mail']->queue([
-			'to' 		=> $reg['email'],
+			'schema'	=> $tschema,
+			'to' 		=> [$reg['email']],
 			'vars'		=> $vars,
 			'template'	=> 'registration_confirm',
 		], 1000);

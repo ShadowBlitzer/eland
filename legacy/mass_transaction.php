@@ -402,31 +402,33 @@ include __DIR__ . '/include/header.php';
 
 echo '<div class="panel panel-warning">';
 echo '<div class="panel-heading">';
-echo '<button class="btn btn-default" title="Toon invul-hulp" data-toggle="collapse" ';
+echo '<button class="btn btn-default" ';
+echo 'title="Toon invul-hulp" data-toggle="collapse" ';
 echo 'data-target="#help" type="button">';
 echo '<i class="fa fa-question"></i>';
 echo ' Invul-hulp</button>';
 echo '</div>';
-echo '<div class="panel-body collapse" id="help">';
+echo '<div class="panel-heading collapse" id="help">';
 
-echo '<p>Met deze invul-hulp kan je snel alle bedragen van de massa-transactie invullen. ';
-echo 'De bedragen kan je nadien nog individueel aanpassen alvorens de massa transactie uit te voeren. ';
+echo '<p>Met deze invul-hulp kan je snel alle ';
+echo 'bedragen van de massa-transactie invullen. ';
+echo 'De bedragen kan je nadien nog individueel ';
+echo 'aanpassen alvorens de massa transactie uit te voeren. ';
 echo '</p>';
 
-echo '<form class="form form-horizontal" id="fill_in_aid">';
+echo '<form class="form" id="fill_in_aid">';
 
 echo '<div class="pan-sub bg-warning">';
 
 echo '<div class="form-group">';
-echo '<label for="fixed" class="col-sm-2 control-label">Vast bedrag</label>';
-echo '<div class="col-sm-10">';
-echo '<div class="input-group margin-bottom">';
+echo '<label for="fixed" class="control-label">';
+echo 'Vast bedrag</label>';
+echo '<div class="input-group">';
 echo '<span class="input-group-addon">';
 echo $app['config']->get('currency', $tschema);
 echo '</span>';
 echo '<input type="number" class="form-control margin-bottom" id="fixed" ';
 echo 'min="0">';
-echo '</div>';
 echo '</div>';
 echo '</div>';
 
@@ -439,30 +441,34 @@ echo '<h4>Variabel deel</h4>';
 
 //
 echo '<div class="form-group">';
-echo '<label for="fixed" class="col-sm-2 control-label">Over periode</label>';
-echo '<div class="col-sm-10">';
-echo '<div class="input-group margin-bottom">';
-echo '<span class="input-group-addon">dagen</span>';
-echo '<input type="number" class="form-control margin-bottom" id="var_days" ';
+echo '<label for="fixed" class="control-label">';
+echo 'Over periode</label>';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo 'dagen</span>';
+echo '<input type="number" ';
+echo 'class="form-control margin-bottom" id="var_days" ';
 echo 'min="0">';
-echo '</div>';
 echo '</div>';
 echo '</div>';
 
 //
 echo '<div class="form-group">';
-echo '<label for="var_balance" class="col-sm-2 control-label">';
+echo '<label for="var_balance" class="control-label">';
 echo 'Promille op saldo</label>';
-echo '<div class="col-sm-5">';
+echo '<div class="row">';
+echo '<div class="col-sm-6">';
 
 echo '<div class="input-group">';
 echo '<span class="input-group-addon">&permil;</span>';
-echo '<input type="number" class="form-control margin-bottom" id="var_balance">';
+echo '<input type="number" ';
+echo 'class="form-control margin-bottom" id="var_balance">';
 echo '</div>';
-echo '<p>Berekend op gewogen gemiddelde van saldo. Kan ook negatief zijn!</p>';
+echo '<p>Berekend op gewogen gemiddelde van saldo. ';
+echo 'Kan ook negatief zijn!</p>';
 echo '</div>';
 
-echo '<div class="col-sm-5">';
+echo '<div class="col-sm-6">';
 echo '<div class="input-group">';
 echo '<span class="input-group-addon">';
 echo $app['config']->get('currency', $tschema);
@@ -470,65 +476,74 @@ echo ': basis';
 echo '</span>';
 echo '<input type="number" class="form-control" id="var_base">';
 echo '</div>';
-echo '<p>De basis waartegenover berekend wordt. Kan ook afwijkend van nul zijn.</p>';
+echo '<p>De basis waartegenover berekend wordt. ';
+echo 'Kan ook afwijkend van nul zijn.</p>';
+echo '</div>';
 echo '</div>';
 echo '</div>';
 
 //
 echo '<div class="form-group">';
-echo '<label for="var_trans_in" class="col-sm-2 control-label">';
+echo '<label for="var_trans_in" class="control-label">';
 echo 'Promille op transacties in</label>';
-echo '<div class="col-sm-5">';
+echo '<div class="row">';
+echo '<div class="col-sm-6">';
 echo '<div class="input-group">';
 echo '<span class="input-group-addon">&permil;</span>';
 echo '<input type="number" class="form-control" id="var_trans_in">';
 echo '</div>';
 echo '</div>';
 
-echo '<div class="col-sm-5">';
+echo '<div class="col-sm-6">';
 echo '<div class="input-group">';
 echo '<span class="input-group-addon">';
-echo 'excl. Account Codes';
+echo 'excl. ';
+echo '<i class="fa fa-user"></i>';
 echo '</span>';
-echo '<input type="text" class="form-control" id="var_ex_code_in">';
+echo '<input type="text" class="form-control" ';
+echo 'id="var_ex_code_in" ';
+echo 'placeholder="Account Codes">';
 echo '</div>';
 echo '<p>Exclusief tegenpartijen: ';
 echo 'Account Codes gescheiden door komma\'s</p>';
 echo '</div>';
 echo '</div>';
+echo '</div>';
 
 //
 echo '<div class="form-group">';
-echo '<label for="var_trans_out" class="col-sm-2 control-label">';
+echo '<label for="var_trans_out" class="control-label">';
 echo 'Promille op transacties uit</label>';
-echo '<div class="col-sm-5">';
-
+echo '<div class="row">';
+echo '<div class="col-sm-6">';
 echo '<div class="input-group">';
 echo '<span class="input-group-addon">&permil;</span>';
-
 echo '<input type="number" class="form-control" id="var_trans_out">';
-
 echo '</div>';
 echo '</div>';
 
-echo '<div class="col-sm-5">';
+echo '<div class="col-sm-6">';
 echo '<div class="input-group">';
 echo '<span class="input-group-addon">';
-echo 'excl. Account Codes';
+echo 'excl. ';
+echo '<i class="fa fa-user"></i>';
 echo '</span>';
-
-echo '<input type="text" class="form-control" id="var_ex_code_out">';
+echo '<input type="text" class="form-control" ';
+echo 'id="var_ex_code_out" ';
+echo 'placeholder="Account Codes">';
 echo '</div>';
 echo '<p>Exclusief tegenpartijen: ';
 echo 'Account Codes gescheiden door komma\'s</p>';
 echo '</div>';
 echo '</div>';
+echo '</div>';
 
 //
 echo '<div class="form-group">';
-echo '<label for="var_minimum" class="col-sm-2 control-label">';
+echo '<label for="var_minimum" class="control-label">';
 echo 'Minimum - maximum</label>';
-echo '<div class="col-sm-5">';
+echo '<div class="row">';
+echo '<div class="col-sm-6">';
 
 echo '<div class="input-group">';
 echo '<span class="input-group-addon">';
@@ -536,18 +551,19 @@ echo $app['config']->get('currency', $tschema);
 echo ': min';
 echo '</span>';
 
-echo '<input type="number" class="form-control margin-bottom" id="var_min">';
+echo '<input type="number" ';
+echo 'class="form-control margin-bottom" id="var_min">';
 echo '</div>';
 echo '</div>';
 
-echo '<div class="col-sm-5">';
+echo '<div class="col-sm-6">';
 echo '<div class="input-group">';
 echo '<span class="input-group-addon">';
 echo $app['config']->get('currency', $tschema);
 echo ': max';
 echo '</span>';
-
 echo '<input type="number" class="form-control" id="var_max">';
+echo '</div>';
 echo '</div>';
 echo '</div>';
 echo '</div>';
@@ -556,11 +572,9 @@ echo '</div>';
 /**/
 
 echo '<div class="form-group">';
-echo '<label for="respect_minlimit" class="col-sm-3 control-label">';
-echo 'Respecteer minimum limieten</label>';
-echo '<div class="col-sm-9">';
+echo '<label for="respect_minlimit" class="control-label">';
 echo '<input type="checkbox" id="respect_minlimit" checked="checked">';
-echo '</div>';
+echo ' Respecteer minimum limieten</label>';
 echo '</div>';
 
 if ($app['config']->get('minlimit', $tschema) !== ''
@@ -592,7 +606,8 @@ if ($app['config']->get('minlimit', $tschema) !== ''
 	echo '</ul>';
 }
 
-echo '<button class="btn btn-default" id="fill-in">Vul in</button>';
+echo '<button class="btn btn-default" id="fill-in">';
+echo 'Vul in</button>';
 
 echo '</form>';
 
@@ -609,7 +624,10 @@ echo '<div class="input-group">';
 echo '<span class="input-group-addon">';
 echo '<i class="fa fa-search"></i>';
 echo '</span>';
-echo '<input type="text" class="form-control" id="q" name="q" value="' . $q . '">';
+echo '<input type="text" class="form-control" ';
+echo 'id="q" name="q" value="';
+echo $q;
+echo '">';
 echo '</div>';
 echo '</div>';
 echo '</div>';
@@ -623,7 +641,7 @@ echo '<ul class="nav nav-tabs" id="nav-tabs">';
 foreach ($st as $k => $s)
 {
 	$shsh = $s['hsh'] ?? '';
-	$class_li = ($shsh == $hsh) ? ' class="active"' : '';
+	$class_li = $shsh == $hsh ? ' class="active"' : '';
 	$class_a  = $s['cl'] ?? 'white';
 
 	echo '<li' . $class_li . '><a href="#" class="bg-' . $class_a . '" ';
@@ -632,21 +650,27 @@ foreach ($st as $k => $s)
 
 echo '</ul>';
 
-echo '<form method="post" class="form-horizontal" autocomplete="off">';
+echo '<form method="post" autocomplete="off">';
 
 echo '<input type="hidden" value="" id="combined-filter">';
-echo '<input type="hidden" value="' . $hsh . '" name="hsh" id="hsh">';
-echo '<input type="hidden" value="" name="selected_users" id="selected_users">';
+echo '<input type="hidden" value="';
+echo $hsh;
+echo '" name="hsh" id="hsh">';
+echo '<input type="hidden" value="" ';
+echo 'name="selected_users" id="selected_users">';
 
 echo '<div class="panel panel-info">';
 echo '<div class="panel-heading">';
 
 echo '<div class="form-group">';
-echo '<label for="from_letscode" class="col-sm-2 control-label">';
+echo '<label for="from_letscode" class="control-label">';
 echo 'Van Account Code';
 echo '</label>';
-echo '<div class="col-sm-10">';
-echo '<input type="text" class="form-control" id="from_letscode" name="from_letscode" ';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo '<span class="fa fa-user"></span></span>';
+echo '<input type="text" class="form-control" ';
+echo 'id="from_letscode" name="from_letscode" ';
 echo 'value="';
 echo $from_letscode;
 echo '" ';
@@ -656,17 +680,22 @@ echo '" ';
 echo 'data-typeahead="';
 echo $app['typeahead']->get(['users_active', 'users_inactive', 'users_ip', 'users_im']);
 echo '">';
+echo '</div>';
 echo '<p>Gebruik dit voor een "Eén naar veel" transactie.';
 echo 'Alle ingevulde bedragen hieronder worden van dit Account gehaald.</p>';
 echo '</div>';
-echo '</div>';
 
 echo '</div>';
 
-echo '<table class="table table-bordered table-striped table-hover panel-body footable" ';
+echo '<table class="table table-bordered table-striped ';
+echo 'table-hover panel-body footable" ';
 echo 'data-filter="#combined-filter" data-filter-minimum="1" ';
-echo 'data-minlimit="' . $group_minlimit . '" ';
-echo 'data-maxlimit="' . $group_maxlimit . '"';
+echo 'data-minlimit="';
+echo $group_minlimit;
+echo '" ';
+echo 'data-maxlimit="';
+echo $group_maxlimit;
+echo '"';
 echo '>';
 echo '<thead>';
 
@@ -688,9 +717,9 @@ foreach($users as $user_id => $user)
 	$status_key = $status_ary[$user['status']];
 	$status_key = ($status_key == 'active' && $newusertreshold < strtotime($user['adate'])) ? 'new' : $status_key;
 
-	$hsh = ($st[$status_key]['hsh']) ?: '';
-	$hsh .= ($status_key == 'leaving' || $status_key == 'new') ? $st['active']['hsh'] : '';
-	$hsh .= ($status_key == 'active') ? $st['without-new-and-leaving']['hsh'] : '';
+	$hsh = $st[$status_key]['hsh'] ?: '';
+	$hsh .= $status_key == 'leaving' || $status_key == 'new' ? $st['active']['hsh'] : '';
+	$hsh .= $status_key == 'active' ? $st['without-new-and-leaving']['hsh'] : '';
 
 	$class = isset($st[$status_key]['cl']) ? ' class="' . $st[$status_key]['cl'] . '"' : '';
 
@@ -705,7 +734,8 @@ foreach($users as $user_id => $user)
 	echo '</td>';
 
 	echo '<td data-value="' . $hsh . '">';
-	echo '<input type="number" name="amount[' . $user_id . ']" class="form-control" ';
+	echo '<input type="number" name="amount[' . $user_id . ']" ';
+	echo 'class="form-control" ';
 	echo 'value="';
 	echo $amount[$user_id] ?? '';
 	echo '" ';
@@ -749,59 +779,71 @@ echo '</table>';
 echo '<div class="panel-heading">';
 
 echo '<div class="form-group">';
-echo '<label for="total" class="col-sm-2 control-label">Totaal ';
-echo $app['config']->get('currency', $tschema);
+echo '<label for="total" class="control-label">Totaal';
 echo '</label>';
-echo '<div class="col-sm-10">';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo $app['config']->get('currency', $tschema);
+echo '</span>';
 echo '<input type="number" class="form-control" id="total" readonly>';
 echo '</div>';
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<label for="to_letscode" class="col-sm-2 control-label">';
+echo '<label for="to_letscode" class="control-label">';
 echo 'Aan Account Code';
 echo '</label>';
-echo '<div class="col-sm-10">';
-echo '<input type="text" class="form-control" id="to_letscode" name="to_letscode" ';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo '<span class="fa fa-user"></span></span>';
+echo '<input type="text" class="form-control" ';
+echo 'id="to_letscode" name="to_letscode" ';
 echo 'value="';
 echo $to_letscode;
 echo '" ';
 echo 'data-typeahead-source="from_letscode">';
-echo '<p>Gebruik dit voor een "Veel naar één" transactie. Bijvoorbeeld, een ledenbijdrage. ';
-echo 'Alle ingevulde bedragen hierboven gaan naar dit Account.</p>';
 echo '</div>';
+echo '<p>Gebruik dit voor een "Veel naar één" transactie. ';
+echo 'Bijvoorbeeld, een ledenbijdrage. ';
+echo 'Alle ingevulde bedragen hierboven ';
+echo 'gaan naar dit Account.</p>';
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<label for="description" class="col-sm-2 control-label">Omschrijving</label>';
-echo '<div class="col-sm-10">';
+echo '<label for="description" class="control-label">';
+echo 'Omschrijving</label>';
+echo '<div class="input-group">';
+echo '<span class="input-group-addon">';
+echo '<span class="fa fa-pencil"></span></span>';
 echo '<input type="text" class="form-control" id="description" ';
 echo 'name="description" ';
-echo 'value="' . $description . '" required>';
+echo 'value="';
+echo $description;
+echo '" required>';
 echo '</div>';
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<label for="mail_en" class="col-sm-2 control-label">';
-echo 'Verstuur notificatie mails</label>';
-echo '<div class="col-sm-10">';
+echo '<label for="mail_en" class="control-label">';
 echo '<input type="checkbox" id="mail_en" name="mail_en" value="1"';
 echo $mail_en ? ' checked="checked"' : '';
 echo '>';
-echo '</div>';
+echo ' Verstuur notificatie mails</label>';
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<div class="col-sm-12">';
-echo '<input type="checkbox" name="verify"';
-echo ' value="1" required> ';
-echo 'Ik heb nagekeken dat de juiste bedragen en de juiste "Van" of "Aan" ';
+echo '<label>';
+echo '<input type="checkbox" name="verify" ';
+echo 'value="1" required> ';
+echo 'Ik heb nagekeken dat de juiste ';
+echo 'bedragen en de juiste "Van" of "Aan" ';
 echo 'Account Code ingevuld zijn.';
-echo '</div>';
+echo '</label>';
 echo '</div>';
 
 echo aphp('transactions', [], 'Annuleren', 'btn btn-default') . '&nbsp;';
-echo '<input type="submit" value="Massa transactie uitvoeren" name="zend" class="btn btn-success">';
+echo '<input type="submit" value="Massa transactie uitvoeren" ';
+echo 'name="zend" class="btn btn-success">';
 echo $app['form_token']->get_hidden_input();
 
 echo '</div>';
@@ -809,7 +851,9 @@ echo '</div>';
 
 echo '</div>';
 
-echo '<input type="hidden" value="' . $transid . '" name="transid">';
+echo '<input type="hidden" value="';
+echo $transid;
+echo '" name="transid">';
 
 echo '</form>';
 
@@ -899,7 +943,8 @@ function mail_mass_transaction($mail_ary)
 		]);
 
 		$app['queue.mail']->queue([
-			'to'		=> $user_id,
+			'schema'	=> $tschema,
+			'to'		=> $app['mail_addr_user']->get($user_id, $tschema),
 			'template'	=> 'transaction',
 			'vars'		=> $vars,
 		]);
@@ -942,7 +987,12 @@ function mail_mass_transaction($mail_ary)
 	]);
 
 	$app['queue.mail']->queue([
-		'to' 		=> ['admin', $s_id, $one_user_id],
+		'schema'	=> $tschema,
+		'to' 		=> array_merge(
+			$app['mail_addr_system']->get_support($tschema),
+			$app['mail_addr_user']->get($s_id, $tschema),
+			$app['mail_addr_user']->get($one_user_id, $tschema)
+		),
 		'subject' 	=> $subject,
 		'text' 		=> $text,
 		'template'	=> 'admin_mass_transaction',

@@ -38,7 +38,7 @@ if (isset($_POST['zend']))
 			where c.id_user = ?
 				and c.id_type_contact = tc.id', [$s_id]);
 
-		$email = $app['mailaddr']->get($s_id);
+		$email = $app['mail_addr_user']->get($s_id, $tschema);
 
 		$vars = [
 			'group'	=> [
@@ -56,7 +56,8 @@ if (isset($_POST['zend']))
 		];
 
 		$email_ary = [
-			'to'		=> 'support',
+			'schema'	=> $tschema,
+			'to'		=> $app['mail_addr_system']->get_support($tschema),
 			'template'	=> 'support',
 			'vars'		=> $vars,
 		];
@@ -64,23 +65,19 @@ if (isset($_POST['zend']))
 		if ($email)
 		{
 			$app['queue.mail']->queue([
+				'schema'	=> $tschema,
 				'template'	=> 'support_copy',
 				'vars'		=> $vars,
-				'to'		=> $s_id,
+				'to'		=> $app['mail_addr_user']->get($s_id, $tschema),
 			]);
 
-			$email_ary['reply_to'] = $s_id;
+			$email_ary['reply_to'] = $app['mail_addr_user']->get($s_id, $tschema);
 		}
 
-		$return_message =  $app['queue.mail']->queue($email_ary);
+		$app['queue.mail']->queue($email_ary);
 
-		if (!$return_message)
-		{
-			$app['alert']->success('De Support E-mail is verzonden.');
-			redirect_default_page();
-		}
-
-		$app['alert']->error('E-mail niet verstuurd. ' . $return_message);
+		$app['alert']->success('De Support E-mail is verzonden.');
+		redirect_default_page();
 	}
 	else
 	{
@@ -97,7 +94,7 @@ else
 	}
 	else
 	{
-		$email = $app['mailaddr']->get($s_id);
+		$email = $app['mail_addr_user']->get($s_id, $tschema);
 
 		if (!count($email))
 		{

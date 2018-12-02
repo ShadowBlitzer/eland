@@ -15,15 +15,15 @@ use App\Legacy\service\this_group;
 
 class geocode extends schema_task
 {
-	private $queue;
-	private $monolog;
-	private $cache;
-	private $db;
+	protected $queue;
+	protected $monolog;
+	protected $cache;
+	protected $db;
 
-	private $curl;
-	private $geocoder;
+	protected $curl;
+	protected $geocoder;
 
-	private $geocode_queue;
+	protected $geocode_queue;
 
 	public function __construct(
 		db $db,

@@ -17,22 +17,24 @@ use App\Legacy\service\groups;
 use App\Legacy\service\this_group;
 use App\Legacy\service\interlets_groups;
 use App\Legacy\service\config;
+use App\Legacy\service\mail_addr_user;
 
 class saldo extends schema_task
 {
-	private $db;
-	private $xdb;
-	private $redis;
-	private $cache;
-	private $monolog;
-	private $mail;
-	private $s3_img_url;
-	private $s3_doc_url;
-	private $protocol;
-	private $date_format;
-	private $distance;
-	private $interlets_groups;
-	private $config;
+	protected $db;
+	protected $xdb;
+	protected $redis;
+	protected $cache;
+	protected $monolog;
+	protected $mail;
+	protected $s3_img_url;
+	protected $s3_doc_url;
+	protected $protocol;
+	protected $date_format;
+	protected $distance;
+	protected $interlets_groups;
+	protected $config;
+	protected $mail_addr_user;
 
 	public function __construct(
 		db $db,
@@ -50,7 +52,8 @@ class saldo extends schema_task
 		groups $groups,
 		this_group $this_group,
 		interlets_groups $interlets_groups,
-		config $config
+		config $config,
+		mail_addr_user $mail_addr_user
 	)
 	{
 		parent::__construct($schedule, $groups, $this_group);
@@ -66,6 +69,7 @@ class saldo extends schema_task
 		$this->date_format = $date_format;
 		$this->interlets_groups = $interlets_groups;
 		$this->config = $config;
+		$this->mail_addr_user = $mail_addr_user;
 	}
 
 	function process()
@@ -131,11 +135,11 @@ class saldo extends schema_task
 
 	// fetch active users
 
-		$rs = $this->db->prepare('SELECT u.id,
+		$rs = $this->db->prepare('select u.id,
 				u.name, u.saldo, u.status, u.minlimit, u.maxlimit,
 				u.letscode, u.postcode, u.cron_saldo
-			FROM ' . $this->schema . '.users u
-			WHERE u.status in (1, 2)');
+			from ' . $this->schema . '.users u
+			where u.status in (1, 2)');
 
 		$rs->execute();
 
@@ -491,7 +495,8 @@ class saldo extends schema_task
 
 			// new topics
 
-			$rows = $this->xdb->get_many(['agg_schema' => $this->schema,
+			$rows = $this->xdb->get_many([
+				'agg_schema' => $this->schema,
 				'agg_type' => 'forum',
 				'data->>\'subject\'' => ['is not null'],
 				'ts' => ['>' => $treshold_time],
@@ -635,7 +640,7 @@ class saldo extends schema_task
 			$this->mail->queue([
 				'validate_email'	=> true,
 				'schema'	=> $this->schema,
-				'to'		=> $id,
+				'to'		=> $this->mail_addr_user->get($id, $this->schema),
 				'template'	=> 'periodic_overview',
 				'vars'		=> array_merge($vars, [
 					'user'			=> $users[$id],

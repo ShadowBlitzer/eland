@@ -10,11 +10,11 @@ use App\Legacy\service\token;
 
 class email_validate
 {
-	public $ttl = 345600; // 4 days
-	private $db;
-	private $xdb;
-	private $cache;
-	private $monolog;
+	protected $ttl = 345600; // 4 days
+	protected $db;
+	protected $xdb;
+	protected $cache;
+	protected $monolog;
 
 	public function __construct(
 		cache $cache,
@@ -28,10 +28,6 @@ class email_validate
 		$this->token = $token;
 		$this->monolog = $monolog;
 	}
-
-	/*
-	 *
-	 */
 
 	public function get_token($email, $schema, $source)
 	{

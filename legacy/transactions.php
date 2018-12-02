@@ -494,9 +494,10 @@ if ($add)
 				$text .= ' group:' . $group['groupname'];
 
 				$app['queue.mail']->queue([
-					'to' => 'admin',
-					'subject' => $subject,
-					'text' => $text,
+					'schema'		=> $tschema,
+					'to' 			=> $app['mail_addr_system']->get_admin($tschema),
+					'subject' 		=> $subject,
+					'text' 			=> $text,
 				]);
 
 				$app['alert']->error('De lokale commit van de interSysteem transactie is niet geslaagd. ' . $contact_admin);
@@ -913,20 +914,20 @@ if ($add)
 	echo '<div class="panel panel-info">';
 	echo '<div class="panel-heading">';
 
-	echo '<form  method="post" class="form-horizontal" autocomplete="off">';
+	echo '<form  method="post" autocomplete="off">';
 
 	echo '<div class="form-group"';
 	echo $s_admin ? '' : ' disabled" ';
 	echo '>';
-	echo '<label for="letscode_from" class="col-sm-2 control-label">';
+	echo '<label for="letscode_from" class="control-label">';
 	echo 'Van Account Code';
 	echo '</label>';
-	echo '<div class="col-sm-10">';
 	echo '<div class="input-group">';
 	echo '<span class="input-group-addon">';
 	echo '<i class="fa fa-user"></i>';
 	echo '</span>';
-	echo '<input type="text" class="form-control" id="letscode_from" name="letscode_from" ';
+	echo '<input type="text" class="form-control" ';
+	echo 'id="letscode_from" name="letscode_from" ';
 	echo 'data-typeahead-source="';
 	echo $groups_en ? 'group_self' : 'letscode_to';
 	echo '" ';
@@ -935,23 +936,21 @@ if ($add)
 	echo '" required';
 	echo $s_admin ? '' : ' disabled';
 	echo '>';
-
-	echo '</div>';
 	echo '</div>';
 	echo '</div>';
 
 	if ($groups_en)
 	{
 		echo '<div class="form-group">';
-		echo '<label for="group_id" class="col-sm-2 control-label">Aan Systeem</label>';
-		echo '<div class="col-sm-10">';
-
+		echo '<label for="group_id" class="control-label">';
+		echo 'Aan Systeem</label>';
 		echo '<div class="input-group">';
 		echo '<span class="input-group-addon">';
 		echo '<i class="fa fa-share-alt"></i>';
 		echo '</span>';
 
-		echo '<select type="text" class="form-control" id="group_id" name="group_id">';
+		echo '<select type="text" class="form-control" ';
+		echo 'id="group_id" name="group_id">';
 
 		foreach ($groups as $l)
 		{
@@ -1010,7 +1009,6 @@ if ($add)
 		echo '</select>';
 		echo '</div>';
 		echo '</div>';
-		echo '</div>';
 	}
 	else
 	{
@@ -1029,15 +1027,15 @@ if ($add)
 	}
 
 	echo '<div class="form-group">';
-	echo '<label for="letscode_to" class="col-sm-2 control-label">';
+	echo '<label for="letscode_to" class="control-label">';
 	echo 'Aan Account Code';
 	echo '</label>';
-	echo '<div class="col-sm-10">';
 	echo '<div class="input-group">';
 	echo '<span class="input-group-addon">';
 	echo '<i class="fa fa-user"></i>';
 	echo '</span>';
-	echo '<input type="text" class="form-control" id="letscode_to" name="letscode_to" ';
+	echo '<input type="text" class="form-control" ';
+	echo 'id="letscode_to" name="letscode_to" ';
 
 	if ($groups_en)
 	{
@@ -1071,31 +1069,35 @@ if ($add)
 	echo '</ul>';
 
 	echo '</div>';
-	echo '</div>';
+
 
 	echo '<div class="form-group">';
-	echo '<label for="amount" class="col-sm-2 control-label">';
+	echo '<label for="amount" class="control-label">';
 	echo 'Aantal</label>';
-	echo '<div class="col-sm-10" id="amount_container">';
-	echo '<div class="input-group">';
+	echo '<div class="row">';
+	echo '<div class="col-sm-12" id="amount_container">';
 
+	echo '<div class="input-group">';
 	echo '<span class="input-group-addon">';
 	echo $app['config']->get('currency', $tschema);
 	echo '</span>';
-
-	echo '<input type="number" class="form-control" id="amount" name="amount" ';
+	echo '<input type="number" class="form-control" ';
+	echo 'id="amount" name="amount" ';
 	echo 'value="';
 	echo $transaction['amount'];
 	echo '" min="1" required>';
-
 	echo '</div>';
 
 	echo '<ul>';
 
 	echo get_valuation();
 
-	echo '<li id="info_remote_amount_unknown" class="hidden">De omrekening naar de externe tijdsvaluta ';
-	echo 'is niet gekend omdat het andere Systeem zich niet op dezelfde eLAND-server bevindt.</li>';
+	echo '<li id="info_remote_amount_unknown" ';
+	echo 'class="hidden">De omrekening ';
+	echo 'naar de externe tijdsvaluta ';
+	echo 'is niet gekend omdat het andere ';
+	echo 'Systeem zich niet op dezelfde ';
+	echo 'eLAND-server bevindt.</li>';
 
 	if ($s_admin)
 	{
@@ -1113,16 +1115,17 @@ if ($add)
 
 	echo '</ul>';
 
-	echo '</div>';
+	echo '</div>'; // amount_container
 
-	echo '<div class="col-sm-5 collapse" id="remote_amount_container">';
+	echo '<div class="col-sm-6 collapse" ';
+	echo 'id="remote_amount_container">';
+
 	echo '<div class="input-group">';
 	echo '<span class="input-group-addon">';
 	echo '</span>';
 	echo '<input type="number" class="form-control" ';
 	echo 'id="remote_amount" name="remote_amount" ';
 	echo 'value="" min="1">';
-
 	echo '</div>';
 
 	echo '<ul>';
@@ -1136,22 +1139,21 @@ if ($add)
 
 	echo '</ul>';
 
-	echo '</div>';
-
-	echo '</div>';
+	echo '</div>'; // remote_amount
+	echo '</div>'; // form-group
 
 	echo '<div class="form-group">';
-	echo '<label for="description" class="col-sm-2 control-label">Omschrijving</label>';
-	echo '<div class="col-sm-10">';
+	echo '<label for="description" class="control-label">';
+	echo 'Omschrijving</label>';
 	echo '<div class="input-group">';
 	echo '<span class="input-group-addon">';
 	echo '<i class="fa fa-pencil"></i>';
 	echo '</span>';
-	echo '<input type="text" class="form-control" id="description" name="description" ';
+	echo '<input type="text" class="form-control" ';
+	echo 'id="description" name="description" ';
 	echo 'value="';
 	echo $transaction['description'];
 	echo '" required maxlength="60">';
-	echo '</div>';
 	echo '</div>';
 	echo '</div>';
 
@@ -1277,11 +1279,11 @@ if ($edit)
 	echo '<div class="panel panel-info">';
 	echo '<div class="panel-heading">';
 
-	echo '<form  method="post" class="form-horizontal" autocomplete="off">';
+	echo '<form  method="post" autocomplete="off">';
 
 // copied from "show a transaction"
 
-	echo '<dl class="dl-horizontal">';
+	echo '<dl>';
 
 	echo '<dt>Tijdstip</dt>';
 	echo '<dd>';
@@ -1371,10 +1373,17 @@ if ($edit)
 	echo '</dl>';
 
 	echo '<div class="form-group">';
-	echo '<label for="description" class="col-sm-2 control-label">Nieuwe omschrijving</label>';
-	echo '<div class="col-sm-10">';
-	echo '<input type="text" class="form-control" id="description" name="description" ';
-	echo 'value="' . $transaction['description'] . '" required maxlength="60">';
+	echo '<label for="description" class="control-label">';
+	echo 'Nieuwe omschrijving</label>';
+	echo '<div class="input-group">';
+	echo '<span class="input-group-addon">';
+	echo '<i class="fa fa-pencil"></i>';
+	echo '</span>';
+	echo '<input type="text" class="form-control" ';
+	echo 'id="description" name="description" ';
+	echo 'value="';
+	echo $transaction['description'];
+	echo '" required maxlength="60">';
 	echo '</div>';
 	echo '</div>';
 
@@ -1387,12 +1396,12 @@ if ($edit)
 	echo '</div>';
 	echo '</div>';
 
-	echo '<ul><small><i>';
+	echo '<ul><i>';
 	echo '<li>Omdat dat transacties binnen het netwerk zichtbaar zijn voor iedereen kan ';
 	echo 'de omschrijving aangepast worden door admins in het geval deze ongewenste informatie bevat (bvb. een opmerking die beledigend is).</li>';
 	echo '<li>Pas de omschrijving van een transactie enkel aan wanneer het echt noodzakelijk is! Dit om verwarring te vermijden.</li>';
 	echo '<li>Transacties kunnen nooit ongedaan gemaakt worden. Doe een tegenboeking bij vergissing.</li>';
-	echo '</i></small></ul>';
+	echo '</i></ul>';
 
 	include __DIR__ . '/include/footer.php';
 	exit;

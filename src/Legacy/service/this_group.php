@@ -9,11 +9,11 @@ use App\Legacy\service\groups;
 
 class this_group
 {
-	private $db;
-	private $redis;
-	private $groups;
-	private $schema;
-	private $host;
+	protected $db;
+	protected $redis;
+	protected $groups;
+	protected $schema;
+	protected $host;
 
 	public function __construct(groups $groups, db $db, Redis $redis)
 	{

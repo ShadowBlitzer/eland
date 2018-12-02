@@ -12,8 +12,8 @@ use App\Legacy\service\this_group;
 
 class sync_user_cache extends schema_task
 {
-	private $db;
-	private $user_cache;
+	protected $db;
+	protected $user_cache;
 
 	public function __construct(
 		db $db,

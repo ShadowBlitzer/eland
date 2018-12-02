@@ -13,9 +13,9 @@ use App\Legacy\service\config;
 
 class cleanup_messages extends schema_task
 {
-	private $db;
-	private $monolog;
-	private $config;
+	protected $db;
+	protected $monolog;
+	protected $config;
 
 	public function __construct(
 		db $db,
@@ -37,9 +37,9 @@ class cleanup_messages extends schema_task
 		$msgs = '';
 		$testdate = gmdate('Y-m-d H:i:s', time() - $this->config->get('msgexpcleanupdays', $this->schema) * 86400);
 
-		$st = $this->db->prepare('SELECT id, content, id_category, msg_type
-			FROM ' . $this->schema . '.messages
-			WHERE validity < ?');
+		$st = $this->db->prepare('select id, content, id_category, msg_type
+			from ' . $this->schema . '.messages
+			where validity < ?');
 
 		$st->bindValue(1, $testdate);
 		$st->execute();
@@ -56,16 +56,17 @@ class cleanup_messages extends schema_task
 			$this->monolog->info('(cron) Expired and deleted Messages ' . $msgs,
 				['schema' => $this->schema]);
 
-			$this->db->executeQuery('delete from ' . $this->schema . '.messages WHERE validity < ?', [$testdate]);
+			$this->db->executeQuery('delete from ' . $this->schema . '.messages
+				where validity < ?', [$testdate]);
 		}
 
 		$users = '';
 		$ids = [];
 
-		$st = $this->db->prepare('SELECT u.id, u.letscode, u.name
-			FROM ' . $this->schema . '.users u, ' . $this->schema . '.messages m
-			WHERE u.status = 0
-				AND m.id_user = u.id');
+		$st = $this->db->prepare('select u.id, u.letscode, u.name
+			from ' . $this->schema . '.users u, ' . $this->schema . '.messages m
+			where u.status = 0
+				and m.id_user = u.id');
 
 		$st->execute();
 
@@ -89,7 +90,8 @@ class cleanup_messages extends schema_task
 			}
 			else if (count($ids) > 1)
 			{
-				$this->db->executeQuery('delete from ' . $this->schema . '.messages where id_user in (?)',
+				$this->db->executeQuery('delete from ' . $this->schema . '.messages
+					where id_user in (?)',
 					[$ids],
 					[\Doctrine\DBAL\Connection::PARAM_INT_ARRAY]);
 			}
@@ -106,7 +108,8 @@ class cleanup_messages extends schema_task
 
 		while ($row = $rs->fetch())
 		{
-			$this->db->delete($this->schema . '.msgpictures', ['id' => $row['id']]);
+			$this->db->delete($this->schema . '.msgpictures',
+				['id' => $row['id']]);
 		}
 
 		// update counts for each category
@@ -164,7 +167,9 @@ class cleanup_messages extends schema_task
 				'stat_msgs_wanted'	=> $want_count[$id] ?? 0,
 			];
 
-			$this->db->update($this->schema . '.categories', $stats, ['id' => $id]);
+			$this->db->update($this->schema . '.categories',
+				$stats,
+				['id' => $id]);
 		}
 	}
 

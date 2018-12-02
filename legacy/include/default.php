@@ -57,22 +57,17 @@ $app->extend('monolog', function($monolog, $app) {
 
 	$monolog->pushProcessor(function ($record) use ($app){
 
-		$record['extra']['schema'] = $app['this_group']->get_schema();
-
 		if (isset($app['s_ary_user']))
 		{
 			$record['extra']['letscode'] = $app['s_ary_user']['letscode'] ?? '';
 			$record['extra']['user_id'] = $app['s_ary_user']['id'] ?? '';
 			$record['extra']['username'] = $app['s_ary_user']['name'] ?? '';
 		}
-
 		if (isset($app['s_schema']))
 		{
 			$record['extra']['user_schema'] = $app['s_schema'];
 		}
-
 		$record['extra']['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? ($_SERVER['REMOTE_ADDR'] ?? '');
-
 		return $record;
 	});
 
@@ -146,9 +141,12 @@ $app['date_format'] = function($app){
 	return new service\date_format($app['config'], $app['this_group']);
 };
 
-$app['mailaddr'] = function ($app){
-	return new service\mailaddr($app['db'], $app['monolog'],
-		$app['this_group'], $app['config']);
+$app['mail_addr_system'] = function ($app){
+	return new service\mail_addr_system($app['monolog'], $app['config']);
+};
+
+$app['mail_addr_user'] = function ($app){
+	return new service\mail_addr_user($app['db'], $app['monolog']);
 };
 
 $app['interlets_groups'] = function ($app){
@@ -185,8 +183,9 @@ $app['email_validate'] = function ($app){
 
 $app['queue.mail'] = function ($app){
 	return new queue\mail($app['queue'], $app['monolog'],
-		$app['this_group'], $app['mailaddr'], $app['twig'],
-		$app['config'], $app['email_validate']);
+		$app['twig'],
+		$app['config'], $app['mail_addr_system'],
+		$app['email_validate']);
 };
 
 // tasks
@@ -246,16 +245,20 @@ $app['schema_task.user_exp_msgs'] = function ($app){
 	return new schema_task\user_exp_msgs($app['db'], $app['queue.mail'],
 		$app['protocol'],
 		$app['schedule'], $app['groups'], $app['this_group'],
-		$app['config'], $app['template_vars'], $app['user_cache']);
+		$app['config'], $app['template_vars'], $app['user_cache'],
+		$app['mail_addr_user']);
 };
 
 $app['schema_task.saldo'] = function ($app){
-	return new schema_task\saldo($app['db'], $app['xdb'], $app['predis'], $app['cache'],
+	return new schema_task\saldo(
+		$app['db'], $app['xdb'], $app['predis'], $app['cache'],
 		$app['monolog'], $app['queue.mail'],
 		$app['s3_img_url'], $app['s3_doc_url'], $app['protocol'],
 		$app['date_format'], $app['distance'],
 		$app['schedule'], $app['groups'], $app['this_group'],
-		$app['interlets_groups'], $app['config']);
+		$app['interlets_groups'], $app['config'],
+		$app['mail_addr_user']
+	);
 };
 
 $app['schema_task.interlets_fetch'] = function ($app){

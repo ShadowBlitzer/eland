@@ -12,19 +12,19 @@ use App\Legacy\service\user_cache;
 
 class autominlimit
 {
-	private $monolog;
-	private $xdb;
-	private $db;
-	private $this_group;
-	private $config;
-	private $user_cache;
+	protected $monolog;
+	protected $xdb;
+	protected $db;
+	protected $this_group;
+	protected $config;
+	protected $user_cache;
 
-	private $exclusive;
-	private $trans_exclusive;
-	private $enabled = false;
-	private $trans_percentage;
-	private $group_minlimit;
-	private $schema;
+	protected $exclusive;
+	protected $trans_exclusive;
+	protected $enabled = false;
+	protected $trans_percentage;
+	protected $group_minlimit;
+	protected $schema;
 
 	public function __construct(
 		LoggerInterface $monolog,
