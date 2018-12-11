@@ -136,7 +136,7 @@ if ($add && $submit && !count($errors))
 				'to' 		=> $app['mail_addr_system']->get_newsadmin($tschema),
 				'template'	=> 'admin_news_approve',
 				'vars'		=> $vars,
-			]);
+			], 7000);
 
 			$app['alert']->success('Nieuwsbericht wacht op goedkeuring van een beheerder');
 			cancel();
@@ -800,7 +800,7 @@ if (!$inline)
 	include __DIR__ . '/include/footer.php';
 }
 
-function cancel($id = '')
+function cancel(int $id = 0):void
 {
 	global $view_news;
 

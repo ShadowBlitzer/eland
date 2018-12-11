@@ -280,12 +280,12 @@ if ($post && $img && $images && !$s_guest)
 			continue;
 		}
 
-		if ($size > (200 * 1024))
+		if ($size > (400 * 1024))
 		{
 			$ret_ary[] = [
 				'name'	=> $name,
 				'size'	=> $size,
-				'error' => 'te groot bestand',
+				'error' => 'Te groot bestand',
 			];
 
 			continue;
@@ -488,8 +488,12 @@ if ($img_del == 'all' && $id)
 		echo '<img src="' . $a_img . '" class="img-rounded">';
 
 		echo '<div class="caption">';
-        echo '<span class="btn btn-danger" data-img-del="' . $img_id . '" ';
-        echo 'data-url="' . generate_url('messages', ['img_del' => $img_id]) . '" role="button">';
+		echo '<span class="btn btn-danger" data-img-del="';
+		echo $img_id;
+		echo '" ';
+		echo 'data-url="';
+		echo generate_url('messages', ['img_del' => $img_id]);
+		echo '" role="button">';
         echo '<i class="fa fa-times"></i> ';
         echo 'Verwijderen</span>';
 		echo '</div>';
@@ -577,7 +581,8 @@ if ($mail && $post && $id)
 		'contacts'		=> $contacts,
 		'msg_text'		=> $content,
 		'message'		=> $message,
-		'login_url'		=> $app['base_url'].'/login.php',
+		'login_url'		=> $app['base_url'] . '/login.php',
+		'support_url'	=> $app['base_url'] . '/support.php?src=p',
 	];
 
 	$app['queue.mail']->queue([
@@ -586,7 +591,7 @@ if ($mail && $post && $id)
 		'reply_to'	=> $app['mail_addr_user']->get($s_id, $s_schema),
 		'template'	=> 'message',
 		'vars'		=> $vars,
-	], 600);
+	], 8500);
 
 
 	if ($cc)
@@ -596,7 +601,7 @@ if ($mail && $post && $id)
 			'to'		=> $app['mail_addr_user']->get($s_id, $s_schema),
 			'template'	=> 'message_copy',
 			'vars'		=> $vars,
-		], 600);
+		], 8000);
 	}
 
 	$app['alert']->success('Mail verzonden.');
@@ -1188,7 +1193,10 @@ if (($edit || $add))
 		echo '<input type="text" class="form-control" ';
 		echo 'id="user_letscode" name="user_letscode" ';
 		echo 'data-typeahead="';
-		echo $app['typeahead']->get('users_active');
+		echo $app['typeahead']->get([['accounts', [
+			'status'	=> 'active',
+			'schema'	=> $tschema,
+		]]]);
 		echo '" ';
 		echo 'data-newuserdays="';
 		echo $app['config']->get('newuserdays', $tschema);
@@ -1743,7 +1751,9 @@ if ($filter_en)
 {
 	if (!$uid)
 	{
-		if (isset($filter['fcode']) && $filter['fcode']);
+		if (isset($filter['fcode'])
+			&& $filter['fcode']
+			&& !empty($filter['fcode']))
 		{
 			[$fcode] = explode(' ', trim($filter['fcode']));
 			$fcode = trim($fcode);
@@ -2210,7 +2220,12 @@ if (!$inline)
 
 	echo '<input type="text" class="form-control" ';
 	echo 'aria-describedby="fcode_addon" ';
-	echo 'data-typeahead="' . $app['typeahead']->get('users_active') . '" ';
+	echo 'data-typeahead="';
+	echo $app['typeahead']->get([['accounts', [
+		'status'	=> 'active',
+		'schema'	=> $tschema,
+	]]]);
+	echo '" ';
 	echo 'data-newuserdays="';
 	echo $app['config']->get('newuserdays', $tschema);
 	echo '" ';
@@ -2222,7 +2237,9 @@ if (!$inline)
 	echo '</div>';
 
 	echo '<div class="col-sm-2">';
-	echo '<input type="submit" id="filter_submit" value="Toon" class="btn btn-default btn-block" name="f[s]">';
+	echo '<input type="submit" id="filter_submit" ';
+	echo 'value="Toon" class="btn btn-default btn-block" ';
+	echo 'name="f[s]">';
 	echo '</div>';
 
 	echo '</div>';
@@ -2318,8 +2335,13 @@ if ($v_list)
 			$th_params['orderby'] = $key_orderby;
 			$th_params['asc'] = $data['asc'];
 
-			echo '<a href="' . generate_url('messages', $th_params) . '">';
-			echo $data['lbl'] . '&nbsp;<i class="fa fa-sort' . $data['indicator'] . '"></i>';
+			echo '<a href="';
+			echo generate_url('messages', $th_params);
+			echo '">';
+			echo $data['lbl'];
+			echo '&nbsp;<i class="fa fa-sort';
+			echo $data['indicator'];
+			echo '"></i>';
 			echo '</a>';
 		}
 		echo '</th>';
@@ -2410,8 +2432,12 @@ else if ($v_extended)
 		if (isset($imgs[$msg['id']]))
 		{
 			echo '<div class="media-left">';
-			echo '<a href="' . generate_url('messages', ['id' => $msg['id']]) . '">';
-			echo '<img class="media-object" src="' . $app['s3_img_url'] . $imgs[$msg['id']] . '" width="150">';
+			echo '<a href="';
+			echo generate_url('messages', ['id' => $msg['id']]);
+			echo '">';
+			echo '<img class="media-object" src="';
+			echo $app['s3_img_url'] . $imgs[$msg['id']];
+			echo '" width="150">';
 			echo '</a>';
 			echo '</div>';
 		}
@@ -2419,7 +2445,12 @@ else if ($v_extended)
 		echo '<div class="media-body">';
 		echo '<h3 class="media-heading">';
 		echo aphp('messages', ['id' => $msg['id']], $type_str . ': ' . $msg['content']);
-		echo $exp ? ' <small><span class="text-danger">Vervallen</span></small>' : '';
+
+		if ($exp)
+		{
+			echo ' <small><span class="text-danger">Vervallen</span></small>';
+		}
+
 		echo '</h3>';
 
 		echo htmlspecialchars($msg['Description'], ENT_QUOTES);
@@ -2431,7 +2462,7 @@ else if ($v_extended)
 		echo '<div class="panel-footer">';
 		echo '<p><i class="fa fa-user"></i> ';
 		echo link_user($msg['id_user'], $tschema);
-		echo ($msg['postcode']) ? ', postcode: ' . $msg['postcode'] : '';
+		echo $msg['postcode'] ? ', postcode: ' . $msg['postcode'] : '';
 
 		if ($s_admin || $sf_owner)
 		{

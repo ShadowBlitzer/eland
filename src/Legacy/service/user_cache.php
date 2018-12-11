@@ -75,7 +75,9 @@ class user_cache
 
 	protected function read_from_db(int $id, string $schema):array
 	{
-		$user = $this->db->fetchAssoc('select * from ' . $schema . '.users where id = ?', [$id]);
+		$user = $this->db->fetchAssoc('select *
+			from ' . $schema . '.users
+			where id = ?', [$id]);
 
 		if (!is_array($user))
 		{
@@ -86,7 +88,8 @@ class user_cache
 		$user['minlimit'] = $user['minlimit'] == -999999999 ? '' : $user['minlimit'];
 		$user['maxlimit'] = $user['maxlimit'] == 999999999 ? '' : $user['maxlimit'];
 
-		$row = $this->xdb->get('user_fullname_access', $id, $schema);
+		$row = $this->xdb->get('user_fullname_access',
+			$id, $schema);
 
 		if ($row)
 		{
@@ -96,7 +99,8 @@ class user_cache
 		{
 			$user += ['fullname_access' => 'admin'];
 
-			$this->xdb->set('user_fullname_access', $id, ['fullname_access' => 'admin'], $schema);
+			$this->xdb->set('user_fullname_access',
+				$id, ['fullname_access' => 'admin'], $schema);
 		}
 
 		return $user;

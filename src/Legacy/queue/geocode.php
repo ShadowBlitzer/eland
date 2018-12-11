@@ -2,25 +2,22 @@
 
 namespace App\Legacy\queue;
 
+use App\Legacy\queue\queue_interface;
 use Doctrine\DBAL\Connection as db;
 use Psr\Log\LoggerInterface;
-
-use App\Legacy\model\queue as queue_model;
-use App\Legacy\model\queue_interface;
 use App\Legacy\service\cache;
 use App\Legacy\service\queue;
 use App\Legacy\service\user_cache;
 use App\Legacy\service\geocode as geocode_service;
 
-class geocode extends queue_model implements queue_interface
+class geocode implements queue_interface
 {
-	private $queue;
-	private $monolog;
-	private $cache;
-	private $db;
-	private $user_cache;
-
-	private $geocode_service;
+	protected $queue;
+	protected $monolog;
+	protected $cache;
+	protected $db;
+	protected $user_cache;
+	protected $geocode_service;
 
 	public function __construct(
 		db $db,
@@ -37,11 +34,9 @@ class geocode extends queue_model implements queue_interface
 		$this->db = $db;
 		$this->user_cache = $user_cache;
 		$this->geocode_service = $geocode_service;
-
-		parent::__construct();
 	}
 
-	public function process(array $data)
+	public function process(array $data):void
 	{
 		$adr = trim($data['adr']);
 		$uid = $data['uid'];
@@ -61,7 +56,9 @@ class geocode extends queue_model implements queue_interface
 
 		$user = $this->user_cache->get($uid, $sch);
 
-		$log_user = 'user: ' . $sch . '.' . $user['letscode'] . ' ' . $user['name'] . ' (' . $uid . ')';
+		$log_user = 'user: ' . $sch . '.' .
+			$user['letscode'] . ' ' .
+			$user['name'] . ' (' . $uid . ')';
 
 		$geo_status_key = 'geo_status_' . $adr;
 
@@ -76,7 +73,8 @@ class geocode extends queue_model implements queue_interface
 
 		if (getenv('GEO_BLOCK') === '1')
 		{
-			error_log('geo coding is blocked. not processing: ' . json_encode($data));
+			error_log('geo coding is blocked. not processing: ' .
+				json_encode($data));
 			return;
 		}
 
@@ -84,40 +82,30 @@ class geocode extends queue_model implements queue_interface
 
 		if (count($coords))
 		{
-				$this->cache->set($key, $coords);
-				$this->cache->del($geo_status_key);
-				$this->cache->del('geo_sleep');
+			$this->cache->set($key, $coords);
+			$this->cache->del($geo_status_key);
+			$this->cache->del('geo_sleep');
 
-				$log = 'Geocoded: ' . $adr . ' : ' . implode('|', $coords);
+			$log = 'Geocoded: ' . $adr . ' : ' . implode('|', $coords);
 
-				$this->monolog->info('(cron) ' . $log . ' ' . $log_user, ['schema' => $sch]);
+			$this->monolog->info('(cron) ' .
+				$log . ' ' . $log_user,
+				['schema' => $sch]);
 
-				return;
+			return;
 		}
 
 		$log = 'Geocode return NULL for: ' . $adr;
-		$this->monolog->info('cron geocode: ' . $log . ' ' . $log_user, ['schema' => $sch]);
+		$this->monolog->info('cron geocode: ' . $log .
+			' ' . $log_user, ['schema' => $sch]);
 
 		return;
 	}
 
-	public function queue(array $data)
+	public function queue(array $data):void
 	{
-		if (!isset($data['schema']))
+		if (!$this->check_data($data))
 		{
-			$this->monolog->debug('no schema set for geocode task');
-			return;
-		}
-
-		if (!isset($data['uid']))
-		{
-			$this->monolog->debug('no uid set for geocode task', ['schema' => $data['schema']]);
-			return;
-		}
-
-		if (!isset($data['adr']))
-		{
-			$this->monolog->debug('no adr set for geocode task', ['schema' => $data['schema']]);
 			return;
 		}
 
@@ -126,40 +114,77 @@ class geocode extends queue_model implements queue_interface
 		$this->queue->set('geocode', $data);
 	}
 
-	public function run(string $schema)
+	/**
+	 * address edits/adds/inits
+	 */
+	public function cond_queue(array $data):void
 	{
+		if (!$this->check_data($data))
+		{
+			return;
+		}
+
 		$log_ary = [];
 
-		$st = $this->db->prepare('select c.value, c.id_user
-			from ' . $schema . '.contact c, ' . $schema . '.type_contact tc, ' . $schema . '.users u
-			where c.id_type_contact = tc.id
-				and tc.abbrev = \'adr\'
-				and c.id_user = u.id
-				and u.status in (1, 2)');
+		$key = 'geo_' . $data['adr'];
+		$status_key = 'geo_status_' . $data['adr'];
 
-		$st->execute();
+		$log = json_encode($data);
 
-		while (($row = $st->fetch()) && count($log_ary) < 20)
+		if ($this->cache->exists($key))
 		{
-			$data = [
-				'adr'		=> trim($row['value']),
-				'uid'		=> $row['id_user'],
-				'schema'	=> $schema,
-			];
-
-			if ($this->queue($data) !== false)
-			{
-				$log_ary[] = link_user($row['id_user'], $schema, false, true) . ': ' . $data['adr'];
-			}
+			$this->monolog->info('Geocoding: key already exists for ' .
+				json_encode($data), ['schema' => $data['schema']]);
+			return;
 		}
 
-		if (count($log_ary))
+		if ($this->cache->get($status_key) == ['value' => 'error'])
 		{
-			$this->monolog->info('Addresses queued for geocoding: ' . implode(', ', $log_ary), ['schema' => $schema]);
+			$this->monolog->info('Geocoding: Error status exists for ' .
+				json_encode($data), ['schema' => $data['schema']]);
+			return;
 		}
+
+		$this->cache->set($status_key,
+			['value' => 'queue'],
+			2592000);  // 30 days
+
+		$this->queue($data);
+
+		$log = 'Queued for Geocoding: ';
+		$log .= link_user($data['uid'], $data['schema'], false, true);
+		$log .= ', ';
+		$log .= $data['adr'];
+
+		$this->monolog->info($log, ['schema' => $data['schema']]);
 	}
 
-	public function get_interval()
+	public function check_data(array $data):bool
+	{
+		if (!isset($data['schema']))
+		{
+			$this->monolog->debug('no schema set for geocode task');
+			return false;
+		}
+
+		if (!isset($data['uid']))
+		{
+			$this->monolog->debug('no uid set for geocode task',
+				['schema' => $data['schema']]);
+			return false;
+		}
+
+		if (!isset($data['adr']))
+		{
+			$this->monolog->debug('no adr set for geocode task',
+				['schema' => $data['schema']]);
+			return false;
+		}
+
+		return true;
+	}
+
+	public function get_interval():int
 	{
 		return 120;
 	}

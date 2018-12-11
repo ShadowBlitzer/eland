@@ -164,7 +164,8 @@ if ($user_mail_submit && $id && $post)
 		'from_group'	=> $s_group_self ? '' : $app['config']->get('systemname', $s_schema),
 		'contacts'		=> $contacts,
 		'msg_text'		=> $user_mail_content,
-		'login_url'		=> $app['base_url'].'/login.php',
+		'login_url'		=> $app['base_url'] . '/login.php',
+		'support_url'	=> $app['base_url'] . '/support.php?src=p',
 	];
 
 	$app['queue.mail']->queue([
@@ -173,7 +174,7 @@ if ($user_mail_submit && $id && $post)
 		'reply_to'	=> $app['mail_addr_user']->get($s_id, $s_schema),
 		'template'	=> 'user',
 		'vars'		=> $vars,
-	], 600);
+	], 8000);
 
 	if ($user_mail_cc)
 	{
@@ -182,7 +183,7 @@ if ($user_mail_submit && $id && $post)
 			'to' 		=> $app['mail_addr_user']->get($s_id, $s_schema),
 			'template' 	=> 'user_copy',
 			'vars'		=> $vars,
-		], 600);
+		], 8000);
 	}
 
 	$app['alert']->success('E-mail verzonden.');
@@ -218,7 +219,7 @@ if ($post && $img && $id )
 	$tmp_name = $image['tmp_name'];
 	$type = $image['type'];
 
-	if ($size > 200 * 1024)
+	if ($size > 400 * 1024)
 	{
 		echo json_encode(['error' => 'Het bestand is te groot.']);
 		exit;
@@ -496,7 +497,8 @@ if ($s_admin && !count($errors) && $bulk_field_submit && $post)
 			$fullname_access_role . ' for users ' .
 			$users_log, ['schema' => $tschema]);
 
-		$app['alert']->success('De zichtbaarheid van de volledige naam werd aangepast.');
+		$app['alert']->success('De zichtbaarheid van de
+			volledige naam werd aangepast.');
 
 		cancel();
 	}
@@ -526,8 +528,8 @@ if ($s_admin && !count($errors) && $bulk_field_submit && $post)
 
 		if ($bulk_field == 'status')
 		{
-			$app['typeahead']->invalidate_thumbprint('users_active');
-			$app['typeahead']->invalidate_thumbprint('users_extern');
+			delete_thumbprint('active');
+			delete_thumbprint('extern');
 		}
 
 		$app['monolog']->info('bulk: Set ' . $bulk_field .
@@ -674,7 +676,7 @@ if ($s_admin && !count($errors) && ($bulk_mail_submit || $bulk_mail_test) && $po
 			'subject' 	=> $bulk_mail_subject,
 			'html' 		=> $html,
 			'reply_to' 	=> $app['mail_addr_user']->get($s_id, $tschema),
-		]);
+		], random_int(5000, 6000));
 
 		$alert_msg_users[] = link_user($sel_user, $tschema);
 
@@ -704,7 +706,9 @@ if ($s_admin && !count($errors) && ($bulk_mail_submit || $bulk_mail_test) && $po
 			$missing_users .= link_user($warning_user_id, $tschema) . '<br>';
 		}
 
-		$alert_warning = 'Naar volgende gebruikers werd geen E-mail verzonden wegens ontbreken van E-mail adres: <br>' . $missing_users;
+		$alert_warning = 'Naar volgende gebruikers werd geen
+			E-mail verzonden wegens ontbreken van E-mail adres: <br>' .
+			$missing_users;
 
 		$app['alert']->warning($alert_warning);
 	}
@@ -739,7 +743,7 @@ if ($s_admin && !count($errors) && ($bulk_mail_submit || $bulk_mail_test) && $po
 			'to' 		=> $app['mail_addr_user']->get($s_id, $tschema),
 			'subject' 	=> 'kopie: ' . $bulk_mail_subject,
 			'html' 		=> $html,
-		]);
+		], 8000);
 
 		$app['monolog']->debug('#bulk mail', ['schema' => $tschema]);
 
@@ -757,7 +761,8 @@ if ($pw)
 
 	if (!$s_admin && !$s_owner)
 	{
-		$app['alert']->error('Je hebt onvoldoende rechten om het paswoord aan te passen voor deze gebruiker.');
+		$app['alert']->error('Je hebt onvoldoende rechten om het
+			paswoord aan te passen voor deze gebruiker.');
 		cancel($pw);
 	}
 
@@ -814,6 +819,7 @@ if ($pw)
 							'user'			=> $user,
 							'password'		=> $password,
 							'url_login'		=> $app['base_url'] . '/login.php?login=' . $user['letscode'],
+							'support_url'	=> $app['base_url'] . '/support.php?src=p',
 						];
 
 						$app['queue.mail']->queue([
@@ -822,7 +828,7 @@ if ($pw)
 							'reply_to'	=> $app['mail_addr_system']->get_support($tschema),
 							'template'	=> 'password_reset',
 							'vars'		=> $vars,
-						]);
+						], 8000);
 
 						$app['alert']->success('Notificatie mail verzonden');
 					}
@@ -866,12 +872,14 @@ if ($pw)
 	echo '<div class="input-group">';
 	echo '<span class="input-group-addon">';
 	echo '<span class="fa fa-key"></span></span>';
-	echo '<input type="text" class="form-control" id="password" name="password" ';
+	echo '<input type="text" class="form-control" ';
+	echo 'id="password" name="password" ';
 	echo 'value="';
 	echo $password;
 	echo '" required>';
 	echo '<span class="input-group-btn">';
-	echo '<button class="btn btn-default" type="button" id="generate">Genereer</button>';
+	echo '<button class="btn btn-default" type="button" ';
+	echo 'id="generate">Genereer</button>';
 	echo '</span>';
 	echo '</div>';
 	echo '</div>';
@@ -887,8 +895,10 @@ if ($pw)
 	echo '</label>';
 	echo '</div>';
 
-	echo aphp('users', ['id' => $pw], 'Annuleren', 'btn btn-default') . '&nbsp;';
-	echo '<input type="submit" value="Opslaan" name="zend" class="btn btn-primary">';
+	echo aphp('users', ['id' => $pw], 'Annuleren', 'btn btn-default');
+	echo '&nbsp;';
+	echo '<input type="submit" value="Opslaan" name="zend" ';
+	echo 'class="btn btn-primary">';
 	echo $app['form_token']->get_hidden_input();
 
 	echo '</form>';
@@ -908,7 +918,8 @@ if ($del)
 {
 	if (!$s_admin)
 	{
-		$app['alert']->error('Je hebt onvoldoende rechten om een gebruiker te verwijderen.');
+		$app['alert']->error('Je hebt onvoldoende rechten
+			om een gebruiker te verwijderen.');
 		cancel($del);
 	}
 
@@ -922,7 +933,8 @@ if ($del)
 		from ' . $tschema . '.transactions
 		where id_to = ? or id_from = ?', [$del, $del]))
 	{
-		$app['alert']->error('Een gebruiker met transacties kan niet worden verwijderd.');
+		$app['alert']->error('Een gebruiker met transacties
+			kan niet worden verwijderd.');
 		cancel($del);
 	}
 
@@ -946,13 +958,15 @@ if ($del)
 
 		if (!$verify)
 		{
-			$app['alert']->error('Het controle nazichts-vakje is niet aangevinkt.');
+			$app['alert']->error('Het controle nazichts-vakje
+				is niet aangevinkt.');
 			cancel($del);
 		}
 
 		$usr = $user['letscode'] . ' ' . $user['name'] . ' [id:' . $del . ']';
 		$msgs = '';
-		$st = $app['db']->prepare('select id, content, id_category, msg_type
+		$st = $app['db']->prepare('select id, content,
+				id_category, msg_type
 			from ' . $tschema . '.messages
 			where id_user = ?');
 
@@ -1019,7 +1033,8 @@ if ($del)
 			$want_count[$row['id_category']] = $row['count'];
 		}
 
-		$all_cat = $app['db']->fetchAll('select id, stat_msgs_offers, stat_msgs_wanted
+		$all_cat = $app['db']->fetchAll('select id,
+				stat_msgs_offers, stat_msgs_wanted
 			from ' . $tschema . '.categories
 			where id_parent is not null');
 
@@ -1059,11 +1074,11 @@ if ($del)
 
 		if ($user['status'] == 1 || $user['status'] == 2)
 		{
-			$app['typeahead']->invalidate_thumbprint('users_active');
+			delete_thumbprint('active');
 		}
 		else if ($user['status'] == 7)
 		{
-			$app['typeahead']->invalidate_thumbprint('users_extern');
+			delete_thumbprint('extern');
 		}
 
 		$app['interlets_groups']->clear_cache($s_schema);
@@ -1089,15 +1104,18 @@ if ($del)
 	echo '<form method="post"">';
 
 	echo '<div class="form-group">';
-	echo '<label>';
+	echo '<label for="id_verify">';
 	echo '<input type="checkbox" name="verify"';
-	echo ' value="1"> ';
-	echo ' Ik ben wis en waarachtig zeker dat ik deze gebruiker wil verwijderen.';
+	echo ' value="1" id="id_verify"> ';
+	echo ' Ik ben wis en waarachtig zeker dat ';
+	echo 'ik deze gebruiker wil verwijderen.';
 	echo '</label>';
 	echo '</div>';
 
-	echo aphp('users', ['id' => $del], 'Annuleren', 'btn btn-default') . '&nbsp;';
-	echo '<input type="submit" value="Verwijderen" name="zend" class="btn btn-danger">';
+	echo aphp('users', ['id' => $del], 'Annuleren', 'btn btn-default');
+	echo '&nbsp;';
+	echo '<input type="submit" value="Verwijderen" ';
+	echo 'name="zend" class="btn btn-danger">';
 	echo $app['form_token']->get_hidden_input();
 
 	echo '</form>';
@@ -1117,7 +1135,8 @@ if ($add || $edit)
 {
 	if ($add && !$s_admin)
 	{
-		$app['alert']->error('Je hebt geen rechten om een gebruiker toe te voegen.');
+		$app['alert']->error('Je hebt geen rechten om
+			een gebruiker toe te voegen.');
 		cancel();
 	}
 
@@ -1125,7 +1144,8 @@ if ($add || $edit)
 
 	if ($edit && !$s_admin && !$s_owner)
 	{
-		$app['alert']->error('Je hebt geen rechten om deze gebruiker aan te passen.');
+		$app['alert']->error('Je hebt geen rechten om
+			deze gebruiker aan te passen.');
 		cancel($edit);
 	}
 
@@ -1365,27 +1385,32 @@ if ($add || $edit)
 			}
 			else if (strlen($user['letscode']) > 20)
 			{
-				$errors[] = 'De Account Code mag maximaal 20 tekens lang zijn.';
+				$errors[] = 'De Account Code mag maximaal
+					20 tekens lang zijn.';
 			}
 
 			if (!preg_match("/^[A-Za-z0-9-]+$/", $user['letscode']))
 			{
-				$errors[] = 'De Account Code kan enkel uit letters, cijfers en koppeltekens bestaan.';
+				$errors[] = 'De Account Code kan enkel uit
+					letters, cijfers en koppeltekens bestaan.';
 			}
 
 			if (filter_var($user['minlimit'], FILTER_VALIDATE_INT) === false)
 			{
-				$errors[] = 'Geef getal of niets op voor de Minimum Account Limiet.';
+				$errors[] = 'Geef getal of niets op voor de
+					Minimum Account Limiet.';
 			}
 
 			if (filter_var($user['maxlimit'], FILTER_VALIDATE_INT) === false)
 			{
-				$errors[] = 'Geef getal of niets op voor de Maximum Account Limiet.';
+				$errors[] = 'Geef getal of niets op voor de
+					Maximum Account Limiet.';
 			}
 
 			if (strlen($user['presharedkey']) > 80)
 			{
-				$errors[] = 'De Preshared Key mag maximaal 80 tekens lang zijn.';
+				$errors[] = 'De Preshared Key mag maximaal
+					80 tekens lang zijn.';
 			}
 		}
 
@@ -1402,7 +1427,8 @@ if ($add || $edit)
 
 		if (strlen($user['comments']) > 100)
 		{
-			$errors[] = 'Het veld Commentaar mag maximaal 100 tekens lang zijn.';
+			$errors[] = 'Het veld Commentaar mag maximaal
+				100 tekens lang zijn.';
 		}
 
 		if (strlen($user['postcode']) > 6)
@@ -1412,7 +1438,8 @@ if ($add || $edit)
 
 		if (strlen($user['hobbies']) > 500)
 		{
-			$errors[] = 'Het veld hobbies en interesses mag maximaal 500 tekens lang zijn.';
+			$errors[] = 'Het veld hobbies en interesses mag
+				maximaal 500 tekens lang zijn.';
 		}
 
 		if ($s_admin && !$user_prefetch['adate'] && $user['status'] == 1)
@@ -1484,6 +1511,15 @@ if ($add || $edit)
 							continue;
 						}
 
+						if ($value['abbrev'] === 'adr')
+						{
+							$app['queue.geocode']->cond_queue([
+								'adr'		=> $value['value'],
+								'uid'		=> $id,
+								'schema'	=> $tschema,
+							]);
+						}
+
 						$insert = [
 							'value'				=> trim($value['value']),
 							'flag_public'		=> $value['flag_public'],
@@ -1504,27 +1540,30 @@ if ($add || $edit)
 							{
 								send_activation_mail($password, $user);
 
-								$app['alert']->success('Een E-mail met paswoord is naar de gebruiker verstuurd.');
+								$app['alert']->success('Een E-mail met paswoord is
+									naar de gebruiker verstuurd.');
 							}
 							else
 							{
-								$app['alert']->warning('De E-mail functies zijn uitgeschakeld. Geen E-mail met paswoord naar de gebruiker verstuurd.');
+								$app['alert']->warning('De E-mail functies zijn uitgeschakeld.
+									Geen E-mail met paswoord naar de gebruiker verstuurd.');
 							}
 						}
 						else
 						{
-							$app['alert']->warning('Geen E-mail met paswoord naar de gebruiker verstuurd.');
+							$app['alert']->warning('Geen E-mail met paswoord naar
+								de gebruiker verstuurd.');
 						}
 					}
 
 					if ($user['status'] == 2 | $user['status'] == 1)
 					{
-						$app['typeahead']->invalidate_thumbprint('users_active');
+						delete_thumbprint('active');
 					}
 
 					if ($user['status'] == 7)
 					{
-						$app['typeahead']->invalidate_thumbprint('users_extern');
+						delete_thumbprint('extern');
 					}
 
 					$app['interlets_groups']->clear_cache($s_schema);
@@ -1570,7 +1609,8 @@ if ($add || $edit)
 					{
 						$stored_contacts = [];
 
-						$rs = $app['db']->prepare('select c.id, tc.abbrev, c.value, c.flag_public
+						$rs = $app['db']->prepare('select c.id,
+								tc.abbrev, c.value, c.flag_public
 							from ' . $tschema . '.type_contact tc, ' .
 								$tschema . '.contact c
 							WHERE tc.id = c.id_type_contact
@@ -1592,7 +1632,8 @@ if ($add || $edit)
 							{
 								if ($stored_contact)
 								{
-									$app['db']->delete($tschema . '.contact', ['id_user' => $edit, 'id' => $value['id']]);
+									$app['db']->delete($tschema . '.contact',
+										['id_user' => $edit, 'id' => $value['id']]);
 								}
 								continue;
 							}
@@ -1602,6 +1643,15 @@ if ($add || $edit)
 								&& $stored_contact['flag_public'] == $value['flag_public'])
 							{
 								continue;
+							}
+
+							if ($value['abbrev'] === 'adr')
+							{
+								$app['queue.geocode']->cond_queue([
+									'adr'		=> $value['value'],
+									'uid'		=> $edit,
+									'schema'	=> $tschema,
+								]);
 							}
 
 							if (!isset($stored_contact))
@@ -1636,16 +1686,19 @@ if ($add || $edit)
 
 									send_activation_mail($password, $user);
 
-									$app['alert']->success('E-mail met paswoord naar de gebruiker verstuurd.');
+									$app['alert']->success('E-mail met paswoord
+										naar de gebruiker verstuurd.');
 								}
 								else
 								{
-									$app['alert']->warning('De E-mail functies zijn uitgeschakeld. Geen E-mail met paswoord naar de gebruiker verstuurd.');
+									$app['alert']->warning('De E-mail functies zijn uitgeschakeld.
+										Geen E-mail met paswoord naar de gebruiker verstuurd.');
 								}
 							}
 							else
 							{
-								$app['alert']->warning('Geen E-mail met paswoord naar de gebruiker verstuurd.');
+								$app['alert']->warning('Geen E-mail met
+									paswoord naar de gebruiker verstuurd.');
 							}
 						}
 
@@ -1654,13 +1707,13 @@ if ($add || $edit)
 							|| $user_stored['status'] == 1
 							|| $user_stored['status'] == 2)
 						{
-							$app['typeahead']->invalidate_thumbprint('users_active');
+							delete_thumbprint('active');
 						}
 
 						if ($user['status'] == 7
 							|| $user_stored['status'] == 7)
 						{
-							$app['typeahead']->invalidate_thumbprint('users_extern');
+							delete_thumbprint('extern');
 						}
 
 						$app['interlets_groups']->clear_cache($s_schema);
@@ -1696,7 +1749,8 @@ if ($add || $edit)
 
 		if ($s_admin)
 		{
-			$contact = $app['db']->fetchAll('select name, abbrev, \'\' as value, 0 as id
+			$contact = $app['db']->fetchAll('select name, abbrev,
+				\'\' as value, 0 as id
 				from ' . $tschema . '.type_contact
 				where abbrev in (\'mail\', \'adr\', \'tel\', \'gsm\')');
 		}
@@ -1789,11 +1843,23 @@ if ($add || $edit)
 		}
 	}
 
+	if ($edit)
+	{
+		$edit_user_cached = $app['user_cache']->get($edit, $tschema);
+	}
+
 	array_walk($user, function(&$value, $key){ $value = trim(htmlspecialchars($value, ENT_QUOTES, 'UTF-8')); });
 	array_walk($contact, function(&$value, $key){ $value['value'] = trim(htmlspecialchars($value['value'], ENT_QUOTES, 'UTF-8')); });
 
-	$app['assets']->add(['datepicker', 'generate_password.js',
-		'generate_password_onload.js', 'user_edit.js', 'access_input_cache.js']);
+	$app['assets']->add([
+		'datepicker',
+		'generate_password.js',
+		'generate_password_onload.js',
+		'user_edit.js',
+		'access_input_cache.js',
+		'typeahead',
+		'typeahead.js',
+	]);
 
 	$h1 = 'Gebruiker ';
 	$h1 .= $edit ? 'aanpassen: ' . link_user($user, $tschema) : 'toevoegen';
@@ -1816,11 +1882,31 @@ if ($add || $edit)
 		echo '<div class="input-group">';
 		echo '<span class="input-group-addon">';
 		echo '<span class="fa fa-user"></span></span>';
-		echo '<input type="text" class="form-control" id="letscode" name="letscode" ';
+		echo '<input type="text" class="form-control" ';
+		echo 'id="letscode" name="letscode" ';
 		echo 'value="';
 		echo $user['letscode'] ?? '';
-		echo '" required maxlength="20">';
+		echo '" required maxlength="20" ';
+		echo 'data-typeahead="';
+		echo $app['typeahead']->get([['account_codes', [
+			'schema'	=> $tschema,
+		]]]);
+		echo '" ';
+		echo 'data-typeahead-render="';
+		echo htmlspecialchars(json_encode([
+			'exists_check'	=> 10,
+			'exists_omit'	=> $edit_user_cached['letscode'] ?? '',
+		]));
+		echo '">';
 		echo '</div>';
+		echo '<span class="help-block hidden exists_query_results">';
+		echo 'Reeds gebruikt: ';
+		echo '<span class="query_results">';
+		echo '</span>';
+		echo '</span>';
+		echo '<span class="help-block hidden exists_msg">';
+		echo 'Deze Account Code bestaat al!';
+		echo '</span>';
 		echo '</div>';
 	}
 
@@ -1832,11 +1918,31 @@ if ($add || $edit)
 		echo '<div class="input-group">';
 		echo '<span class="input-group-addon">';
 		echo '<span class="fa fa-user"></span></span>';
-		echo '<input type="text" class="form-control" id="name" name="name" ';
+		echo '<input type="text" class="form-control" ';
+		echo 'id="name" name="name" ';
 		echo 'value="';
 		echo $user['name'] ?? '';
-		echo '" required maxlength="50">';
+		echo '" required maxlength="50" ';
+		echo 'data-typeahead="';
+		echo $app['typeahead']->get([['usernames', [
+			'schema'	=> $tschema,
+		]]]);
+		echo '" ';
+		echo 'data-typeahead-render="';
+		echo htmlspecialchars(json_encode([
+			'exists_check'	=> 10,
+			'exists_omit'	=> $edit_user_cached['name'] ?? '',
+		]));
+		echo '">';
 		echo '</div>';
+		echo '<span class="help-block hidden exists_query_results">';
+		echo 'Reeds gebruikt: ';
+		echo '<span class="query_results">';
+		echo '</span>';
+		echo '</span>';
+		echo '<span id="username_exists" ';
+		echo 'class="help-block hidden exists_msg">';
+		echo 'Deze Gebruikersnaam bestaat reeds!</span>';
 		echo '</div>';
 	}
 
@@ -1865,7 +1971,14 @@ if ($add || $edit)
 		$fullname_access = $add && !$intersystem_code ? false : 'admin';
 	}
 
-	echo $app['access_control']->get_radio_buttons('users_fullname', $fullname_access, false, 'fullname_access', 'xs', 'Zichtbaarheid volledige naam');
+	echo $app['access_control']->get_radio_buttons(
+		'users_fullname',
+		$fullname_access,
+		false,
+		'fullname_access',
+		'xs',
+		'Zichtbaarheid Volledige Naam'
+	);
 
 	echo '<div class="form-group">';
 	echo '<label for="postcode" class="control-label">';
@@ -1877,7 +1990,13 @@ if ($add || $edit)
 	echo 'id="postcode" name="postcode" ';
 	echo 'value="';
 	echo $user['postcode'] ?? '';
-	echo '" required maxlength="6">';
+	echo '" ';
+	echo 'required maxlength="6" ';
+	echo 'data-typeahead="';
+	echo $app['typeahead']->get([['postcodes', [
+		'schema'	=> $tschema,
+	]]]);
+	echo '">';
 	echo '</div>';
 	echo '</div>';
 
@@ -1887,7 +2006,8 @@ if ($add || $edit)
 	echo '<div class="input-group">';
 	echo '<span class="input-group-addon">';
 	echo '<span class="fa fa-calendar"></span></span>';
-	echo '<input type="text" class="form-control" id="birthday" name="birthday" ';
+	echo '<input type="text" class="form-control" ';
+	echo 'id="birthday" name="birthday" ';
 	echo 'value="';
 	echo isset($user['birthday']) && !empty($user['birtday']) ? $app['date_format']->get($user['birthday'], 'day') : '';
 	echo '" ';
@@ -1925,7 +2045,8 @@ if ($add || $edit)
 	echo '<div class="input-group">';
 	echo '<span class="input-group-addon">';
 	echo '<span class="fa fa-comment-o"></span></span>';
-	echo '<input type="text" class="form-control" id="comments" name="comments" ';
+	echo '<input type="text" class="form-control" ';
+	echo 'id="comments" name="comments" ';
 	echo 'value="';
 	echo $user['comments'] ?? '';
 	echo '">';
@@ -1940,7 +2061,8 @@ if ($add || $edit)
 		echo '<div class="input-group">';
 		echo '<span class="input-group-addon">';
 		echo '<span class="fa fa-hand-paper-o"></span></span>';
-		echo '<select id="accountrole" name="accountrole" class="form-control">';
+		echo '<select id="accountrole" name="accountrole" ';
+		echo 'class="form-control">';
 		echo get_select_options($role_ary, $user['accountrole']);
 		echo '</select>';
 		echo '</div>';
@@ -1953,7 +2075,8 @@ if ($add || $edit)
 		echo '<div class="input-group">';
 		echo '<span class="input-group-addon">';
 		echo '<span class="fa fa-key"></span></span>';
-		echo '<input type="text" class="form-control" id="presharedkey" name="presharedkey" ';
+		echo '<input type="text" class="form-control" ';
+		echo 'id="presharedkey" name="presharedkey" ';
 		echo 'value="';
 		echo $user['presharedkey'] ?? '';
 		echo '" maxlength="80">';
@@ -2031,7 +2154,8 @@ if ($add || $edit)
 		{
 			echo '<button class="btn btn-default" ';
 			echo 'title="Limieten instellen" data-toggle="collapse" ';
-			echo 'data-target="#limits_pan" type="button">Instellen</button>';
+			echo 'data-target="#limits_pan" type="button">';
+			echo 'Instellen</button>';
 		}
 
 		echo '</h2>';
@@ -2063,7 +2187,9 @@ if ($add || $edit)
 		echo 'afwijkende minimum limiet wil instellen ';
 		echo 'voor dit account. Als dit veld leeg is, ';
 		echo 'dan is de algemeen geldende ';
-		echo aphp('config', ['active_tab' => 'balance'], 'Minimum Systeemslimiet');
+		echo aphp('config',
+			['active_tab' => 'balance'],
+			'Minimum Systeemslimiet');
 		echo ' ';
 		echo 'van toepassing. ';
 
@@ -2074,7 +2200,8 @@ if ($add || $edit)
 		}
 		else
 		{
-			echo 'De algemeen geldende Minimum Systeemslimiet bedraagt <strong>';
+			echo 'De algemeen geldende ';
+			echo 'Minimum Systeemslimiet bedraagt <strong>';
 			echo $app['config']->get('minlimit', $tschema);
 			echo ' ';
 			echo $app['config']->get('currency', $tschema);
@@ -2083,7 +2210,11 @@ if ($add || $edit)
 
 		echo 'Dit veld wordt bij aanmaak van een ';
 		echo 'gebruiker vooraf ingevuld met de "';
-		echo aphp('config', ['active_tab' => 'balance'], 'Preset Individuele Minimum Account Limiet');
+		echo aphp(
+			'config',
+			['active_tab' => 'balance'],
+			'Preset Individuele Minimum Account Limiet'
+		);
 		echo '" ';
 		echo 'die gedefiniëerd is in de instellingen.';
 
@@ -2116,7 +2247,11 @@ if ($add || $edit)
 		echo 'afwijkende maximum limiet wil instellen ';
 		echo 'voor dit account. Als dit veld leeg is, ';
 		echo 'dan is de algemeen geldende ';
-		echo aphp('config', ['active_tab' => 'balance'], 'Maximum Systeemslimiet');
+		echo aphp(
+			'config',
+			['active_tab' => 'balance'],
+			'Maximum Systeemslimiet'
+		);
 		echo ' ';
 		echo 'van toepassing. ';
 
@@ -2137,7 +2272,11 @@ if ($add || $edit)
 
 		echo 'Dit veld wordt bij aanmaak van een gebruiker ';
 		echo 'vooraf ingevuld wanneer "';
-		echo aphp('config', ['active_tab' => 'balance'], 'Preset Individuele Maximum Account Limiet');
+		echo aphp(
+			'config',
+			['active_tab' => 'balance'],
+			'Preset Individuele Maximum Account Limiet'
+		);
 		echo '" ';
 		echo 'is ingevuld in de instellingen.';
 
@@ -2151,13 +2290,9 @@ if ($add || $edit)
 		echo '</p>';
 
 		echo '</div>';
-	}
+		echo '</div>';
+		echo '</div>';
 
-	echo '</div>';
-	echo '</div>';
-
-	if ($s_admin)
-	{
 		$contacts_format = [
 			'adr'	=> [
 				'fa'		=> 'map-marker',
@@ -2194,13 +2329,10 @@ if ($add || $edit)
 		echo $add ? 'nadat de gebruiker gecreëerd is' : '';
 		echo '.</p>';
 
-//		echo '<ul class="list-group">';
-
 		foreach ($contact as $key => $c)
 		{
 			$name = 'contact[' . $key . '][value]';
 
-//			echo '<li class="list-group-item">';
 			echo '<div class="pan-sab">';
 
 			echo '<div class="form-group">';
@@ -2240,15 +2372,16 @@ if ($add || $edit)
 
 			echo $app['access_control']->get_radio_buttons($c['abbrev'], $c['flag_public'], false, 'contact_access_' . $key);
 
-			echo '<input type="hidden" name="contact['. $key . '][id]" value="' . $c['id'] . '">';
-			echo '<input type="hidden" name="contact['. $key . '][name]" value="' . $c['name'] . '">';
-			echo '<input type="hidden" name="contact['. $key . '][abbrev]" value="' . $c['abbrev'] . '">';
+			echo '<input type="hidden" ';
+			echo 'name="contact['. $key . '][id]" value="' . $c['id'] . '">';
+			echo '<input type="hidden" ';
+			echo 'name="contact['. $key . '][name]" value="' . $c['name'] . '">';
+			echo '<input type="hidden" ';
+			echo 'name="contact['. $key . '][abbrev]" value="' . $c['abbrev'] . '">';
 
-//			echo '</li>';
 			echo '</div>';
 		}
 
-//		echo '</ul>';
 		echo '</div>';
 	}
 
@@ -2487,7 +2620,10 @@ if ($id)
 
 	$top_buttons_right .= btn_item_nav($prev_url, false, false);
 	$top_buttons_right .= btn_item_nav($next_url, true, true);
-	$top_buttons_right .= aphp('users', ['status' => $link ? $link : 'active', 'view' => $view_users], '', 'btn btn-default', 'Lijst', 'users');
+	$top_buttons_right .= aphp(
+		'users',
+		['status' => $link ? $link : 'active', 'view' => $view_users],
+		'', 'btn btn-default', 'Lijst', 'users');
 	$top_buttons_right .= '</span>';
 
 	$status = $user['status'];
@@ -2496,7 +2632,8 @@ if ($id)
 	$h_status_ary = $status_ary;
 	$h_status_ary[3] = 'Instapper';
 
-	$h1 = (($s_owner && !$s_admin) ? 'Mijn gegevens: ' : '') . link_user($user, $tschema);
+	$h1 = $s_owner && !$s_admin ? 'Mijn gegevens: ' : '';
+	$h1 .= link_user($user, $tschema);
 
 	if ($status != 1)
 	{
@@ -2508,12 +2645,17 @@ if ($id)
 	{
 		if ($interlets_group_missing)
 		{
-			$h1 .= ' <span class="label label-warning label-sm"><i class="fa fa-exclamation-triangle"></i> ';
+			$h1 .= ' <span class="label label-warning label-sm">';
+			$h1 .= '<i class="fa fa-exclamation-triangle"></i> ';
 			$h1 .= 'De interSysteem-verbinding ontbreekt</span>';
 		}
 		else if ($interlets_group_id)
 		{
-			$h1 .= ' ' . aphp('intersystem', ['id' => $interlets_group_id], 'Gekoppeld interSysteem', 'btn btn-default', 'Gekoppelde interSysteem');
+			$h1 .= ' ' . aphp('intersystem',
+				['id' => $interlets_group_id],
+				'Gekoppeld interSysteem',
+				'btn btn-default',
+				'Gekoppelde interSysteem');
 		}
 	}
 
@@ -2527,18 +2669,23 @@ if ($id)
 	echo '<div class="panel panel-default">';
 	echo '<div class="panel-body text-center center-block" id="img_user">';
 
-	$show_img = ($user['PictureFile']) ? true : false;
+	$show_img = $user['PictureFile'] ? true : false;
 
-	$user_img = ($show_img) ? '' : ' style="display:none;"';
-	$no_user_img = ($show_img) ? ' style="display:none;"' : '';
+	$user_img = $show_img ? '' : ' style="display:none;"';
+	$no_user_img = $show_img ? ' style="display:none;"' : '';
 
-	$img_src = ($user['PictureFile']) ? $app['s3_img_url'] . $user['PictureFile'] : $rootpath . 'gfx/1.gif';
-	echo '<img id="user_img"' . $user_img . ' class="img-rounded img-responsive center-block" ';
-	echo 'src="' . $img_src . '" ';
+	$img_src = $user['PictureFile'] ? $app['s3_img_url'] . $user['PictureFile'] : $rootpath . 'gfx/1.gif';
+	echo '<img id="user_img"';
+	echo $user_img;
+	echo ' class="img-rounded img-responsive center-block" ';
+	echo 'src="';
+	echo $img_src;
+	echo '" ';
 	echo 'data-bucket-url="' . $app['s3_img_url'] . '"></img>';
 
 	echo '<div id="no_user_img"' . $no_user_img . '>';
-	echo '<i class="fa fa-user fa-5x text-muted"></i><br>Geen profielfoto</div>';
+	echo '<i class="fa fa-user fa-5x text-muted"></i>';
+	echo '<br>Geen profielfoto</div>';
 
 	echo '</div>';
 
@@ -2550,19 +2697,31 @@ if ($id)
 			$attr['style'] = 'display:none;';
 		}
 
-		echo '<div class="panel-footer"><span class="btn btn-success fileinput-button">';
+		echo '<div class="panel-footer">';
+		echo '<span class="btn btn-success fileinput-button">';
 		echo '<i class="fa fa-plus" id="img_plus"></i> Foto opladen';
 		echo '<input id="fileupload" type="file" name="image" ';
-		echo 'data-url="' . generate_url('users', ['img' => 1, 'id' => $id]) . '" ';
+		echo 'data-url="';
+		echo generate_url('users', ['img' => 1, 'id' => $id]);
+		echo '" ';
 		echo 'data-data-type="json" data-auto-upload="true" ';
 		echo 'data-accept-file-types="/(\.|\/)(jpe?g)$/i" ';
 		echo 'data-max-file-size="999000" data-image-max-width="400" ';
 		echo 'data-image-crop="true" ';
 		echo 'data-image-max-height="400"></span>&nbsp;';
 
-		echo aphp('users', ['img_del' => 1, 'id' => $id], 'Foto verwijderen', 'btn btn-danger', false, 'times', false, $attr);
+		echo aphp(
+			'users',
+			['img_del' => 1, 'id' => $id],
+			'Foto verwijderen',
+			'btn btn-danger',
+			false,
+			'times',
+			false,
+			$attr);
 
-		echo '<p class="text-warning">Je foto moet in het jpg/jpeg formaat zijn. ';
+		echo '<p class="text-warning">';
+		echo 'Je foto moet in het jpg/jpeg formaat zijn. ';
 		echo 'Je kan ook een foto hierheen verslepen.</p>';
 		echo '</div>';
 	}
@@ -2800,7 +2959,9 @@ if ($id)
 	echo '<div class="row">';
 	echo '<div class="col-md-12">';
 
-	echo '<h3>Saldo: <span class="label label-info">' . $user['saldo'] . '</span> ';
+	echo '<h3>Saldo: <span class="label label-info">';
+	echo $user['saldo'];
+	echo '</span> ';
 	echo $app['config']->get('currency', $tschema);
 	echo '</h3>';
 	echo '</div></div>';
@@ -2808,8 +2969,12 @@ if ($id)
 	echo '<div class="row print-hide">';
 	echo '<div class="col-md-6">';
 	echo '<div id="chartdiv" data-height="480px" data-width="960px" ';
-	echo 'data-user-id="' . $id . '" ';
-	echo 'data-days="' . $tdays . '"></div>';
+	echo 'data-user-id="';
+	echo $id;
+	echo '" ';
+	echo 'data-days="';
+	echo $tdays;
+	echo '"></div>';
 	echo '</div>';
 	echo '<div class="col-md-6">';
 	echo '<div id="donutdiv" data-height="480px" data-width="960px"></div>';
@@ -3514,7 +3679,9 @@ if ($v_map)
 
 if ($v_list || $v_extended || $v_tiles)
 {
-	echo '<form method="get" action="' . generate_url('users', $params) . '">';
+	echo '<form method="get" action="';
+	echo generate_url('users', $params);
+	echo '">';
 
 	$params_plus = array_merge($params, get_session_query_param());
 
@@ -3526,7 +3693,8 @@ if ($v_list || $v_extended || $v_tiles)
 
 if ($v_list)
 {
-	echo '<div class="panel panel-info collapse" id="columns_show">';
+	echo '<div class="panel panel-info collapse" ';
+	echo 'id="columns_show">';
 	echo '<div class="panel-heading">';
 	echo '<h2>Weergave kolommen</h2>';
 
@@ -3560,48 +3728,92 @@ if ($v_list)
 			echo '<h3>Transacties/activiteit</h3>';
 
 			echo '<div class="form-group">';
-			echo '<label for="activity_days" class="control-label">';
-			echo 'In periode (dagen)';
+			echo '<label for="p_activity_days" ';
+			echo 'class="control-label">';
+			echo 'In periode';
 			echo '</label>';
-			echo '<input type="number" name="sh[p][activity_days]" value="';
-			echo $activity_days . '" ';
+			echo '<div class="input-group">';
+			echo '<span class="input-group-addon">';
+			echo 'dagen';
+			echo '</span>';
+			echo '<input type="number" ';
+			echo 'id="p_activity_days" ';
+			echo 'name="sh[p][activity_days]" ';
+			echo 'value="';
+			echo $activity_days;
+			echo '" ';
 			echo 'size="4" min="1" class="form-control">';
 			echo '</div>';
+			echo '</div>';
 
-			$typeahead_ary = ['users_active'];
+			$typeahead_ary = [];
 
-			if ($s_admin)
+			if ($s_guest)
 			{
-				$typeahead_ary = array_merge($typeahead_ary, [
-					'users_extern', 'users_inactive', 'users_im', 'users_ip'
-				]);
+				$typeahead_status_ary = ['active'];
+			}
+			else if ($s_user)
+			{
+				$typeahead_status_ary = ['active', 'extern'];
+			}
+			else if ($s_admin)
+			{
+				$typeahead_status_ary = ['active', 'extern',
+					'inactive', 'im', 'ip'];
 			}
 
+			foreach ($typeahead_status_ary as $t_stat)
+			{
+				$typeahead_ary[] = [
+					'accounts', [
+						'status'	=> $t_stat,
+						'schema'	=> $tschema,
+					],
+				];
+			}
+
+			$typeahead = $app['typeahead']->get($typeahead_ary);
+
 			echo '<div class="form-group">';
-			echo '<label for="activity_filter_letscode" class="control-label">';
+			echo '<label for="p_activity_filter_letscode" ';
+			echo 'class="control-label">';
 			echo 'Exclusief tegenpartij';
 			echo '</label>';
-			echo '<input type="text" name="sh[p][activity_filter_letscode]" ';
+			echo '<div class="input-group">';
+			echo '<span class="input-group-addon">';
+			echo '<i class="fa fa-user"></i>';
+			echo '</span>';
+			echo '<input type="text" ';
+			echo 'name="sh[p][activity_filter_letscode]" ';
+			echo 'id="p_activity_filter_letscode" ';
 			echo 'value="';
 			echo $activity_filter_letscode;
 			echo '" ';
+			echo 'placeholder="Account Code" ';
 			echo 'class="form-control" ';
 			echo 'data-newuserdays="';
 			echo $app['config']->get('newuserdays', $tschema);
 			echo '" ';
 			echo 'data-typeahead="';
-			echo $app['typeahead']->get($typeahead_ary);
+			echo $typeahead;
 			echo '">';
-			echo '<p>Account Code</p>';
+			echo '</div>';
 			echo '</div>';
 
 			foreach ($ary as $a_type => $a_ary)
 			{
 				foreach($a_ary as $key => $lbl)
 				{
+					$checkbox_id = 'id_' . $group . '_' . $a_type . '_' . $key;
+
 					echo '<div class="checkbox">';
-					echo '<label>';
+					echo '<label for="';
+					echo $checkbox_id;
+					echo '">';
 					echo '<input type="checkbox" ';
+					echo 'id="';
+					echo $checkbox_id;
+					echo '" ';
 					echo 'name="sh[' . $group . '][' . $a_type . '][' . $key . ']" ';
 					echo 'value="1"';
 					echo isset($show_columns[$group][$a_type][$key]) ? ' checked="checked"' : '';
@@ -3622,26 +3834,57 @@ if ($v_list)
 
 		foreach ($ary as $key => $lbl)
 		{
+			$checkbox_id = 'id_' . $group . '_' . $key;
+
 			echo '<div class="checkbox">';
-			echo '<label>';
-			echo '<input type="checkbox" name="sh[' . $group . '][' . $key . ']" value="1"';
+			echo '<label for="';
+			echo $checkbox_id;
+			echo '">';
+			echo '<input type="checkbox" name="sh[' . $group . '][' . $key . ']" ';
+			echo 'id="';
+			echo $checkbox_id;
+			echo '" ';
+			echo 'value="1"';
 			echo isset($show_columns[$group][$key]) ? ' checked="checked"' : '';
-			echo '> ' . $lbl;
-			echo $key === 'adr' ? ', split door teken: <input type="text" name="sh[p][adr_split]" size="1" value="' . $adr_split . '">' : '';
+			echo '> ';
+			echo $lbl;
+
+			if ($key === 'adr')
+			{
+				echo ', split door teken: ';
+				echo '<input type="text" ';
+				echo 'name="sh[p][adr_split]" ';
+				echo 'size="1" value="';
+				echo $adr_split;
+				echo '">';
+			}
 
 			if ($key === 'saldo_date')
 			{
-				echo '<input type="text" name="sh[p][saldo_date]" ';
+				echo '<div class="input-group">';
+				echo '<span class="input-group-addon">';
+				echo '<i class="fa fa-calendar"></i>';
+				echo '</span>';
+				echo '<input type="text" ';
+				echo 'class="form-control" ';
+				echo 'name="sh[p][saldo_date]" ';
 				echo 'data-provide="datepicker" ';
-				echo 'data-date-format="' . $app['date_format']->datepicker_format() . '" ';
+				echo 'data-date-format="';
+				echo $app['date_format']->datepicker_format();
+				echo '" ';
 				echo 'data-date-language="nl" ';
 				echo 'data-date-today-highlight="true" ';
 				echo 'data-date-autoclose="true" ';
 				echo 'data-date-enable-on-readonly="false" ';
 				echo 'data-date-end-date="0d" ';
 				echo 'data-date-orientation="bottom" ';
-				echo 'placeholder="' . $app['date_format']->datepicker_placeholder() . '" ';
-				echo 'value="' . $saldo_date . '">';
+				echo 'placeholder="';
+				echo $app['date_format']->datepicker_placeholder();
+				echo '" ';
+				echo 'value="';
+				echo $saldo_date;
+				echo '">';
+				echo '</div>';
 
 				$columns['u']['saldo_date'] = 'Saldo op ' . $saldo_date;
 			}
@@ -3654,7 +3897,9 @@ if ($v_list)
 	echo '</div>';
 	echo '<div class="row">';
 	echo '<div class="col-md-12">';
-	echo '<input type="submit" name="show" class="btn btn-default" value="Pas weergave kolommen aan">';
+	echo '<input type="submit" name="show" ';
+	echo 'class="btn btn-default" ';
+	echo 'value="Pas weergave kolommen aan">';
 	echo '</div>';
 	echo '</div>';
 	echo '</div>';
@@ -3907,13 +4152,13 @@ if ($v_list)
 
 					[$adr_1, $adr_2] = explode(trim($adr_split), $contacts[$id]['adr'][0][0]);
 
-					echo get_contacts([[$adr_1, $contacts[$id]['adr'][0][1]]], 'adr');
+					echo get_contacts_str([[$adr_1, $contacts[$id]['adr'][0][1]]], 'adr');
 					echo '</td><td>';
-					echo get_contacts([[$adr_2, $contacts[$id]['adr'][0][1]]], 'adr');
+					echo get_contacts_str([[$adr_2, $contacts[$id]['adr'][0][1]]], 'adr');
 				}
 				else if (isset($contacts[$id][$key]))
 				{
-					echo get_contacts($contacts[$id][$key], $key);
+					echo get_contacts_str($contacts[$id][$key], $key);
 				}
 				else
 				{
@@ -4304,7 +4549,7 @@ else if ($v_tiles)
 
 include __DIR__ . '/include/footer.php';
 
-function get_contacts(array $contacts, $abbrev = null):string
+function get_contacts_str(array $contacts, string $abbrev):string
 {
 	global $access_level;
 
@@ -4315,13 +4560,22 @@ function get_contacts(array $contacts, $abbrev = null):string
 		end($contacts);
 		$end = key($contacts);
 
-		$f = $abbrev === 'mail' ? '<a href="mailto:%1$s">%1$s</a>' : '%1$s';
+		$tpl = '%1$s';
+
+		if ($abbrev === 'mail')
+		{
+			$tpl = '<a href="mailto:%1$s">%1$s</a>';
+		}
+		else if ($abbrev === 'web')
+		{
+			$tpl = '<a href="%1$s">%1$s</a>';
+		}
 
 		foreach ($contacts as $key => $contact)
 		{
 			if ($contact[1] >= $access_level)
 			{
-				$ret .= sprintf($f, htmlspecialchars($contact[0], ENT_QUOTES));
+				$ret .= sprintf($tpl, htmlspecialchars($contact[0], ENT_QUOTES));
 
 				if ($key === $end)
 				{
@@ -4346,7 +4600,7 @@ function get_contacts(array $contacts, $abbrev = null):string
 	return $ret;
 }
 
-function cancel($id = null)
+function cancel(int $id = 0):void
 {
 	global $view_users;
 
@@ -4374,7 +4628,7 @@ function get_dd(string $str):string
 	return $out;
 }
 
-function send_activation_mail($password, $user)
+function send_activation_mail(string $password, array $user):void
 {
 	global $app;
 
@@ -4394,7 +4648,7 @@ function send_activation_mail($password, $user)
 		'to' 		=> $app['mail_addr_system']->get_admin($tschema),
 		'vars'		=> $vars,
 		'template'	=> 'admin_user_activation',
-	]);
+	], 5000);
 
 	$vars = [
 		'group'		=> [
@@ -4403,9 +4657,10 @@ function send_activation_mail($password, $user)
 			'support'	=> explode(',', $app['config']->get('support', $tschema)),
 			'currency'	=> $app['config']->get('currency', $tschema),
 		],
-		'user'		=> $user,
-		'password'	=> $password,
-		'url_login'	=> $app['base_url'] . '/login.php?login=' . $user['letscode'],
+		'user'			=> $user,
+		'password'		=> $password,
+		'url_login'		=> $app['base_url'] . '/login.php?login=' . $user['letscode'],
+		'support_url'	=> $app['base_url'] . '/support.php?src=p',
 	];
 
 	$app['queue.mail']->queue([
@@ -4414,5 +4669,30 @@ function send_activation_mail($password, $user)
 		'reply_to' 	=> $app['mail_addr_system']->get_support($tschema),
 		'template'	=> 'user_activation',
 		'vars'		=> $vars,
+	], 5000);
+}
+
+function delete_thumbprint(string $status):void
+{
+	global $app, $eland_interlets_groups;
+
+	$tschema = $app['this_group']->get_schema();
+
+	$app['typeahead']->delete_thumbprint('accounts', [
+		'schema'	=> $tschema,
+		'status'	=> $status,
 	]);
+
+	if ($status !== 'active')
+	{
+		return;
+	}
+
+	foreach ($eland_interlets_groups as $remote_schema => $h)
+	{
+		$app['typeahead']->delete_thumbprint('eland_intersystem_accounts', [
+			'schema'		=> $tschema,
+			'remote_schema'	=> $remote_schema,
+		]);
+	}
 }

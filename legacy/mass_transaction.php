@@ -662,6 +662,18 @@ echo 'name="selected_users" id="selected_users">';
 echo '<div class="panel panel-info">';
 echo '<div class="panel-heading">';
 
+$typeahead_ary = [];
+
+foreach (['active', 'inactive', 'ip', 'im', 'extern'] as $t_stat)
+{
+	$typeahead_ary[] = [
+		'accounts', [
+			'status'	=> $t_stat,
+			'schema'	=> $tschema,
+		],
+	];
+}
+
 echo '<div class="form-group">';
 echo '<label for="from_letscode" class="control-label">';
 echo 'Van Account Code';
@@ -678,11 +690,12 @@ echo 'data-newuserdays="';
 echo $app['config']->get('newuserdays', $tschema);
 echo '" ';
 echo 'data-typeahead="';
-echo $app['typeahead']->get(['users_active', 'users_inactive', 'users_ip', 'users_im']);
+echo $app['typeahead']->get($typeahead_ary);
 echo '">';
 echo '</div>';
 echo '<p>Gebruik dit voor een "Eén naar veel" transactie.';
-echo 'Alle ingevulde bedragen hieronder worden van dit Account gehaald.</p>';
+echo 'Alle ingevulde bedragen hieronder ';
+echo 'worden van dit Account gehaald.</p>';
 echo '</div>';
 
 echo '</div>';
@@ -889,11 +902,11 @@ function mail_mass_transaction($mail_ary)
 
 	$from_many_bool = is_array($mail_ary['from']) ? true : false;
 
-	$many_ary = ($from_many_bool) ? $mail_ary['from'] : $mail_ary['to'];
+	$many_ary = $from_many_bool ? $mail_ary['from'] : $mail_ary['to'];
 
 	$many_user_ids = array_keys($many_ary);
 
-	$one_user_id = ($from_many_bool) ? $mail_ary['to'] : $mail_ary['from'];
+	$one_user_id = $from_many_bool ? $mail_ary['to'] : $mail_ary['from'];
 
 	$common_vars = [
 		'group'		=> [
@@ -905,6 +918,7 @@ function mail_mass_transaction($mail_ary)
 		'description'			=> $mail_ary['description'],
 		'new_transaction_url'	=> $app['base_url'] . '/transactions.php?add=1',
 		'from_many'				=> $from_many_bool,
+		'support_url'			=> $app['base_url'] . '/support.php?src=p',
 	];
 
 	$from_user_id = $to_user_id = $one_user_id;
@@ -947,7 +961,7 @@ function mail_mass_transaction($mail_ary)
 			'to'		=> $app['mail_addr_user']->get($user_id, $tschema),
 			'template'	=> 'transaction',
 			'vars'		=> $vars,
-		]);
+		], random_int(0, 5000));
 	}
 
 	$total = 0;
@@ -997,12 +1011,12 @@ function mail_mass_transaction($mail_ary)
 		'text' 		=> $text,
 		'template'	=> 'admin_mass_transaction',
 		'vars'		=> $vars,
-	]);
+	], 8000);
 
 	return true;
 }
 
-function cancel()
+function cancel():void
 {
 	header('Location: ' . generate_url('mass_transaction'));
 	exit;

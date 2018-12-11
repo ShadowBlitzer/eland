@@ -111,13 +111,23 @@ $tab_panes = [
 				'addon'	=> $currency,
 				'lbl'	=> 'Preset Minimum Account Limiet',
 				'type'	=> 'number',
-				'explain'	=> 'Bij aanmaak van een nieuw Account wordt deze Minimum Account Limiet vooraf ingevuld in het aanmaakformulier. Dit heeft enkel zin wanneer instappende leden een afwijkende Minimum Account Limiet hebben van de Minimum Systeemslimiet. Deze instelling is ook nuttig wanneer de Automatische Minimum Limiet gebruikt wordt. Dit veld kan leeg gelaten worden.',
+				'explain'	=> 'Bij aanmaak van een nieuw Account wordt
+					deze Minimum Account Limiet vooraf ingevuld in het
+					aanmaakformulier. Dit heeft enkel zin wanneer instappende
+					leden een afwijkende Minimum Account Limiet hebben van
+					de Minimum Systeemslimiet. Deze instelling is ook nuttig
+					wanneer de Automatische Minimum Limiet gebruikt wordt.
+					Dit veld kan leeg gelaten worden.',
 			],
 			'preset_maxlimit'	=> [
 				'addon'	=> $currency,
 				'lbl'	=> 'Preset Maximum Account Limiet',
 				'type'	=> 'number',
-				'explain'	=> 'Bij aanmaak van een nieuw Account wordt deze Maximum Account Limiet vooraf ingevuld in het aanmaakformulier. Dit heeft enkel zin wanneer instappende leden een afwijkende Maximum Account Limiet hebben van de Maximum Systeemslimiet. Dit veld kan leeg gelaten worden.',
+				'explain'	=> 'Bij aanmaak van een nieuw Account wordt deze
+					Maximum Account Limiet vooraf ingevuld in het aanmaakformulier.
+					Dit heeft enkel zin wanneer instappende leden een afwijkende
+					Maximum Account Limiet hebben van de Maximum Systeemslimiet.
+					Dit veld kan leeg gelaten worden.',
 
 			],
 			'balance_equilibrium'	=> [
@@ -125,7 +135,8 @@ $tab_panes = [
 				'lbl'		=> 'Het uitstapsaldo voor actieve leden. ',
 				'type'		=> 'number',
 				'required'	=> true,
-				'explain' 	=> 'Het saldo van leden met status uitstapper kan enkel bewegen in de richting van deze instelling.'
+				'explain' 	=> 'Het saldo van leden met status uitstapper
+					kan enkel bewegen in de richting van deze instelling.'
 			],
 
 		],
@@ -138,7 +149,8 @@ $tab_panes = [
 			'msgs_days_default'	=> [
 				'addon'	=> 'dagen',
 				'lbl'	=> 'Standaard geldigheidsduur',
-				'explain' => 'Bij aanmaak van nieuw vraag of aanbod wordt deze waarde standaard ingevuld in het formulier.',
+				'explain' => 'Bij aanmaak van nieuw vraag of aanbod wordt
+					deze waarde standaard ingevuld in het formulier.',
 				'type'	=> 'number',
 				'attr'	=> ['min' => 1, 'max' => 1460],
 			],
@@ -157,7 +169,9 @@ $tab_panes = [
 			],
 
 			'li_2'	=> [
-				'inline' => '%1$s Mail een notificatie naar de eigenaar van een vraag of aanbod bericht op het moment dat het vervalt.',
+				'inline' => '%1$s Mail een notificatie naar de eigenaar
+					van een vraag of aanbod bericht op het moment dat
+					het vervalt.',
 				'inputs'	=> [
 					'msgexpwarnenabled'	=> [
 						'type'	=> 'checkbox',
@@ -173,11 +187,14 @@ $tab_panes = [
 			'systemname' => [
 				'lbl'		=> 'Systeemsnaam',
 				'required'	=> true,
+				'addon_fa'	=> 'share-alt',
 			],
 			'systemtag' => [
 				'lbl'		=> 'Tag',
-				'explain'	=> 'Prefix tussen haken [tag] in onderwerp van alle E-mail-berichten',
+				'explain'	=> 'Prefix tussen haken [tag] in onderwerp
+					van alle E-mail-berichten',
 				'required'	=> true,
+				'addon_fa'	=> 'tag',
 				'attr'		=> ['maxlength' => 30],
 			],
 		],
@@ -189,6 +206,7 @@ $tab_panes = [
 			'currency'	=> [
 				'lbl'		=> 'Naam van Munt (meervoud)',
 				'required'	=> true,
+				'addon_fa'	=> 'money',
 			],
 
 			'currencyratio'	=> [
@@ -196,34 +214,49 @@ $tab_panes = [
 				'lbl'		=> 'Aantal per uur',
 				'attr'		=> ['max' => 240, 'min' => 1],
 				'type'		=> 'number',
-				'explain'	=> 'Deze instelling heeft enkel betrekking op Tijdbanken.
-					Zij is vereist voor eLAS/eLAND interSysteem-verbindingen zodat zij
-					een gemeenschappelijke tijdbasis kunnen hebben.',
+				'addon_fa'	=> 'clock-o',
+				'explain'	=> 'Deze instelling heeft enkel betrekking op Tijdsbanken.
+					Zij is vereist voor eLAS/eLAND interSysteem-verbindingen zodat de Systemen
+					een gemeenschappelijke tijdbasis hebben.',
 			],
 		],
 	],
 
 	'mailaddresses'	=> [
 		'lbl'		=> 'E-Mail Adressen',
+		'explain'	=> 'Er moet minstens één E-mail adres voor elk
+			type ingesteld zijn.
+			Maak het vakje leeg om een E-mail
+			adres te verwijderen.',
 		'inputs'	=> [
 			'admin'	=> [
 				'lbl'	=> 'Algemeen admin/beheerder',
+				'explain_top'	=> 'Krjgt algemene E-mail notificaties
+					van het Systeem',
 				'attr' 	=> ['minlength' => 7],
 				'type'	=> 'email',
+				'addon_fa'		=> 'envelope-o',
 				'max_inputs'	=> 5,
-				'add_btn_text' => 'Extra E-mail Adres',
+				'add_btn_text' 	=> 'Extra E-mail Adres',
 			],
 			'newsadmin'	=> [
-				'lbl'	=> 'Nieuwsbeheerder',
+				'lbl'	=> 'Nieuws beheerder',
+				'explain_top'	=> 'Krjgt E-mail wanneer een nieuwsbericht,
+					gepost door een gewoon lid, goedgekeurd of
+					verwijderd dient te worden',
 				'attr'	=> ['minlength' => 7],
 				'type'	=> 'email',
+				'addon_fa'		=> 'envelope-o',
 				'max_inputs'	=> 5,
 				'add_btn_text'	=> 'Extra E-mail Adres',
 			],
 			'support'	=> [
 				'lbl'	=> 'Support / Helpdesk',
+				'explain_top'	=> 'Krjgt E-mail berichten
+					van het Help- en Contactformulier.',
 				'attr'	=> ['minlength' => 7],
 				'type'	=> 'email',
+				'addon_fa'		=> 'envelope-o',
 				'max_inputs'	=> 5,
 				'add_btn_text'	=> 'Extra E-mail Adres',
 			],
@@ -235,7 +268,8 @@ $tab_panes = [
 		'lbl_pane'	=> 'Periodieke Overzichts E-mail',
 		'inputs' => [
 			'li_1'	=> [
-				'inline' => 'Verstuur de Periodieke Overzichts E-mail om de %1$s dagen',
+				'inline' => 'Verstuur de Periodieke Overzichts E-mail
+					om de %1$s dagen',
 				'inputs' => [
 					'saldofreqdays'	=> [
 						'type'		=> 'number',
@@ -243,7 +277,8 @@ $tab_panes = [
 						'required'	=> true,
 					],
 				],
-				'explain' => 'Noot: Leden kunnen steeds ontvangst van de Periodieke Overzichts E-mail aan- of afzetten in hun profielinstellingen.',
+				'explain' => 'Noot: Leden kunnen steeds ontvangst van de Periodieke
+					Overzichts E-mail aan- of afzetten in hun profielinstellingen.',
 			],
 
 			'periodic_mail_block_ary' => [
@@ -370,7 +405,7 @@ $tab_panes = [
 			],
 
 			'li_2' => [
-				'inline' => '%1$s Leden kunnen zelf de Gebruikersnaam aanpassen.',
+				'inline' => '%1$s Leden kunnen zelf hun Gebruikersnaam aanpassen.',
 				'inputs' => [
 					'users_can_edit_username' => [
 						'type'	=> 'checkbox',
@@ -379,7 +414,7 @@ $tab_panes = [
 			],
 
 			'li_3' => [
-				'inline' => '%1$s Leden kunnen zelf het veld Volledige Naam aanpassen.',
+				'inline' => '%1$s Leden kunnen zelf hun Volledige Naam aanpassen.',
 				'inputs' => [
 					'users_can_edit_fullname' => [
 						'type'	=> 'checkbox',
@@ -394,7 +429,7 @@ $tab_panes = [
 		'inputs'	=> [
 
 			'li_1'	=> [
-				'inline'	=> '%1$s E-mail functionaliteit aan: het systeem verstuurt E-mails.',
+				'inline'	=> '%1$s E-mail functionaliteit aan: het Systeem verstuurt E-mails.',
 				'inputs'	=> [
 					'mailenabled'	=> [
 						'type'	=> 'checkbox',
@@ -412,7 +447,7 @@ $tab_panes = [
 			],
 
 			'li_3' => [
-				'inline'	=> '%1$s Dit Systeem is een Tijdbank (munt met tijdbasis).',
+				'inline'	=> '%1$s Dit Systeem is een Tijdsbank (munt met tijdbasis).',
 				'inputs'	=> [
 					'template_lets'	=> [
 						'type'	=> 'checkbox',
@@ -423,7 +458,7 @@ $tab_panes = [
 
 			'li_4'	=> [
 				'inline'	=> '%1$s Gebruik eLAS/eLAND interSysteem. Deze instelling is enkel geldig wanneer hierboven
-					"Tijdbank" geselecteerd is. eLAS/eLAND interSysteem is enkel mogelijk met
+					"Tijdsbank" geselecteerd is. eLAS/eLAND interSysteem is enkel mogelijk met
 					munten met gemeenschappelijke tijdbasis.',
 				'inputs'	=> [
 					'interlets_en'	=> [
@@ -438,11 +473,13 @@ $tab_panes = [
 				'type'		=> 'select',
 				'options'	=> $landing_page_options,
 				'required'	=> true,
+				'addon_fa'	=> 'plane',
 			],
 
 			'homepage_url'	=> [
 				'lbl'		=> 'Website url',
 				'type'		=> 'url',
+				'addon_fa'	=> 'link',
 				'explain'	=> 'Titel en logo in de navigatiebalk linken naar deze url.',
 			],
 
@@ -450,13 +487,15 @@ $tab_panes = [
 				'lbl'		=> 'Datum- en tijdweergave',
 				'type'		=> 'select',
 				'options'	=> $app['date_format']->get_options(),
+				'addon_fa'	=> 'calendar',
 			],
 
 			'css'	=> [
 				'lbl'		=> 'Stijl (css)',
 				'type' 		=> 'url',
-				'explain'	=> 'Url van extra stijlblad (css-bestand). Laat leeg wanneer niet gebruikt.',
+				'explain'	=> 'Url van extra stijlblad (css-bestand). Laat dit veld leeg wanneer het niet gebruikt wordt.',
 				'attr'		=> ['maxlength'	=> 100],
+				'addon_fa'	=> 'link',
 			],
 		],
 	],
@@ -696,13 +735,13 @@ if ($post)
 	if (!count($posted_configs))
 	{
 		$app['alert']->warning('Geen gewijzigde waarden.');
-		cancel();
+		cancel($active_tab);
 	}
 
 	if (count($errors))
 	{
 		$app['alert']->error($errors);
-		cancel();
+		cancel($active_tab);
 	}
 
 	$execute_post_actions = [];
@@ -745,7 +784,7 @@ if ($post)
 		$app['alert']->success('De instelling is aangepast.');
 	}
 
-	cancel();
+	cancel($active_tab);
 }
 
 $app['assets']->add(['sortable', 'summernote', 'rich_edit.js', 'config.js']);
@@ -763,7 +802,8 @@ foreach ($tab_panes as $id => $pane)
 	echo '<li role="presentation"';
 	echo $id === $active_tab ? ' class="active"' : '';
 	echo '>';
-	echo '<a href="#' . $id . '" aria-controls="' . $id . '" role="tab" data-toggle="tab">';
+	echo '<a href="#' . $id . '" aria-controls="';
+	echo $id . '" role="tab" data-toggle="tab">';
 	echo $pane['lbl'];
 	echo '</a>';
 	echo '</li>';
@@ -780,14 +820,24 @@ foreach ($tab_panes as $id => $pane)
 	$active = $id === $active_tab ? ' active' : '';
 
 	echo '<div role="tabpanel" ';
-	echo 'class="tab-pane' . $active . '" id="' . $id . '">';
+	echo 'class="tab-pane' . $active;
+	echo '" id="' . $id . '">';
 
 	echo '<form method="post">';
 
-	echo '<div class="panel panel-default">';
+	echo '<div class="panel panel-info">';
 	echo '<div class="panel-heading"><h4>';
 	echo $pane['lbl_pane'] ?? $pane['lbl'];
-	echo '</h4></div>';
+	echo '</h4>';
+
+	if (isset($pane['explain']))
+	{
+		echo '<p>';
+		echo $pane['explain'];
+		echo '</p>';
+	}
+
+	echo '</div>';
 
 	echo '<ul class="list-group">';
 
@@ -798,7 +848,7 @@ foreach ($tab_panes as $id => $pane)
 			continue;
 		}
 
-		echo '<li class="list-group-item">';
+		echo '<li class="list-group-item bg-info">';
 
 		if (isset($input['max_inputs']) && $input['max_inputs'] > 1)
 		{
@@ -822,6 +872,7 @@ foreach ($tab_panes as $id => $pane)
 		if (isset($input['inline']))
 		{
 			$input_ary = [];
+			$id_for_label = '';
 
 			if (isset($input['inputs']))
 			{
@@ -830,6 +881,12 @@ foreach ($tab_panes as $id => $pane)
 					$str = '<input type="';
 					$str .= $inline_input['type'] ?? 'text';
 					$str .= '" name="' . $inline_name . '"';
+
+					if (!$id_for_label)
+					{
+						$id_for_label = 'inline_id_' . $inline_name;
+						$str .= ' id="' . $id_for_label . '"';
+					}
 
 					if ($inline_input['type'] == 'checkbox')
 					{
@@ -858,7 +915,21 @@ foreach ($tab_panes as $id => $pane)
 				}
 			}
 
-			echo '<p>' . vsprintf($input['inline'], $input_ary) . '</p>';
+			echo '<p>';
+
+			if ($id_for_label)
+			{
+				echo '<label for="' . $id_for_label . '">';
+			}
+
+			echo vsprintf($input['inline'], $input_ary);
+
+			if ($id_for_label)
+			{
+				echo '</label>';
+			}
+
+			echo '</p>';
 		}
 		else if (isset($input['type']) && $input['type'] === 'sortable')
 		{
@@ -897,7 +968,11 @@ foreach ($tab_panes as $id => $pane)
 			echo '<div class="panel-body">';
 			echo '<ul id="list_active" class="list-group">';
 
-			echo get_sortable_items($input['ary'], $v_options, $active, 'bg-success');
+			echo get_sortable_items_str(
+				$input['ary'],
+				$v_options,
+				$active,
+				'bg-success');
 
 			echo '</ul>';
 			echo '</div>';
@@ -912,7 +987,11 @@ foreach ($tab_panes as $id => $pane)
 			echo '<div class="panel-body">';
 			echo '<ul id="list_inactive" class="list-group">';
 
-			echo get_sortable_items($input['ary'], $v_options, $inactive, 'bg-danger');
+			echo get_sortable_items_str(
+				$input['ary'],
+				$v_options,
+				$inactive,
+				'bg-danger');
 
 			echo '</ul';
 			echo '</div>';
@@ -935,11 +1014,26 @@ foreach ($tab_panes as $id => $pane)
 				echo '</label>';
 			}
 
-			if (isset($input['addon']))
+			if (isset($input['explain_top']))
+			{
+				echo '<p>';
+				echo $input['explain_top'];
+				echo '</p>';
+			}
+
+			if (isset($input['addon']) || isset($input['addon_fa']))
 			{
 				echo '<div class="input-group">';
 				echo '<span class="input-group-addon">';
-				echo $input['addon'];
+				echo $input['addon'] ?? '';
+
+				if (isset($input['addon_fa']))
+				{
+					echo '<i class="fa fa-';
+					echo $input['addon_fa'];
+					echo '"></i>';
+				}
+
 				echo '</span>';
 			}
 
@@ -999,7 +1093,7 @@ foreach ($tab_panes as $id => $pane)
 				echo '>';
 			}
 
-			if (isset($input['addon']))
+			if (isset($input['addon']) || isset($input['addon_fa']))
 			{
 				echo '</div>';
 			}
@@ -1029,7 +1123,7 @@ foreach ($tab_panes as $id => $pane)
 
 	echo '</ul>';
 
-	echo '<div class="panel-footer">';
+	echo '<div class="panel-heading">';
 
 	echo '<input type="hidden" name="active_tab" value="' . $id . '">';
 	echo '<input type="submit" class="btn btn-primary" value="Aanpassen" name="' . $id . '_submit">';
@@ -1049,16 +1143,21 @@ echo '</div>';
 
 include __DIR__ . '/include/footer.php';
 
-function cancel()
+function cancel(string $active_tab):void
 {
-	global $active_tab;
-
 	header('Location: ' . generate_url('config', ['active_tab' => $active_tab]));
 	exit;
 }
 
-function get_sortable_items($input_ary, $v_options, $items, $class)
+function get_sortable_items_str(
+	array $input_ary,
+	array $v_options,
+	array $items,
+	string $class
+):string
 {
+	$out = '';
+
 	foreach ($items as $a)
 	{
 		$options = $input_ary[$a];
@@ -1071,17 +1170,19 @@ function get_sortable_items($input_ary, $v_options, $items, $class)
 		{
 			$lbl = reset($options);
 			$option = key($options);
-			echo '<li class="list-group-item ' . $class . '" ';
-			echo 'data-block="';
-			echo $a;
-			echo '" ';
-			echo 'data-option="';
-			echo $option;
-			echo '" >';
-			echo '<span class="lbl">';
-			echo $lbl;
-			echo '</span>';
-			echo '</li>';
+			$out .= '<li class="list-group-item ';
+			$out .= $class;
+			$out .= '" ';
+			$out .= 'data-block="';
+			$out .= $a;
+			$out .= '" ';
+			$out .= 'data-option="';
+			$out .= $option;
+			$out .= '" >';
+			$out .= '<span class="lbl">';
+			$out .= $lbl;
+			$out .= '</span>';
+			$out .= '</li>';
 
 			continue;
 		}
@@ -1097,32 +1198,43 @@ function get_sortable_items($input_ary, $v_options, $items, $class)
 			$option = key($options);
 		}
 
-		echo '<li class="list-group-item ' . $class . '" ';
-		echo 'data-block="' . $a . '" ';
-		echo 'data-option="' . $option . '">';
-		echo '<span class="lbl">';
-		echo $lbl;
-		echo '</span>';
-		echo '&nbsp;&nbsp;';
-		echo '<button type="button" class="btn btn-default ';
-		echo 'dropdown-toggle" ';
-		echo 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-		echo ' <span class="caret"></span>';
-		echo '</button>';
-		echo '<ul class="dropdown-menu">';
+		$out .= '<li class="list-group-item ';
+		$out .= $class;
+		$out .= '" ';
+		$out .= 'data-block="';
+		$out .= $a;
+		$out .= '" ';
+		$out .= 'data-option="';
+		$out .= $option;
+		$out .= '">';
+		$out .= '<span class="lbl">';
+		$out .= $lbl;
+		$out .= '</span>';
+		$out .= '&nbsp;&nbsp;';
+		$out .= '<button type="button" class="btn btn-default ';
+		$out .= 'dropdown-toggle" ';
+		$out .= 'data-toggle="dropdown" aria-haspopup="true" ';
+		$out .= 'aria-expanded="false">';
+		$out .= ' <span class="caret"></span>';
+		$out .= '</button>';
+		$out .= '<ul class="dropdown-menu">';
 
 		foreach ($options as $k => $lbl)
 		{
-			echo '<li><a href="#" data-o="' . $k . '">';
-			echo $lbl;
-			echo '</a></li>';
+			$out .= '<li><a href="#" data-o="';
+			$out .= $k;
+			$out .= '">';
+			$out .= $lbl;
+			$out .= '</a></li>';
 		}
 
-		echo '</ul></li>';
+		$out .= '</ul></li>';
 	}
 
 	for($i = 0; $i < 5; $i++)
 	{
-		echo '<li class="list-group-item"></li>';
+		$out .= '<li class="list-group-item"></li>';
 	}
+
+	return $out;
 }

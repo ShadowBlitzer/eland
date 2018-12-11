@@ -1,55 +1,46 @@
 <?php
 
-namespace App\Legacy\task;
-
-use Psr\Log\LoggerInterface;
-use Predis\Client as redis;
+namespace task;
 
 use App\Legacy\service\cache;
-use App\Legacy\model\task;
+use Predis\Client as redis;
 use App\Legacy\service\typeahead;
-use App\Legacy\service\schedule;
+use Psr\Log\LoggerInterface;
 
-class fetch_elas_interlets extends task
+class fetch_elas_intersystem
 {
-	private $cache;
-	private $redis;
-	private $typeahead;
-	private $monolog;
-	private $client;
-	private $url;
-	private $domain;
-	private $now;
-	private $now_gmdate;
-	private $last_fetch;
-	private $apikeys_fails;
-
+	protected $cache;
+	protected $redis;
+	protected $typeahead;
+	protected $monolog;
+	protected $client;
+	protected $url;
+	protected $domain;
+	protected $now;
+	protected $now_gmdate;
+	protected $last_fetch;
+	protected $apikeys_fails;
+	protected $elas_domains;
 
 	public function __construct(
 		cache $cache,
 		redis $redis,
 		typeahead $typeahead,
-		LoggerInterface $monolog,
-		schedule $schedule
+		LoggerInterface $monolog
 	)
 	{
-		parent::__construct($schedule);
 		$this->cache = $cache;
 		$this->redis = $redis;
 		$this->typeahead = $typeahead;
 		$this->monolog = $monolog;
 	}
 
-	/**
-	*
-	*/
-
 	function process()
 	{
 		$this->now = time();
 		$this->now_gmdate = gmdate('Y-m-d H:i:s', $this->now);
 
-		$elas_interlets_domains = $this->cache->get('elas_interlets_domains');
+		$this->elas_domains = $this->cache->get('elas_interlets_domains');
 
 		$this->last_fetch = $this->cache->get('elas_interlets_last_fetch');
 
@@ -77,7 +68,7 @@ class fetch_elas_interlets extends task
 			unset($this->apikeys_fails[$apikey]);
 		}
 
-		$diff = array_diff_key($elas_interlets_domains, $this->last_fetch['users'] ?? []);
+		$diff = array_diff_key($this->elas_domains, $this->last_fetch['users'] ?? []);
 
 		if (count($diff))
 		{
@@ -94,18 +85,23 @@ class fetch_elas_interlets extends task
 			}
 		}
 
-		$this->last_fetch['users'] = array_intersect_key($this->last_fetch['users'] ?? [], $elas_interlets_domains);
-		$this->last_fetch['msgs'] = array_intersect_key($this->last_fetch['msgs'] ?? [], $elas_interlets_domains);
+		$this->last_fetch['users'] = array_intersect_key($this->last_fetch['users'] ?? [], $this->elas_domains);
+		$this->last_fetch['msgs'] = array_intersect_key($this->last_fetch['msgs'] ?? [], $this->elas_domains);
 
 		$apikeys = [];
 
-		foreach ($elas_interlets_domains as $domain => $ary)
+		foreach ($this->elas_domains as $domain => $ary)
 		{
-			foreach ($ary as $sch => $apikey)
+			foreach ($ary as $sch => $sch_ary)
 			{
+				if (!isset($sch_ary['remoteapikey']))
+				{
+					continue;
+				}
+
 				if (!isset($apikeys_ignore[$apikey]))
 				{
-					$apikeys[$domain] = $apikey;
+					$apikeys[$domain] = $sch_ary['remoteapikey'];
 					continue;
 				}
 			}
@@ -221,7 +217,7 @@ class fetch_elas_interlets extends task
 	*
 	*/
 
-	private function update_cache()
+	protected function update_cache()
 	{
 		$this->cache->set('elas_interlets_last_fetch', $this->last_fetch);
 		$this->cache->set('elas_interlets_apikeys_fails', $this->apikeys_fails);
@@ -232,7 +228,7 @@ class fetch_elas_interlets extends task
 	 *
 	 */
 
-	private function fetch_msgs()
+	protected function fetch_msgs()
 	{
 		$msgs = [];
 
@@ -393,11 +389,14 @@ class fetch_elas_interlets extends task
 	*
 	*/
 
-	private function fetch_users()
+	protected function fetch_users()
 	{
-		$crawler = $this->client->request('GET', $this->url . '/rendermembers.php');
+		$crawler = $this->client->request('GET',
+			$this->url . '/rendermembers.php');
 
-		$status_code = $this->client->getResponse()->getStatus();
+		$status_code = $this->client
+			->getResponse()
+			->getStatus();
 
 		$users = [];
 
@@ -480,8 +479,26 @@ class fetch_elas_interlets extends task
 			});
 		}
 
-		$thumbprint = crc32(json_encode($users));
-		$this->typeahead->invalidate_thumbprint('users_active', $this->domain, $thumbprint);
+		$new_thumbprint = crc32(json_encode($users));
+
+		foreach($this->elas_domains[$this->domain] as $schema => $ary)
+		{
+			if (!isset($ary['group_id']))
+			{
+				continue;
+			}
+
+			$params = [
+				'schema'	=> $schema,
+				'group_id'	=> $ary['group_id'],
+			];
+
+			$this->typeahead->set_thumbprint(
+				'elas_intersystem_accounts',
+				$params,
+				$new_thumbprint
+			);
+		}
 
 		$this->cache->set($this->domain . '_typeahead_data', $users);
 
@@ -492,14 +509,5 @@ class fetch_elas_interlets extends task
 		$this->redis->expire($redis_key, 86400); // 1 day
 
 		error_log($this->domain . ' typeahead data fetched of ' . count($users) . ' users');
-	}
-
-	/**
-	 *
-	 */
-
-	function get_interval()
-	{
-		return 900;
 	}
 }

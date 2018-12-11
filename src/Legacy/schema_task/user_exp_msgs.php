@@ -8,7 +8,6 @@ use App\Legacy\queue\mail;
 use App\Legacy\model\schema_task;
 use App\Legacy\service\schedule;
 use App\Legacy\service\groups;
-use App\Legacy\service\this_group;
 use App\Legacy\service\config;
 use App\Legacy\service\template_vars;
 use App\Legacy\service\user_cache;
@@ -29,14 +28,13 @@ class user_exp_msgs extends schema_task
 		string $protocol,
 		schedule $schedule,
 		groups $groups,
-		this_group $this_group,
 		config $config,
 		template_vars $template_vars,
 		user_cache $user_cache,
 		mail_addr_user $mail_addr_user
 	)
 	{
-		parent::__construct($schedule, $groups, $this_group);
+		parent::__construct($schedule, $groups);
 		$this->db = $db;
 		$this->mail = $mail;
 		$this->protocol = $protocol;
@@ -46,7 +44,7 @@ class user_exp_msgs extends schema_task
 		$this->mail_addr_user = $mail_addr_user;
 	}
 
-	function process()
+	function process():void
 	{
 		$now = gmdate('Y-m-d H:i:s');
 
@@ -55,11 +53,12 @@ class user_exp_msgs extends schema_task
 		$group_vars = $this->template_vars->get($this->schema);
 
 		$warn_messages  = $this->db->fetchAll('select m.*
-			from ' . $this->schema . '.messages m, ' . $this->schema . '.users u
-				where m.exp_user_warn = \'f\'
-					and u.id = m.id_user
-					and u.status in (1, 2)
-					and m.validity < ?', [$now]);
+			from ' . $this->schema . '.messages m, ' .
+				$this->schema . '.users u
+			where m.exp_user_warn = \'f\'
+				and u.id = m.id_user
+				and u.status in (1, 2)
+				and m.validity < ?', [$now]);
 
 		foreach ($warn_messages as $msg)
 		{
@@ -87,13 +86,15 @@ class user_exp_msgs extends schema_task
 				'url_extend' 	=> $url_extend,
 				'url_msg_add'	=> $base_url . '/messages.php?add=1',
 				'group'			=> $group_vars,
+				'support_url'	=> $base_url . '/support.php?src=p',
 			];
 
 			$this->mail->queue([
 				'to' 		=> $this->mail_addr_user->get($msg['id_user'], $this->schema),
 				'schema' 	=> $this->schema,
 				'template' 	=> 'user_exp_msgs',
-				'vars' 		=> $vars]);
+				'vars' 		=> $vars],
+			random_int(0, 5000));
 		}
 
 		$this->db->executeUpdate('update ' . $this->schema . '.messages
@@ -101,12 +102,12 @@ class user_exp_msgs extends schema_task
 			where validity < ?', [$now]);
 	}
 
-	public function is_enabled()
+	public function is_enabled():bool
 	{
 		return $this->config->get('msgexpwarnenabled', $this->schema) ? true : false;
 	}
 
-	public function get_interval()
+	public function get_interval():int
 	{
 		return 86400;
 	}

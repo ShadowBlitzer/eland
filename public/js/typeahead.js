@@ -10,6 +10,7 @@ $(document).ready(function(){
 
 		var datasets = [];
 		var data = $(this).data('typeahead');
+		var render_params = $(this).data('typeahead-render');
 		var newuserdays = $(this).data('newuserdays');
 		var treshold = now - (newuserdays * 86400);
 
@@ -25,7 +26,81 @@ $(document).ready(function(){
 
 			$.extend(params, session_params);
 
-			if (rec['name'] == 'users'){
+			if (render_params
+				&& render_params.hasOwnProperty('exists_check')){
+
+				var $input_container = $(this).parent().parent();
+				var $exists_msg = $input_container.find('span.exists_msg');
+				var $exists_query_results = $input_container.find('span.exists_query_results');
+				var $query_results = $exists_query_results.find('span.query_results');
+
+				if (render_params.hasOwnProperty('exists_omit')){
+					var exists_omit = render_params.exists_omit.toLowerCase();
+				} else {
+					exists_omit = '';
+				}
+
+				var exists_engine = new Bloodhound({
+					prefetch: {
+						url: './typeahead/' + rec.name + '.php?' + $.param(params),
+						cache: true,
+						ttl: 172800000, // 2 days
+						thumbprint: rec.thumbprint,
+						filter: filter
+					},
+					datumTokenizer: Bloodhound.tokenizers.whitespace,
+					queryTokenizer: Bloodhound.tokenizers.whitespace
+				});
+
+				var $this_input = $(this);
+
+				function render_exists(){
+					var lower_case_val = $this_input.val().toLowerCase();
+
+					exists_engine.search(lower_case_val, function(results_ary){
+
+						results_ary = $.grep(results_ary, function (item){
+							return item.toLowerCase() !== exists_omit;
+						});
+
+						if (results_ary.length){
+
+							if (lower_case_val === results_ary[0].toLowerCase()) {
+								$exists_msg.removeClass('hidden');
+								$exists_msg.show();
+								$input_container.addClass('has-error');
+							} else {
+								$exists_msg.hide();
+								$input_container.removeClass('has-error');
+							}
+
+							$exists_query_results.removeClass('hidden');
+							$exists_query_results.show();
+
+							$query_results.text(results_ary
+								.slice(0, render_params.exists_check)
+								.join(', ') +
+								(results_ary.length > render_params.exists_check ?
+									', ...' : '')
+							);
+						} else {
+							$exists_query_results.hide();
+							$exists_msg.hide();
+							$input_container.removeClass('has-error');
+						}
+					});
+				}
+
+				$this_input.keyup(render_exists);
+
+				window.setTimeout(render_exists, 800);
+
+				continue;
+			}
+
+			if (rec['name'] === 'accounts'
+				|| rec['name'] === 'elas_intersystem_accounts'
+				|| rec['name'] === 'eland_intersystem_accounts'){
 
 				var filter = function(users){
 					return $.map(users, function(user){
@@ -85,18 +160,21 @@ $(document).ready(function(){
 					return user.value;
 				};
 
+				var hint = true;
+
 			} else {
 				filter = false;
 				tokenizer = Bloodhound.tokenizers.whitespace;
-				templates = {};
 				displayKey = false;
+				templates = {};
+				hint = true;
 			}
 
 			datasets.push({data: new Bloodhound({
 					prefetch: {
-						url: './ajax/typeahead_' + rec.name + '.php?' + $.param(params),
+						url: './typeahead/' + rec.name + '.php?' + $.param(params),
 						cache: true,
-						ttl: 2592000000,	//30 days
+						ttl: 172800000,	// 2 days
 						thumbprint: rec.thumbprint,
 						filter: filter
 					},
@@ -104,7 +182,8 @@ $(document).ready(function(){
 					queryTokenizer: Bloodhound.tokenizers.whitespace
 				}),
 				templates: templates,
-				displayKey: displayKey
+				displayKey: displayKey,
+				hint: hint
 			});
 		}
 

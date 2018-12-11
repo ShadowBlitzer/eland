@@ -1,29 +1,29 @@
 <?php
 
-namespace App\Legacy\task;
+namespace task;
 
 use Doctrine\DBAL\Connection as db;
-
 use App\Legacy\service\cache;
-use App\Legacy\model\task;
 use App\Legacy\service\groups;
-use App\Legacy\service\schedule;
 
-class get_elas_interlets_domains extends task
+class get_elas_intersystem_domains
 {
-	private $cache;
-	private $db;
-	private $groups;
+	protected $cache;
+	protected $db;
+	protected $groups;
 
-	public function __construct(db $db, cache $cache, schedule $schedule, groups $groups)
+	public function __construct(
+		db $db,
+		cache $cache,
+		groups $groups
+	)
 	{
-		parent::__construct($schedule);
 		$this->db = $db;
 		$this->cache = $cache;
 		$this->groups = $groups;
 	}
 
-	function process()
+	function process():void
 	{
 		$elas_interlets_domains = $this->cache->get('elas_interlets_domains');
 
@@ -31,7 +31,7 @@ class get_elas_interlets_domains extends task
 
 		foreach ($this->groups->get_schemas() as $sch)
 		{
-			$groups = $this->db->fetchAll('select url, remoteapikey
+			$groups = $this->db->fetchAll('select url, remoteapikey, id
 				from ' . $sch . '.letsgroups
 				where apimethod = \'elassoap\'
 					and remoteapikey is not null
@@ -51,7 +51,10 @@ class get_elas_interlets_domains extends task
 					continue;
 				}
 
-				$domains[$domain][$sch] = trim($group['remoteapikey']);
+				$domains[$domain][$sch] = [
+					'remoteapikey'	=> trim($group['remoteapikey']),
+					'group_id'		=> $group['id'],
+				];
 			}
 		}
 
@@ -63,10 +66,5 @@ class get_elas_interlets_domains extends task
 		$this->cache->set('elas_interlets_domains', $domains);
 
 		return;
-	}
-
-	function get_interval()
-	{
-		return 900;
 	}
 }

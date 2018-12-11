@@ -4,11 +4,9 @@ namespace App\Legacy\schema_task;
 
 use Doctrine\DBAL\Connection as db;
 use Psr\Log\LoggerInterface;
-
 use App\Legacy\model\schema_task;
 use App\Legacy\service\schedule;
 use App\Legacy\service\groups;
-use App\Legacy\service\this_group;
 
 class saldo_update extends schema_task
 {
@@ -19,16 +17,15 @@ class saldo_update extends schema_task
 		db $db,
 		LoggerInterface $monolog,
 		schedule $schedule,
-		groups $groups,
-		this_group $this_group
+		groups $groups
 	)
 	{
-		parent::__construct($schedule, $groups, $this_group);
+		parent::__construct($schedule, $groups);
 		$this->db = $db;
 		$this->monolog = $monolog;
 	}
 
-	function process()
+	function process():void
 	{
 		$user_balances = $min = $plus = [];
 
@@ -76,13 +73,21 @@ class saldo_update extends schema_task
 				continue;
 			}
 
-			$this->db->update($this->schema . '.users', ['saldo' => $calculated], ['id' => $id]);
-			$m = 'User id ' . $id . ' balance updated, old: ' . $balance . ', new: ' . $calculated;
+			$this->db->update($this->schema . '.users',
+				['saldo' => $calculated], ['id' => $id]);
+
+			$m = 'User id ' . $id . ' balance updated, old: ' .
+				$balance . ', new: ' . $calculated;
 			$this->monolog->info('(cron) ' . $m, ['schema' => $this->schema]);
 		}
 	}
 
-	public function get_interval()
+	public function is_enabled():bool
+	{
+		return true;
+	}
+
+	public function get_interval():int
 	{
 		return 86400;
 	}

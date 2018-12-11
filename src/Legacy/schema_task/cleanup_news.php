@@ -9,7 +9,6 @@ use App\Legacy\model\schema_task;
 use App\Legacy\service\xdb;
 use App\Legacy\service\schedule;
 use App\Legacy\service\groups;
-use App\Legacy\service\this_group;
 
 class cleanup_news extends schema_task
 {
@@ -22,21 +21,23 @@ class cleanup_news extends schema_task
 		xdb $xdb,
 		LoggerInterface $monolog,
 		schedule $schedule,
-		groups $groups,
-		this_group $this_group
+		groups $groups
 	)
 	{
-		parent::__construct($schedule, $groups, $this_group);
+		parent::__construct($schedule, $groups);
 		$this->db = $db;
 		$this->xdb = $xdb;
 		$this->monolog = $monolog;
 	}
 
-	public function process()
+	public function process():void
 	{
 		$now = gmdate('Y-m-d H:i:s');
 
-		$news = $this->db->fetchAll('select id, headline from ' . $this->schema . '.news where itemdate < ? and sticky = \'f\'', [$now]);
+		$news = $this->db->fetchAll('select id, headline
+			from ' . $this->schema . '.news
+			where itemdate < ?
+				and sticky = \'f\'', [$now]);
 
 		foreach ($news as $n)
 		{
@@ -47,7 +48,12 @@ class cleanup_news extends schema_task
 		}
 	}
 
-	public function get_interval()
+	public function is_enabled():bool
+	{
+		return true;
+	}
+
+	public function get_interval():int
 	{
 		return 86400;
 	}

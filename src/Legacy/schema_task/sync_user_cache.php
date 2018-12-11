@@ -8,7 +8,6 @@ use App\Legacy\service\user_cache;
 use App\Legacy\model\schema_task;
 use App\Legacy\service\schedule;
 use App\Legacy\service\groups;
-use App\Legacy\service\this_group;
 
 class sync_user_cache extends schema_task
 {
@@ -19,20 +18,20 @@ class sync_user_cache extends schema_task
 		db $db,
 		user_cache $user_cache,
 		schedule $schedule,
-		groups $groups,
-		this_group $this_group
+		groups $groups
 	)
 	{
-		parent::__construct($schedule, $groups, $this_group);
+		parent::__construct($schedule, $groups);
 		$this->db = $db;
 		$this->user_cache = $user_cache;
 	}
 
-	function process()
+	function process():void
 	{
 		$user_ids = [];
 
-		$rs = $this->db->prepare('select id from ' . $this->schema . '.users');
+		$rs = $this->db->prepare('select id
+			from ' . $this->schema . '.users');
 
 		$rs->execute();
 
@@ -47,7 +46,12 @@ class sync_user_cache extends schema_task
 		}
 	}
 
-	public function get_interval()
+	public function is_enabled():bool
+	{
+		return true;
+	}
+
+	public function get_interval():int
 	{
 		return 43200;
 	}

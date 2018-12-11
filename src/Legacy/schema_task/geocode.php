@@ -2,7 +2,6 @@
 
 namespace App\Legacy\schema_task;
 
-
 use Doctrine\DBAL\Connection as db;
 use Psr\Log\LoggerInterface;
 
@@ -11,7 +10,6 @@ use App\Legacy\service\cache;
 use App\Legacy\queue\geocode as geocode_queue;
 use App\Legacy\service\schedule;
 use App\Legacy\service\groups;
-use App\Legacy\service\this_group;
 
 class geocode extends schema_task
 {
@@ -19,10 +17,8 @@ class geocode extends schema_task
 	protected $monolog;
 	protected $cache;
 	protected $db;
-
 	protected $curl;
 	protected $geocoder;
-
 	protected $geocode_queue;
 
 	public function __construct(
@@ -31,18 +27,17 @@ class geocode extends schema_task
 		LoggerInterface $monolog,
 		geocode_queue $geocode_queue,
 		schedule $schedule,
-		groups $groups,
-		this_group $this_group
+		groups $groups
 	)
 	{
-		parent::__construct($schedule, $groups, $this_group);
+		parent::__construct($schedule, $groups);
 		$this->monolog = $monolog;
 		$this->cache = $cache;
 		$this->db = $db;
 		$this->geocode_queue = $geocode_queue;
 	}
 
-	public function process()
+	public function process():void
 	{
 		if (getenv('GEO_BLOCK') === '1')
 		{
@@ -53,7 +48,9 @@ class geocode extends schema_task
 		$log_ary = [];
 
 		$st = $this->db->prepare('select c.value, c.id_user
-			from ' . $this->schema . '.contact c, ' . $this->schema . '.type_contact tc, ' . $this->schema . '.users u
+			from ' . $this->schema . '.contact c, ' .
+				$this->schema . '.type_contact tc, ' .
+				$this->schema . '.users u
 			where c.id_type_contact = tc.id
 				and tc.abbrev = \'adr\'
 				and c.id_user = u.id
@@ -61,7 +58,7 @@ class geocode extends schema_task
 
 		$st->execute();
 
-		while (($row = $st->fetch()) && count($log_ary) < 20)
+		while ($row = $st->fetch())
 		{
 			$data = [
 				'adr'		=> trim($row['value']),
@@ -71,7 +68,6 @@ class geocode extends schema_task
 
 			$key = 'geo_' . $data['adr'];
 			$status_key = 'geo_status_' . $data['adr'];
-
 
 			if ($this->cache->exists($key))
 			{
@@ -85,20 +81,32 @@ class geocode extends schema_task
 
 			$this->geocode_queue->queue($data);
 
-			$log_ary[] = link_user($row['id_user'], $this->schema, false, true) . ': ' . $data['adr'];
+			$log = link_user($row['id_user'], $this->schema, false, true);
+			$log .= ': ';
+			$log .= $data['adr'];
 
-			$this->cache->set($status_key, ['value' => 'queue'], 2592000);  // 30 days
+			$log_ary[] = $log;
+
+			$this->cache->set($status_key,
+				['value' => 'queue'],
+				2592000);  // 30 days
 		}
 
 		if (count($log_ary))
 		{
-			$this->monolog->info('Addresses queued for geocoding: ' . implode(', ', $log_ary),
+			$this->monolog->info('Addresses queued for geocoding: ' .
+				implode(', ', $log_ary),
 				['schema' => $this->schema]);
 		}
 	}
 
-	public function get_interval()
+	public function is_enabled():bool
 	{
-		return 900;
+		return true;
+	}
+
+	public function get_interval():int
+	{
+		return 86400;
 	}
 }

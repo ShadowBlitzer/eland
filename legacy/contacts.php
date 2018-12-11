@@ -167,13 +167,15 @@ if ($edit || $add)
 			from ' . $tschema . '.contact
 			where id = ?', [$edit])))
 		{
-			$app['alert']->error('Dit contact heeft geen eigenaar of bestaat niet.');
+			$app['alert']->error('Dit contact heeft geen eigenaar
+				of bestaat niet.');
 			cancel();
 		}
 
 		if ($uid && $uid != $user_id)
 		{
-			$app['alert']->error('uid in url is niet de eigenaar van contact.');
+			$app['alert']->error('uid in url is niet
+				de eigenaar van contact.');
 			cancel();
 		}
 	}
@@ -227,11 +229,11 @@ if ($edit || $add)
 			'id_user'				=> $user_id,
 		);
 
-		$mail_type_id = $app['db']->fetchColumn('select id
+		$abbrev_type = $app['db']->fetchColumn('select abbrev
 			from ' . $tschema . '.type_contact
-			where abbrev = \'mail\'');
+			where id = ?', array($contact['id_type_contact']));
 
-		if ($contact['id_type_contact'] == $mail_type_id && !filter_var($contact['value'], FILTER_VALIDATE_EMAIL))
+		if ($abbrev_type === 'mail' && !filter_var($contact['value'], FILTER_VALIDATE_EMAIL))
 		{
 			$errors[] = 'Geen geldig E-mail adres';
 		}
@@ -251,9 +253,7 @@ if ($edit || $add)
 			$errors[] = 'Commentaar mag maximaal 50 tekens lang zijn.';
 		}
 
-		if(!$app['db']->fetchColumn('select abbrev
-			from ' . $tschema . '.type_contact
-			where id = ?', array($contact['id_type_contact'])))
+		if(!$abbrev_type)
 		{
 			$errors[] = 'Contacttype bestaat niet!';
 		}
@@ -264,6 +264,10 @@ if ($edit || $add)
 		{
 			$errors[] = $access_error;
 		}
+
+		$mail_type_id = $app['db']->fetchColumn('select id
+			from ' . $tschema . '.type_contact
+			where abbrev = \'mail\'');
 
 		if ($edit)
 		{
@@ -281,7 +285,8 @@ if ($edit || $add)
 
 			if ($edit == $mail_id && $count_mail == 1 && $contact['id_type_contact'] != $mail_type_id)
 			{
-				$app['alert']->warning('Waarschuwing: de gebruiker heeft geen E-mail adres.');
+				$app['alert']->warning('Waarschuwing: de gebruiker heeft
+					geen E-mail adres.');
 			}
 		}
 
@@ -300,8 +305,10 @@ if ($edit || $add)
 
 			if ($mail_count && $s_admin)
 			{
-				$warning = 'Omdat deze gebruikers niet meer een uniek E-mail adres hebben zullen zij ';
-				$warning .= 'niet meer zelf hun paswoord kunnnen resetten of kunnen inloggen met ';
+				$warning = 'Omdat deze gebruikers niet meer ';
+				$warning .= 'een uniek E-mail adres hebben zullen zij ';
+				$warning .= 'niet meer zelf hun paswoord kunnnen resetten ';
+				$warning .= 'of kunnen inloggen met ';
 				$warning .= 'E-mail adres. Zie ' . aphp('status', [], 'Status');
 
 				if ($mail_count == 1)
@@ -312,23 +319,34 @@ if ($edit || $add)
 				else if ($mail_count > 1)
 				{
 					$warning_2 = 'Waarschuwing: E-mail adres ' . $mailadr;
-					$warning_2 .= ' bestaat al ' . $mail_count . ' maal onder de actieve gebruikers.';
+					$warning_2 .= ' bestaat al ' . $mail_count;
+					$warning_2 .= ' maal onder de actieve gebruikers.';
 				}
 
 				$app['alert']->warning($warning_2 . ' ' . $warning);
 			}
 			else if ($mail_count)
 			{
-				$errors[] = 'Dit E-mail adres komt reeds voor onder de actieve gebruikers.';
+				$errors[] = 'Dit E-mail adres komt reeds voor onder
+					de actieve gebruikers.';
 			}
-
 		}
 
 		if(!count($errors))
 		{
+			if ($abbrev_type === 'adr')
+			{
+				$app['queue.geocode']->cond_queue([
+					'adr'		=> $contact['value'],
+					'uid'		=> $contact['id_user'],
+					'schema'	=> $tschema,
+				]);
+			}
+
 			if ($edit)
 			{
-				if ($app['db']->update($tschema . '.contact', $contact, array('id' => $edit)))
+				if ($app['db']->update($tschema . '.contact',
+					$contact, array('id' => $edit)))
 				{
 					$app['alert']->success('Contact aangepast.');
 					cancel($uid);
@@ -437,7 +455,17 @@ if ($edit || $add)
 
 	if ($s_admin && $add && !$uid)
 	{
-		$typeahead_ary = array('users_active', 'users_inactive', 'users_ip', 'users_im', 'users_extern');
+		$typeahead_ary = [];
+
+		foreach (['active', 'inactive', 'ip', 'im', 'extern'] as $t_stat)
+		{
+			$typeahead_ary[] = [
+				'accounts', [
+					'status'	=> $t_stat,
+					'schema'	=> $tschema,
+				],
+			];
+		}
 
 		echo '<div class="form-group">';
 		echo '<label for="letscode" class="control-label">Voor</label>';
@@ -533,11 +561,13 @@ if ($edit || $add)
 
 	if ($add)
 	{
-		echo '<input type="submit" value="Opslaan" name="zend" class="btn btn-success">';
+		echo '<input type="submit" value="Opslaan" ';
+		echo 'name="zend" class="btn btn-success">';
 	}
 	else
 	{
-		echo '<input type="submit" value="Aanpassen" name="zend" class="btn btn-primary">';
+		echo '<input type="submit" value="Aanpassen" ';
+		echo 'name="zend" class="btn btn-primary">';
 	}
 
 	echo $app['form_token']->get_hidden_input();
@@ -585,7 +615,9 @@ if ($uid)
 		echo '<div class="row">';
 		echo '<div class="col-md-12">';
 
-		echo '<h3><i class="fa fa-map-marker"></i> Contactinfo van ';
+		echo '<h3>';
+		echo '<i class="fa fa-map-marker"></i>';
+		echo ' Contactinfo van ';
 		echo link_user($user, $tschema);
 		echo ' ';
 		echo $top_buttons;
@@ -609,7 +641,8 @@ if ($uid)
 
 	echo '<div class="panel panel-danger">';
 	echo '<div class="table-responsive">';
-	echo '<table class="table table-hover table-striped table-bordered footable" ';
+	echo '<table class="table table-hover ';
+	echo 'table-striped table-bordered footable" ';
 	echo 'data-sort="false">';
 
 	echo '<thead>';
@@ -622,7 +655,8 @@ if ($uid)
 	if ($s_admin || $s_owner)
 	{
 		echo '<th data-hide="phone, tablet">Zichtbaarheid</th>';
-		echo '<th data-sort-ignore="true" data-hide="phone, tablet">Verwijderen</th>';
+		echo '<th data-sort-ignore="true" ';
+		echo 'data-hide="phone, tablet">Verwijderen</th>';
 	}
 
 	echo '</tr>';
@@ -633,12 +667,16 @@ if ($uid)
 	foreach ($contacts as $c)
 	{
 		echo '<tr>';
-		echo '<td>' . $c['abbrev'] . '</td>';
+		echo '<td>';
+		echo $c['abbrev'];
+		echo '</td>';
 
 		if (($c['flag_public'] < $access_level) && !$s_owner)
 		{
-			echo '<td><span class="btn btn-default btn-xs">verborgen</span></td>';
-			echo '<td><span class="btn btn-default btn-xs">verborgen</span></td>';
+			echo '<td><span class="btn btn-default btn-xs">';
+			echo 'verborgen</span></td>';
+			echo '<td><span class="btn btn-default btn-xs">';
+			echo 'verborgen</span></td>';
 		}
 		else if ($s_owner || $s_admin)
 		{
@@ -656,10 +694,29 @@ if ($uid)
 			echo isset($c['comments']) ? aphp('contacts', ['edit' => $c['id'], 'uid' => $uid], $c['comments']) : '';
 			echo '</td>';
 		}
-		else if ($c['abbrev'] == 'mail')
+		else if ($c['abbrev'] === 'mail')
 		{
-			echo '<td><a href="mailto:' . $c['value'] . '">' . $c['value'] . '</a></td>';
-			echo '<td>' . htmlspecialchars($c['comments'], ENT_QUOTES) . '</td>';
+			echo '<td>';
+			echo '<a href="mailto:';
+			echo $c['value'] . '">';
+			echo $c['value'];
+			echo '</a>';
+			echo '</td>';
+			echo '<td>';
+			echo htmlspecialchars($c['comments'], ENT_QUOTES);
+			echo '</td>';
+		}
+		else if ($c['abbrev'] === 'web')
+		{
+			echo '<td>';
+			echo '<a href="';
+			echo $c['value'] . '">';
+			echo $c['value'];
+			echo '</a>';
+			echo '</td>';
+			echo '<td>';
+			echo htmlspecialchars($c['comments'], ENT_QUOTES);
+			echo '</td>';
 		}
 		else
 		{
@@ -697,7 +754,9 @@ if ($uid)
 		echo '<div class="user_map" id="map" data-markers="';
 		echo $app['distance']->get_to_data();
 		echo '" ';
-		echo 'data-token="' . $app['mapbox_token'] . '"></div>';
+		echo 'data-token="';
+		echo $app['mapbox_token'];
+		echo '"></div>';
 		echo '</div>';
 	}
 
@@ -929,7 +988,7 @@ $csv_en = true;
 $top_buttons .= aphp('contacts', ['add' => 1], 'Toevoegen', 'btn btn-success', 'Contact toevoegen', 'plus', true);
 
 $panel_collapse = ($q || $abbrev || $access != 'all' || $letscode || $ustatus != 'all') ? false : true;
-$filtered = ($panel_collapse) ? false : true;
+$filtered = $panel_collapse ? false : true;
 
 $app['assets']->add(['typeahead', 'typeahead.js']);
 
@@ -1027,21 +1086,36 @@ echo '<div class="input-group margin-bottom">';
 echo '<span class="input-group-addon" id="fcode_addon">Van ';
 echo '<span class="fa fa-user"></span></span>';
 
-$typeahead_name_ary = array('users_active', 'users_inactive', 'users_ip', 'users_im', 'users_extern');
+$typeahead_ary = [];
+
+foreach (['active', 'inactive', 'ip', 'im', 'extern'] as $t_stat)
+{
+	$typeahead_ary[] = [
+		'accounts', [
+			'status'	=> $t_stat,
+			'schema'	=> $tschema,
+		],
+	];
+}
 
 echo '<input type="text" class="form-control" ';
 echo 'aria-describedby="letscode_addon" ';
-echo 'data-typeahead="' . $app['typeahead']->get($typeahead_name_ary) . '" ';
+echo 'data-typeahead="';
+echo $app['typeahead']->get($typeahead_ary);
+echo '" ';
 echo 'data-newuserdays="';
 echo $app['config']->get('newuserdays', $tschema);
 echo '" ';
 echo 'name="letscode" id="letscode" placeholder="Account Code" ';
-echo 'value="' . $letscode . '">';
+echo 'value="';
+echo $letscode;
+echo '">';
 echo '</div>';
 echo '</div>';
 
 echo '<div class="col-sm-2">';
-echo '<input type="submit" value="Toon" class="btn btn-default btn-block">';
+echo '<input type="submit" value="Toon" ';
+echo 'class="btn btn-default btn-block">';
 echo '</div>';
 
 echo '</div>';
@@ -1107,8 +1181,13 @@ foreach ($tableheader_ary as $key_orderby => $data)
 		$th_params['orderby'] = $key_orderby;
 		$th_params['asc'] = $data['asc'];
 
-		echo '<a href="' . generate_url('contacts', $th_params) . '">';
-		echo $data['lbl'] . '&nbsp;<i class="fa fa-sort' . $data['indicator'] . '"></i>';
+		echo '<a href="';
+		echo generate_url('contacts', $th_params);
+		echo '">';
+		echo $data['lbl'];
+		echo '&nbsp;<i class="fa fa-sort';
+		echo $data['indicator'];
+		echo '"></i>';
 		echo '</a>';
 	}
 	echo '</th>';
@@ -1122,7 +1201,9 @@ echo '<tbody>';
 foreach ($contacts as $c)
 {
 	echo '<tr>';
-	echo '<td>' . $c['abbrev'] . '</td>';
+	echo '<td>';
+	echo $c['abbrev'];
+	echo '</td>';
 
 	echo '<td>';
 	echo isset($c['value']) ? aphp('contacts', ['edit' => $c['id']], $c['value']) : '';
@@ -1131,9 +1212,16 @@ foreach ($contacts as $c)
 	echo link_user($c['id_user'], $tschema);
 	echo '</td>';
 	echo '<td>';
-	echo isset($c['comments']) ? aphp('contacts', ['edit' => $c['id']], $c['comments']) : '';
+
+	if (isset($c['comments']))
+	{
+		echo aphp('contacts', ['edit' => $c['id']], $c['comments']);
+	}
+
 	echo '</td>';
-	echo '<td>' . $app['access_control']->get_label($c['flag_public']) . '</td>';
+	echo '<td>';
+	echo $app['access_control']->get_label($c['flag_public']);
+	echo '</td>';
 
 	echo '<td>';
 	echo aphp('contacts', ['del' => $c['id']], 'Verwijderen', 'btn btn-danger btn-xs', false, 'times');
@@ -1152,7 +1240,7 @@ echo $app['pagination']->get();
 
 include __DIR__ . '/include/footer.php';
 
-function cancel($uid = false)
+function cancel(int $uid = 0):void
 {
 	if ($uid)
 	{

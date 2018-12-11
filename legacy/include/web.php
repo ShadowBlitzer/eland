@@ -8,13 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 $app->register(new Silex\Provider\SessionServiceProvider(), [
 	'session.storage.handler'	=> function ($app) {
 		return new Predis\Session\Handler(
-			$app['predis'], ['gc_maxlifetime' => 172800]
+			$app['predis'],
+			['gc_maxlifetime' => 172800]
 		);
 	},
 	'session.storage.options'	=> [
 		'name'						=> 'eland',
 		'cookie_domain'				=> '.' . getenv('OVERALL_DOMAIN'),
-		'cookie_lifetime'			=> 172800,
 	],
 ]);
 
@@ -30,7 +30,10 @@ $app['assets'] = function($app){
 	return new service\assets($app['rootpath']);
 };
 
-$app['assets']->add(['jquery', 'bootstrap', 'fontawesome', 'footable', 'autocomplete', 'base.css', 'print.css', 'base.js']);
+$app['assets']->add([
+	'jquery', 'bootstrap', 'fontawesome',
+	'footable', 'autocomplete', 'base.css',
+	'print.css', 'base.js']);
 
 $app['script_name'] = str_replace('.php', '', ltrim($_SERVER['SCRIPT_NAME'], '/'));
 
@@ -78,7 +81,6 @@ $access_ary = [
 ];
 
 $allowed_interlets_landing_pages = [
-//	'index'			=> true,
 	'messages'		=> true,
 	'users'			=> true,
 	'transactions'	=> true,
@@ -309,7 +311,8 @@ if (!isset($page_access))
 
 if (getenv('WEBSITE_MAINTENANCE'))
 {
-	echo $app['twig']->render('website_maintenance.html.twig', ['message' =>  getenv('WEBSITE_MAINTENANCE')]);
+	echo $app['twig']->render('website_maintenance.html.twig',
+		['message' =>  getenv('WEBSITE_MAINTENANCE')]);
 	exit;
 }
 
@@ -399,7 +402,8 @@ if ($page_access != 'anonymous'
 	&& !$s_group_self
 	&& !$eland_interlets_groups[$app['this_group']->get_schema()])
 {
-	header('Location: ' . generate_url('messages', ['view' => $view_messages], $s_schema));
+	header('Location: ' .
+		generate_url('messages', ['view' => $view_messages], $s_schema));
 	exit;
 }
 
@@ -417,7 +421,10 @@ if ($page_access != 'anonymous' && !$s_admin
 $app['xdb']->set_user($s_schema, ctype_digit((string) $s_id) ? $s_id : 0);
 
 $app['form_token'] = function ($app){
-	return new service\form_token($app['predis'], $app['script_name']);
+	return new service\form_token(
+		$app['predis'],
+		$app['script_name']
+	);
 };
 
 /* view (global for all groups) */
@@ -537,9 +544,12 @@ function btn_item_nav(string $url, bool $next, bool $down):string
 function btn_filter():string
 {
 	$ret = '<div class="pull-right">';
-	$ret .= '&nbsp;<button class="btn btn-default hidden-xs" title="Filters" ';
+	$ret .= '&nbsp;<button class="btn btn-default hidden-xs" ';
+	$ret .= 'title="Filters" ';
 	$ret .= 'data-toggle="collapse" data-target="#filter"';
-	$ret .= '><i class="fa fa-caret-down"></i><span class="hidden-xs hidden-sm"> Filters</span></button>';
+	$ret .= '><i class="fa fa-caret-down"></i>';
+	$ret .= '<span class="hidden-xs hidden-sm"> ';
+	$ret .= 'Filters</span></button>';
 	$ret .= '</div>';
 	return $ret;
 }
@@ -549,7 +559,7 @@ function btn_filter():string
  */
 
 function aphp(
-	string $entity = '',
+	string $entity,
 	array $params = [],
 	string $label = '*link*',
 	$class = false,
@@ -564,6 +574,7 @@ function aphp(
 	$out .= '"';
 	$out .= $class ? ' class="' . $class . '"' : '';
 	$out .= $title ? ' title="' . $title . '"' : '';
+
 	if (is_array($attr))
 	{
 		foreach ($attr as $name => $val)

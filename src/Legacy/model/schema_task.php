@@ -4,26 +4,25 @@ namespace App\Legacy\model;
 
 use App\Legacy\model\task_interface;
 use App\Legacy\model\task;
-
 use App\Legacy\service\schedule;
 use App\Legacy\service\groups;
-use App\Legacy\service\this_group;
 
 abstract class schema_task extends task implements task_interface
 {
 	protected $groups;
-	protected $this_group;
 	protected $schema;
 
-	public function __construct(schedule $schedule, groups $groups, this_group $this_group)
+	public function __construct(
+		schedule $schedule,
+		groups $groups
+	)
 	{
 		parent::__construct($schedule);
 
 		$this->groups = $groups;
-		$this->this_group = $this_group;
 	}
 
-	public function should_run()
+	public function should_run():bool
 	{
 		$this->schedule->set_time();
 
@@ -47,11 +46,5 @@ abstract class schema_task extends task implements task_interface
 		}
 
 		return false;
-	}
-
-	public function run()
-	{
-		$this->this_group->force($this->schema);
-		parent::run();
 	}
 }

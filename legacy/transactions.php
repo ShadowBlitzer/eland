@@ -498,7 +498,7 @@ if ($add)
 					'to' 			=> $app['mail_addr_system']->get_admin($tschema),
 					'subject' 		=> $subject,
 					'text' 			=> $text,
-				]);
+				], 9000);
 
 				$app['alert']->error('De lokale commit van de interSysteem transactie is niet geslaagd. ' . $contact_admin);
 				cancel();
@@ -790,7 +790,6 @@ if ($add)
 		];
 
 		$group_id = 'self';
-		$to_schema_table = '';
 
 		if ($tus)
 		{
@@ -801,51 +800,92 @@ if ($add)
 				$group_id = $app['db']->fetchColumn('select id
 					from ' . $tschema . '.letsgroups
 					where url = ?', [$app['protocol'] . $host_from_tus]);
-				$to_schema_table = $tus . '.';
+
+				if ($mid)
+				{
+					$row = $app['db']->fetchAssoc('select
+							m.content, m.amount, m.id_user,
+							u.letscode, u.name
+						from ' . $tus . '.messages m,
+							'. $tus . '.users u
+						where u.id = m.id_user
+							and u.status in (1, 2)
+							and m.id = ?', [$mid]);
+
+					if ($row)
+					{
+						$transaction['letscode_to'] = $row['letscode'] . ' ' . $row['name'];
+						$transaction['description'] =  substr($row['content'], 0, 60);
+						$amount = $row['amount'];
+						$amount = ($app['config']->get('currencyratio', $tschema) * $amount) / $app['config']->get('currencyratio', $tus);
+						$transaction['amount'] = round($amount);
+					}
+				}
+				else if ($tuid)
+				{
+					$to_user = $app['user_cache']->get($tuid, $tus);
+
+					if (in_array($to_user['status'], [1, 2]))
+					{
+						$transaction['letscode_to'] = link_user($tuid, $tus, false);
+					}
+				}
 			}
 		}
-
-		if ($mid && !($tus xor $host_from_tus))
+		else if ($mid)
 		{
 			$row = $app['db']->fetchAssoc('select
-					m.content, m.amount, m.id_user, u.letscode, u.name, u.status
-				from ' . $to_schema_table . 'messages m,
-					'. $to_schema_table . 'users u
+					m.content, m.amount, m.id_user,
+					u.letscode, u.name, u.status
+				from ' . $tschema . '.messages m,
+					'. $tschema . '.users u
 				where u.id = m.id_user
 					and m.id = ?', [$mid]);
 
-			if (($s_admin && !$tus) || $row['status'] == 1 || $row['status'] == 2)
+			if ($row)
 			{
-				$transaction['letscode_to'] = $row['letscode'] . ' ' . $row['name'];
-				$transaction['description'] =  substr('#m.' . $to_schema_table . $mid . ' ' . $row['content'], 0, 60);
-				$amount = $row['amount'];
-				if ($tus)
+				if ($row['status'] === 1 || $row['status'] === 2)
 				{
-					$amount = round(($app['config']->get('currencyratio', $tschema) * $amount) / $app['config']->get('currencyratio', $tus));
+					$transaction['letscode_to'] = $row['letscode'] . ' ' . $row['name'];
+					$transaction['description'] =  substr($row['content'], 0, 60);
+					$transaction['amount'] = $row['amount'];
 				}
-				$transaction['amount'] = $amount;
-				$tuid = $row['tuid'];
+
+				if ($s_id == $row['id_user'])
+				{
+					if ($s_admin)
+					{
+						$transaction['letscode_from'] = '';
+					}
+					else
+					{
+						$transaction['letscode_to'] = '';
+						$transaction['description'] = '';
+						$transaction['amount'] = '';
+					}
+				}
 			}
 		}
 		else if ($tuid)
 		{
-			$to_user = $app['user_cache']->get($tuid, ((isset($host_from_tus)) ? $tus : $tschema));
+			$to_user = $app['user_cache']->get($tuid, $tschema);
 
-			if (($s_admin && !$tus) || $to_user['status'] == 1 || $to_user['status'] == 2)
+			if (in_array($to_user['status'], [1, 2]) || $s_admin)
 			{
-				$transaction['letscode_to'] = $to_user['letscode'] . ' ' . $to_user['name'];
+				$transaction['letscode_to'] = link_user($tuid, $tschema, false);
 			}
-		}
 
-		if ($fuid && $s_admin && ($fuid != $tuid))
-		{
-			$from_user = $app['user_cache']->get($fuid, $tschema);
-			$transaction['letscode_from'] = $from_user['letscode'] . ' ' . $from_user['name'];
-		}
-
-		if ($tuid == $s_id && !$fuid && $tus != $tschema)
-		{
-			$transaction['letscode_from'] = '';
+			if ($tuid == $s_id)
+			{
+				if ($s_admin)
+				{
+					$transaction['letscode_from'] = '';
+				}
+				else
+				{
+					$transaction['letscode_to'] = '';
+				}
+			}
 		}
 	}
 
@@ -862,22 +902,26 @@ if ($add)
 
 	if (count($eland_interlets_groups))
 	{
-		$urls = [];
+		$eland_urls = [];
 
-		foreach ($eland_interlets_groups as $h)
+		foreach ($eland_interlets_groups as $remote_eland_schema => $host)
 		{
-			$urls[] = $app['protocol'] . $h;
+			$eland_url = $app['protocol'] . $host;
+			$eland_urls[] = $eland_url;
+			$map_eland_schema_url[$eland_url] = $remote_eland_schema;
 		}
 
-		$eland_groups = $app['db']->executeQuery('select id, groupname, url
+		$eland_groups = $app['db']->executeQuery('select id,
+				groupname, url
 			from ' . $tschema . '.letsgroups
 			where apimethod <> \'internal\'
 				and url in (?)',
-				[$urls],
+				[$eland_urls],
 				[\Doctrine\DBAL\Connection::PARAM_STR_ARRAY]);
 
 		foreach ($eland_groups as $g)
 		{
+			$g['remote_schema'] = $map_eland_schema_url[$g['url']];
 			$groups[] = $g;
 		}
 	}
@@ -891,7 +935,7 @@ if ($add)
 			$ids[] = $key;
 		}
 
-		$elas_groups = $app['db']->executeQuery('select id, groupname, url
+		$elas_groups = $app['db']->executeQuery('select id, groupname
 			from ' . $tschema . '.letsgroups
 			where apimethod <> \'internal\'
 				and id in (?)',
@@ -954,52 +998,80 @@ if ($add)
 
 		foreach ($groups as $l)
 		{
-			echo '<option value="' . $l['id'] . '" ';
+			echo '<option value="';
+			echo $l['id'];
+			echo '" ';
 
 			if ($l['id'] == 'self')
 			{
 				echo 'id="group_self" ';
 
+				$typeahead_ary = [];
+
 				if ($s_admin)
 				{
-					$typeahead = ['users_active', 'users_inactive', 'users_ip', 'users_im'];
+					$typeahead_status_ary = ['active', 'inactive', 'ip', 'im'];
 				}
-				else
+				else if ($s_user)
 				{
-					$typeahead = 'users_active';
+					$typeahead_status_ary = ['active'];
 				}
 
-				$typeahead = $app['typeahead']->get($typeahead);
+				foreach ($typeahead_status_ary as $t_stat)
+				{
+					$typeahead_ary[] = [
+						'accounts', [
+							'status'	=> $t_stat,
+							'schema'	=> $tschema,
+						],
+					];
+				}
 
-				$sch = $tschema;
+				$typeahead = $app['typeahead']->get($typeahead_ary);
+
+				$config_schema = $tschema;
+			}
+			else if (isset($l['remote_schema']))
+			{
+				$remote_schema = $l['remote_schema'];
+
+				$typeahead = $app['typeahead']->get([[
+					'eland_intersystem_accounts', [
+					'schema'		=> $tschema,
+					'remote_schema'	=> $remote_schema,
+				]]]);
+
+				$config_schema = $remote_schema;
 			}
 			else
 			{
-				$domain = strtolower(parse_url($l['url'], PHP_URL_HOST));
+				$typeahead = $app['typeahead']->get([[
+					'elas_intersystem_accounts', [
+					'schema'	=> $tschema,
+					'group_id'	=> $l['id'],
+				]]]);
 
-				$typeahead = $app['typeahead']->get('users_active', $domain, $l['id']);
-
-				$sch = $app['groups']->get_schema($domain);
+				unset($config_schema);
 			}
 
-			if ($sch)
+			if (isset($config_schema))
 			{
 				echo ' data-newuserdays="';
-				echo $app['config']->get('newuserdays', $sch) . '"';
+				echo $app['config']->get('newuserdays', $config_schema) . '"';
 				echo ' data-minlimit="';
-				echo $app['config']->get('minlimit', $sch) . '"';
+				echo $app['config']->get('minlimit', $config_schema) . '"';
 				echo ' data-maxlimit="';
-				echo $app['config']->get('maxlimit', $sch) . '"';
+				echo $app['config']->get('maxlimit', $config_schema) . '"';
 				echo ' data-currency="';
-				echo $app['config']->get('currency', $sch) . '"';
+				echo $app['config']->get('currency', $config_schema) . '"';
 				echo ' data-currencyratio="';
-				echo $app['config']->get('currencyratio', $sch) . '"';
+				echo $app['config']->get('currencyratio', $config_schema) . '"';
 				echo ' data-balance-equilibrium="';
-				echo $app['config']->get('balance_equilibrium', $sch) . '"';
+				echo $app['config']->get('balance_equilibrium', $config_schema) . '"';
 			}
 
 			echo ' data-typeahead="' . $typeahead . '"';
-			echo $l['id'] == $group_id ? ' selected="selected"' : '';
+			echo $l['id'] === $group_id ? ' selected="selected"' : '';
 			echo '>';
 			echo htmlspecialchars($l['groupname'], ENT_QUOTES);
 			echo $l['id'] === 'self' ? ' (eigen Systeem)' : ' (interSysteem)';
@@ -1012,18 +1084,31 @@ if ($add)
 	}
 	else
 	{
+		$typeahead_ary = [];
+
 		if ($s_admin)
 		{
-			$typeahead = ['users_active', 'users_inactive', 'users_ip', 'users_im'];
+			$typeahead_status_ary = ['active', 'inactive', 'ip', 'im'];
 		}
-		else
+		else if ($s_user)
 		{
-			$typeahead = 'users_active';
+			$typeahead_status_ary = ['active'];
 		}
 
-		$typeahead = $app['typeahead']->get($typeahead);
+		foreach ($typeahead_status_ary as $t_stat)
+		{
+			$typeahead_ary[] = [
+				'accounts', [
+					'status'	=> $t_stat,
+					'schema'	=> $tschema,
+				],
+			];
+		}
 
-		echo '<input type="hidden" id="group_id" name="group_id" value="self">';
+		$typeahead = $app['typeahead']->get($typeahead_ary);
+
+		echo '<input type="hidden" id="group_id" ';
+		echo 'name="group_id" value="self">';
 	}
 
 	echo '<div class="form-group">';
@@ -1070,7 +1155,6 @@ if ($add)
 
 	echo '</div>';
 
-
 	echo '<div class="form-group">';
 	echo '<label for="amount" class="control-label">';
 	echo 'Aantal</label>';
@@ -1090,7 +1174,7 @@ if ($add)
 
 	echo '<ul>';
 
-	echo get_valuation();
+	echo get_valuation($tschema);
 
 	echo '<li id="info_remote_amount_unknown" ';
 	echo 'class="hidden">De omrekening ';
@@ -1304,13 +1388,14 @@ if ($edit)
 
 		echo '<dt>Van interSysteem gebruiker</dt>';
 		echo '<dd>';
-		echo '<span class="btn btn-default btn-xs"><i class="fa fa-share-alt"></i></span> ';
+		echo '<span class="btn btn-default btn-xs">';
+		echo '<i class="fa fa-share-alt"></i></span> ';
 
 		if ($inter_transaction)
 		{
 			echo link_user($inter_transaction['id_from'],
 				$inter_schema,
-				$s_inter_schema_check[$inter_schema]);
+				isset($s_inter_schema_check[$inter_schema]));
 		}
 		else
 		{
@@ -1342,7 +1427,7 @@ if ($edit)
 		{
 			echo link_user($inter_transaction['id_to'],
 				$inter_schema,
-				$s_inter_schema_check[$inter_schema]);
+				isset($s_inter_schema_check[$inter_schema]));
 		}
 		else
 		{
@@ -1611,7 +1696,9 @@ if ($id)
 			if ($inter_transaction && isset($eland_interlets_groups[$inter_schema]))
 			{
 				echo '<a href="';
-				echo generate_url('transactions', ['id' => $inter_transaction['id']], $inter_schema);
+				echo generate_url('transactions',
+					['id' => $inter_transaction['id']],
+					$inter_schema);
 				echo '">';
 			}
 
@@ -1702,7 +1789,9 @@ if ($id)
 			if ($inter_transaction && isset($eland_interlets_groups[$inter_schema]))
 			{
 				echo '<a href="';
-				echo generate_url('transactions', ['id' => $inter_transaction['id']], $inter_schema);
+				echo generate_url('transactions',
+					['id' => $inter_transaction['id']],
+					$inter_schema);
 				echo '">';
 			}
 
@@ -2068,7 +2157,8 @@ if (!$inline)
 	echo '<i class="fa fa-search"></i>';
 	echo '</span>';
 	echo '<input type="text" class="form-control" id="q" value="';
-	echo $q . '" name="q" placeholder="Zoekterm">';
+	echo $q;
+	echo '" name="q" placeholder="Zoekterm">';
 	echo '</div>';
 	echo '</div>';
 
@@ -2081,24 +2171,38 @@ if (!$inline)
 	echo '<span class="input-group-addon" id="fcode_addon">Van ';
 	echo '<span class="fa fa-user"></span></span>';
 
+	$typeahead_ary = [];
+
 	if ($s_guest)
 	{
-		$typeahead_name_ary = ['users_active'];
+		$typeahead_status_ary = ['active'];
 	}
 	else if ($s_user)
 	{
-		$typeahead_name_ary = ['users_active', 'users_extern'];
+		$typeahead_status_ary = ['active', 'extern'];
 	}
 	else if ($s_admin)
 	{
-		$typeahead_name_ary = ['users_active', 'users_extern',
-			'users_inactive', 'users_im', 'users_ip'];
+		$typeahead_status_ary = ['active', 'extern',
+			'inactive', 'im', 'ip'];
 	}
+
+	foreach ($typeahead_status_ary as $t_stat)
+	{
+		$typeahead_ary[] = [
+			'accounts', [
+				'status'	=> $t_stat,
+				'schema'	=> $tschema,
+			],
+		];
+	}
+
+	$typeahead = $app['typeahead']->get($typeahead_ary);
 
 	echo '<input type="text" class="form-control" ';
 	echo 'aria-describedby="fcode_addon" ';
 	echo 'data-typeahead="';
-	echo $app['typeahead']->get($typeahead_name_ary);
+	echo $typeahead;
 	echo '" ';
 	echo 'data-newuserdays="';
 	echo $app['config']->get('newuserdays', $tschema);
@@ -2132,7 +2236,8 @@ if (!$inline)
 	echo 'placeholder="Account Code" ';
 	echo 'aria-describedby="tcode_addon" ';
 	echo 'name="tcode" value="';
-	echo $tcode . '">';
+	echo $tcode;
+	echo '">';
 	echo '</div>';
 	echo '</div>';
 
@@ -2150,7 +2255,9 @@ if (!$inline)
 	echo 'id="fdate" name="fdate" ';
 	echo 'value="' . $fdate . '" ';
 	echo 'data-provide="datepicker" ';
-	echo 'data-date-format="' . $app['date_format']->datepicker_format() . '" ';
+	echo 'data-date-format="';
+	echo $app['date_format']->datepicker_format();
+	echo '" ';
 	echo 'data-date-default-view-date="-1y" ';
 	echo 'data-date-end-date="0d" ';
 	echo 'data-date-language="nl" ';
@@ -2276,8 +2383,13 @@ foreach ($tableheader_ary as $key_orderby => $data)
 		$h_params['orderby'] = $key_orderby;
 		$h_params['asc'] = $data['asc'];
 
-		echo '<a href="' . generate_url('transactions', $h_params) . '">';
-		echo $data['lbl'] . '&nbsp;<i class="fa fa-sort' . $data['indicator'] . '"></i>';
+		echo '<a href="';
+		echo generate_url('transactions', $h_params);
+		echo '">';
+		echo $data['lbl'];
+		echo '&nbsp;<i class="fa fa-sort';
+		echo $data['indicator'];
+		echo '"></i>';
 		echo '</a>';
 	}
 	echo '</th>';
@@ -2448,12 +2560,12 @@ if ($inline)
 }
 else
 {
-	echo get_valuation();
+	echo get_valuation($tschema);
 
 	include __DIR__ . '/include/footer.php';
 }
 
-function cancel($id = null)
+function cancel(int $id = 0):void
 {
 	$params = [];
 
@@ -2466,19 +2578,17 @@ function cancel($id = null)
 	exit;
 }
 
-function get_valuation():string
+function get_valuation(string $schema):string
 {
 	global $app;
 
-	$tschema = $app['this_group']->get_schema();
-
 	$out = '';
 
-	if ($app['config']->get('template_lets', $tschema)
-		&& $app['config']->get('currencyratio', $tschema) > 0)
+	if ($app['config']->get('template_lets', $schema)
+		&& $app['config']->get('currencyratio', $schema) > 0)
 	{
 		$out .= '<li id="info_ratio">Valuatie: <span class="num">';
-		$out .= $app['config']->get('currencyratio', $tschema);
+		$out .= $app['config']->get('currencyratio', $schema);
 		$out .= '</span> per uur</li>';
 	}
 

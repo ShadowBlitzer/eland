@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 use App\Legacy\model\schema_task;
 use App\Legacy\service\schedule;
 use App\Legacy\service\groups;
-use App\Legacy\service\this_group;
 use App\Legacy\service\config;
 
 class cleanup_messages extends schema_task
@@ -22,17 +21,16 @@ class cleanup_messages extends schema_task
 		LoggerInterface $monolog,
 		schedule $schedule,
 		groups $groups,
-		this_group $this_group,
 		config $config
 	)
 	{
-		parent::__construct($schedule, $groups, $this_group);
+		parent::__construct($schedule, $groups);
 		$this->db = $db;
 		$this->monolog = $monolog;
 		$this->config = $config;
 	}
 
-	function process()
+	function process():void
 	{
 		$msgs = '';
 		$testdate = gmdate('Y-m-d H:i:s', time() - $this->config->get('msgexpcleanupdays', $this->schema) * 86400);
@@ -86,11 +84,13 @@ class cleanup_messages extends schema_task
 
 			if (count($ids) == 1)
 			{
-				$this->db->delete($this->schema . '.messages', ['id_user' => $ids[0]]);
+				$this->db->delete($this->schema . '.messages',
+					['id_user' => $ids[0]]);
 			}
 			else if (count($ids) > 1)
 			{
-				$this->db->executeQuery('delete from ' . $this->schema . '.messages
+				$this->db->executeQuery('delete
+					from ' . $this->schema . '.messages
 					where id_user in (?)',
 					[$ids],
 					[\Doctrine\DBAL\Connection::PARAM_INT_ARRAY]);
@@ -101,7 +101,7 @@ class cleanup_messages extends schema_task
 
 		$rs = $this->db->prepare('select mp.id, mp."PictureFile"
 			from ' . $this->schema . '.msgpictures mp
-			left join ' . $this->schema . '.messages m ON mp.msgid = m.id
+			left join ' . $this->schema . '.messages m on mp.msgid = m.id
 			where m.id is null');
 
 		$rs->execute();
@@ -117,7 +117,8 @@ class cleanup_messages extends schema_task
 		$offer_count = $want_count = [];
 
 		$rs = $this->db->prepare('select m.id_category, count(m.*)
-			from ' . $this->schema . '.messages m, ' . $this->schema . '.users u
+			from ' . $this->schema . '.messages m, ' .
+				$this->schema . '.users u
 			where  m.id_user = u.id
 				and u.status IN (1, 2, 3)
 				and msg_type = 1
@@ -131,7 +132,8 @@ class cleanup_messages extends schema_task
 		}
 
 		$rs = $this->db->prepare('select m.id_category, count(m.*)
-			from ' . $this->schema . '.messages m, ' . $this->schema . '.users u
+			from ' . $this->schema . '.messages m, ' .
+				$this->schema . '.users u
 			where  m.id_user = u.id
 				and u.status IN (1, 2, 3)
 				and msg_type = 0
@@ -144,7 +146,8 @@ class cleanup_messages extends schema_task
 			$want_count[$row['id_category']] = $row['count'];
 		}
 
-		$all_cat = $this->db->fetchAll('select id, stat_msgs_offers, stat_msgs_wanted
+		$all_cat = $this->db->fetchAll('select id,
+				stat_msgs_offers, stat_msgs_wanted
 			from ' . $this->schema . '.categories
 			where id_parent is not null');
 
@@ -173,7 +176,12 @@ class cleanup_messages extends schema_task
 		}
 	}
 
-	public function get_interval()
+	public function is_enabled():bool
+	{
+		return true;
+	}
+
+	public function get_interval():int
 	{
 		return 86400;
 	}

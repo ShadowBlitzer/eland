@@ -14,7 +14,6 @@ use App\Legacy\service\date_format;
 use App\Legacy\service\distance;
 use App\Legacy\service\schedule;
 use App\Legacy\service\groups;
-use App\Legacy\service\this_group;
 use App\Legacy\service\interlets_groups;
 use App\Legacy\service\config;
 use App\Legacy\service\mail_addr_user;
@@ -50,13 +49,12 @@ class saldo extends schema_task
 		distance $distance,
 		schedule $schedule,
 		groups $groups,
-		this_group $this_group,
 		interlets_groups $interlets_groups,
 		config $config,
 		mail_addr_user $mail_addr_user
 	)
 	{
-		parent::__construct($schedule, $groups, $this_group);
+		parent::__construct($schedule, $groups);
 		$this->db = $db;
 		$this->xdb = $xdb;
 		$this->redis = $redis;
@@ -72,7 +70,7 @@ class saldo extends schema_task
 		$this->mail_addr_user = $mail_addr_user;
 	}
 
-	function process()
+	function process():void
 	{
 
 		// vars
@@ -97,10 +95,9 @@ class saldo extends schema_task
 		$new_transaction_url = $base_url . '/transactions.php?add=1';
 		$account_edit_url = $base_url . '/users.php?edit=';
 
-		$users = $news = $new_users = $leaving_users = $transactions = $messages = [];
-
+		$users = $news = $new_users = [];
+		$leaving_users = $transactions = $messages = [];
 		$forum = $interlets = $docs = [];
-
 		$mailaddr = $mailaddr_public = $saldo_mail = [];
 
 	// get blocks
@@ -151,7 +148,9 @@ class saldo extends schema_task
 	// fetch mail addresses & cron_saldo
 
 		$st = $this->db->prepare('select u.id, c.value, c.flag_public
-			from ' . $this->schema . '.users u, ' . $this->schema . '.contact c, ' . $this->schema . '.type_contact tc
+			from ' . $this->schema . '.users u, ' .
+				$this->schema . '.contact c, ' .
+				$this->schema . '.type_contact tc
 			where u.status in (1, 2)
 				and u.id = c.id_user
 				and c.id_type_contact = tc.id
@@ -181,7 +180,8 @@ class saldo extends schema_task
 			$image_ary = [];
 
 			$rs = $this->db->prepare('select m.id, p."PictureFile"
-				from ' . $this->schema . '.msgpictures p, ' . $this->schema . '.messages m
+				from ' . $this->schema . '.msgpictures p, ' .
+					$this->schema . '.messages m
 				where p.msgid = m.id
 					and m.cdate >= ?', [$treshold_time]);
 
@@ -198,7 +198,9 @@ class saldo extends schema_task
 			$addr = $addr_public = $addr_p = [];
 
 			$rs = $this->db->prepare('select u.id, c.value, c.flag_public
-				from ' . $this->schema . '.users u, ' . $this->schema . '.contact c, ' . $this->schema . '.type_contact tc
+				from ' . $this->schema . '.users u, ' .
+					$this->schema . '.contact c, ' .
+					$this->schema . '.type_contact tc
 				where u.status in (1, 2)
 					and u.id = c.id_user
 					and c.id_type_contact = tc.id
@@ -226,10 +228,12 @@ class saldo extends schema_task
 		// fetch messages
 
 			$rs = $this->db->prepare('select m.id, m.content,
-				m."Description" as description, m.msg_type, m.id_user,
-				m.amount, m.units,
-				u.name, u.letscode, u.postcode
-				from ' . $this->schema . '.messages m, ' . $this->schema . '.users u
+					m."Description" as description,
+					m.msg_type, m.id_user,
+					m.amount, m.units,
+					u.name, u.letscode, u.postcode
+				from ' . $this->schema . '.messages m, ' .
+					$this->schema . '.users u
 				where m.id_user = u.id
 					and u.status IN (1, 2)
 					and m.cdate >= ?
@@ -274,10 +278,12 @@ class saldo extends schema_task
 				$interlets_msgs = [];
 
 				$rs = $this->db->prepare('select m.id, m.content,
-					m."Description" as description, m.msg_type, m.id_user,
-					m.amount, m.units,
-					u.name, u.letscode, u.postcode
-					from ' . $sch . '.messages m, ' . $sch . '.users u
+						m."Description" as description,
+						m.msg_type, m.id_user,
+						m.amount, m.units,
+						u.name, u.letscode, u.postcode
+					from ' . $sch . '.messages m, ' .
+						$sch . '.users u
 					where m.id_user = u.id
 						and m.local = \'f\'
 						and u.status IN (1, 2)
@@ -355,7 +361,8 @@ class saldo extends schema_task
 			}
 
 			$query = 'select n.*, u.name, u.letscode
-				from ' . $this->schema . '.news n, ' . $this->schema . '.users u
+				from ' . $this->schema . '.news n, ' .
+					$this->schema . '.users u
 				where n.approved = \'t\'
 					and n.published = \'t\'
 					and n.id_user = u.id ';
@@ -382,7 +389,11 @@ class saldo extends schema_task
 				}
 				else
 				{
-					$this->xdb->set('news_access', $news_id, ['access' => 'interlets'], $this->schema);
+					$this->xdb->set('news_access',
+						$news_id,
+						['access' => 'interlets'],
+						$this->schema);
+
 					$row['access'] = 'interlets';
 				}
 
@@ -405,7 +416,8 @@ class saldo extends schema_task
 		if (isset($block_options['new_users']))
 		{
 
-			$rs = $this->db->prepare('select u.id, u.name, u.letscode, u.postcode
+			$rs = $this->db->prepare('select u.id, u.name,
+					u.letscode, u.postcode
 				from ' . $this->schema . '.users u
 				where u.status = 1
 					and u.adate > ?');
@@ -457,11 +469,14 @@ class saldo extends schema_task
 
 		if (isset($block_options['transactions']))
 		{
-			$rs = $this->db->prepare('select t.id_from, t.id_to, t.real_from, t.real_to,
+			$rs = $this->db->prepare('select t.id_from, t.id_to,
+					t.real_from, t.real_to,
 					t.amount, t.cdate, t.description,
 					uf.name as from_name, uf.letscode as from_letscode,
 					ut.name as to_name, ut.letscode as to_letscode
-				from ' . $this->schema . '.transactions t, ' . $this->schema . '.users uf, ' . $this->schema . '.users ut
+				from ' . $this->schema . '.transactions t, ' .
+					$this->schema . '.users uf, ' .
+					$this->schema . '.users ut
 				where t.id_from = uf.id
 					and t.id_to = ut.id
 					and t.cdate > ?');
@@ -613,6 +628,7 @@ class saldo extends schema_task
 			'interlets'				=> $interlets,
 			'block_options'			=> $block_options,
 			'blocks_sorted'			=> $blocks_sorted,
+			'support_url'			=> $base_url . '/support.php?src=p',
 		];
 
 	// queue mail
@@ -621,6 +637,17 @@ class saldo extends schema_task
 
 		foreach ($saldo_mail as $id => $b)
 		{
+			$to = $this->mail_addr_user->get($id, $this->schema);
+
+			if (!count($to))
+			{
+				$this->monolog->info('No periodic mail queued for user ' .
+				link_user($id, $this->schema, false) . ' because no email address.',
+				['schema' => $this->schema]);
+
+				continue;
+			}
+
 			if (isset($users_geo[$id]))
 			{
 				$users[$id]['geo'] = $users_geo[$id];
@@ -640,16 +667,18 @@ class saldo extends schema_task
 			$this->mail->queue([
 				'validate_email'	=> true,
 				'schema'	=> $this->schema,
-				'to'		=> $this->mail_addr_user->get($id, $this->schema),
+				'to'		=> $to,
 				'template'	=> 'periodic_overview',
 				'vars'		=> array_merge($vars, [
 					'user'			=> $users[$id],
 					'url_login'		=> $base_url . '/login.php?login=' . $users[$id]['letscode'],
 					'account_edit_url'	=> $base_url . '/users.php?edit=' . $id,
 				]),
-			], random_int(50, 500));
+			], random_int(0, 5000));
 
-			$log_to[] = $users[$id]['letscode'] . ' ' . $users[$id]['name'] . ' (' . $id . ')';
+			$log_str = $users[$id]['letscode'] . ' ' . $users[$id]['name'];
+			$log_str .= ' (' . $id . ' to: ' . json_encode($to) . ' )';
+			$log_to[] = $log_str;
 		}
 
 		$this->monolog->debug('x-saldomail, schema: ' .
@@ -660,7 +689,7 @@ class saldo extends schema_task
 
 		if (count($log_to))
 		{
-			$this->monolog->info('Saldomail queued, to: ' .
+			$this->monolog->info('Saldomail queued: ' .
 				implode(', ', $log_to), ['schema' => $this->schema]);
 		}
 		else
@@ -669,13 +698,15 @@ class saldo extends schema_task
 				['schema' => $this->schema]);
 		}
 
-		return true;
+		return;
 	}
 
-	/**
-	 *
-	 */
-	public function get_interval()
+	public function is_enabled():bool
+	{
+		return $this->config->get('saldofreqdays', $this->schema) ? true : false;
+	}
+
+	public function get_interval():int
 	{
 		if (isset($this->schema))
 		{

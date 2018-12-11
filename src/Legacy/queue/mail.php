@@ -15,7 +15,7 @@ use App\Legacy\service\mail_addr_system;
 use App\Legacy\service\token;
 use App\Legacy\service\email_validate;
 
-class mail extends queue_model implements queue_interface
+class mail implements queue_interface
 {
 	protected $converter;
 	protected $mailer;
@@ -57,14 +57,12 @@ class mail extends queue_model implements queue_interface
 		$converter_config = $this->converter->getConfig();
 		$converter_config->setOption('strip_tags', true);
 		$converter_config->setOption('remove_nodes', 'img');
-
-		parent::__construct();
 	}
 
 	/**
 	 *
 	 */
-	public function process(array $data)
+	public function process(array $data):void
 	{
 		if (!isset($data['schema']))
 		{
@@ -151,7 +149,7 @@ class mail extends queue_model implements queue_interface
 			}
 		}
 
-		if (!isset($data['to']))
+		if (!isset($data['to']) || !is_array($data['to']) || !count($data['to']))
 		{
 			$this->monolog->error('mail queue process: mail without "to" ' .
 				json_encode($data),
@@ -193,7 +191,7 @@ class mail extends queue_model implements queue_interface
 			if ($this->mailer->send($message, $failed_recipients))
 			{
 				$this->monolog->info('mail queue process: sent ' .
-					implode(', ', $data['to']) . ' subject: ' . $data['subject'],
+					json_encode($data['to']) . ' subject: ' . $data['subject'],
 					['schema' => $sch]);
 			}
 			else
@@ -218,7 +216,7 @@ class mail extends queue_model implements queue_interface
 		$this->mailer->getTransport()->stop();
 	}
 
-	public function queue(array $data, int $priority = 100):void
+	public function queue(array $data, int $priority = 10000):void
 	{
 		if (!isset($data['schema']))
 		{
@@ -317,17 +315,18 @@ class mail extends queue_model implements queue_interface
 
 			unset($data['to'][$email_to]);
 
-			$error = $this->queue->set('mail', $val_data, $priority);
+			$this->queue->set('mail', $val_data, $priority);
 
-			if (!$error)
-			{
+			$this->monolog->info('mail: Mail in queue with validate token ' . $validate_token .
+				', subject: ' .
+				($data['subject'] ?? '(template)') . ', from : ' .
+				json_encode($data['from']) . ' to : ' . json_encode($data['to']) . ' ' .
+				$reply . ' priority: ' . $priority, ['schema' => $data['schema']]);
+		}
 
-				$this->monolog->info('mail: Mail in queue with validate token ' . $validate_token .
-					', subject: ' .
-					($data['subject'] ?? '(template)') . ', from : ' .
-					json_encode($data['from']) . ' to : ' . json_encode($data['to']) . ' ' .
-					$reply . ' priority: ' . $priority, ['schema' => $data['schema']]);
-			}
+		if (!isset($data['to']) || !$data['to'])
+		{
+			return;
 		}
 
 		$this->queue->set('mail', $data, $priority);
@@ -338,7 +337,7 @@ class mail extends queue_model implements queue_interface
 			$reply . ' priority: ' . $priority, ['schema' => $data['schema']]);
 	}
 
-	public function get_interval()
+	public function get_interval():int
 	{
 		return 5;
 	}

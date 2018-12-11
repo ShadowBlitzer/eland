@@ -1,36 +1,31 @@
 <?php
 
-namespace App\Legacy\task;
+namespace task;
 
 use Predis\Client as Redis;
 use Doctrine\DBAL\Connection as db;
 use Psr\Log\LoggerInterface;
-
-use App\Legacy\model\task;
 use App\Legacy\service\cache;
 use App\Legacy\service\s3;
 use App\Legacy\service\groups;
-use App\Legacy\service\schedule;
 
-class cleanup_image_files extends task
+class cleanup_images
 {
-	private $days = 365;
-	private $cache;
-	private $db;
-	private $monolog;
-	private $s3;
-	private $groups;
+	protected $days = 365;
+	protected $cache;
+	protected $db;
+	protected $monolog;
+	protected $s3;
+	protected $groups;
 
 	public function __construct(
 		cache $cache,
 		db $db,
 		LoggerInterface $monolog,
 		s3 $s3,
-		groups $groups,
-		schedule $schedule
+		groups $groups
 	)
 	{
-		parent::__construct($schedule);
 		$this->cache = $cache;
 		$this->db = $db;
 		$this->monolog = $monolog;
@@ -38,7 +33,7 @@ class cleanup_image_files extends task
 		$this->groups = $groups;
 	}
 
-	public function process()
+	public function process():void
 	{
 		// $schema is not used, files of all schemas are scanned
 
@@ -57,14 +52,15 @@ class cleanup_image_files extends task
 			return;
 		}
 
-		$this->cache->set('cleanup_image_files_marker', ['marker' => $object['Key']]);
+		$this->cache->set('cleanup_image_files_marker',
+			['marker' => $object['Key']]);
 
 		$object_time = strtotime($object['LastModified'] . ' UTC');
 
-		$old = ($object_time < $time_treshold) ? true : false;
+		$old = $object_time < $time_treshold;
 
 		$str_log = $object['Key'] . ' ' . $object['LastModified'] . ' ';
-		$str_log .= ($old) ? 'OLD' : 'NEW';
+		$str_log .= $old ? 'OLD' : 'NEW';
 
 		error_log($str_log);
 
@@ -83,13 +79,15 @@ class cleanup_image_files extends task
 
 		if (!$this->table_exists('users', $sch))
 		{
-			error_log('-> table not present for schema ' . $sch . '.users (no delete)');
+			error_log('-> table not present for schema ' .
+				$sch . '.users (no delete)');
 			return;
 		}
 
 		if (!$this->table_exists('msgpictures', $sch))
 		{
-			error_log('-> table not present for schema ' . $sch . '.msgpictures (no delete)');
+			error_log('-> table not present for schema ' .
+				$sch . '.msgpictures (no delete)');
 			return;
 		}
 
@@ -101,7 +99,9 @@ class cleanup_image_files extends task
 
 		if ($type == 'u' && ctype_digit((string) $id))
 		{
-			$user = $this->db->fetchAssoc('select id, "PictureFile" from ' . $sch . '.users where id = ?', [$id]);
+			$user = $this->db->fetchAssoc('select id, "PictureFile"
+				from ' . $sch . '.users
+				where id = ?', [$id]);
 
 			if (!$user)
 			{
@@ -119,7 +119,8 @@ class cleanup_image_files extends task
 		}
 		else if ($type == 'm' && ctype_digit((string) $id))
 		{
-			$msgpict = $this->db->fetchAssoc('select * from ' . $sch . '.msgpictures
+			$msgpict = $this->db->fetchAssoc('select *
+				from ' . $sch . '.msgpictures
 				where msgid = ?
 					and "PictureFile" = ?', [$id, $object['Key']]);
 
@@ -144,7 +145,7 @@ class cleanup_image_files extends task
 		}
 	}
 
-	private function table_exists(string $table, string $schema)
+	protected function table_exists(string $table, string $schema):bool
 	{
 		return $this->db->fetchColumn('
 			select 1
@@ -153,10 +154,5 @@ class cleanup_image_files extends task
 			where  n.nspname = \'' . $schema . '\'
 			and    c.relname = \'' . $table . '\'
 			and    c.relkind = \'r\'') ? true : false;
-	}
-
-	public function get_interval()
-	{
-		return 900;
 	}
 }
