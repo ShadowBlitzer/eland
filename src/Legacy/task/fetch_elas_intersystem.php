@@ -1,6 +1,6 @@
 <?php
 
-namespace task;
+namespace App\Legacy\task;
 
 use App\Legacy\service\cache;
 use Predis\Client as redis;

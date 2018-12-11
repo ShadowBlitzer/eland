@@ -1,6 +1,6 @@
 <?php
 
-namespace task;
+namespace App\Legacy\task;
 
 use Predis\Client as Redis;
 use Doctrine\DBAL\Connection as db;
