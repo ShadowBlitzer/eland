@@ -1,0 +1,411 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Dokku · eLAND</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="dokku-backups.html" />
+    
+    
+    <link rel="prev" href="elas-intersysteem-koppeling-maken.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    eLAND
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="elas-intersysteem-koppeling-maken.html">
+            
+                <a href="elas-intersysteem-koppeling-maken.html">
+            
+                    
+                    eLAS interSysteem koppeling maken
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3" data-path="dokku.html">
+            
+                <a href="dokku.html">
+            
+                    
+                    Dokku
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="dokku-backups.html">
+            
+                <a href="dokku-backups.html">
+            
+                    
+                    Backups
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="migrate-from-elas-2.html">
+            
+                <a href="migrate-from-elas-2.html">
+            
+                    
+                    Migrate from eLAS 2.x
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="migrate-from-elas-3.html">
+            
+                <a href="migrate-from-elas-3.html">
+            
+                    
+                    Migrate from eLAS 3.x
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="import-csv.html">
+            
+                <a href="import-csv.html">
+            
+                    
+                    Import CSV
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="using-gitbook.html">
+            
+                <a href="using-gitbook.html">
+            
+                    
+                    Using Gitbook
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Dokku</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="dokku">Dokku</h1>
+<p>eLAND installs on a VPS with Dokku.</p>
+<p>See the <a href="http://dokku.viewdocs.io/dokku/getting-started/installation" target="_blank">Dokku installation guide</a>.</p>
+<ul>
+<li><p>Install Dokku on a VPS with a fresh Ubuntu 18.04,</p>
+</li>
+<li><p>Domains: don&apos;t set a global domain, but set a domain for the app with a wildchart</p>
+</li>
+</ul>
+<p>(all dokku commands are on the server)</p>
+<pre><code class="lang-shell">
+dokku domains:set app-name *.my-domain.com
+</code></pre>
+<ul>
+<li><p>Create app, install postgres and redis plugins and bind them to the app (see Dokku guide).</p>
+</li>
+<li><p>Configure nginx to allow bigger uploads (for documents)</p>
+</li>
+</ul>
+<pre><code class="lang-shell">
+sudo su - dokku
+mkdir /home/dokku/appname/nginx.conf.d/
+echo &apos;client_max_body_size 10M;&apos; &gt; /home/dokku/appname/nginx.conf.d/upload.conf
+exit
+sudo service nginx reload
+</code></pre>
+<h2 id="dns">DNS</h2>
+<p>A CNAME record with wildcard should point to the Dokku app url.</p>
+<h2 id="subdomains-systems-match-schemas">Subdomains (systems) match schemas</h2>
+<p>The subdomain part of the url matches the database schema name.</p>
+<p><code>flupke.my-domain.com</code> matches to database schema <code>flupke</code>.</p>
+<p>Set the overall domain with:</p>
+<pre><code class="lang-shell">
+dokku config:set appname OVERALL_DOMAIN=my-domain.com
+</code></pre>
+<h2 id="aws-s3">AWS S3</h2>
+<p>Create a IAM user on AWS with access only to S3.
+Then create a bucket in your region and set the environment variables.</p>
+<pre><code class="lang-shell">dokku config:set AWS_S3_BUCKET=bucket_name AWS_S3_REGION=eu-central-1
+dokku config:set AWS_ACCESS_KEY_ID=aaa AWS_SECRET_ACCESS_KEY=bbb
+</code></pre>
+<h2 id="email">Email</h2>
+<h3 id="smtp-mailserver-ei-amazon-simple-email-service">SMTP mailserver (e.i. Amazon Simple Email Service)</h3>
+<ul>
+<li><code>SMTP_HOST</code></li>
+<li><code>SMTP_PORT</code></li>
+<li><code>SMTP_PASSWORD</code></li>
+<li><code>SMTP_USERNAME</code></li>
+</ul>
+<h3 id="from-mail-addresses">From mail addresses</h3>
+<ul>
+<li><code>MAIL_FROM_ADDRESS</code>: a mail address when a reply-to address has been set.</li>
+<li><code>MAIL_NOREPLY_ADDRESS</code>: a notification mail you can not reply to</li>
+<li><code>MAIL_HOSTER_ADDRESS</code>: used for the request-hosting form.</li>
+</ul>
+<p>Mail is sent only from <code>MAIL_FROM_ADDRESS</code> and <code>MAIL_NOREPLY_ADDRESS</code>.
+These addresses should be set up for DKIM in the mailserver.</p>
+<h3 id="google-geocoding">Google geocoding</h3>
+<p>Coordinates of addresses are looked up and cached from the Google geocoding service in order to show the location on maps. At maximum every 2 minutes a request is sent to the API in order not to hit the daily free limit. You need to get a key from <a href="https://developers.google.com/maps/documentation/geocoding/intro" target="_blank">Google</a>
+and put the key in the environment variable <code>GOOGLE_GEO_API_KEY</code></p>
+<p>The geocoding service can be blocked by setting <code>GEO_BLOCK</code> to 1.</p>
+<h2 id="hoster-contact-form">Hoster Contact Form</h2>
+<p>The hoster can set up general contact forms to let
+people contact him/her:
+The Domain of a request-hosting form can be set with:</p>
+<ul>
+<li><code>APP_HOSTER_CONTACT_domain=name@link</code></li>
+</ul>
+<p>Where:</p>
+<ul>
+<li>domain is the server name of the contact form. All uppercase and dots become double underline.</li>
+<li>name: The name of the contact form or the context.</li>
+<li>link: The link to bring the user back.</li>
+</ul>
+<h2 id="permanent-redirects">Permanent Redirects</h2>
+<ul>
+<li><code>APP_REDIRECT_FROM__DOMAIN__NET=to.domain.net</code></li>
+</ul>
+<p>Redirects from.domain.net to to.domain.net
+A double underscore in the key represents a dot in the domain.</p>
+<h2 id="other-environment-vars">Other environment vars</h2>
+<ul>
+<li><code>TIMEZONE</code>: defaults to &apos;Europe/Brussels&apos;</li>
+<li><code>MASTER_PASSWORD</code>: sha512 encoded password for &apos;master&apos; -&gt; gives admin access to all Systems.</li>
+</ul>
+<h2 id="postgres">Postgres</h2>
+<p><a href="https://github.com/dokku/dokku-postgres" target="_blank">Link a postgres database to the app.</a></p>
+<p>Schemas to be set up can be found in the <a href="https://github.com/eeemarv/eland/tree/master/setup" target="_blank">/setup directory</a>
+See also <a href="migrate-from-elas-3.html">Migrate from eLAS 3.x</a></p>
+<h2 id="redis">Redis</h2>
+<p><a href="https://github.com/dokku/dokku-redis" target="_blank">Link a redis instance to the app.</a></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="elas-intersysteem-koppeling-maken.html" class="navigation navigation-prev " aria-label="Previous page: eLAS interSysteem koppeling maken">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="dokku-backups.html" class="navigation navigation-next " aria-label="Next page: Backups">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Dokku","level":"1.3","depth":1,"next":{"title":"Backups","level":"1.4","depth":1,"path":"dokku-backups.md","ref":"dokku-backups.md","articles":[]},"previous":{"title":"eLAS interSysteem koppeling maken","level":"1.2","depth":1,"path":"elas-intersysteem-koppeling-maken.md","ref":"elas-intersysteem-koppeling-maken.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"eLAND","gitbook":"3.2.2","description":"webtoepassing voor gemeenschapsmunten"},"file":{"path":"dokku.md","mtime":"2018-12-26T12:13:02.661Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2018-12-26T15:48:18.812Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
